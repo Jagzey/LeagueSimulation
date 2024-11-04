@@ -1,0 +1,302 @@
+﻿namespace LeagueSimulation
+{
+    partial class Form2
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            saveStateLabel = new Label();
+            menuStrip1 = new MenuStrip();
+            fileToolStripMenuItem = new ToolStripMenuItem();
+            backToStartMenuToolStripMenuItem = new ToolStripMenuItem();
+            quitGameMenuItem = new ToolStripMenuItem();
+            panel1 = new Panel();
+            menuStrip2 = new MenuStrip();
+            toolStripMenuItem1 = new ToolStripMenuItem();
+            dashboardMenuItem = new ToolStripMenuItem();
+            toolStripMenuItem3 = new ToolStripMenuItem();
+            leagueStandingsMenuItem = new ToolStripMenuItem();
+            toolStripMenuItem5 = new ToolStripMenuItem();
+            toolStripMenuItem7 = new ToolStripMenuItem();
+            toolStripMenuItem8 = new ToolStripMenuItem();
+            toolStripMenuItem9 = new ToolStripMenuItem();
+            toolStripMenuItem10 = new ToolStripMenuItem();
+            toolStripMenuItem11 = new ToolStripMenuItem();
+            leagueLeadersToolStripMenuItem = new ToolStripMenuItem();
+            fullScheduleMenuItem = new ToolStripMenuItem();
+            toolStripMenuItem14 = new ToolStripMenuItem();
+            toolStripMenuItem15 = new ToolStripMenuItem();
+            toolStripMenuItem16 = new ToolStripMenuItem();
+            toolStripMenuItem17 = new ToolStripMenuItem();
+            toolStripMenuItem18 = new ToolStripMenuItem();
+            toolStripMenuItem19 = new ToolStripMenuItem();
+            toolStripMenuItem20 = new ToolStripMenuItem();
+            displayPanel = new FlowLayoutPanel();
+            menuStrip1.SuspendLayout();
+            panel1.SuspendLayout();
+            menuStrip2.SuspendLayout();
+            SuspendLayout();
+            // 
+            // saveStateLabel
+            // 
+            saveStateLabel.AutoSize = true;
+            saveStateLabel.Location = new Point(625, 9);
+            saveStateLabel.Name = "saveStateLabel";
+            saveStateLabel.Size = new Size(114, 15);
+            saveStateLabel.TabIndex = 0;
+            saveStateLabel.Text = "League Save State: n";
+            // 
+            // menuStrip1
+            // 
+            menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(800, 24);
+            menuStrip1.TabIndex = 1;
+            menuStrip1.Text = "menuStrip1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { backToStartMenuToolStripMenuItem, quitGameMenuItem });
+            fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            fileToolStripMenuItem.Size = new Size(37, 20);
+            fileToolStripMenuItem.Text = "File";
+            // 
+            // backToStartMenuToolStripMenuItem
+            // 
+            backToStartMenuToolStripMenuItem.Name = "backToStartMenuToolStripMenuItem";
+            backToStartMenuToolStripMenuItem.Size = new Size(174, 22);
+            backToStartMenuToolStripMenuItem.Text = "Back to Start Menu";
+            // 
+            // quitGameMenuItem
+            // 
+            quitGameMenuItem.Name = "quitGameMenuItem";
+            quitGameMenuItem.Size = new Size(174, 22);
+            quitGameMenuItem.Text = "Quit Game";
+            quitGameMenuItem.Click += quitGameToolStripMenuItem_Click;
+            // 
+            // panel1
+            // 
+            panel1.Controls.Add(menuStrip2);
+            panel1.Location = new Point(0, 27);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(138, 411);
+            panel1.TabIndex = 2;
+            // 
+            // menuStrip2
+            // 
+            menuStrip2.Items.AddRange(new ToolStripItem[] { toolStripMenuItem1, toolStripMenuItem20 });
+            menuStrip2.Location = new Point(0, 0);
+            menuStrip2.Name = "menuStrip2";
+            menuStrip2.Size = new Size(138, 31);
+            menuStrip2.TabIndex = 1;
+            menuStrip2.Text = "menuStrip2";
+            // 
+            // toolStripMenuItem1
+            // 
+            toolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { dashboardMenuItem, toolStripMenuItem3, toolStripMenuItem8, leagueLeadersToolStripMenuItem, fullScheduleMenuItem, toolStripMenuItem14, toolStripMenuItem15, toolStripMenuItem16, toolStripMenuItem17 });
+            toolStripMenuItem1.Font = new Font("Segoe UI", 12.4F);
+            toolStripMenuItem1.Name = "toolStripMenuItem1";
+            toolStripMenuItem1.Size = new Size(126, 27);
+            toolStripMenuItem1.Text = "League Menu";
+            // 
+            // dashboardMenuItem
+            // 
+            dashboardMenuItem.Name = "dashboardMenuItem";
+            dashboardMenuItem.Size = new Size(198, 28);
+            dashboardMenuItem.Text = "Dashboard";
+            dashboardMenuItem.Click += dashboardMenuItem_Click;
+            // 
+            // toolStripMenuItem3
+            // 
+            toolStripMenuItem3.DropDownItems.AddRange(new ToolStripItem[] { leagueStandingsMenuItem, toolStripMenuItem5, toolStripMenuItem7 });
+            toolStripMenuItem3.Name = "toolStripMenuItem3";
+            toolStripMenuItem3.Size = new Size(198, 28);
+            toolStripMenuItem3.Text = "League";
+            // 
+            // leagueStandingsMenuItem
+            // 
+            leagueStandingsMenuItem.Name = "leagueStandingsMenuItem";
+            leagueStandingsMenuItem.Size = new Size(154, 28);
+            leagueStandingsMenuItem.Text = "Standings";
+            leagueStandingsMenuItem.Click += leagueStandingsMenuItem_Click;
+            // 
+            // toolStripMenuItem5
+            // 
+            toolStripMenuItem5.Name = "toolStripMenuItem5";
+            toolStripMenuItem5.Size = new Size(154, 28);
+            toolStripMenuItem5.Text = "Playoffs";
+            // 
+            // toolStripMenuItem7
+            // 
+            toolStripMenuItem7.Name = "toolStripMenuItem7";
+            toolStripMenuItem7.Size = new Size(154, 28);
+            toolStripMenuItem7.Text = "History";
+            // 
+            // toolStripMenuItem8
+            // 
+            toolStripMenuItem8.DropDownItems.AddRange(new ToolStripItem[] { toolStripMenuItem9, toolStripMenuItem10, toolStripMenuItem11 });
+            toolStripMenuItem8.Name = "toolStripMenuItem8";
+            toolStripMenuItem8.Size = new Size(198, 28);
+            toolStripMenuItem8.Text = "Team";
+            // 
+            // toolStripMenuItem9
+            // 
+            toolStripMenuItem9.Name = "toolStripMenuItem9";
+            toolStripMenuItem9.Size = new Size(149, 28);
+            toolStripMenuItem9.Text = "Roster";
+            // 
+            // toolStripMenuItem10
+            // 
+            toolStripMenuItem10.Name = "toolStripMenuItem10";
+            toolStripMenuItem10.Size = new Size(149, 28);
+            toolStripMenuItem10.Text = "Schedule";
+            // 
+            // toolStripMenuItem11
+            // 
+            toolStripMenuItem11.Name = "toolStripMenuItem11";
+            toolStripMenuItem11.Size = new Size(149, 28);
+            toolStripMenuItem11.Text = "History";
+            // 
+            // leagueLeadersToolStripMenuItem
+            // 
+            leagueLeadersToolStripMenuItem.Name = "leagueLeadersToolStripMenuItem";
+            leagueLeadersToolStripMenuItem.Size = new Size(198, 28);
+            leagueLeadersToolStripMenuItem.Text = "League Leaders";
+            // 
+            // fullScheduleMenuItem
+            // 
+            fullScheduleMenuItem.Name = "fullScheduleMenuItem";
+            fullScheduleMenuItem.Size = new Size(198, 28);
+            fullScheduleMenuItem.Text = "Full Schedule";
+            fullScheduleMenuItem.Click += fullScheduleMenuItem_Click;
+            // 
+            // toolStripMenuItem14
+            // 
+            toolStripMenuItem14.Name = "toolStripMenuItem14";
+            toolStripMenuItem14.Size = new Size(198, 28);
+            toolStripMenuItem14.Text = "Team Schedule";
+            // 
+            // toolStripMenuItem15
+            // 
+            toolStripMenuItem15.Name = "toolStripMenuItem15";
+            toolStripMenuItem15.Size = new Size(198, 28);
+            toolStripMenuItem15.Text = "Team Roster";
+            // 
+            // toolStripMenuItem16
+            // 
+            toolStripMenuItem16.Name = "toolStripMenuItem16";
+            toolStripMenuItem16.Size = new Size(198, 28);
+            toolStripMenuItem16.Text = "Award Races";
+            // 
+            // toolStripMenuItem17
+            // 
+            toolStripMenuItem17.DropDownItems.AddRange(new ToolStripItem[] { toolStripMenuItem18, toolStripMenuItem19 });
+            toolStripMenuItem17.Name = "toolStripMenuItem17";
+            toolStripMenuItem17.Size = new Size(198, 28);
+            toolStripMenuItem17.Text = "Stats";
+            // 
+            // toolStripMenuItem18
+            // 
+            toolStripMenuItem18.Name = "toolStripMenuItem18";
+            toolStripMenuItem18.Size = new Size(167, 28);
+            toolStripMenuItem18.Text = "Player Stats";
+            // 
+            // toolStripMenuItem19
+            // 
+            toolStripMenuItem19.Name = "toolStripMenuItem19";
+            toolStripMenuItem19.Size = new Size(167, 28);
+            toolStripMenuItem19.Text = "Team Stats";
+            // 
+            // toolStripMenuItem20
+            // 
+            toolStripMenuItem20.Name = "toolStripMenuItem20";
+            toolStripMenuItem20.Size = new Size(12, 27);
+            // 
+            // displayPanel
+            // 
+            displayPanel.AutoScroll = true;
+            displayPanel.FlowDirection = FlowDirection.TopDown;
+            displayPanel.Location = new Point(141, 27);
+            displayPanel.Name = "displayPanel";
+            displayPanel.Size = new Size(647, 411);
+            displayPanel.TabIndex = 3;
+            displayPanel.WrapContents = false;
+            // 
+            // Form2
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(800, 450);
+            Controls.Add(displayPanel);
+            Controls.Add(panel1);
+            Controls.Add(saveStateLabel);
+            Controls.Add(menuStrip1);
+            MainMenuStrip = menuStrip1;
+            Name = "Form2";
+            Text = "Basketball League Simulator";
+            FormClosing += Form2_FormClosing;
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
+            menuStrip2.ResumeLayout(false);
+            menuStrip2.PerformLayout();
+            ResumeLayout(false);
+            PerformLayout();
+        }
+
+        #endregion
+
+        private Label saveStateLabel;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem fileToolStripMenuItem;
+        private ToolStripMenuItem quitGameMenuItem;
+        private Panel panel1;
+        private MenuStrip menuStrip2;
+        private ToolStripMenuItem toolStripMenuItem1;
+        private ToolStripMenuItem dashboardMenuItem;
+        private ToolStripMenuItem toolStripMenuItem3;
+        private ToolStripMenuItem leagueStandingsMenuItem;
+        private ToolStripMenuItem toolStripMenuItem5;
+        private ToolStripMenuItem toolStripMenuItem7;
+        private ToolStripMenuItem toolStripMenuItem8;
+        private ToolStripMenuItem toolStripMenuItem9;
+        private ToolStripMenuItem toolStripMenuItem10;
+        private ToolStripMenuItem toolStripMenuItem11;
+        private ToolStripMenuItem fullScheduleMenuItem;
+        private ToolStripMenuItem toolStripMenuItem14;
+        private ToolStripMenuItem toolStripMenuItem15;
+        private ToolStripMenuItem toolStripMenuItem16;
+        private ToolStripMenuItem toolStripMenuItem17;
+        private ToolStripMenuItem toolStripMenuItem18;
+        private ToolStripMenuItem toolStripMenuItem19;
+        private ToolStripMenuItem toolStripMenuItem20;
+        private ToolStripMenuItem backToStartMenuToolStripMenuItem;
+        private FlowLayoutPanel displayPanel;
+        private ToolStripMenuItem leagueLeadersToolStripMenuItem;
+    }
+}
