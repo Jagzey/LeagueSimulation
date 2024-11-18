@@ -22,7 +22,7 @@ namespace LeagueSimulation
             this.SaveState = saveState;
             InitializeComponent();
             this.CurrentLeague = loadGame;
-            LoadDashboard(new DashboardUserControl(loadGame));
+            if (!CurrentLeague.Playoffs) LoadDashboard(new DashboardUserControl(loadGame));
         }
 
         private void LoadDashboard(UserControl dashboardUserControl)
@@ -48,6 +48,22 @@ namespace LeagueSimulation
             displayPanel.Controls.Clear();
             // add the full league standings control to the display panel
             displayPanel.Controls.Add(leagueStandingsUserControl);
+        }
+
+        private void LoadRoster(RosterUserControl rosterUserControl)
+        {
+            // clear current data in the display panel
+            displayPanel.Controls.Clear();
+            // add the roster control to the display panel
+            displayPanel.Controls.Add(rosterUserControl);
+        }
+
+        private void LoadLeagueLeaders(LeagueLeadersUserControl leagueLeadersUserControl)
+        {
+            // clear current data in the display panel
+            displayPanel.Controls.Clear();
+            // add the league leader control to the display panel
+            displayPanel.Controls.Add(leagueLeadersUserControl);
         }
 
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)
@@ -78,6 +94,21 @@ namespace LeagueSimulation
         private void leagueStandingsMenuItem_Click(object sender, EventArgs e)
         {
             LoadLeagueStandings(new LeagueStandingsUserControl(CurrentLeague));
+        }
+
+        private void rosterMenuItem_Click(object sender, EventArgs e)
+        {
+            LoadRoster(new RosterUserControl(CurrentLeague));
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void leagueLeadersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LoadLeagueLeaders(new LeagueLeadersUserControl(CurrentLeague));
         }
     }
 }

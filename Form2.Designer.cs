@@ -40,19 +40,15 @@
             toolStripMenuItem3 = new ToolStripMenuItem();
             leagueStandingsMenuItem = new ToolStripMenuItem();
             toolStripMenuItem5 = new ToolStripMenuItem();
-            toolStripMenuItem7 = new ToolStripMenuItem();
             toolStripMenuItem8 = new ToolStripMenuItem();
-            toolStripMenuItem9 = new ToolStripMenuItem();
+            rosterMenuItem = new ToolStripMenuItem();
             toolStripMenuItem10 = new ToolStripMenuItem();
-            toolStripMenuItem11 = new ToolStripMenuItem();
-            leagueLeadersToolStripMenuItem = new ToolStripMenuItem();
             fullScheduleMenuItem = new ToolStripMenuItem();
-            toolStripMenuItem14 = new ToolStripMenuItem();
-            toolStripMenuItem15 = new ToolStripMenuItem();
             toolStripMenuItem16 = new ToolStripMenuItem();
             toolStripMenuItem17 = new ToolStripMenuItem();
             toolStripMenuItem18 = new ToolStripMenuItem();
             toolStripMenuItem19 = new ToolStripMenuItem();
+            leagueLeadersToolStripMenuItem = new ToolStripMenuItem();
             toolStripMenuItem20 = new ToolStripMenuItem();
             displayPanel = new FlowLayoutPanel();
             menuStrip1.SuspendLayout();
@@ -117,24 +113,25 @@
             // 
             // toolStripMenuItem1
             // 
-            toolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { dashboardMenuItem, toolStripMenuItem3, toolStripMenuItem8, leagueLeadersToolStripMenuItem, fullScheduleMenuItem, toolStripMenuItem14, toolStripMenuItem15, toolStripMenuItem16, toolStripMenuItem17 });
+            toolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { dashboardMenuItem, toolStripMenuItem3, toolStripMenuItem8, fullScheduleMenuItem, toolStripMenuItem16, toolStripMenuItem17 });
             toolStripMenuItem1.Font = new Font("Segoe UI", 12.4F);
             toolStripMenuItem1.Name = "toolStripMenuItem1";
             toolStripMenuItem1.Size = new Size(126, 27);
             toolStripMenuItem1.Text = "League Menu";
+            toolStripMenuItem1.Click += toolStripMenuItem1_Click;
             // 
             // dashboardMenuItem
             // 
             dashboardMenuItem.Name = "dashboardMenuItem";
-            dashboardMenuItem.Size = new Size(198, 28);
+            dashboardMenuItem.Size = new Size(180, 28);
             dashboardMenuItem.Text = "Dashboard";
             dashboardMenuItem.Click += dashboardMenuItem_Click;
             // 
             // toolStripMenuItem3
             // 
-            toolStripMenuItem3.DropDownItems.AddRange(new ToolStripItem[] { leagueStandingsMenuItem, toolStripMenuItem5, toolStripMenuItem7 });
+            toolStripMenuItem3.DropDownItems.AddRange(new ToolStripItem[] { leagueStandingsMenuItem, toolStripMenuItem5 });
             toolStripMenuItem3.Name = "toolStripMenuItem3";
-            toolStripMenuItem3.Size = new Size(198, 28);
+            toolStripMenuItem3.Size = new Size(180, 28);
             toolStripMenuItem3.Text = "League";
             // 
             // leagueStandingsMenuItem
@@ -150,24 +147,19 @@
             toolStripMenuItem5.Size = new Size(154, 28);
             toolStripMenuItem5.Text = "Playoffs";
             // 
-            // toolStripMenuItem7
-            // 
-            toolStripMenuItem7.Name = "toolStripMenuItem7";
-            toolStripMenuItem7.Size = new Size(154, 28);
-            toolStripMenuItem7.Text = "History";
-            // 
             // toolStripMenuItem8
             // 
-            toolStripMenuItem8.DropDownItems.AddRange(new ToolStripItem[] { toolStripMenuItem9, toolStripMenuItem10, toolStripMenuItem11 });
+            toolStripMenuItem8.DropDownItems.AddRange(new ToolStripItem[] { rosterMenuItem, toolStripMenuItem10 });
             toolStripMenuItem8.Name = "toolStripMenuItem8";
-            toolStripMenuItem8.Size = new Size(198, 28);
+            toolStripMenuItem8.Size = new Size(180, 28);
             toolStripMenuItem8.Text = "Team";
             // 
-            // toolStripMenuItem9
+            // rosterMenuItem
             // 
-            toolStripMenuItem9.Name = "toolStripMenuItem9";
-            toolStripMenuItem9.Size = new Size(149, 28);
-            toolStripMenuItem9.Text = "Roster";
+            rosterMenuItem.Name = "rosterMenuItem";
+            rosterMenuItem.Size = new Size(149, 28);
+            rosterMenuItem.Text = "Roster";
+            rosterMenuItem.Click += rosterMenuItem_Click;
             // 
             // toolStripMenuItem10
             // 
@@ -175,61 +167,44 @@
             toolStripMenuItem10.Size = new Size(149, 28);
             toolStripMenuItem10.Text = "Schedule";
             // 
-            // toolStripMenuItem11
+            // fullScheduleMenuItem
             // 
-            toolStripMenuItem11.Name = "toolStripMenuItem11";
-            toolStripMenuItem11.Size = new Size(149, 28);
-            toolStripMenuItem11.Text = "History";
+            fullScheduleMenuItem.Name = "fullScheduleMenuItem";
+            fullScheduleMenuItem.Size = new Size(180, 28);
+            fullScheduleMenuItem.Text = "Full Schedule";
+            fullScheduleMenuItem.Click += fullScheduleMenuItem_Click;
+            // 
+            // toolStripMenuItem16
+            // 
+            toolStripMenuItem16.Name = "toolStripMenuItem16";
+            toolStripMenuItem16.Size = new Size(180, 28);
+            toolStripMenuItem16.Text = "Award Races";
+            // 
+            // toolStripMenuItem17
+            // 
+            toolStripMenuItem17.DropDownItems.AddRange(new ToolStripItem[] { toolStripMenuItem18, toolStripMenuItem19, leagueLeadersToolStripMenuItem });
+            toolStripMenuItem17.Name = "toolStripMenuItem17";
+            toolStripMenuItem17.Size = new Size(180, 28);
+            toolStripMenuItem17.Text = "Stats";
+            // 
+            // toolStripMenuItem18
+            // 
+            toolStripMenuItem18.Name = "toolStripMenuItem18";
+            toolStripMenuItem18.Size = new Size(198, 28);
+            toolStripMenuItem18.Text = "Player Stats";
+            // 
+            // toolStripMenuItem19
+            // 
+            toolStripMenuItem19.Name = "toolStripMenuItem19";
+            toolStripMenuItem19.Size = new Size(198, 28);
+            toolStripMenuItem19.Text = "Team Stats";
             // 
             // leagueLeadersToolStripMenuItem
             // 
             leagueLeadersToolStripMenuItem.Name = "leagueLeadersToolStripMenuItem";
             leagueLeadersToolStripMenuItem.Size = new Size(198, 28);
             leagueLeadersToolStripMenuItem.Text = "League Leaders";
-            // 
-            // fullScheduleMenuItem
-            // 
-            fullScheduleMenuItem.Name = "fullScheduleMenuItem";
-            fullScheduleMenuItem.Size = new Size(198, 28);
-            fullScheduleMenuItem.Text = "Full Schedule";
-            fullScheduleMenuItem.Click += fullScheduleMenuItem_Click;
-            // 
-            // toolStripMenuItem14
-            // 
-            toolStripMenuItem14.Name = "toolStripMenuItem14";
-            toolStripMenuItem14.Size = new Size(198, 28);
-            toolStripMenuItem14.Text = "Team Schedule";
-            // 
-            // toolStripMenuItem15
-            // 
-            toolStripMenuItem15.Name = "toolStripMenuItem15";
-            toolStripMenuItem15.Size = new Size(198, 28);
-            toolStripMenuItem15.Text = "Team Roster";
-            // 
-            // toolStripMenuItem16
-            // 
-            toolStripMenuItem16.Name = "toolStripMenuItem16";
-            toolStripMenuItem16.Size = new Size(198, 28);
-            toolStripMenuItem16.Text = "Award Races";
-            // 
-            // toolStripMenuItem17
-            // 
-            toolStripMenuItem17.DropDownItems.AddRange(new ToolStripItem[] { toolStripMenuItem18, toolStripMenuItem19 });
-            toolStripMenuItem17.Name = "toolStripMenuItem17";
-            toolStripMenuItem17.Size = new Size(198, 28);
-            toolStripMenuItem17.Text = "Stats";
-            // 
-            // toolStripMenuItem18
-            // 
-            toolStripMenuItem18.Name = "toolStripMenuItem18";
-            toolStripMenuItem18.Size = new Size(167, 28);
-            toolStripMenuItem18.Text = "Player Stats";
-            // 
-            // toolStripMenuItem19
-            // 
-            toolStripMenuItem19.Name = "toolStripMenuItem19";
-            toolStripMenuItem19.Size = new Size(167, 28);
-            toolStripMenuItem19.Text = "Team Stats";
+            leagueLeadersToolStripMenuItem.Click += leagueLeadersToolStripMenuItem_Click;
             // 
             // toolStripMenuItem20
             // 
@@ -282,14 +257,10 @@
         private ToolStripMenuItem toolStripMenuItem3;
         private ToolStripMenuItem leagueStandingsMenuItem;
         private ToolStripMenuItem toolStripMenuItem5;
-        private ToolStripMenuItem toolStripMenuItem7;
         private ToolStripMenuItem toolStripMenuItem8;
-        private ToolStripMenuItem toolStripMenuItem9;
+        private ToolStripMenuItem rosterMenuItem;
         private ToolStripMenuItem toolStripMenuItem10;
-        private ToolStripMenuItem toolStripMenuItem11;
         private ToolStripMenuItem fullScheduleMenuItem;
-        private ToolStripMenuItem toolStripMenuItem14;
-        private ToolStripMenuItem toolStripMenuItem15;
         private ToolStripMenuItem toolStripMenuItem16;
         private ToolStripMenuItem toolStripMenuItem17;
         private ToolStripMenuItem toolStripMenuItem18;

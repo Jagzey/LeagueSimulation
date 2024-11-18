@@ -1,6 +1,4 @@
-﻿using System.Data.Entity.Core.Mapping;
-using System.Data.SQLite;
-using System.Diagnostics;
+﻿using System.Data.SQLite;
 
 namespace LeagueSimulation
 {
@@ -141,6 +139,32 @@ namespace LeagueSimulation
                         PRIMARY KEY (gameId, playerId)
                         );";
 
+                string createPlayerSeasonTableQuery = @"
+                        CREATE TABLE playersSeasonStats(
+                        seasonId INTEGER NOT NULL,
+                        playerId INTEGER NOT NULL,
+                        teamId INTEGER NOT NULL,
+                        teamName TEXT NOT NULL,
+                        playerForename TEXT NOT NULL,
+                        playerSurname TEXT NOT NULL,
+                        position TEXT NOT NULL,
+                        gameValue DECIMAL (3,1) NOT NULL,
+                        MP DECIMAL (3,1) NOT NULL,
+                        FGPCT DECIMAL (3,1) NOT NULL,
+                        TFGPCT DECIMAL (3,1) NOT NULL,
+                        PTS DECIMAL (3,1) NOT NULL,
+                        REB DECIMAL (3,1) NOT NULL,
+                        AST DECIMAL (3,1) NOT NULL,
+                        STL DECIMAL (3,1) NOT NULL,
+                        BLK DECIMAL (3,1) NOT NULL,
+                        TOV DECIMAL (3,1) NOT NULL,
+                        PF DECIMAL (3,1) NOT NULL,
+                        FOREIGN KEY (seasonId) REFERENCES seasonSchedule(seasonId),
+                        FOREIGN KEY (teamId) REFERENCES teams(teamId),
+                        FOREIGN KEY (playerId) REFERENCES players(playerId),
+                        PRIMARY KEY (seasonId, playerId, teamId)
+                        );";
+
                 string createScheduleTableQuery = @"
                     CREATE TABLE seasonSchedule(
                     seasonId INTEGER NOT NULL,
@@ -180,6 +204,9 @@ namespace LeagueSimulation
                     command.ExecuteNonQuery();
 
                     command.CommandText = createPlayersTableQuery;
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = createPlayerSeasonTableQuery;
                     command.ExecuteNonQuery();
 
                     command.CommandText = createGamesTableQuery;
@@ -223,7 +250,7 @@ namespace LeagueSimulation
                             string conference = "";
                             if (i < 15) conference = "East";
                             else
-                            { 
+                            {
                                 conference = "West";
                                 team.Position -= 15;
                             }
@@ -235,7 +262,7 @@ namespace LeagueSimulation
                             '{conference}',
                             {team.W},
                             {team.L},
-	                        {i+1 + team.Position}
+	                        {i + 1 + team.Position}
                             );";
                             command.CommandText = addTeamQuery;
                             command.ExecuteNonQuery();
@@ -438,6 +465,28 @@ namespace LeagueSimulation
             }
 
         }
+
+        public string GetTeamStatistic(string stat)
+        {
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                string getTeamStatQuery = $"SELECT AVG({stat}) FROM teamGameStats WHERE teamName = '{this.UserTeamName}';";
+                using (var command = new SQLiteCommand(getTeamStatQuery, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            if (reader.IsDBNull(0)) return "";
+                            return $"{Math.Round(reader.GetDouble(0), 1)}";
+                        }
+                    }
+                }
+
+            }
+            return "";
+        }
         public string GetTeamRecord(string teamName)
         {
             int wins = 0;
@@ -589,7 +638,7 @@ namespace LeagueSimulation
                         string[] teamsInScheduleGame = scheduleGame.Split(',');
                         insertGameIntoScheduleQuery = $@"
                             INSERT into seasonSchedule(seasonId,dayId,gameId,homeTeam,awayTeam,gameCompleted)
-                                VALUES({CurrentSeason},{i+1},
+                                VALUES({CurrentSeason},{i + 1},
                                 {gameId},
                                 '{teamsInScheduleGame[0]}',
                                 '{teamsInScheduleGame[1]}',
@@ -602,7 +651,7 @@ namespace LeagueSimulation
                             command.ExecuteNonQuery();
                         }
                     }
-                    
+
                 }
             }
         }
@@ -650,7 +699,7 @@ namespace LeagueSimulation
         public void UpdateLeagueDataIfNeeded(int currentDayOfGames)
         {
             bool allGamesComplete = true;
-            foreach (string game in CurrentSchedule[currentDayOfGames-1])
+            foreach (string game in CurrentSchedule[currentDayOfGames - 1])
             {
                 string[] teamsPlaying = game.Split(",");
                 if (!CheckIfGameCompleted(currentDayOfGames, teamsPlaying[0], teamsPlaying[1]))
@@ -675,7 +724,7 @@ namespace LeagueSimulation
                     }
                 }
             }
-            
+
         }
 
         public void LoadLeagueData()
@@ -739,9 +788,9 @@ namespace LeagueSimulation
                                 if (scheduleDayToPull.Count > 0) scheduleToPull.Add(scheduleDayToPull);
                                 scheduleDayToPull = new List<string>();
                                 dayCounter = reader.GetInt32(reader.GetOrdinal("dayId"));
-                                
+
                             }
-                             scheduleDayToPull.Add(scheduleGameToPull);
+                            scheduleDayToPull.Add(scheduleGameToPull);
                         }
                     }
                 }
@@ -916,7 +965,7 @@ namespace LeagueSimulation
                             if (team == 82) validGames = true;
                             else continue;
                         }
-                    }  
+                    }
                 }
 
                 for (int i = 0; i < 123; i++)
@@ -1032,7 +1081,7 @@ namespace LeagueSimulation
                             tempDay = new List<string>();
                         }
                         else
-                        { 
+                        {
                             daysFilled = true;
                             remainingDays.Add(tempDay);
                         }
@@ -1061,7 +1110,7 @@ namespace LeagueSimulation
                     ORDER BY WINPCT DESC
                     ;";
 
-                using (var command = new SQLiteCommand(getEasternConferenceTeamsInPlayoffsQuery,connection))
+                using (var command = new SQLiteCommand(getEasternConferenceTeamsInPlayoffsQuery, connection))
                 {
                     using (var reader = command.ExecuteReader())
                     {
@@ -1222,7 +1271,7 @@ namespace LeagueSimulation
             return variableFileName;
         }
 
-        public void SimulateDay(List<string> games, int currentDaySimulated)
+        public void SimulateDay(List<string> games, int currentDaySimulated, bool updateStats)
         {
             // simulate games within the day
             foreach (string game in games)
@@ -1230,15 +1279,15 @@ namespace LeagueSimulation
                 string[] teamsPlaying = game.Split(',');
                 if (!CheckIfGameCompleted(currentDaySimulated, teamsPlaying[0], teamsPlaying[1]))
                 {
-                    SimulateGame(game, currentDaySimulated);
+                    SimulateGame(game, currentDaySimulated, updateStats);
                 }
-                
+
             }
             // update windows form
             UpdateLeagueDataIfNeeded(currentDaySimulated);
         }
 
-        public void SimulateGame(string game, int currentDayOfGame)
+        public void SimulateGame(string game, int currentDayOfGame, bool updateStats)
         {
             // simulate game specified by user
             GamesPlayed++;
@@ -1248,7 +1297,7 @@ namespace LeagueSimulation
                 Team team1 = ExtractTeamFromTeamName(teamsPlaying[0]);
                 Team team2 = ExtractTeamFromTeamName(teamsPlaying[1]);
                 int gameId = GetGameId(game, currentDayOfGame);
-                GameGenerator simulatedGame = new GameGenerator(team1, team2, ConnectionString, CurrentUser, CurrentSaveState, gameId, Playoffs);
+                GameGenerator simulatedGame = new GameGenerator(team1, team2, ConnectionString, CurrentUser, CurrentSaveState, gameId, Playoffs, this);
                 SetGameToComplete(currentDayOfGame, teamsPlaying[0], teamsPlaying[1]);
             }
 
@@ -1256,20 +1305,22 @@ namespace LeagueSimulation
             bool allGamesComplete = true;
             // we check everyday up to the current game being simulated, where i is the current day
             // if all games are complete, then we increase the season currentDay
-            for (int i = 0; i < currentDayOfGame; i++)
+
+            for (int j = 0; j < CurrentSchedule[currentDayOfGame - 1].Count; j++)
             {
-                for (int j = 0; j < CurrentSchedule[currentDayOfGame].Count; j++)
+                string currentGame = CurrentSchedule[currentDayOfGame - 1][j];
+                string[] currentTeamsPlaying = currentGame.Split(",");
+                if (!CheckIfGameCompleted(currentDayOfGame, currentTeamsPlaying[0], currentTeamsPlaying[1]))
                 {
-                    string currentGame = CurrentSchedule[i][j];
-                    string[] currentTeamsPlaying = currentGame.Split(",");
-                    if (!CheckIfGameCompleted(i+1, currentTeamsPlaying[0], currentTeamsPlaying[1]))
-                    {
-                        allGamesComplete = false; break;
-                    }
+                    allGamesComplete = false; break;
                 }
-                if (!allGamesComplete) break;
             }
-            if (allGamesComplete) CurrentDay++;
+
+            if (allGamesComplete)
+            {
+                CurrentDay++;
+                if (updateStats) SetPlayerAverageStats();
+            }
         }
 
         public (List<string>, List<string>) WatchGame(string game, int currentDayOfGame)
@@ -1282,11 +1333,160 @@ namespace LeagueSimulation
                 Team team1 = ExtractTeamFromTeamName(teamsPlaying[0]);
                 Team team2 = ExtractTeamFromTeamName(teamsPlaying[1]);
                 int gameId = GetGameId(game, currentDayOfGame);
-                GameGenerator simulatedGame = new GameGenerator(team1, team2, ConnectionString, CurrentUser, CurrentSaveState, gameId, Playoffs);
+                GameGenerator simulatedGame = new GameGenerator(team1, team2, ConnectionString, CurrentUser, CurrentSaveState, gameId, Playoffs, this);
                 SetGameToComplete(currentDayOfGame, teamsPlaying[0], teamsPlaying[1]);
+                SetPlayerAverageStats();
                 return (simulatedGame.CommentatorPhrases, simulatedGame.ScoreAfterEachPhrase);
             }
             return (new List<string>(), new List<string>());
+        }
+
+        public Player GetPlayerFromId(int playerId)
+        {
+            Player playerTeam1 = new Player();
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                string team1PlayersQuery = $@"
+                    SELECT *
+                    FROM players
+                    WHERE playerId = {playerId};
+                ";
+                using (var command = new SQLiteCommand(team1PlayersQuery, connection))
+                {
+                    // this reader, will extract a player, and put them into a Player
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            // extract data from a player in database, and put into a player class
+                            playerTeam1.PlayerId = reader.GetInt32(reader.GetOrdinal("playerId"));
+                            playerTeam1.position = reader.GetString(reader.GetOrdinal("position"));
+                            playerTeam1.PrimaryPlaystyle = reader.GetString(reader.GetOrdinal("primaryPlaystyle"));
+                            playerTeam1.SecondaryPlaystyle = reader.GetString(reader.GetOrdinal("secondaryPlaystyle"));
+                            playerTeam1.RosterSpot = reader.GetInt32(reader.GetOrdinal("rosterSpot"));
+                            playerTeam1.Height = reader.GetInt32(reader.GetOrdinal("height")); // height in inches
+                            playerTeam1.Weight = reader.GetInt32(reader.GetOrdinal("weight")); // weight in lbs
+                            playerTeam1.playerForename = reader.GetString(reader.GetOrdinal("playerForename"));
+                            playerTeam1.playerSurname = reader.GetString(reader.GetOrdinal("playerSurname"));
+                            playerTeam1.TeamId = reader.GetInt32(reader.GetOrdinal("teamId"));
+                            playerTeam1.teamName = reader.GetString(reader.GetOrdinal("teamName"));
+                            playerTeam1.CloseShot = reader.GetInt32(reader.GetOrdinal("closeShot"));
+                            playerTeam1.Layup = reader.GetInt32(reader.GetOrdinal("layup"));
+                            playerTeam1.Dunk = reader.GetInt32(reader.GetOrdinal("dunk"));
+                            playerTeam1.MidRange = reader.GetInt32(reader.GetOrdinal("midRange"));
+                            playerTeam1.ThreePoint = reader.GetInt32(reader.GetOrdinal("threePoint"));
+                            playerTeam1.FreeThrow = reader.GetInt32(reader.GetOrdinal("freeThrow"));
+                            playerTeam1.Passing = reader.GetInt32(reader.GetOrdinal("passing"));
+                            playerTeam1.BallHandle = reader.GetInt32(reader.GetOrdinal("ballHandle"));
+                            playerTeam1.Defense = reader.GetInt32(reader.GetOrdinal("defense"));
+                            playerTeam1.Steal = reader.GetInt32(reader.GetOrdinal("steal"));
+                            playerTeam1.Block = reader.GetInt32(reader.GetOrdinal("block"));
+                            playerTeam1.Rebound = reader.GetInt32(reader.GetOrdinal("rebound"));
+                            playerTeam1.Speed = reader.GetInt32(reader.GetOrdinal("speed"));
+                            playerTeam1.Strength = reader.GetInt32(reader.GetOrdinal("strength"));
+                            playerTeam1.Stamina = reader.GetInt32(reader.GetOrdinal("stamina"));
+                            playerTeam1.Overall = reader.GetInt32(reader.GetOrdinal("overall"));
+
+                        }
+                    }
+                }
+            }
+            return playerTeam1;
+        }
+
+        public void SetPlayerAverageStats()
+        {
+            int playersCount = 450;
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                // set player's average stats
+                for (int i = 1; i <= playersCount; i++)
+                {
+                    Player player = GetPlayerFromId(i);
+                    int playerId = player.PlayerId;
+                    string getAverageStatsQuery = $@"
+                    SELECT AVG(gameValue), AVG(MP), AVG(PTS), AVG(REB), 
+                    AVG(AST), AVG(STL), AVG(BLK), AVG(TOV), AVG(PF)
+                    FROM playersGamesStats
+                    WHERE playerId = {playerId}
+                    AND MP > 0
+                    ;";
+                    double avgPTS = 0;
+                    double avgMP = 0;
+                    double avgGameValue = 0;
+                    double avgREB = 0;
+                    double avgAST = 0;
+                    double avgSTL = 0;
+                    double avgBLK = 0;
+                    double avgTOV = 0;
+                    double avgPF = 0;
+                    double avgFG = GameGenerator.CalculatePlayerFieldGoal(playerId, false, ConnectionString);
+                    double avgTFG = GameGenerator.CalculatePlayerFieldGoal(playerId, true, ConnectionString);
+                    avgFG *= 100;
+                    avgTFG *= 100;
+                    avgFG = Math.Round(avgFG, 1);
+                    avgTFG = Math.Round(avgTFG, 1);
+
+                    bool validPlayer = true;
+
+                    // here we get the average stats from the playersGamesStats table
+                    using (var command = new SQLiteCommand(getAverageStatsQuery, connection))
+                    {
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                if (reader.IsDBNull(0)) { validPlayer = false; break; }
+                                avgPTS = Math.Round(reader.GetDouble(reader.GetOrdinal("AVG(PTS)")), 1);
+                                avgMP = Math.Round(reader.GetDouble(reader.GetOrdinal("AVG(MP)")), 1);
+                                avgGameValue = Math.Round(reader.GetDouble(reader.GetOrdinal("AVG(gameValue)")), 1);
+                                avgREB = Math.Round(reader.GetDouble(reader.GetOrdinal("AVG(REB)")), 1);
+                                avgAST = Math.Round(reader.GetDouble(reader.GetOrdinal("AVG(AST)")), 1);
+                                avgSTL = Math.Round(reader.GetDouble(reader.GetOrdinal("AVG(STL)")), 1);
+                                avgBLK = Math.Round(reader.GetDouble(reader.GetOrdinal("AVG(BLK)")), 1);
+                                avgTOV = Math.Round(reader.GetDouble(reader.GetOrdinal("AVG(TOV)")), 1);
+                                avgPF = Math.Round(reader.GetDouble(reader.GetOrdinal("AVG(PF)")), 1);
+                            }
+                        }
+                    }
+
+                    // here we set the average stats of the player in the playersSeasonStats table
+                    string dropCurrentStatsQuery = $@"DELETE FROM playersSeasonStats WHERE seasonId = {this.CurrentSeason} AND playerId = {player.PlayerId} AND teamId = {player.TeamId}";
+                    string setAverageStatsQuery = $@"
+                        INSERT INTO playersSeasonStats(seasonId,playerId,teamId,teamName,playerForename,playerSurname,position,gameValue,
+                        MP,FGPCT,TFGPCT,PTS,REB,AST,STL,BLK,TOV,PF)
+                        VALUES(
+                        {this.CurrentSeason},
+                        {player.PlayerId},
+                        {player.TeamId},
+                        '{player.teamName}',
+                        '{player.playerForename}',
+                        '{player.playerSurname}',
+                        '{player.position}',
+                        {avgGameValue},
+                        {avgMP},
+                        {avgFG},
+                        {avgTFG},
+                        {avgPTS},
+                        {avgREB},
+                        {avgAST},
+                        {avgSTL},
+                        {avgBLK},
+                        {avgTOV},
+                        {avgPF}
+                        );";
+                    using (var command = new SQLiteCommand(connection))
+                    {
+                        command.CommandText = dropCurrentStatsQuery;
+                        if (validPlayer) command.ExecuteNonQuery();
+                        command.CommandText = setAverageStatsQuery;
+                        if (validPlayer) command.ExecuteNonQuery();
+                    }
+                }
+
+            }
         }
 
         public int GetGameId(string game, int currentDayOfGame)
@@ -1304,7 +1504,7 @@ namespace LeagueSimulation
                     ;";
                 using (var command = new SQLiteCommand(getGameIdQuery, connection))
                 {
-                    using (var reader =  command.ExecuteReader())
+                    using (var reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -1368,10 +1568,10 @@ namespace LeagueSimulation
             this.CurrentDay = GetLeagueCurrentDay();
 
             this.GamesPlayed = GetRegSeasonGamesPlayed();
-            
+
 
         }
 
-        
+
     }
 }

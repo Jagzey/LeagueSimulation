@@ -43,63 +43,63 @@ namespace LeagueSimulation
                 {
                     if (firstPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        firstPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        firstPositionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (secondPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        secondPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        secondPositionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (thirdPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        thirdPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        thirdPositionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (fifthPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        fifthPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        fifthPositionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (sixthPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        sixthPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        sixthPositionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (seventhPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        seventhPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        seventhPositionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (eighthPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        eighthPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        eighthPositionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (ninthPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        ninthPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        ninthPositionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (tenthPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        tenthPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        tenthPositionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (eleventhPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        eleventhPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        eleventhPositionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (twelfthPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        twelfthPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        twelfthPositionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (thirteenthPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        thirteenthPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        thirteenthPositionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (fourteenthPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        fourteenthPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        fourteenthPositionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (fifteenthPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        fifteenthPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        fifteenthPositionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (fourthPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        fourthPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        fourthPositionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                 }
 
@@ -150,6 +150,14 @@ namespace LeagueSimulation
                 ptsLeaderLabel.Text = league.GetUserTeamLeaderInStatistic("PTS");
                 rebLeaderLabel.Text = league.GetUserTeamLeaderInStatistic("REB");
                 astLeaderLabel.Text = league.GetUserTeamLeaderInStatistic("AST");
+            }
+
+            // we update the team stats in the dashboard
+            {
+                pointsLabel.Text += league.GetTeamStatistic("PTS");
+                reboundsLabel.Text += league.GetTeamStatistic("REB");
+                assistsLabel.Text += league.GetTeamStatistic("AST");
+                turnoversLabel.Text += league.GetTeamStatistic("TOV");
             }
 
 
@@ -418,7 +426,7 @@ namespace LeagueSimulation
             turnoversLabel.Name = "turnoversLabel";
             turnoversLabel.Size = new Size(200, 21);
             turnoversLabel.TabIndex = 5;
-            turnoversLabel.Text = "Turnovers: x";
+            turnoversLabel.Text = "Turnovers: ";
             // 
             // assistsLabel
             // 
@@ -427,7 +435,7 @@ namespace LeagueSimulation
             assistsLabel.Name = "assistsLabel";
             assistsLabel.Size = new Size(200, 21);
             assistsLabel.TabIndex = 4;
-            assistsLabel.Text = "Assists: x";
+            assistsLabel.Text = "Assists: ";
             // 
             // reboundsLabel
             // 
@@ -436,7 +444,7 @@ namespace LeagueSimulation
             reboundsLabel.Name = "reboundsLabel";
             reboundsLabel.Size = new Size(200, 21);
             reboundsLabel.TabIndex = 3;
-            reboundsLabel.Text = "Rebounds: x";
+            reboundsLabel.Text = "Rebounds: ";
             // 
             // pointsLabel
             // 
@@ -445,7 +453,7 @@ namespace LeagueSimulation
             pointsLabel.Name = "pointsLabel";
             pointsLabel.Size = new Size(200, 21);
             pointsLabel.TabIndex = 2;
-            pointsLabel.Text = "Points: x";
+            pointsLabel.Text = "Points: ";
             // 
             // teamStatsLabel
             // 
@@ -494,6 +502,7 @@ namespace LeagueSimulation
             ptsLeaderLabel.Size = new Size(197, 21);
             ptsLeaderLabel.TabIndex = 6;
             ptsLeaderLabel.Text = "Michael Jordan: 30.5 pts";
+            ptsLeaderLabel.Click += ptsLeaderLabel_Click;
             // 
             // teamLeadersLabel
             // 
@@ -710,6 +719,11 @@ namespace LeagueSimulation
         private Label? dashboardPanel;
 
         private void schedulePanel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void ptsLeaderLabel_Click(object sender, EventArgs e)
         {
 
         }

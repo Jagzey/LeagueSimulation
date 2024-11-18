@@ -40,7 +40,7 @@ namespace LeagueSimulation
 
         private void createGameButton_Click(object sender, EventArgs e)
         {
-            string teamNamesConnectionString = $@"Data Source=C:\\Users\\FiercePC\\OneDrive - The Kings School Chester\\A-Level\\Computer Science\\NEA Project\\Project Files\\LeagueGenerator\\Names Files\\basketball_team_names_list.txt;Version=3;";
+            string teamNamesConnectionString = $@"Data Source=C:\\Users\\{CurrentUser}\\OneDrive - The Kings School Chester\\A-Level\\Computer Science\\NEA Project\\Project Files\\LeagueGenerator\\Names Files\\basketball_team_names_list.txt;Version=3;";
             // first, we check if the save state is valid
             int saveState = (int)saveStateNum.Value;
             // this occurs if the user's input is an integer
@@ -49,15 +49,11 @@ namespace LeagueSimulation
                 {
                     MessageBox.Show(text: "A league exists for this save state, press 'Load Game' to load it, or enter a different save state.");
                 }
-                else if (!League.CheckIfTeamNameExists(teamNameTextBox.Text, CurrentUser))
-                {
-                    MessageBox.Show(text: "No team exists for the team name specified. Please enter a valid name team.");
-                }
                 else
                 {
                     // we load the league into form2
                     MessageBox.Show(text: "No league exists for this save state, it will now be created.");
-                    Form form2 = new Form2(saveState, new League(CurrentUser, saveState, true, teamNameTextBox.Text));
+                    Form form2 = new Form2(saveState, new League(CurrentUser, saveState, true, teamNameDropDown.Text));
                     this.Hide();
                     form2.Show();
                 }
@@ -70,6 +66,11 @@ namespace LeagueSimulation
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox1_SelectedIndexChanged_1(object sender, EventArgs e)
         {
 
         }

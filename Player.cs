@@ -244,8 +244,8 @@ namespace LeagueSimulation
                     if ((height - 75.5) < -2)
                     {
                         value = random.Next(0, 100);
-                        if (value < 32) secondaryPlaystyle = playstyles[0];
-                        else if (value < 93) secondaryPlaystyle = playstyles[1];
+                        if (value < 30) secondaryPlaystyle = playstyles[0];
+                        else if (value < 95) secondaryPlaystyle = playstyles[1];
                         else if (value <= 100) secondaryPlaystyle = playstyles[2];
                     }
                     else if ((height - 75.5) < 1)
@@ -633,13 +633,13 @@ namespace LeagueSimulation
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
-                        statsMean = 51;
+                        statsMean = 63;
                         statsStdev = 2.7;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
 
                         // calculate ballHandle
-                        statsMean = 64;
+                        statsMean = 67;
                         statsStdev = 2.7;
                         ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         ballHandle += multipler;
@@ -732,7 +732,7 @@ namespace LeagueSimulation
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
-                        statsMean = 73;
+                        statsMean = 75;
                         statsStdev = 2.7;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
@@ -834,13 +834,13 @@ namespace LeagueSimulation
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
-                        statsMean = 59;
+                        statsMean = 60;
                         statsStdev = 2.7;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
 
                         // calculate ballHandle
-                        statsMean = 65;
+                        statsMean = 68;
                         statsStdev = 2.7;
                         ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         ballHandle += multipler;
@@ -938,7 +938,7 @@ namespace LeagueSimulation
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
-                        statsMean = 47;
+                        statsMean = 56;
                         statsStdev = 2.7;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
@@ -1040,7 +1040,7 @@ namespace LeagueSimulation
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
-                        statsMean = 45;
+                        statsMean = 54;
                         statsStdev = 2.7;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
@@ -1144,13 +1144,13 @@ namespace LeagueSimulation
                     if (freeThrow > 99) freeThrow = 99;
 
                     // calculate passing
-                    statsMean = 57;
+                    statsMean = 66;
                     statsStdev = 2.7;
                     passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     passing += multipler;
 
                     // calculate ballHandle
-                    statsMean = 58;
+                    statsMean = 63;
                     statsStdev = 2.7;
                     ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     ballHandle += multipler;
@@ -1252,13 +1252,13 @@ namespace LeagueSimulation
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
-                        statsMean = 51;
+                        statsMean = 55;
                         statsStdev = 2.7;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
 
                         // calculate ballHandle
-                        statsMean = 52;
+                        statsMean = 54;
                         statsStdev = 2.7;
                         ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         ballHandle += multipler;
@@ -1354,14 +1354,14 @@ namespace LeagueSimulation
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
-                        statsMean = 67;
+                        statsMean = 74;
                         statsStdev = 2.7;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
                         if (passing > 99) passing = 99;
 
                         // calculate ballHandle
-                        statsMean = 62;
+                        statsMean = 68;
                         statsStdev = 2.7;
                         ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         ballHandle += multipler;
@@ -1459,7 +1459,7 @@ namespace LeagueSimulation
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
-                        statsMean = 47;
+                        statsMean = 55;
                         statsStdev = 2.7;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
@@ -1978,14 +1978,14 @@ namespace LeagueSimulation
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
-                        statsMean = 68;
+                        statsMean = 72;
                         statsStdev = 2.7;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
                         if (passing > 99) passing = 99;
 
                         // calculate ballHandle
-                        statsMean = 56;
+                        statsMean = 62;
                         statsStdev = 2.7;
                         ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         ballHandle += multipler;
@@ -2508,7 +2508,7 @@ namespace LeagueSimulation
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
-                        statsMean = 37;
+                        statsMean = 42;
                         statsStdev = 2.7;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
@@ -2609,14 +2609,14 @@ namespace LeagueSimulation
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
-                        statsMean = 69;
+                        statsMean = 73;
                         statsStdev = 2.7;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
                         if (passing > 99) passing = 99;
 
                         // calculate ballHandle
-                        statsMean = 56;
+                        statsMean = 62;
                         statsStdev = 2.7;
                         ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         ballHandle += multipler;
@@ -2922,7 +2922,7 @@ namespace LeagueSimulation
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
-                        statsMean = 35;
+                        statsMean = 42;
                         statsStdev = 2.7;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
@@ -3029,7 +3029,7 @@ namespace LeagueSimulation
                     if (freeThrow > 99) freeThrow = 99;
 
                     // calculate passing
-                    statsMean = 47;
+                    statsMean = 53;
                     statsStdev = 2.7;
                     passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     passing += multipler;

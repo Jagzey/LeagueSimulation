@@ -126,6 +126,7 @@
             simMonthButton = new Button();
             simDayButton = new Button();
             scheduleDisplayPanel = new FlowLayoutPanel();
+            simToEndButton = new Button();
             gamesListPanel.SuspendLayout();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
@@ -282,6 +283,7 @@
             game2WatchGameButton.TabIndex = 5;
             game2WatchGameButton.Text = "Watch Game";
             game2WatchGameButton.UseVisualStyleBackColor = true;
+            game2WatchGameButton.Click += game2WatchGameButton_Click;
             // 
             // game2TeamsLabel
             // 
@@ -355,6 +357,7 @@
             game3WatchGameButton.TabIndex = 5;
             game3WatchGameButton.Text = "Watch Game";
             game3WatchGameButton.UseVisualStyleBackColor = true;
+            game3WatchGameButton.Click += game3WatchGameButton_Click;
             // 
             // game3TeamsLabel
             // 
@@ -428,6 +431,7 @@
             game4WatchGameButton.TabIndex = 5;
             game4WatchGameButton.Text = "Watch Game";
             game4WatchGameButton.UseVisualStyleBackColor = true;
+            game4WatchGameButton.Click += game4WatchGameButton_Click;
             // 
             // game4TeamsLabel
             // 
@@ -501,6 +505,7 @@
             game5WatchGameButton.TabIndex = 5;
             game5WatchGameButton.Text = "Watch Game";
             game5WatchGameButton.UseVisualStyleBackColor = true;
+            game5WatchGameButton.Click += game5WatchGameButton_Click;
             // 
             // game5TeamsLabel
             // 
@@ -574,6 +579,7 @@
             game6WatchGameButton.TabIndex = 5;
             game6WatchGameButton.Text = "Watch Game";
             game6WatchGameButton.UseVisualStyleBackColor = true;
+            game6WatchGameButton.Click += game6WatchGameButton_Click;
             // 
             // game6TeamsLabel
             // 
@@ -647,6 +653,7 @@
             game7WatchGameButton.TabIndex = 5;
             game7WatchGameButton.Text = "Watch Game";
             game7WatchGameButton.UseVisualStyleBackColor = true;
+            game7WatchGameButton.Click += game7WatchGameButton_Click;
             // 
             // game7TeamsLabel
             // 
@@ -720,6 +727,7 @@
             game8WatchGameButton.TabIndex = 5;
             game8WatchGameButton.Text = "Watch Game";
             game8WatchGameButton.UseVisualStyleBackColor = true;
+            game8WatchGameButton.Click += game8WatchGameButton_Click;
             // 
             // game8TeamsLabel
             // 
@@ -793,6 +801,7 @@
             game9WatchGameButton.TabIndex = 5;
             game9WatchGameButton.Text = "Watch Game";
             game9WatchGameButton.UseVisualStyleBackColor = true;
+            game9WatchGameButton.Click += game9WatchGameButton_Click;
             // 
             // game9TeamsLabel
             // 
@@ -866,6 +875,7 @@
             game10WatchGameButton.TabIndex = 5;
             game10WatchGameButton.Text = "Watch Game";
             game10WatchGameButton.UseVisualStyleBackColor = true;
+            game10WatchGameButton.Click += game10WatchGameButton_Click;
             // 
             // game10TeamsLabel
             // 
@@ -939,6 +949,7 @@
             game11WatchGameButton.TabIndex = 5;
             game11WatchGameButton.Text = "Watch Game";
             game11WatchGameButton.UseVisualStyleBackColor = true;
+            game11WatchGameButton.Click += game11WatchGameButton_Click;
             // 
             // game11TeamsLabel
             // 
@@ -1012,6 +1023,7 @@
             game12WatchGameButton.TabIndex = 5;
             game12WatchGameButton.Text = "Watch Game";
             game12WatchGameButton.UseVisualStyleBackColor = true;
+            game12WatchGameButton.Click += game12WatchGameButton_Click;
             // 
             // game12TeamsLabel
             // 
@@ -1085,6 +1097,7 @@
             game13WatchGameButton.TabIndex = 5;
             game13WatchGameButton.Text = "Watch Game";
             game13WatchGameButton.UseVisualStyleBackColor = true;
+            game13WatchGameButton.Click += game13WatchGameButton_Click;
             // 
             // game13TeamsLabel
             // 
@@ -1137,6 +1150,7 @@
             // 
             // topPanel
             // 
+            topPanel.Controls.Add(simToEndButton);
             topPanel.Controls.Add(simMonthButton);
             topPanel.Controls.Add(simDayButton);
             topPanel.Controls.Add(fullScheduleTitleMenu);
@@ -1179,6 +1193,17 @@
             scheduleDisplayPanel.Name = "scheduleDisplayPanel";
             scheduleDisplayPanel.Size = new Size(641, 2800);
             scheduleDisplayPanel.TabIndex = 5;
+            // 
+            // simToEndButton
+            // 
+            simToEndButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            simToEndButton.Location = new Point(267, 44);
+            simToEndButton.Name = "simToEndButton";
+            simToEndButton.Size = new Size(135, 40);
+            simToEndButton.TabIndex = 6;
+            simToEndButton.Text = "Sim to End";
+            simToEndButton.UseVisualStyleBackColor = true;
+            simToEndButton.Click += simToEndButton_Click;
             // 
             // FullScheduleUserControl
             // 
@@ -1321,5 +1346,6 @@
         private Button simDayButton;
         private Button simMonthButton;
         private FlowLayoutPanel scheduleDisplayPanel;
+        private Button simToEndButton;
     }
 }

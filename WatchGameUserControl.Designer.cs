@@ -29,10 +29,6 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WatchGameUserControl));
-            panel1 = new Panel();
-            flowLayoutPanel2 = new FlowLayoutPanel();
-            label3 = new Label();
-            commentatorPhrasesLabel = new Label();
             label1 = new Label();
             playbackSpeed = new NumericUpDown();
             label2 = new Label();
@@ -42,51 +38,13 @@
             seasonDayLabel = new Label();
             scoreLabel = new Label();
             panel2 = new Panel();
-            panel1.SuspendLayout();
-            flowLayoutPanel2.SuspendLayout();
+            flowLayoutPanel2 = new FlowLayoutPanel();
+            label3 = new Label();
+            commentatorPhrasesLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)playbackSpeed).BeginInit();
             panel2.SuspendLayout();
+            flowLayoutPanel2.SuspendLayout();
             SuspendLayout();
-            // 
-            // panel1
-            // 
-            panel1.Controls.Add(flowLayoutPanel2);
-            panel1.Location = new Point(3, 116);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(635, 2129);
-            panel1.TabIndex = 0;
-            // 
-            // flowLayoutPanel2
-            // 
-            flowLayoutPanel2.AutoScroll = true;
-            flowLayoutPanel2.AutoSize = true;
-            flowLayoutPanel2.Controls.Add(label3);
-            flowLayoutPanel2.Controls.Add(commentatorPhrasesLabel);
-            flowLayoutPanel2.FlowDirection = FlowDirection.TopDown;
-            flowLayoutPanel2.Location = new Point(3, 3);
-            flowLayoutPanel2.Name = "flowLayoutPanel2";
-            flowLayoutPanel2.Size = new Size(632, 1563);
-            flowLayoutPanel2.TabIndex = 1;
-            // 
-            // label3
-            // 
-            label3.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label3.Location = new Point(3, 0);
-            label3.Name = "label3";
-            label3.Size = new Size(626, 66);
-            label3.TabIndex = 0;
-            label3.Text = "Play-by-Play Description";
-            label3.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // commentatorPhrasesLabel
-            // 
-            commentatorPhrasesLabel.AutoSize = true;
-            commentatorPhrasesLabel.Location = new Point(3, 66);
-            commentatorPhrasesLabel.MaximumSize = new Size(610, 0);
-            commentatorPhrasesLabel.Name = "commentatorPhrasesLabel";
-            commentatorPhrasesLabel.Size = new Size(593, 45);
-            commentatorPhrasesLabel.TabIndex = 1;
-            commentatorPhrasesLabel.Text = resources.GetString("commentatorPhrasesLabel.Text");
             // 
             // label1
             // 
@@ -184,30 +142,56 @@
             panel2.Size = new Size(635, 107);
             panel2.TabIndex = 1;
             // 
+            // flowLayoutPanel2
+            // 
+            flowLayoutPanel2.AutoScroll = true;
+            flowLayoutPanel2.AutoSize = true;
+            flowLayoutPanel2.Controls.Add(label3);
+            flowLayoutPanel2.Controls.Add(commentatorPhrasesLabel);
+            flowLayoutPanel2.FlowDirection = FlowDirection.TopDown;
+            flowLayoutPanel2.Location = new Point(17, 116);
+            flowLayoutPanel2.Name = "flowLayoutPanel2";
+            flowLayoutPanel2.Size = new Size(599, 1563);
+            flowLayoutPanel2.TabIndex = 2;
+            // 
+            // label3
+            // 
+            label3.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label3.Location = new Point(3, 0);
+            label3.Name = "label3";
+            label3.Size = new Size(593, 66);
+            label3.TabIndex = 0;
+            label3.Text = "Play-by-Play Description";
+            label3.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // commentatorPhrasesLabel
+            // 
+            commentatorPhrasesLabel.AutoSize = true;
+            commentatorPhrasesLabel.Location = new Point(3, 66);
+            commentatorPhrasesLabel.MaximumSize = new Size(610, 0);
+            commentatorPhrasesLabel.Name = "commentatorPhrasesLabel";
+            commentatorPhrasesLabel.Size = new Size(593, 45);
+            commentatorPhrasesLabel.TabIndex = 1;
+            commentatorPhrasesLabel.Text = resources.GetString("commentatorPhrasesLabel.Text");
+            // 
             // WatchGameUserControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(flowLayoutPanel2);
             Controls.Add(panel2);
-            Controls.Add(panel1);
             Name = "WatchGameUserControl";
             Size = new Size(641, 4000);
-            panel1.ResumeLayout(false);
-            panel1.PerformLayout();
-            flowLayoutPanel2.ResumeLayout(false);
-            flowLayoutPanel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)playbackSpeed).EndInit();
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
+            flowLayoutPanel2.ResumeLayout(false);
+            flowLayoutPanel2.PerformLayout();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
-
-        public Panel panel1;
-        public FlowLayoutPanel flowLayoutPanel2;
-        private Label label3;
-        public Label commentatorPhrasesLabel;
         private Label label1;
         public NumericUpDown playbackSpeed;
         private Label label2;
@@ -217,5 +201,8 @@
         private Label seasonDayLabel;
         public Label scoreLabel;
         public Panel panel2;
+        public FlowLayoutPanel flowLayoutPanel2;
+        private Label label3;
+        public Label commentatorPhrasesLabel;
     }
 }

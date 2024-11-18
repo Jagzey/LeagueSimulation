@@ -7,6 +7,9 @@
     <Compile Update="FullScheduleUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="LeagueLeadersUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="LeagueStandingsUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

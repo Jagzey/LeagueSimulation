@@ -1,11 +1,13 @@
-﻿namespace LeagueSimulation
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace LeagueSimulation
 {
     public partial class FullScheduleUserControl : UserControl
     {
         public League? league;
         public bool addPhrases = false;
         public string? CommentatorPhrase;
-        public string? ScoreAfterPhrase; 
+        public string? ScoreAfterPhrase;
         public FullScheduleUserControl(League? league)
         {
             InitializeComponent();
@@ -413,11 +415,11 @@
             }
             else
             {
-                league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][0], (int)currentDayShownNum.Value);
+                league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][0], (int)currentDayShownNum.Value, true);
                 string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][0].Split(',');
                 UpdateGame1Panel(teamsPlaying);
             }
-            
+
         }
 
         private void UpdateGame1Panel(string[] teamsPlaying)
@@ -433,7 +435,7 @@
 
         private void game2SimGameButton_Click(object sender, EventArgs e)
         {
-            league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][1], (int)currentDayShownNum.Value);
+            league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][1], (int)currentDayShownNum.Value, true);
             string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][1].Split(',');
             UpdateGame2Panel(teamsPlaying);
         }
@@ -451,7 +453,7 @@
 
         private void game3SimGameButton_Click(object sender, EventArgs e)
         {
-            league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][2], (int)currentDayShownNum.Value);
+            league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][2], (int)currentDayShownNum.Value, true);
             string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][2].Split(',');
             UpdateGame3Panel(teamsPlaying);
         }
@@ -469,7 +471,7 @@
 
         private void game4SimGameButton_Click(object sender, EventArgs e)
         {
-            league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][3], (int)currentDayShownNum.Value);
+            league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][3], (int)currentDayShownNum.Value, true);
             string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][3].Split(',');
             UpdateGame4Panel(teamsPlaying);
         }
@@ -487,7 +489,7 @@
 
         private void game5SimGameButton_Click(object sender, EventArgs e)
         {
-            league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][4], (int)currentDayShownNum.Value);
+            league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][4], (int)currentDayShownNum.Value, true);
             string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][4].Split(',');
             UpdateGame5Panel(teamsPlaying);
         }
@@ -505,7 +507,7 @@
 
         private void game6SimGameButton_Click(object sender, EventArgs e)
         {
-            league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][5], (int)currentDayShownNum.Value);
+            league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][5], (int)currentDayShownNum.Value, true);
             string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][5].Split(',');
             UpdateGame6Panel(teamsPlaying);
         }
@@ -523,7 +525,7 @@
 
         private void game7SimGameButton_Click(object sender, EventArgs e)
         {
-            league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][6], (int)currentDayShownNum.Value);
+            league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][6], (int)currentDayShownNum.Value, true);
             string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][6].Split(',');
             UpdateGame7Panel(teamsPlaying);
         }
@@ -541,7 +543,7 @@
 
         private void game8SimGameButton_Click(object sender, EventArgs e)
         {
-            league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][7], (int)currentDayShownNum.Value);
+            league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][7], (int)currentDayShownNum.Value, true);
             string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][7].Split(',');
             UpdateGame8Panel(teamsPlaying);
         }
@@ -560,7 +562,7 @@
 
         private void game9SimGameButton_Click(object sender, EventArgs e)
         {
-            league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][8], (int)currentDayShownNum.Value);
+            league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][8], (int)currentDayShownNum.Value, true);
             string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][8].Split(',');
             UpdateGame9Panel(teamsPlaying);
         }
@@ -577,7 +579,7 @@
         }
         private void game10SimGameButton_Click(object sender, EventArgs e)
         {
-            league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][9], (int)currentDayShownNum.Value);
+            league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][9], (int)currentDayShownNum.Value, true);
             string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][9].Split(',');
             UpdateGame10Panel(teamsPlaying);
         }
@@ -594,7 +596,7 @@
         }
         private void game11SimGameButton_Click(object sender, EventArgs e)
         {
-            league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][10], (int)currentDayShownNum.Value);
+            league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][10], (int)currentDayShownNum.Value, true);
             string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][10].Split(',');
             UpdateGame11Panel(teamsPlaying);
         }
@@ -612,7 +614,7 @@
 
         private void game12SimGameButton_Click(object sender, EventArgs e)
         {
-            league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][11], (int)currentDayShownNum.Value);
+            league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][11], (int)currentDayShownNum.Value, true);
             string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][11].Split(',');
             UpdateGame12Panel(teamsPlaying);
         }
@@ -630,7 +632,7 @@
 
         private void game13SimGameButton_Click(object sender, EventArgs e)
         {
-            league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][12], (int)currentDayShownNum.Value);
+            league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][12], (int)currentDayShownNum.Value, true);
             string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][12].Split(',');
             UpdateGame13Panel(teamsPlaying);
         }
@@ -649,9 +651,9 @@
             scheduleDisplayPanel.Controls.Clear();
 
             scheduleDisplayPanel.Controls.Add(userControl.panel2);
-            scheduleDisplayPanel.Controls.Add(userControl.panel1);
+            scheduleDisplayPanel.Controls.Add(userControl.flowLayoutPanel2);
             userControl.panel2.Show();
-            userControl.panel1.Show();
+            userControl.flowLayoutPanel2.Show();
             scheduleDisplayPanel.Refresh();
 
             int commentatorCounter = 0;
@@ -659,16 +661,26 @@
             {
                 string commentatorPhrase = userControl.CommentatorPhrases[commentatorCounter];
                 string currentScore = userControl.ScoreAfterEachPhrase[commentatorCounter];
-                await WaitToPrintPhrase((int)userControl.playbackSpeed.Value, commentatorPhrase, currentScore);
-                if (addPhrases)
+                if (commentatorPhrase.Contains("substituted"))
                 {
-                    userControl.commentatorPhrasesLabel.Text = $"{CommentatorPhrase}\n\n" + userControl.commentatorPhrasesLabel.Text;
-                    userControl.scoreLabel.Text = ScoreAfterPhrase;
+                    userControl.commentatorPhrasesLabel.Text = $"{commentatorPhrase}\n\n" + userControl.commentatorPhrasesLabel.Text;
+                    userControl.scoreLabel.Text = currentScore;
                     commentatorCounter++;
                     addPhrases = false;
                 }
+                else
+                {
+                    await WaitToPrintPhrase((int)userControl.playbackSpeed.Value, commentatorPhrase, currentScore);
+                    if (addPhrases)
+                    {
+                        userControl.commentatorPhrasesLabel.Text = $"{CommentatorPhrase}\n\n" + userControl.commentatorPhrasesLabel.Text;
+                        userControl.scoreLabel.Text = ScoreAfterPhrase;
+                        commentatorCounter++;
+                        addPhrases = false;
+                    }
+                }
                 userControl.panel2.Refresh();
-                userControl.panel1.Refresh();
+                userControl.flowLayoutPanel2.Refresh();
 
             }
 
@@ -700,7 +712,7 @@
 
         private void simDayButton_Click(object sender, EventArgs e)
         {
-            league.SimulateDay(league.CurrentSchedule[(int)currentDayShownNum.Value - 1], (int)currentDayShownNum.Value);
+            league.SimulateDay(league.CurrentSchedule[(int)currentDayShownNum.Value - 1], (int)currentDayShownNum.Value, true);
 
             // now we update all the buttons on the screen
             {
@@ -727,8 +739,134 @@
             for (int i = 0; i < 30; i++)
             {
                 if (i >= league.CurrentSchedule.Count) break;
-                league.SimulateDay(league.CurrentSchedule[(int)currentDayShownNum.Value - 1 + i], (int)currentDayShownNum.Value + i);
+                league.SimulateDay(league.CurrentSchedule[(int)currentDayShownNum.Value - 1 + i], (int)currentDayShownNum.Value + i, false);
             }
+            league.SetPlayerAverageStats();
+
+
+            // now we update all the buttons on the screen
+            {
+                List<string> gamesInDay = league.CurrentSchedule[(int)currentDayShownNum.Value - 1];
+                if (gamesInDay.Count > 0) UpdateGame1Panel(gamesInDay[0].Split(","));
+                if (gamesInDay.Count > 1) UpdateGame2Panel(gamesInDay[1].Split(","));
+                if (gamesInDay.Count > 2) UpdateGame3Panel(gamesInDay[2].Split(","));
+                if (gamesInDay.Count > 3) UpdateGame4Panel(gamesInDay[3].Split(","));
+                if (gamesInDay.Count > 4) UpdateGame5Panel(gamesInDay[4].Split(","));
+                if (gamesInDay.Count > 5) UpdateGame6Panel(gamesInDay[5].Split(","));
+                if (gamesInDay.Count > 6) UpdateGame7Panel(gamesInDay[6].Split(","));
+                if (gamesInDay.Count > 7) UpdateGame8Panel(gamesInDay[7].Split(","));
+                if (gamesInDay.Count > 8) UpdateGame9Panel(gamesInDay[8].Split(","));
+                if (gamesInDay.Count > 9) UpdateGame10Panel(gamesInDay[9].Split(","));
+                if (gamesInDay.Count > 10) UpdateGame11Panel(gamesInDay[10].Split(","));
+                if (gamesInDay.Count > 11) UpdateGame12Panel(gamesInDay[11].Split(","));
+                if (gamesInDay.Count > 12) UpdateGame13Panel(gamesInDay[12].Split(","));
+            }
+        }
+
+        private void game2WatchGameButton_Click(object sender, EventArgs e)
+        {
+            (List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][1], (int)currentDayShownNum.Value);
+            string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][1].Split(',');
+            UpdateGame2Panel(teamsPlaying);
+            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
+        }
+
+        private void game3WatchGameButton_Click(object sender, EventArgs e)
+        {
+            (List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][2], (int)currentDayShownNum.Value);
+            string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][2].Split(',');
+            UpdateGame3Panel(teamsPlaying);
+            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
+        }
+
+        private void game4WatchGameButton_Click(object sender, EventArgs e)
+        {
+            (List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][3], (int)currentDayShownNum.Value);
+            string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][3].Split(',');
+            UpdateGame4Panel(teamsPlaying);
+            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
+        }
+
+        private void game5WatchGameButton_Click(object sender, EventArgs e)
+        {
+            (List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][4], (int)currentDayShownNum.Value);
+            string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][4].Split(',');
+            UpdateGame5Panel(teamsPlaying);
+            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
+        }
+
+        private void game6WatchGameButton_Click(object sender, EventArgs e)
+        {
+            (List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][5], (int)currentDayShownNum.Value);
+            string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][5].Split(',');
+            UpdateGame6Panel(teamsPlaying);
+            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
+        }
+
+        private void game7WatchGameButton_Click(object sender, EventArgs e)
+        {
+            (List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][6], (int)currentDayShownNum.Value);
+            string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][6].Split(',');
+            UpdateGame7Panel(teamsPlaying);
+            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
+        }
+
+        private void game8WatchGameButton_Click(object sender, EventArgs e)
+        {
+            (List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][7], (int)currentDayShownNum.Value);
+            string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][7].Split(',');
+            UpdateGame8Panel(teamsPlaying);
+            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
+        }
+
+        private void game9WatchGameButton_Click(object sender, EventArgs e)
+        {
+            (List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][8], (int)currentDayShownNum.Value);
+            string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][8].Split(',');
+            UpdateGame9Panel(teamsPlaying);
+            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
+        }
+
+        private void game10WatchGameButton_Click(object sender, EventArgs e)
+        {
+            (List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][9], (int)currentDayShownNum.Value);
+            string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][9].Split(',');
+            UpdateGame10Panel(teamsPlaying);
+            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
+        }
+
+        private void game11WatchGameButton_Click(object sender, EventArgs e)
+        {
+            (List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][10], (int)currentDayShownNum.Value);
+            string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][10].Split(',');
+            UpdateGame11Panel(teamsPlaying);
+            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
+        }
+
+        private void game12WatchGameButton_Click(object sender, EventArgs e)
+        {
+            (List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][11], (int)currentDayShownNum.Value);
+            string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][11].Split(',');
+            UpdateGame12Panel(teamsPlaying);
+            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
+        }
+
+        private void game13WatchGameButton_Click(object sender, EventArgs e)
+        {
+            (List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][12], (int)currentDayShownNum.Value);
+            string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][12].Split(',');
+            UpdateGame13Panel(teamsPlaying);
+            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
+        }
+
+        private void simToEndButton_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < league.CurrentSchedule.Count; i++)
+            {
+                if (i >= league.CurrentSchedule.Count) break;
+                league.SimulateDay(league.CurrentSchedule[(int)currentDayShownNum.Value - 1 + i], (int)currentDayShownNum.Value + i, false);
+            }
+            league.SetPlayerAverageStats();
 
 
             // now we update all the buttons on the screen

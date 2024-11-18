@@ -35,7 +35,7 @@ namespace LeagueSimulation
                 eastSeventhPositionLabel.Text = $"7. {userConferenceTeams[6]} {league.GetTeamRecord(userConferenceTeams[6])}";
                 eastEighthPositionLabel.Text = $"8. {userConferenceTeams[7]} {league.GetTeamRecord(userConferenceTeams[7])}";
                 eastNinthPositionLabel.Text = $"9. {userConferenceTeams[8]} {league.GetTeamRecord(userConferenceTeams[8])}";
-                eastTenthPositionLabel.Text = $"10. {userConferenceTeams[9]} {league.GetTeamRecord(userConferenceTeams[8])}";
+                eastTenthPositionLabel.Text = $"10. {userConferenceTeams[9]} {league.GetTeamRecord(userConferenceTeams[9])}";
                 eastEleventhPositionLabel.Text = $"11. {userConferenceTeams[10]} {league.GetTeamRecord(userConferenceTeams[10])}";
                 eastTwelfthPositionLabel.Text = $"12. {userConferenceTeams[11]} {league.GetTeamRecord(userConferenceTeams[11])}";
                 eastThirteenthPositionLabel.Text = $"13. {userConferenceTeams[12]} {league.GetTeamRecord(userConferenceTeams[12])}";

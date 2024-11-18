@@ -28,53 +28,57 @@
         /// </summary>
         private void InitializeComponent()
         {
-            dataGridView1 = new DataGridView();
+            rosterFlowLayoutPanel = new FlowLayoutPanel();
             panel1 = new Panel();
-            cu = new ListBox();
+            currentTeamRoster = new ComboBox();
             label1 = new Label();
             rosterLabel = new Label();
-            PlayerName = new DataGridViewTextBoxColumn();
+            rosterDataGridView = new DataGridView();
+            PlayerFirstname = new DataGridViewTextBoxColumn();
+            PlayerSurname = new DataGridViewTextBoxColumn();
             Overall = new DataGridViewTextBoxColumn();
             Potential = new DataGridViewTextBoxColumn();
             Position = new DataGridViewTextBoxColumn();
             Age = new DataGridViewTextBoxColumn();
             MinutesPlayed = new DataGridViewTextBoxColumn();
-            GamesPlayed = new DataGridViewTextBoxColumn();
+            FGPCT = new DataGridViewTextBoxColumn();
             Points = new DataGridViewTextBoxColumn();
             Rebounds = new DataGridViewTextBoxColumn();
             Assists = new DataGridViewTextBoxColumn();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            rosterFlowLayoutPanel.SuspendLayout();
             panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)rosterDataGridView).BeginInit();
             SuspendLayout();
             // 
-            // dataGridView1
+            // rosterFlowLayoutPanel
             // 
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { PlayerName, Overall, Potential, Position, Age, MinutesPlayed, GamesPlayed, Points, Rebounds, Assists });
-            dataGridView1.Location = new Point(3, 69);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.ReadOnly = true;
-            dataGridView1.Size = new Size(628, 328);
-            dataGridView1.TabIndex = 0;
+            rosterFlowLayoutPanel.Controls.Add(panel1);
+            rosterFlowLayoutPanel.Controls.Add(rosterDataGridView);
+            rosterFlowLayoutPanel.Location = new Point(3, 3);
+            rosterFlowLayoutPanel.Name = "rosterFlowLayoutPanel";
+            rosterFlowLayoutPanel.Size = new Size(628, 394);
+            rosterFlowLayoutPanel.TabIndex = 0;
             // 
             // panel1
             // 
-            panel1.Controls.Add(cu);
+            panel1.Controls.Add(currentTeamRoster);
             panel1.Controls.Add(label1);
             panel1.Controls.Add(rosterLabel);
             panel1.Location = new Point(3, 3);
             panel1.Name = "panel1";
-            panel1.Size = new Size(628, 60);
-            panel1.TabIndex = 1;
+            panel1.Size = new Size(609, 60);
+            panel1.TabIndex = 3;
             // 
-            // cu
+            // currentTeamRoster
             // 
-            cu.FormattingEnabled = true;
-            cu.ItemHeight = 15;
-            cu.Items.AddRange(new object[] { "New York Bankers", "", "Philadelphia Hawks", "", "Boston Beavers", "", "Miami Crocodiles", "", "Atlanta Raptors", "", "Washington Wolves", "", "Charlotte Vipers", "", "Orlando Knights", "Detroit Thunder", "", "Cleveland Crows", "", "Milwaukee Spartans", "", "Indianapolis Falcons", "", "Chicago Raiders", "", "Brooklyn Bulls", "", "Toronto Titans", "", "Los Angeles Warriors", "", "San Francisco Saints", "", "Phoenix Dragons", "", "Dallas Cowboys", "", "Houston Eagles", "", "Denver Raccoons", "", "Portland Tornados", "", "San Antonio Kangaroos", "", "Las Vegas Dimes", "", "Seattle Panthers", "", "Sacramento Sharks", "", "Salt Lake City Lions", "", "Oklahoma City Sonics", "", "New Orleans Raiders", "", "Minneapolis Seals" });
-            cu.Location = new Point(29, 24);
-            cu.Name = "cu";
-            cu.Size = new Size(120, 19);
-            cu.TabIndex = 2;
+            currentTeamRoster.DropDownStyle = ComboBoxStyle.DropDownList;
+            currentTeamRoster.FormattingEnabled = true;
+            currentTeamRoster.Items.AddRange(new object[] { "New York Bankers", "Philadelphia Hawks", "Boston Beavers", "Miami Crocodiles", "Atlanta Raptors", "Washington Wolves", "Charlotte Vipers", "Orlando Knights", "Detroit Thunder", "Cleveland Crows", "Milwaukee Spartans", "Indianapolis Falcons", "Chicago Raiders", "Brooklyn Bulls", "Toronto Titans", "Los Angeles Warriors", "San Francisco Saints", "Phoenix Dragons", "Dallas Cowboys", "Houston Eagles", "Denver Raccoons", "Portland Tornados", "San Antonio Kangaroos", "Las Vegas Dimes", "Seattle Panthers", "Sacramento Sharks", "Salt Lake City Lions", "Oklahoma City Sonics", "New Orleans Raiders", "Minneapolis Seals" });
+            currentTeamRoster.Location = new Point(20, 24);
+            currentTeamRoster.Name = "currentTeamRoster";
+            currentTeamRoster.Size = new Size(142, 23);
+            currentTeamRoster.TabIndex = 9;
+            currentTeamRoster.SelectedIndexChanged += currentTeamRoster_SelectedIndexChanged;
             // 
             // label1
             // 
@@ -95,15 +99,34 @@
             rosterLabel.TabIndex = 0;
             rosterLabel.Text = "Roster Menu";
             // 
-            // PlayerName
+            // rosterDataGridView
             // 
-            PlayerName.HeaderText = "Player Name";
-            PlayerName.Name = "PlayerName";
-            PlayerName.ReadOnly = true;
-            PlayerName.Width = 140;
+            rosterDataGridView.Columns.AddRange(new DataGridViewColumn[] { PlayerFirstname, PlayerSurname, Overall, Potential, Position, Age, MinutesPlayed, FGPCT, Points, Rebounds, Assists });
+            rosterDataGridView.Location = new Point(3, 69);
+            rosterDataGridView.Name = "rosterDataGridView";
+            rosterDataGridView.ReadOnly = true;
+            rosterDataGridView.Size = new Size(625, 312);
+            rosterDataGridView.TabIndex = 2;
+            // 
+            // PlayerFirstname
+            // 
+            PlayerFirstname.DataPropertyName = "playerForename";
+            PlayerFirstname.HeaderText = "Firstname";
+            PlayerFirstname.Name = "PlayerFirstname";
+            PlayerFirstname.ReadOnly = true;
+            PlayerFirstname.Width = 90;
+            // 
+            // PlayerSurname
+            // 
+            PlayerSurname.DataPropertyName = "playerSurname";
+            PlayerSurname.HeaderText = "Surname";
+            PlayerSurname.Name = "PlayerSurname";
+            PlayerSurname.ReadOnly = true;
+            PlayerSurname.Width = 90;
             // 
             // Overall
             // 
+            Overall.DataPropertyName = "overall";
             Overall.HeaderText = "Ovr";
             Overall.Name = "Overall";
             Overall.ReadOnly = true;
@@ -111,6 +134,7 @@
             // 
             // Potential
             // 
+            Potential.DataPropertyName = "potential";
             Potential.HeaderText = "Pot";
             Potential.Name = "Potential";
             Potential.ReadOnly = true;
@@ -118,6 +142,7 @@
             // 
             // Position
             // 
+            Position.DataPropertyName = "position";
             Position.HeaderText = "Pos";
             Position.Name = "Position";
             Position.ReadOnly = true;
@@ -125,6 +150,7 @@
             // 
             // Age
             // 
+            Age.DataPropertyName = "age";
             Age.HeaderText = "Age";
             Age.Name = "Age";
             Age.ReadOnly = true;
@@ -132,20 +158,23 @@
             // 
             // MinutesPlayed
             // 
+            MinutesPlayed.DataPropertyName = "MP";
             MinutesPlayed.HeaderText = "MP";
             MinutesPlayed.Name = "MinutesPlayed";
             MinutesPlayed.ReadOnly = true;
-            MinutesPlayed.Width = 65;
+            MinutesPlayed.Width = 43;
             // 
-            // GamesPlayed
+            // FGPCT
             // 
-            GamesPlayed.HeaderText = "GP";
-            GamesPlayed.Name = "GamesPlayed";
-            GamesPlayed.ReadOnly = true;
-            GamesPlayed.Width = 45;
+            FGPCT.DataPropertyName = "FGPCT";
+            FGPCT.HeaderText = "FG%";
+            FGPCT.Name = "FGPCT";
+            FGPCT.ReadOnly = true;
+            FGPCT.Width = 45;
             // 
             // Points
             // 
+            Points.DataPropertyName = "PTS";
             Points.HeaderText = "PTS";
             Points.Name = "Points";
             Points.ReadOnly = true;
@@ -153,6 +182,7 @@
             // 
             // Rebounds
             // 
+            Rebounds.DataPropertyName = "REB";
             Rebounds.HeaderText = "REB";
             Rebounds.Name = "Rebounds";
             Rebounds.ReadOnly = true;
@@ -160,6 +190,7 @@
             // 
             // Assists
             // 
+            Assists.DataPropertyName = "AST";
             Assists.HeaderText = "AST";
             Assists.Name = "Assists";
             Assists.ReadOnly = true;
@@ -169,30 +200,33 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(panel1);
-            Controls.Add(dataGridView1);
+            Controls.Add(rosterFlowLayoutPanel);
             Name = "RosterUserControl";
             Size = new Size(634, 400);
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            Load += RosterUserControl_Load;
+            rosterFlowLayoutPanel.ResumeLayout(false);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)rosterDataGridView).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
 
-        private DataGridView dataGridView1;
+        private FlowLayoutPanel rosterFlowLayoutPanel;
         private Panel panel1;
-        private Label rosterLabel;
         private Label label1;
-        private ListBox cu;
-        private DataGridViewTextBoxColumn PlayerName;
+        private Label rosterLabel;
+        private DataGridView rosterDataGridView;
+        private ComboBox currentTeamRoster;
+        private DataGridViewTextBoxColumn PlayerFirstname;
+        private DataGridViewTextBoxColumn PlayerSurname;
         private DataGridViewTextBoxColumn Overall;
         private DataGridViewTextBoxColumn Potential;
         private DataGridViewTextBoxColumn Position;
         private DataGridViewTextBoxColumn Age;
         private DataGridViewTextBoxColumn MinutesPlayed;
-        private DataGridViewTextBoxColumn GamesPlayed;
+        private DataGridViewTextBoxColumn FGPCT;
         private DataGridViewTextBoxColumn Points;
         private DataGridViewTextBoxColumn Rebounds;
         private DataGridViewTextBoxColumn Assists;
