@@ -22,7 +22,11 @@ namespace LeagueSimulation
             this.SaveState = saveState;
             InitializeComponent();
             this.CurrentLeague = loadGame;
-            if (!CurrentLeague.Playoffs) LoadDashboard(new DashboardUserControl(loadGame));
+            if (!CurrentLeague.Playoffs)
+            {
+                LoadDashboard(new DashboardUserControl(loadGame));
+                if (CurrentLeague.GamesPlayed >= 82) CurrentLeague.GeneratePlayoffsSchedule();
+            }
         }
 
         private void LoadDashboard(UserControl dashboardUserControl)

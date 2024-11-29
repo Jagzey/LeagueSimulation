@@ -428,7 +428,10 @@ namespace LeagueSimulation
             {
                 connection.Open();
                 string getPlayersQuery = $"SELECT playerId FROM playersGamesStats WHERE teamName = '{UserTeamName}';";
-                string getTeamLeaderQuery = $"SELECT playerForename, playerSurname, AVG({stat}) FROM playersGamesStats WHERE playerId = ";
+                string getTeamLeaderQuery = @$"
+                    SELECT players.playerForename, players.playerSurname, AVG(playersGamesStats.{stat}) 
+                    FROM playersGamesStats, players 
+                    WHERE players.playerId = playersGamesStats.playerId AND players.playerId = ";
                 using (var command = new SQLiteCommand(getPlayersQuery, connection))
                 {
                     using (var reader = command.ExecuteReader())
@@ -441,7 +444,10 @@ namespace LeagueSimulation
                 }
                 foreach (int player in playersOnTeam)
                 {
-                    getTeamLeaderQuery = $"SELECT playerForename, playerSurname, AVG({stat}) FROM playersGamesStats WHERE playerId = ";
+                    getTeamLeaderQuery = @$"
+                        SELECT players.playerForename, players.playerSurname, AVG(playersGamesStats.{stat}) 
+                        FROM playersGamesStats, players 
+                        WHERE players.playerId = playersGamesStats.playerId AND players.playerId = ";
                     getTeamLeaderQuery += player.ToString() + ";";
                     using (var command = new SQLiteCommand(getTeamLeaderQuery, connection))
                     {
@@ -1094,6 +1100,58 @@ namespace LeagueSimulation
                 return dailySchedule;
             }
             return new List<List<string>>();
+        }
+
+        public List<List<string>> GeneratePlayoffsSchedule()
+        {
+            // we get the top 8 seeds from both conferences, to generate the schedule
+            List<string> eastPlayoffTeams = new List<string>();
+            List<string> westPlayoffTeams = new List<string>();
+            List<List<string>> games = new List<List<string>>();
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                string getEastPlayoffTeams = $"SELECT teamName FROM teams WHERE position < 9 AND conference = 'East' ORDER BY position";
+                string getWestPlayoffTeams = $"SELECT teamName FROM teams WHERE position < 9 AND conference = 'West' ORDER BY position";
+                using (var command = new SQLiteCommand(getEastPlayoffTeams, connection))
+                {
+                    using (var reader = command.ExecuteReader()) while (reader.Read()) eastPlayoffTeams.Add(reader.GetString(0));
+                }
+                using (var command = new SQLiteCommand(getWestPlayoffTeams, connection))
+                {
+                    using (var reader = command.ExecuteReader()) while (reader.Read()) westPlayoffTeams.Add(reader.GetString(0));
+                }
+            }
+
+            // here we generate the first 4 games for the east and west coast for the 1st round of the playoffs
+            for (int i = 0; i < 8; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    List<string> currentDay = new List<string>();
+                    // we generate the games for the east coast
+                    for (int j = 0; j < 4; j++)
+                    {
+                        string initialHomeTeam = eastPlayoffTeams[j];
+                        string initialAwayTeam = eastPlayoffTeams[7 - j];
+                        currentDay.Add($"{initialHomeTeam},{initialAwayTeam}");
+                    }
+                    games.Add(currentDay);
+                }
+                else
+                {
+                    List<string> currentDay = new List<string>();
+                    // we generate the games for the west coast
+                    for (int j = 0; j < 4; j++)
+                    {
+                        string initialHomeTeam = westPlayoffTeams[j];
+                        string initialAwayTeam = westPlayoffTeams[7 - j];
+                        currentDay.Add($"{initialHomeTeam},{initialAwayTeam}");
+                    }
+                    games.Add(currentDay);
+                }
+            }
+            return games;
         }
 
         public List<List<string>> GetTeamsInPlayoffs()

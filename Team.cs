@@ -19,7 +19,7 @@ namespace LeagueSimulation
         private int teamId = 0;
         //public int revenue = 200000000;
         public int Position { get; set; }
-        public string Conference { get; set; } 
+        public string? Conference { get; set; } 
         public int W { get; set; }
         public int L { get; set; }
         public double WinPct { get; set; }
