@@ -108,8 +108,9 @@ namespace LeagueSimulation
             // we fill out the dashboard panel in the dashboard
             {
                 teamNameLabel.Text = league.UserTeamName;
-                teamRecordLabel.Text = league.GetUserTeamRecord();
+                teamRecordLabel.Text = league.GetTeamRecord(league.UserTeamName);
                 seasonDayLabel.Text += $"{league.CurrentDay}";
+                seasonYearLabel.Text += $"{league.CurrentSeason + 2023}";
                 string conferencePositionText = "";
                 int conferencePosition = league.GetLeaguePosition();
                 if (conferencePosition == 1)
@@ -181,6 +182,7 @@ namespace LeagueSimulation
             tenthPositionLabel = new Label();
             ninthPositionLabel = new Label();
             dashboardPanel1 = new Panel();
+            seasonYearLabel = new Label();
             seasonDayLabel = new Label();
             teamConfPositionLabel = new Label();
             teamNameLabel = new Label();
@@ -339,6 +341,7 @@ namespace LeagueSimulation
             // 
             // dashboardPanel1
             // 
+            dashboardPanel1.Controls.Add(seasonYearLabel);
             dashboardPanel1.Controls.Add(seasonDayLabel);
             dashboardPanel1.Controls.Add(teamConfPositionLabel);
             dashboardPanel1.Controls.Add(teamNameLabel);
@@ -350,10 +353,20 @@ namespace LeagueSimulation
             dashboardPanel1.Size = new Size(235, 181);
             dashboardPanel1.TabIndex = 4;
             // 
+            // seasonYearLabel
+            // 
+            seasonYearLabel.Font = new Font("Segoe UI", 14F);
+            seasonYearLabel.Location = new Point(36, 38);
+            seasonYearLabel.Name = "seasonYearLabel";
+            seasonYearLabel.Size = new Size(162, 25);
+            seasonYearLabel.TabIndex = 11;
+            seasonYearLabel.Text = "Season Year: ";
+            seasonYearLabel.TextAlign = ContentAlignment.TopCenter;
+            // 
             // seasonDayLabel
             // 
             seasonDayLabel.Font = new Font("Segoe UI", 14F);
-            seasonDayLabel.Location = new Point(36, 38);
+            seasonDayLabel.Location = new Point(36, 66);
             seasonDayLabel.Name = "seasonDayLabel";
             seasonDayLabel.Size = new Size(162, 25);
             seasonDayLabel.TabIndex = 10;
@@ -373,7 +386,7 @@ namespace LeagueSimulation
             // 
             teamNameLabel.AutoSize = true;
             teamNameLabel.Font = new Font("Segoe UI", 14F);
-            teamNameLabel.Location = new Point(36, 76);
+            teamNameLabel.Location = new Point(36, 98);
             teamNameLabel.Name = "teamNameLabel";
             teamNameLabel.Size = new Size(162, 25);
             teamNameLabel.TabIndex = 9;
@@ -382,9 +395,9 @@ namespace LeagueSimulation
             // teamRecordLabel
             // 
             teamRecordLabel.Font = new Font("Segoe UI", 16F);
-            teamRecordLabel.Location = new Point(68, 112);
+            teamRecordLabel.Location = new Point(69, 123);
             teamRecordLabel.Name = "teamRecordLabel";
-            teamRecordLabel.Size = new Size(106, 34);
+            teamRecordLabel.Size = new Size(106, 35);
             teamRecordLabel.TabIndex = 8;
             teamRecordLabel.Text = "0-0";
             teamRecordLabel.TextAlign = ContentAlignment.MiddleCenter;
@@ -502,7 +515,6 @@ namespace LeagueSimulation
             ptsLeaderLabel.Size = new Size(197, 21);
             ptsLeaderLabel.TabIndex = 6;
             ptsLeaderLabel.Text = "Michael Jordan: 30.5 pts";
-            ptsLeaderLabel.Click += ptsLeaderLabel_Click;
             // 
             // teamLeadersLabel
             // 
@@ -524,7 +536,6 @@ namespace LeagueSimulation
             schedulePanel.Name = "schedulePanel";
             schedulePanel.Size = new Size(203, 161);
             schedulePanel.TabIndex = 8;
-            schedulePanel.Paint += schedulePanel_Paint;
             // 
             // upcomingGame3Label
             // 
@@ -716,16 +727,7 @@ namespace LeagueSimulation
         private Label nonPlayoffsLabel;
         private Panel panel2;
         private Label seasonDayLabel;
+        private Label seasonYearLabel;
         private Label? dashboardPanel;
-
-        private void schedulePanel_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void ptsLeaderLabel_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }

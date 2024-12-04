@@ -123,10 +123,10 @@
             currentDayLabel = new Label();
             currentDayShownNum = new NumericUpDown();
             topPanel = new Panel();
+            simToEndButton = new Button();
             simMonthButton = new Button();
             simDayButton = new Button();
             scheduleDisplayPanel = new FlowLayoutPanel();
-            simToEndButton = new Button();
             gamesListPanel.SuspendLayout();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
@@ -224,7 +224,7 @@
             // 
             game1TeamsLabel.AutoSize = true;
             game1TeamsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game1TeamsLabel.Location = new Point(15, 60);
+            game1TeamsLabel.Location = new Point(3, 60);
             game1TeamsLabel.Name = "game1TeamsLabel";
             game1TeamsLabel.Size = new Size(396, 21);
             game1TeamsLabel.TabIndex = 0;
@@ -289,7 +289,7 @@
             // 
             game2TeamsLabel.AutoSize = true;
             game2TeamsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game2TeamsLabel.Location = new Point(16, 61);
+            game2TeamsLabel.Location = new Point(3, 63);
             game2TeamsLabel.Name = "game2TeamsLabel";
             game2TeamsLabel.Size = new Size(396, 21);
             game2TeamsLabel.TabIndex = 4;
@@ -363,7 +363,7 @@
             // 
             game3TeamsLabel.AutoSize = true;
             game3TeamsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game3TeamsLabel.Location = new Point(16, 61);
+            game3TeamsLabel.Location = new Point(3, 63);
             game3TeamsLabel.Name = "game3TeamsLabel";
             game3TeamsLabel.Size = new Size(396, 21);
             game3TeamsLabel.TabIndex = 4;
@@ -437,7 +437,7 @@
             // 
             game4TeamsLabel.AutoSize = true;
             game4TeamsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game4TeamsLabel.Location = new Point(16, 61);
+            game4TeamsLabel.Location = new Point(3, 63);
             game4TeamsLabel.Name = "game4TeamsLabel";
             game4TeamsLabel.Size = new Size(396, 21);
             game4TeamsLabel.TabIndex = 4;
@@ -511,7 +511,7 @@
             // 
             game5TeamsLabel.AutoSize = true;
             game5TeamsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game5TeamsLabel.Location = new Point(16, 61);
+            game5TeamsLabel.Location = new Point(3, 63);
             game5TeamsLabel.Name = "game5TeamsLabel";
             game5TeamsLabel.Size = new Size(396, 21);
             game5TeamsLabel.TabIndex = 4;
@@ -585,7 +585,7 @@
             // 
             game6TeamsLabel.AutoSize = true;
             game6TeamsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game6TeamsLabel.Location = new Point(16, 61);
+            game6TeamsLabel.Location = new Point(3, 63);
             game6TeamsLabel.Name = "game6TeamsLabel";
             game6TeamsLabel.Size = new Size(396, 21);
             game6TeamsLabel.TabIndex = 4;
@@ -659,7 +659,7 @@
             // 
             game7TeamsLabel.AutoSize = true;
             game7TeamsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game7TeamsLabel.Location = new Point(16, 61);
+            game7TeamsLabel.Location = new Point(3, 63);
             game7TeamsLabel.Name = "game7TeamsLabel";
             game7TeamsLabel.Size = new Size(396, 21);
             game7TeamsLabel.TabIndex = 4;
@@ -733,7 +733,7 @@
             // 
             game8TeamsLabel.AutoSize = true;
             game8TeamsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game8TeamsLabel.Location = new Point(16, 61);
+            game8TeamsLabel.Location = new Point(3, 63);
             game8TeamsLabel.Name = "game8TeamsLabel";
             game8TeamsLabel.Size = new Size(396, 21);
             game8TeamsLabel.TabIndex = 4;
@@ -807,7 +807,7 @@
             // 
             game9TeamsLabel.AutoSize = true;
             game9TeamsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game9TeamsLabel.Location = new Point(16, 61);
+            game9TeamsLabel.Location = new Point(3, 63);
             game9TeamsLabel.Name = "game9TeamsLabel";
             game9TeamsLabel.Size = new Size(396, 21);
             game9TeamsLabel.TabIndex = 4;
@@ -881,7 +881,7 @@
             // 
             game10TeamsLabel.AutoSize = true;
             game10TeamsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game10TeamsLabel.Location = new Point(16, 61);
+            game10TeamsLabel.Location = new Point(3, 63);
             game10TeamsLabel.Name = "game10TeamsLabel";
             game10TeamsLabel.Size = new Size(396, 21);
             game10TeamsLabel.TabIndex = 4;
@@ -1161,6 +1161,17 @@
             topPanel.Size = new Size(629, 84);
             topPanel.TabIndex = 4;
             // 
+            // simToEndButton
+            // 
+            simToEndButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            simToEndButton.Location = new Point(267, 44);
+            simToEndButton.Name = "simToEndButton";
+            simToEndButton.Size = new Size(135, 40);
+            simToEndButton.TabIndex = 6;
+            simToEndButton.Text = "Sim to End";
+            simToEndButton.UseVisualStyleBackColor = true;
+            simToEndButton.Click += simToEndButton_Click;
+            // 
             // simMonthButton
             // 
             simMonthButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -1193,17 +1204,6 @@
             scheduleDisplayPanel.Name = "scheduleDisplayPanel";
             scheduleDisplayPanel.Size = new Size(641, 2800);
             scheduleDisplayPanel.TabIndex = 5;
-            // 
-            // simToEndButton
-            // 
-            simToEndButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            simToEndButton.Location = new Point(267, 44);
-            simToEndButton.Name = "simToEndButton";
-            simToEndButton.Size = new Size(135, 40);
-            simToEndButton.TabIndex = 6;
-            simToEndButton.Text = "Sim to End";
-            simToEndButton.UseVisualStyleBackColor = true;
-            simToEndButton.Click += simToEndButton_Click;
             // 
             // FullScheduleUserControl
             // 

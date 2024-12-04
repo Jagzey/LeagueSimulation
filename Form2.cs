@@ -25,7 +25,7 @@ namespace LeagueSimulation
             if (!CurrentLeague.Playoffs)
             {
                 LoadDashboard(new DashboardUserControl(loadGame));
-                if (CurrentLeague.GamesPlayed >= 82) CurrentLeague.GeneratePlayoffsSchedule();
+                //if (CurrentLeague.GamesPlayed >= 82) CurrentLeague.GeneratePlayoffsSchedule();
             }
         }
 

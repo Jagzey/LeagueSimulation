@@ -1,6 +1,4 @@
-﻿using System;
-using System.Data.SQLite;
-using System.Diagnostics;
+﻿using System.Data.SQLite;
 
 namespace LeagueSimulation
 {
@@ -24,13 +22,13 @@ namespace LeagueSimulation
         private TeamGameStats team2GameStats;
         private List<Player> team1Players = new List<Player>();
         private List<Player> team1Starters = new List<Player>();
-        public List<PlayerInGame> team1Stats  =new List<PlayerInGame>();
+        public List<PlayerInGame> team1Stats = new List<PlayerInGame>();
         public List<PlayerInGame> team1StarterStats = new List<PlayerInGame>(); // used for probabilities in possesions
         private List<Player> team2Players = new List<Player>();
         private List<Player> team2Starters = new List<Player>();
         public List<PlayerInGame> team2Stats = new List<PlayerInGame>();
         public List<PlayerInGame> team2StarterStats = new List<PlayerInGame>(); // used for probabilities in possesions
-        
+
 
         public int GameId { get; set; }
 
@@ -50,15 +48,39 @@ namespace LeagueSimulation
             {
                 connection.Open();
                 string team1PlayersQuery = $@"
-                    SELECT *
-                    FROM players
-                    WHERE teamId = {team1.TeamId}
+                    SELECT 
+                    p.*,
+                    pos.positionShort AS positionShort,
+                    sp.playstyle AS secondaryPlaystyle,
+                    pp.playstyle AS primaryPlaystyle
+                    FROM
+                        players p
+                    LEFT JOIN
+                        position pos ON p.positionId = pos.positionId
+                    LEFT JOIN
+                        secondaryPlaystyle sp ON p.secondaryPlaystyleId = sp.secondaryPlaystyleId
+                    LEFT JOIN
+                        primaryPlaystyle pp ON sp.primaryPlaystyleId = pp.primaryPlaystyleId
+                    WHERE
+                        p.teamId = {team1.TeamId};
                 ";
 
                 string team2PlayersQuery = $@"
-                    SELECT *
-                    FROM players
-                    WHERE teamId = {team2.TeamId}
+                    SELECT 
+                    p.*,
+                    pos.positionShort AS positionShort,
+                    sp.playstyle AS secondaryPlaystyle,
+                    pp.playstyle AS primaryPlaystyle
+                    FROM
+                        players p
+                    LEFT JOIN
+                        position pos ON p.positionId = pos.positionId
+                    LEFT JOIN
+                        secondaryPlaystyle sp ON p.secondaryPlaystyleId = sp.secondaryPlaystyleId
+                    LEFT JOIN
+                        primaryPlaystyle pp ON sp.primaryPlaystyleId = pp.primaryPlaystyleId
+                    WHERE
+                        p.teamId = {team2.TeamId};
                 ";
                 using (var command = new SQLiteCommand(team1PlayersQuery, connection))
                 {
@@ -70,16 +92,16 @@ namespace LeagueSimulation
                             // extract data from a player in database, and put into a player class
                             Player playerTeam1 = new Player();
                             playerTeam1.PlayerId = reader.GetInt32(reader.GetOrdinal("playerId"));
-                            playerTeam1.position = reader.GetString(reader.GetOrdinal("position"));
+                            playerTeam1.position = reader.GetString(reader.GetOrdinal("positionShort"));
                             playerTeam1.PrimaryPlaystyle = reader.GetString(reader.GetOrdinal("primaryPlaystyle"));
                             playerTeam1.SecondaryPlaystyle = reader.GetString(reader.GetOrdinal("secondaryPlaystyle"));
-                            playerTeam1.RosterSpot = reader.GetInt32(reader.GetOrdinal("rosterSpot"));
+                            playerTeam1.RosterSpot = League.CalculatePlayerRosterSpot(playerTeam1.PlayerId, connectionString);
                             playerTeam1.Height = reader.GetInt32(reader.GetOrdinal("height")); // height in inches
                             playerTeam1.Weight = reader.GetInt32(reader.GetOrdinal("weight")); // weight in lbs
                             playerTeam1.playerForename = reader.GetString(reader.GetOrdinal("playerForename"));
                             playerTeam1.playerSurname = reader.GetString(reader.GetOrdinal("playerSurname"));
                             playerTeam1.TeamId = reader.GetInt32(reader.GetOrdinal("teamId"));
-                            playerTeam1.teamName = reader.GetString(reader.GetOrdinal("teamName"));
+                            playerTeam1.teamName = team1.teamName;
                             playerTeam1.CloseShot = reader.GetInt32(reader.GetOrdinal("closeShot"));
                             playerTeam1.Layup = reader.GetInt32(reader.GetOrdinal("layup"));
                             playerTeam1.Dunk = reader.GetInt32(reader.GetOrdinal("dunk"));
@@ -112,16 +134,16 @@ namespace LeagueSimulation
                             // extract data from a player in database, and put into a player class
                             Player playerTeam2 = new Player();
                             playerTeam2.PlayerId = reader.GetInt32(reader.GetOrdinal("playerId"));
-                            playerTeam2.position = reader.GetString(reader.GetOrdinal("position"));
+                            playerTeam2.position = reader.GetString(reader.GetOrdinal("positionShort"));
                             playerTeam2.PrimaryPlaystyle = reader.GetString(reader.GetOrdinal("primaryPlaystyle"));
                             playerTeam2.SecondaryPlaystyle = reader.GetString(reader.GetOrdinal("secondaryPlaystyle"));
-                            playerTeam2.RosterSpot = reader.GetInt32(reader.GetOrdinal("rosterSpot"));
+                            playerTeam2.RosterSpot = League.CalculatePlayerRosterSpot(playerTeam2.PlayerId, connectionString);
                             playerTeam2.Height = reader.GetInt32(reader.GetOrdinal("height")); // height in inches
                             playerTeam2.Weight = reader.GetInt32(reader.GetOrdinal("weight")); // weight in lbs
                             playerTeam2.playerForename = reader.GetString(reader.GetOrdinal("playerForename"));
                             playerTeam2.playerSurname = reader.GetString(reader.GetOrdinal("playerSurname"));
                             playerTeam2.TeamId = reader.GetInt32(reader.GetOrdinal("teamId"));
-                            playerTeam2.teamName = reader.GetString(reader.GetOrdinal("teamName"));
+                            playerTeam2.teamName = team2.teamName;
                             playerTeam2.CloseShot = reader.GetInt32(reader.GetOrdinal("closeShot"));
                             playerTeam2.Layup = reader.GetInt32(reader.GetOrdinal("layup"));
                             playerTeam2.Dunk = reader.GetInt32(reader.GetOrdinal("dunk"));
@@ -171,7 +193,7 @@ namespace LeagueSimulation
                 {
                     team1StarterStats.Add(player);
                 }
-                
+
             }
             foreach (PlayerInGame player in team2Stats)
             {
@@ -213,7 +235,7 @@ namespace LeagueSimulation
             return (false, "");
         }
 
-        public void UpdateTeamRecordsInDatabase()
+        /*public void UpdateTeamRecordsInDatabase()
         {
             int team1WInTable = 0;
             int team2WInTable = 0;
@@ -286,7 +308,7 @@ namespace LeagueSimulation
                     command.ExecuteNonQuery();
                 }
             }
-        }
+        }*/
 
         public static double CalculatePlayerFieldGoal(int playerId, bool threePoint, string connectionString)
         {
@@ -296,7 +318,7 @@ namespace LeagueSimulation
             using (var connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
-                string fieldGoalQuery = $"SELECT {threePointValidator}FG FROM playersGamesStats WHERE playerId = {playerId} AND MP > 0;";
+                string fieldGoalQuery = $"SELECT {threePointValidator}FG FROM playerGameStats WHERE playerId = {playerId} AND MP > 0;";
                 using (var command = new SQLiteCommand(fieldGoalQuery, connection))
                 {
                     using (var reader = command.ExecuteReader())
@@ -336,7 +358,7 @@ namespace LeagueSimulation
                     string getAverageStatsQuery = $@"
                     SELECT AVG(gameValue), AVG(MP), AVG(PTS), AVG(REB), 
                     AVG(AST), AVG(STL), AVG(BLK), AVG(TOV), AVG(PF)
-                    FROM playersGamesStats
+                    FROM playerGameStats
                     WHERE playerId = {playerId}
                     AND MP > 0
                     ;";
@@ -358,7 +380,7 @@ namespace LeagueSimulation
 
                     bool validPlayer = true;
 
-                    // here we get the average stats from the playersGamesStats table
+                    // here we get the average stats from the playerGameStats table
                     using (var command = new SQLiteCommand(getAverageStatsQuery, connection))
                     {
                         using (var reader = command.ExecuteReader())
@@ -421,7 +443,7 @@ namespace LeagueSimulation
                     string getAverageStatsQuery = $@"
                     SELECT AVG(gameValue), AVG(MP), AVG(PTS), AVG(REB), 
                     AVG(AST), AVG(STL), AVG(BLK), AVG(TOV), AVG(PF)
-                    FROM playersGamesStats
+                    FROM playerGameStats
                     WHERE playerId = {playerId}
                     AND MP > 0
                     ;";
@@ -443,7 +465,7 @@ namespace LeagueSimulation
 
                     bool validPlayer = true;
 
-                    // here we get the average stats from the playersGamesStats table
+                    // here we get the average stats from the playerGameStats table
                     using (var command = new SQLiteCommand(getAverageStatsQuery, connection))
                     {
                         using (var reader = command.ExecuteReader())
@@ -501,29 +523,6 @@ namespace LeagueSimulation
             }
         }
 
-        public string GetTeamRecord(Team team)
-        {
-            int wins = 0;
-            int losses = 0;
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
-            {
-                connection.Open();
-                string getRecord = $"SELECT WINS, LOSSES FROM teams WHERE teamId = {team.TeamId}";
-                using (var command = new SQLiteCommand(getRecord, connection))
-                {
-                    using (var reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            wins = reader.GetInt32(reader.GetOrdinal("WINS"));
-                            losses = reader.GetInt32(reader.GetOrdinal("LOSSES"));
-                        }
-                    }
-                }
-            }
-            return $"{wins}-{losses}";
-        }
-
         public void CheckForSubstitutions(int rotationSlot)
         {
             // here 'rotationSlot' represents the index of the rotation slot. e.g. 2 represents the 2nd slot
@@ -539,7 +538,7 @@ namespace LeagueSimulation
                 {
                     if (futureStarter == currentStarter) break;
                     // if the futureStarter and currentStarter are the same person, we don't do anything
-                    if (currentStarter.playerStats.position ==  futureStarter.playerStats.position && futureStarter != currentStarter)
+                    if (currentStarter.playerStats.position == futureStarter.playerStats.position && futureStarter != currentStarter)
                     {
                         string teamName = currentStarter.playerStats.teamName;
                         string currentPlayerName = currentStarter.playerStats.playerForename + " " + currentStarter.playerStats.playerSurname;
@@ -611,8 +610,8 @@ namespace LeagueSimulation
             // we do this only if the game just started, and it's not overtime
             if (!overtime)
             {
-                string team1Record = GetTeamRecord(team1);
-                string team2Record = GetTeamRecord(team2);
+                string team1Record = CurrentLeague.GetTeamRecord(team1.teamName);
+                string team2Record = CurrentLeague.GetTeamRecord(team2.teamName);
                 CommentatorPhrases.Add($"Welcome player! Today, we are watching the {team1.teamName} ({team1Record}) vs. {team2.teamName} ({team2Record}) live. Enjoy!");
                 ScoreAfterEachPhrase.Add($"0-0");
             }
@@ -666,29 +665,29 @@ namespace LeagueSimulation
                             InsertPlayerGameData(gameId);
 
                             // now we update the wins and losses of the teams
-                            InsertTeam1GameData(0);
-                            InsertTeam2GameData(1);
+                            //InsertTeam1GameData(0);
+                            //InsertTeam2GameData(1);
 
                             // add records of teams into database
-                            UpdateTeamRecordsInDatabase();
+                            //UpdateTeamRecordsInDatabase();
 
                             // update positions of teams in the league
-                            UpdateTeamPositions();
+                            //UpdateTeamPositions();
 
                             // here we set the average stats of the players
-                            
+
 
                             CommentatorPhrases.Add($"The game {team1.teamName} vs. {team2.teamName} has come to an end as the clock runs out.");
                             (int, int) score = TeamGameStats.CalculateScore(team1Stats, team2Stats);
                             ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
                             // Now we work out the name of the winner of the game, then display it
                             string nameOfWinner = "";
-                            if (Team1GameStats.Result == "W") nameOfWinner = team1.teamName;
+                            if (team1Stats.Sum(x => x.Points) > team2Stats.Sum(x => x.Points)) nameOfWinner = team1.teamName;
                             else nameOfWinner = team2.teamName;
-                            CommentatorPhrases.Add($"The game score finished as {Team1GameStats.Score}, as the win goes to the {nameOfWinner}. ");
+                            CommentatorPhrases.Add($"The game score finished as {score.Item1}-{score.Item2}, as the win goes to the {nameOfWinner}. ");
                             ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
                         }
-                        
+
                     }
                 }
                 // when the game has not finished, we continue simulating possessions
@@ -1308,7 +1307,7 @@ namespace LeagueSimulation
                                     // here we check their playstyles and make sure that 
                                     // now we add these gameValues to the overallsSum, so that the divisions are normalised
                                     overallsSum += (gameValue1 + gameValue2 + gameValue3 + gameValue4);
-                                    
+
 
                                     // this section checks the overalls of the players who could be passed to
                                     double randomProb = random.NextDouble();
@@ -1661,22 +1660,16 @@ namespace LeagueSimulation
                     // add this team's stats from the game into the database
                     foreach (PlayerInGame player in team1)
                     {
-                        // workout field goal of player
-                        string fieldGoal = $"{player.FieldGoalMade}-{player.FieldGoalAttempted}";
-                        string threeFieldGoal = $"{player.ThreePointMade}-{player.ThreePointAttempted}";
-                        string addGameStatsQuery = $@"INSERT into playersGamesStats(gameId,playerId,teamId,teamName,playerForename,playerSurname,position,gameValue,MP,FG,TFG,PTS,REB,AST,STL,BLK,TOV,PF)
+                        string addGameStatsQuery = $@"INSERT into playerGameStats(gameId,playerId,gameValue,MP,FGM,FGA,TFGM,TFGA,PTS,REB,AST,STL,BLK,TOV,PF)
                             VALUES(
                             {gameId},
                             {player.playerStats.PlayerId},
-                            {player.playerStats.TeamId},
-                            '{player.playerStats.teamName}',
-                            '{player.playerStats.playerForename}',
-                            '{player.playerStats.playerSurname}',
-                            '{player.playerStats.position}',
                             {Math.Round(player.GameValue, 2)},
                             {player.MinutesToPlay},
-                            '{fieldGoal}',
-                            '{threeFieldGoal}',
+                            {player.FieldGoalMade},
+                            {player.FieldGoalAttempted},
+                            {player.ThreePointMade},
+                            {player.ThreePointAttempted},
                             {player.Points},
                             {player.Rebounds},
                             {player.Assists},
@@ -1692,22 +1685,16 @@ namespace LeagueSimulation
 
                     foreach (PlayerInGame player in team2)
                     {
-                        // workout field goal of player
-                        string fieldGoal = $"{player.FieldGoalMade}-{player.FieldGoalAttempted}";
-                        string threeFieldGoal = $"{player.ThreePointMade}-{player.ThreePointAttempted}";
-                        string addGameStatsQuery = $@"INSERT into playersGamesStats(gameId,playerId,teamId,teamName,playerForename,playerSurname,position,gameValue,MP,FG,TFG,PTS,REB,AST,STL,BLK,TOV,PF)
+                        string addGameStatsQuery = $@"INSERT into playerGameStats(gameId,playerId,gameValue,MP,FGM,FGA,TFGM,TFGA,PTS,REB,AST,STL,BLK,TOV,PF)
                             VALUES(
                             {gameId},
                             {player.playerStats.PlayerId},
-                            {player.playerStats.TeamId},
-                            '{player.playerStats.teamName}',
-                            '{player.playerStats.playerForename}',
-                            '{player.playerStats.playerSurname}',
-                            '{player.playerStats.position}',
-                            {player.GameValue},
+                            {Math.Round(player.GameValue, 2)},
                             {player.MinutesToPlay},
-                            '{fieldGoal}',
-                            '{threeFieldGoal}',
+                            {player.FieldGoalMade},
+                            {player.FieldGoalAttempted},
+                            {player.ThreePointMade},
+                            {player.ThreePointAttempted},
                             {player.Points},
                             {player.Rebounds},
                             {player.Assists},
@@ -1720,7 +1707,6 @@ namespace LeagueSimulation
                         command.CommandText = addGameStatsQuery;
                         command.ExecuteNonQuery();
                     }
-                    //Console.WriteLine("All player data has been added.");
                 }
             }
         }
@@ -1872,7 +1858,7 @@ namespace LeagueSimulation
         public void UpdateTeamPositions()
         {
             List<int> easternConferenceTeams = new List<int>();
-            string team1Conference = team1.Conference;
+            string team1Conference = "";
             List<int> westernConferenceTeams = new List<int>();
             string team2Conference = team2.Conference;
             using (var connection = new SQLiteConnection(connectionString))
@@ -1924,7 +1910,7 @@ namespace LeagueSimulation
                     }
                 }
 
-              
+
                 string updateTeamPositionQuery = "";
                 // now we update the positions of teams back into the database
                 for (int i = 0; i < easternConferenceTeams.Count; i++)
@@ -1932,7 +1918,7 @@ namespace LeagueSimulation
                     int currentTeam = easternConferenceTeams[i];
                     updateTeamPositionQuery = $@"
                         UPDATE teams
-                        SET position = '{i+1}'
+                        SET position = '{i + 1}'
                         WHERE teamId = {currentTeam}
                         ;";
 
@@ -1948,7 +1934,7 @@ namespace LeagueSimulation
                     int currentTeam = westernConferenceTeams[i];
                     updateTeamPositionQuery = $@"
                         UPDATE teams
-                        SET position = '{i+1}'
+                        SET position = '{i + 1}'
                         WHERE teamId = {currentTeam}
                         ;";
 
@@ -1965,7 +1951,7 @@ namespace LeagueSimulation
 
         public void GenerateMinutesToPlay()
         {
-            
+
             // now we calculate the minutes for each position in team1
             {
                 // we calculate the minutes to play for each position in team1
@@ -2613,7 +2599,7 @@ namespace LeagueSimulation
             using (var connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
-                string getGameValueQuery = $"SELECT AVG(gameValue) FROM playersGamesStats WHERE playerId = {player.playerStats.PlayerId};";
+                string getGameValueQuery = $"SELECT AVG(gameValue) FROM playerGameStats WHERE playerId = {player.playerStats.PlayerId};";
                 using (var command = new SQLiteCommand(getGameValueQuery, connection))
                 {
                     using (var reader = command.ExecuteReader())
@@ -2647,12 +2633,10 @@ namespace LeagueSimulation
             this.CurrentUser = currentUser;
             this.CurrentSaveState = currentSaveState;
             this.GameId = gameId;
-            this.team1.W = 0;
-            this.team1.L = 0;
             this.CurrentLeague = currentLeague;
 
-            // possession set to team 1
-            possession = new Random().Next(1,3);
+            // possession set to team 1 or team 2
+            possession = new Random().Next(1, 3);
             team1StarterStats = new List<PlayerInGame>();
             team2StarterStats = new List<PlayerInGame>();
             (List<Player>, List<Player>) players = ExtractPlayersFromTeams(team1, team2);

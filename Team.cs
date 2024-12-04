@@ -20,9 +20,6 @@ namespace LeagueSimulation
         //public int revenue = 200000000;
         public int Position { get; set; }
         public string? Conference { get; set; } 
-        public int W { get; set; }
-        public int L { get; set; }
-        public double WinPct { get; set; }
         public int TeamId { get { return teamId; } }
 
         //public int Revenue { get; set; }
@@ -35,7 +32,7 @@ namespace LeagueSimulation
         public string GetConference()
         {
             string conference = "";
-            string teamNamesFilePath = $@"C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Names Files\basketball_team_names_list.txt";
+            string teamNamesFilePath = $@"C:\Users\nzuobm\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Names Files\basketball_team_names_list.txt";
             string[] teamNames = File.ReadAllLines(teamNamesFilePath);
             for (int i = 0; i < teamNames.Length; i++)
             {
@@ -89,7 +86,7 @@ namespace LeagueSimulation
             return (firstPart, secondPart);
         }
 
-        public Team(string unorganisedName, int teamId, int w, int l)
+        public Team(string unorganisedName, int teamId)
         {
             if (unorganisedName != null)
             {
@@ -99,8 +96,6 @@ namespace LeagueSimulation
                 this.teamId = teamId;
                 position = teamId;
                 Conference = GetConference();
-                this.w = w;
-                this.l = l;
             }
         }
 

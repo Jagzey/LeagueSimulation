@@ -33,7 +33,7 @@ namespace LeagueSimulation
         private void FillStartingLabels()
         {
             string[] teamsPlaying = league.CurrentSchedule[CurrentDayOfGame - 1][0].Split(',');
-            teamsPlayingLabel.Text = $"{teamsPlaying[0]} vs. {teamsPlaying[1]}";
+            teamsPlayingLabel.Text = $"{league.GetTeamNameFromId(teamsPlaying[0])} vs. {league.GetTeamNameFromId(teamsPlaying[1])}";
             seasonDayLabel.Text += CurrentDayOfGame;
         }
 
@@ -51,6 +51,11 @@ namespace LeagueSimulation
         private void game1WatchGameButton_Click(object sender, EventArgs e)
         {
             playbackSpeed.Value = playbackSpeed.Minimum;
+        }
+
+        private void teamsPlayingLabel_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

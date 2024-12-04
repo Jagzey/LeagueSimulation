@@ -107,6 +107,7 @@
             teamsPlayingLabel.TabIndex = 6;
             teamsPlayingLabel.Text = "New York Bankers vs. Philadelphia Hawks";
             teamsPlayingLabel.TextAlign = ContentAlignment.MiddleCenter;
+            teamsPlayingLabel.Click += teamsPlayingLabel_Click;
             // 
             // seasonDayLabel
             // 
