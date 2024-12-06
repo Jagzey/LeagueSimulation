@@ -21,7 +21,7 @@ namespace LeagueSimulation
         {
             // we work out the conference standings in the dashboard
             {
-                List<string> userConferenceTeams = league.GetConferenceTeams(league.GetUserConference());
+                List<string> userConferenceTeams = league.GetConferenceTeams(league.GetUserConferenceId());
 
                 firstPositionLabel.Text = $"1. {userConferenceTeams[0]}";
                 secondPositionLabel.Text = $"2. {userConferenceTeams[1]}";
@@ -112,7 +112,7 @@ namespace LeagueSimulation
                 seasonDayLabel.Text += $"{league.CurrentDay}";
                 seasonYearLabel.Text += $"{league.CurrentSeason + 2023}";
                 string conferencePositionText = "";
-                int conferencePosition = league.GetLeaguePosition();
+                int conferencePosition = league.GetUserLeaguePositionInConf();
                 if (conferencePosition == 1)
                 {
                     conferencePositionText = "1st in conference";

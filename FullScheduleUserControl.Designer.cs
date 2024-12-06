@@ -1140,7 +1140,7 @@
             // currentDayShownNum
             // 
             currentDayShownNum.Location = new Point(125, 55);
-            currentDayShownNum.Maximum = new decimal(new int[] { 150, 0, 0, 0 });
+            currentDayShownNum.Maximum = new decimal(new int[] { league.CurrentSchedule.Count, 0, 0, 0 });
             currentDayShownNum.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             currentDayShownNum.Name = "currentDayShownNum";
             currentDayShownNum.Size = new Size(66, 23);

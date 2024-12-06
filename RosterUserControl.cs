@@ -32,20 +32,30 @@ namespace LeagueSimulation
                 {
                     connection.Open();
                     string getPlayerDataQuery = $@"
-                        SELECT players.playerForename, 
-                        players.playerSurname,
-                        players.overall,
-                        players.potential,
-                        players.position, 
-                        players.age,
-                        playersSeasonStats.MP, 
-                        playersSeasonStats.FGPCT, 
-                        playersSeasonStats.PTS, 
-                        playersSeasonStats.REB, 
-                        playersSeasonStats.AST
-                        FROM playersSeasonStats, players
-                        WHERE players.teamName = '{currentTeamRoster.Text}'
-                        AND players.playerId = playersSeasonStats.playerId;
+                        SELECT 
+                            p.playerForename,
+                            p.playerSurname,
+                            p.overall,
+                            p.potential,
+                            pos.positionShort AS playerPosition,
+                            (l.currentSeason + 2023) - p.dateOfBirth AS age,
+                            COALESCE(ROUND(AVG(pgs.MP), 1), 0.0) as MP,
+                            COALESCE(ROUND(SUM(pgs.FGM) * 100 / CAST(SUM(pgs.FGA) AS REAL), 1), 0.0) AS FGPCT,
+                            COALESCE(ROUND(AVG(pgs.PTS), 1), 0.0) AS PTS,
+                            COALESCE(ROUND(AVG(pgs.REB), 1), 0.0) AS REB,
+                            COALESCE(ROUND(AVG(pgs.AST), 1), 0.0) AS AST
+                        FROM 
+                            players p, league l
+                        LEFT JOIN 
+                            playerGameStats pgs ON p.playerId = pgs.playerId
+                        JOIN 
+                            teams t ON p.teamId = t.teamId
+                        JOIN 
+                            position pos ON p.positionId = pos.positionId -- Position name lookup
+                        WHERE 
+                            t.teamName = '{currentTeamRoster.Text}'
+                        GROUP BY
+	                        p.playerId
                     ";
                     SQLiteDataAdapter rosterData = new SQLiteDataAdapter(getPlayerDataQuery, connection);
                     DataTable dt = new DataTable();

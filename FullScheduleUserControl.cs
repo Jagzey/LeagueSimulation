@@ -10,9 +10,10 @@ namespace LeagueSimulation
         public string? ScoreAfterPhrase;
         public FullScheduleUserControl(League? league)
         {
-            InitializeComponent();
             this.league = league;
+            InitializeComponent();
             currentDayShownNum.Value = league.CurrentDay;
+        
             FillLabels();
         }
 
@@ -868,7 +869,7 @@ namespace LeagueSimulation
         // this button simulates a month within a season
         private void button1_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < 123; i++)
             {
                 if (i >= league.CurrentSchedule.Count) break;
                 league.SimulateDay(league.CurrentSchedule[(int)currentDayShownNum.Value - 1 + i], (int)currentDayShownNum.Value + i, false);

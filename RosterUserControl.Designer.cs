@@ -142,7 +142,7 @@
             // 
             // Position
             // 
-            Position.DataPropertyName = "position";
+            Position.DataPropertyName = "playerPosition";
             Position.HeaderText = "Pos";
             Position.Name = "Position";
             Position.ReadOnly = true;

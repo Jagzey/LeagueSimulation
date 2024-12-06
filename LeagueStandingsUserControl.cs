@@ -24,7 +24,7 @@ namespace LeagueSimulation
         {
             // we work out the eastern conference standings in the dashboard
             {
-                List<string> userConferenceTeams = league.GetConferenceTeams("East");
+                List<string> userConferenceTeams = league.GetConferenceTeams(1);
 
                 eastFirstPositionLabel.Text = $"1. {userConferenceTeams[0]} {league.GetTeamRecord(userConferenceTeams[0])}";
                 eastSecondPositionLabel.Text = $"2. {userConferenceTeams[1]} {league.GetTeamRecord(userConferenceTeams[1])}";
@@ -43,7 +43,7 @@ namespace LeagueSimulation
                 eastFifteenthPositionLabel.Text = $"15. {userConferenceTeams[14]} {league.GetTeamRecord(userConferenceTeams[14])}";
 
                 // now we make the user's team bold in the standings, if this is their conference
-                if (league.GetUserConference() == "East")
+                if (league.GetUserConferenceId() == 1)
                 {
                     if (eastFirstPositionLabel.Text.Contains(league.UserTeamName))
                     {
@@ -111,7 +111,7 @@ namespace LeagueSimulation
 
             // we work out the western conference standings in the dashboard
             {
-                List<string> userConferenceTeams = league.GetConferenceTeams("West");
+                List<string> userConferenceTeams = league.GetConferenceTeams(2);
 
                 westFirstPositionLabel.Text = $"1. {userConferenceTeams[0]} {league.GetTeamRecord(userConferenceTeams[0])}";
                 westSecondPositionLabel.Text = $"2. {userConferenceTeams[1]} {league.GetTeamRecord(userConferenceTeams[1])}";
@@ -130,7 +130,7 @@ namespace LeagueSimulation
                 westFifteenthPositionLabel.Text = $"15. {userConferenceTeams[14]} {league.GetTeamRecord(userConferenceTeams[14])}";
 
                 // now we make the user's team bold in the standings, if this is their conference
-                if (league.GetUserConference() == "West")
+                if (league.GetUserConferenceId() == 2)
                 {
                     if (westFirstPositionLabel.Text.Contains(league.UserTeamName))
                     {

@@ -65,7 +65,7 @@
             // 
             currentStat.DropDownStyle = ComboBoxStyle.DropDownList;
             currentStat.FormattingEnabled = true;
-            currentStat.Items.AddRange(new object[] { "Points", "Rebounds", "Assists", "Steals", "Turnovers" });
+            currentStat.Items.AddRange(new object[] { "Points", "Rebounds", "Assists", "Steals", "Turnovers", "Blocks" });
             currentStat.Location = new Point(50, 16);
             currentStat.Name = "currentStat";
             currentStat.Size = new Size(142, 23);
