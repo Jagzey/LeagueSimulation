@@ -32,7 +32,7 @@ namespace LeagueSimulation
         public string GetConference()
         {
             string conference = "";
-            string teamNamesFilePath = $@"C:\Users\nzuobm\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Names Files\basketball_team_names_list.txt";
+            string teamNamesFilePath = $@"C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Names Files\basketball_team_names_list.txt";
             string[] teamNames = File.ReadAllLines(teamNamesFilePath);
             for (int i = 0; i < teamNames.Length; i++)
             {

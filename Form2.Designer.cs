@@ -118,7 +118,6 @@
             toolStripMenuItem1.Name = "toolStripMenuItem1";
             toolStripMenuItem1.Size = new Size(126, 27);
             toolStripMenuItem1.Text = "League Menu";
-            toolStripMenuItem1.Click += toolStripMenuItem1_Click;
             // 
             // dashboardMenuItem
             // 
@@ -137,15 +136,16 @@
             // leagueStandingsMenuItem
             // 
             leagueStandingsMenuItem.Name = "leagueStandingsMenuItem";
-            leagueStandingsMenuItem.Size = new Size(154, 28);
+            leagueStandingsMenuItem.Size = new Size(180, 28);
             leagueStandingsMenuItem.Text = "Standings";
             leagueStandingsMenuItem.Click += leagueStandingsMenuItem_Click;
             // 
             // toolStripMenuItem5
             // 
             toolStripMenuItem5.Name = "toolStripMenuItem5";
-            toolStripMenuItem5.Size = new Size(154, 28);
+            toolStripMenuItem5.Size = new Size(180, 28);
             toolStripMenuItem5.Text = "Playoffs";
+            toolStripMenuItem5.Click += toolStripMenuItem5_Click;
             // 
             // toolStripMenuItem8
             // 

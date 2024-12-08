@@ -32,7 +32,8 @@ namespace LeagueSimulation
 
         private void FillStartingLabels()
         {
-            string[] teamsPlaying = league.CurrentSchedule[CurrentDayOfGame - 1][0].Split(',');
+            string[] teamsPlaying = league.CurrentSchedule[CurrentDayOfGame - 1].Where(x => x.Contains(league.GetIdFromTeamName(HomeTeam).ToString())).ToList()[0].Split(",");
+            if (league.Playoffs) teamsPlaying = league.CurrentPlayoffsSchedule[CurrentDayOfGame - 1].Where(x => x.Contains(league.GetIdFromTeamName(HomeTeam).ToString())).ToList()[0].Split(",");
             teamsPlayingLabel.Text = $"{league.GetTeamNameFromId(teamsPlaying[0])} vs. {league.GetTeamNameFromId(teamsPlaying[1])}";
             seasonDayLabel.Text += CurrentDayOfGame;
         }

@@ -21,7 +21,9 @@ namespace LeagueSimulation
         {
             this.Hide();
             int currentDayShown = (int)currentDayShownNum.Value;
-            List<string> currentDayGames = league.GetGamesForDay(currentDayShown);
+            List<string> currentDayGames = new List<string>();
+            if (!league.Playoffs) currentDayGames = league.GetGamesForDay(currentDayShown);
+            else currentDayGames = league.GetPlayoffGamesForDay(currentDayShown);
             // we update the teamsLabels in the game panels
             {
                 int currentGameCounter = 0;
@@ -34,6 +36,11 @@ namespace LeagueSimulation
                     teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
                     team1Record = league.GetTeamRecord(teamsPlaying[0]);
                     team2Record = league.GetTeamRecord(teamsPlaying[1]);
+                    if (league.Playoffs)
+                    {
+                        team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                        team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                    }
                     game1TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
                     currentGameCounter++;
                 }
@@ -44,6 +51,11 @@ namespace LeagueSimulation
                     teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
                     team1Record = league.GetTeamRecord(teamsPlaying[0]);
                     team2Record = league.GetTeamRecord(teamsPlaying[1]);
+                    if (league.Playoffs)
+                    {
+                        team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                        team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                    }
                     game2TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
                     currentGameCounter++;
                 }
@@ -54,6 +66,11 @@ namespace LeagueSimulation
                     teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
                     team1Record = league.GetTeamRecord(teamsPlaying[0]);
                     team2Record = league.GetTeamRecord(teamsPlaying[1]);
+                    if (league.Playoffs)
+                    {
+                        team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                        team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                    }
                     game3TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
                     currentGameCounter++;
                 }
@@ -64,6 +81,11 @@ namespace LeagueSimulation
                     teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
                     team1Record = league.GetTeamRecord(teamsPlaying[0]);
                     team2Record = league.GetTeamRecord(teamsPlaying[1]);
+                    if (league.Playoffs)
+                    {
+                        team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                        team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                    }
                     game4TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
                     currentGameCounter++;
                 }
@@ -74,6 +96,11 @@ namespace LeagueSimulation
                     teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
                     team1Record = league.GetTeamRecord(teamsPlaying[0]);
                     team2Record = league.GetTeamRecord(teamsPlaying[1]);
+                    if (league.Playoffs)
+                    {
+                        team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                        team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                    }
                     game5TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
                     currentGameCounter++;
                 }
@@ -84,6 +111,11 @@ namespace LeagueSimulation
                     teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
                     team1Record = league.GetTeamRecord(teamsPlaying[0]);
                     team2Record = league.GetTeamRecord(teamsPlaying[1]);
+                    if (league.Playoffs)
+                    {
+                        team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                        team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                    }
                     game6TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
                     currentGameCounter++;
                 }
@@ -94,6 +126,11 @@ namespace LeagueSimulation
                     teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
                     team1Record = league.GetTeamRecord(teamsPlaying[0]);
                     team2Record = league.GetTeamRecord(teamsPlaying[1]);
+                    if (league.Playoffs)
+                    {
+                        team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                        team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                    }
                     game7TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
                     currentGameCounter++;
                 }
@@ -104,6 +141,11 @@ namespace LeagueSimulation
                     teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
                     team1Record = league.GetTeamRecord(teamsPlaying[0]);
                     team2Record = league.GetTeamRecord(teamsPlaying[1]);
+                    if (league.Playoffs)
+                    {
+                        team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                        team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                    }
                     game8TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
                     currentGameCounter++;
                 }
@@ -114,6 +156,11 @@ namespace LeagueSimulation
                     teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
                     team1Record = league.GetTeamRecord(teamsPlaying[0]);
                     team2Record = league.GetTeamRecord(teamsPlaying[1]);
+                    if (league.Playoffs)
+                    {
+                        team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                        team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                    }
                     game9TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
                     currentGameCounter++;
                 }
@@ -124,6 +171,11 @@ namespace LeagueSimulation
                     teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
                     team1Record = league.GetTeamRecord(teamsPlaying[0]);
                     team2Record = league.GetTeamRecord(teamsPlaying[1]);
+                    if (league.Playoffs)
+                    {
+                        team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                        team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                    }
                     game10TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
                     currentGameCounter++;
                 }
@@ -134,6 +186,11 @@ namespace LeagueSimulation
                     teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
                     team1Record = league.GetTeamRecord(teamsPlaying[0]);
                     team2Record = league.GetTeamRecord(teamsPlaying[1]);
+                    if (league.Playoffs)
+                    {
+                        team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                        team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                    }
                     game11TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
                     currentGameCounter++;
                 }
@@ -144,6 +201,11 @@ namespace LeagueSimulation
                     teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
                     team1Record = league.GetTeamRecord(teamsPlaying[0]);
                     team2Record = league.GetTeamRecord(teamsPlaying[1]);
+                    if (league.Playoffs)
+                    {
+                        team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                        team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                    }
                     game12TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
                     currentGameCounter++;
                 }
@@ -154,6 +216,11 @@ namespace LeagueSimulation
                     teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
                     team1Record = league.GetTeamRecord(teamsPlaying[0]);
                     team2Record = league.GetTeamRecord(teamsPlaying[1]);
+                    if (league.Playoffs)
+                    {
+                        team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                        team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                    }
                     game13TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
                     currentGameCounter++;
                 }
@@ -165,7 +232,10 @@ namespace LeagueSimulation
                 if (currentGameCounter == 0 && currentGameCounter < currentDayGames.Count)
                 {
                     string[] teamsPlaying = currentDayGames[currentGameCounter].Split(',');
-                    if (league.CheckIfGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]))
+                    bool gameComplete = false;
+                    if (league.Playoffs) gameComplete = league.CheckIfPlayoffGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]);
+                    else gameComplete = league.CheckIfGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]);
+                    if (gameComplete)
                     {
                         game1WatchGameButton.Hide();
                         game1SimGameButton.Hide();
@@ -176,7 +246,10 @@ namespace LeagueSimulation
                 if (currentGameCounter == 1 && currentGameCounter < currentDayGames.Count)
                 {
                     string[] teamsPlaying = currentDayGames[currentGameCounter].Split(',');
-                    if (league.CheckIfGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]))
+                    bool gameComplete = false;
+                    if (league.Playoffs) gameComplete = league.CheckIfPlayoffGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]);
+                    else gameComplete = league.CheckIfGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]);
+                    if (gameComplete)
                     {
                         game2WatchGameButton.Hide();
                         game2SimGameButton.Hide();
@@ -187,7 +260,10 @@ namespace LeagueSimulation
                 if (currentGameCounter == 2 && currentGameCounter < currentDayGames.Count)
                 {
                     string[] teamsPlaying = currentDayGames[currentGameCounter].Split(',');
-                    if (league.CheckIfGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]))
+                    bool gameComplete = false;
+                    if (league.Playoffs) gameComplete = league.CheckIfPlayoffGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]);
+                    else gameComplete = league.CheckIfGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]);
+                    if (gameComplete)
                     {
                         game3WatchGameButton.Hide();
                         game3SimGameButton.Hide();
@@ -198,7 +274,10 @@ namespace LeagueSimulation
                 if (currentGameCounter == 3 && currentGameCounter < currentDayGames.Count)
                 {
                     string[] teamsPlaying = currentDayGames[currentGameCounter].Split(',');
-                    if (league.CheckIfGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]))
+                    bool gameComplete = false;
+                    if (league.Playoffs) gameComplete = league.CheckIfPlayoffGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]);
+                    else gameComplete = league.CheckIfGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]);
+                    if (gameComplete)
                     {
                         game4WatchGameButton.Hide();
                         game4SimGameButton.Hide();
@@ -209,7 +288,10 @@ namespace LeagueSimulation
                 if (currentGameCounter == 4 && currentGameCounter < currentDayGames.Count)
                 {
                     string[] teamsPlaying = currentDayGames[currentGameCounter].Split(',');
-                    if (league.CheckIfGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]))
+                    bool gameComplete = false;
+                    if (league.Playoffs) gameComplete = league.CheckIfPlayoffGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]);
+                    else gameComplete = league.CheckIfGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]);
+                    if (gameComplete)
                     {
                         game5WatchGameButton.Hide();
                         game5SimGameButton.Hide();
@@ -220,7 +302,10 @@ namespace LeagueSimulation
                 if (currentGameCounter == 5 && currentGameCounter < currentDayGames.Count)
                 {
                     string[] teamsPlaying = currentDayGames[currentGameCounter].Split(',');
-                    if (league.CheckIfGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]))
+                    bool gameComplete = false;
+                    if (league.Playoffs) gameComplete = league.CheckIfPlayoffGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]);
+                    else gameComplete = league.CheckIfGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]);
+                    if (gameComplete)
                     {
                         game6WatchGameButton.Hide();
                         game6SimGameButton.Hide();
@@ -231,7 +316,10 @@ namespace LeagueSimulation
                 if (currentGameCounter == 6 && currentGameCounter < currentDayGames.Count)
                 {
                     string[] teamsPlaying = currentDayGames[currentGameCounter].Split(',');
-                    if (league.CheckIfGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]))
+                    bool gameComplete = false;
+                    if (league.Playoffs) gameComplete = league.CheckIfPlayoffGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]);
+                    else gameComplete = league.CheckIfGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]);
+                    if (gameComplete)
                     {
                         game7WatchGameButton.Hide();
                         game7SimGameButton.Hide();
@@ -242,7 +330,10 @@ namespace LeagueSimulation
                 if (currentGameCounter == 7 && currentGameCounter < currentDayGames.Count)
                 {
                     string[] teamsPlaying = currentDayGames[currentGameCounter].Split(',');
-                    if (league.CheckIfGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]))
+                    bool gameComplete = false;
+                    if (league.Playoffs) gameComplete = league.CheckIfPlayoffGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]);
+                    else gameComplete = league.CheckIfGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]);
+                    if (gameComplete)
                     {
                         game8WatchGameButton.Hide();
                         game8SimGameButton.Hide();
@@ -253,7 +344,10 @@ namespace LeagueSimulation
                 if (currentGameCounter == 8 && currentGameCounter < currentDayGames.Count)
                 {
                     string[] teamsPlaying = currentDayGames[currentGameCounter].Split(',');
-                    if (league.CheckIfGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]))
+                    bool gameComplete = false;
+                    if (league.Playoffs) gameComplete = league.CheckIfPlayoffGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]);
+                    else gameComplete = league.CheckIfGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]);
+                    if (gameComplete)
                     {
                         game9WatchGameButton.Hide();
                         game9SimGameButton.Hide();
@@ -264,7 +358,10 @@ namespace LeagueSimulation
                 if (currentGameCounter == 9 && currentGameCounter < currentDayGames.Count)
                 {
                     string[] teamsPlaying = currentDayGames[currentGameCounter].Split(',');
-                    if (league.CheckIfGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]))
+                    bool gameComplete = false;
+                    if (league.Playoffs) gameComplete = league.CheckIfPlayoffGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]);
+                    else gameComplete = league.CheckIfGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]);
+                    if (gameComplete)
                     {
                         game10WatchGameButton.Hide();
                         game10SimGameButton.Hide();
@@ -275,7 +372,10 @@ namespace LeagueSimulation
                 if (currentGameCounter == 10 && currentGameCounter < currentDayGames.Count)
                 {
                     string[] teamsPlaying = currentDayGames[currentGameCounter].Split(',');
-                    if (league.CheckIfGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]))
+                    bool gameComplete = false;
+                    if (league.Playoffs) gameComplete = league.CheckIfPlayoffGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]);
+                    else gameComplete = league.CheckIfGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]);
+                    if (gameComplete)
                     {
                         game11WatchGameButton.Hide();
                         game11SimGameButton.Hide();
@@ -286,7 +386,10 @@ namespace LeagueSimulation
                 if (currentGameCounter == 11 && currentGameCounter < currentDayGames.Count)
                 {
                     string[] teamsPlaying = currentDayGames[currentGameCounter].Split(',');
-                    if (league.CheckIfGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]))
+                    bool gameComplete = false;
+                    if (league.Playoffs) gameComplete = league.CheckIfPlayoffGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]);
+                    else gameComplete = league.CheckIfGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]);
+                    if (gameComplete)
                     {
                         game12WatchGameButton.Hide();
                         game12SimGameButton.Hide();
@@ -297,7 +400,10 @@ namespace LeagueSimulation
                 if (currentGameCounter == 12 && currentGameCounter < currentDayGames.Count)
                 {
                     string[] teamsPlaying = currentDayGames[currentGameCounter].Split(',');
-                    if (league.CheckIfGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]))
+                    bool gameComplete = false;
+                    if (league.Playoffs) gameComplete = league.CheckIfPlayoffGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]);
+                    else gameComplete = league.CheckIfGameCompleted(currentDayShown, teamsPlaying[0], teamsPlaying[1]);
+                    if (gameComplete)
                     {
                         game13WatchGameButton.Hide();
                         game13SimGameButton.Hide();
@@ -442,8 +548,11 @@ namespace LeagueSimulation
             }
             else
             {
-                league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][0], (int)currentDayShownNum.Value, true);
-                string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][0].Split(',');
+                List<List<string>> schedule = new List<List<string>>();
+                if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
+                else schedule = league.CurrentSchedule;
+                league.SimulateGame(schedule[(int)currentDayShownNum.Value - 1][0], (int)currentDayShownNum.Value, true);
+                string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][0].Split(',');
                 teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
                 teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
                 UpdateGame1Panel(teamsPlaying);
@@ -455,6 +564,11 @@ namespace LeagueSimulation
         {
             string team1Record = league.GetTeamRecord(teamsPlaying[0]);
             string team2Record = league.GetTeamRecord(teamsPlaying[1]);
+            if (league.Playoffs)
+            {
+                team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[1]));
+            }
             game1TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
             game1TeamsLabel.Refresh();
             game1WatchGameButton.Hide();
@@ -464,8 +578,11 @@ namespace LeagueSimulation
 
         private void game2SimGameButton_Click(object sender, EventArgs e)
         {
-            league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][1], (int)currentDayShownNum.Value, true);
-            string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][1].Split(',');
+            List<List<string>> schedule = new List<List<string>>();
+            if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
+            else schedule = league.CurrentSchedule;
+            league.SimulateGame(schedule[(int)currentDayShownNum.Value - 1][1], (int)currentDayShownNum.Value, true);
+            string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][1].Split(',');
             teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
             teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
             UpdateGame2Panel(teamsPlaying);
@@ -475,6 +592,11 @@ namespace LeagueSimulation
         {
             string team1Record = league.GetTeamRecord(teamsPlaying[0]);
             string team2Record = league.GetTeamRecord(teamsPlaying[1]);
+            if (league.Playoffs)
+            {
+                team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[1]));
+            }
             game2TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
             game2TeamsLabel.Refresh();
             game2WatchGameButton.Hide();
@@ -484,8 +606,11 @@ namespace LeagueSimulation
 
         private void game3SimGameButton_Click(object sender, EventArgs e)
         {
-            league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][2], (int)currentDayShownNum.Value, true);
-            string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][2].Split(',');
+            List<List<string>> schedule = new List<List<string>>();
+            if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
+            else schedule = league.CurrentSchedule;
+            league.SimulateGame(schedule[(int)currentDayShownNum.Value - 1][2], (int)currentDayShownNum.Value, true);
+            string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][2].Split(',');
             teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
             teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
             UpdateGame3Panel(teamsPlaying);
@@ -495,6 +620,11 @@ namespace LeagueSimulation
         {
             string team1Record = league.GetTeamRecord(teamsPlaying[0]);
             string team2Record = league.GetTeamRecord(teamsPlaying[1]);
+            if (league.Playoffs)
+            {
+                team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[1]));
+            }
             game3TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
             game3TeamsLabel.Refresh();
             game3WatchGameButton.Hide();
@@ -504,8 +634,11 @@ namespace LeagueSimulation
 
         private void game4SimGameButton_Click(object sender, EventArgs e)
         {
-            league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][3], (int)currentDayShownNum.Value, true);
-            string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][3].Split(',');
+            List<List<string>> schedule = new List<List<string>>();
+            if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
+            else schedule = league.CurrentSchedule;
+            league.SimulateGame(schedule[(int)currentDayShownNum.Value - 1][3], (int)currentDayShownNum.Value, true);
+            string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][3].Split(',');
             teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
             teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
             UpdateGame4Panel(teamsPlaying);
@@ -515,6 +648,11 @@ namespace LeagueSimulation
         {
             string team1Record = league.GetTeamRecord(teamsPlaying[0]);
             string team2Record = league.GetTeamRecord(teamsPlaying[1]);
+            if (league.Playoffs)
+            {
+                team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[1]));
+            }
             game4TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
             game4TeamsLabel.Refresh();
             game4WatchGameButton.Hide();
@@ -524,8 +662,11 @@ namespace LeagueSimulation
 
         private void game5SimGameButton_Click(object sender, EventArgs e)
         {
-            league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][4], (int)currentDayShownNum.Value, true);
-            string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][4].Split(',');
+            List<List<string>> schedule = new List<List<string>>();
+            if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
+            else schedule = league.CurrentSchedule;
+            league.SimulateGame(schedule[(int)currentDayShownNum.Value - 1][4], (int)currentDayShownNum.Value, true);
+            string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][4].Split(',');
             teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
             teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
             UpdateGame5Panel(teamsPlaying);
@@ -535,6 +676,11 @@ namespace LeagueSimulation
         {
             string team1Record = league.GetTeamRecord(teamsPlaying[0]);
             string team2Record = league.GetTeamRecord(teamsPlaying[1]);
+            if (league.Playoffs)
+            {
+                team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[1]));
+            }
             game5TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
             game5TeamsLabel.Refresh();
             game5WatchGameButton.Hide();
@@ -544,8 +690,11 @@ namespace LeagueSimulation
 
         private void game6SimGameButton_Click(object sender, EventArgs e)
         {
-            league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][5], (int)currentDayShownNum.Value, true);
-            string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][5].Split(',');
+            List<List<string>> schedule = new List<List<string>>();
+            if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
+            else schedule = league.CurrentSchedule;
+            league.SimulateGame(schedule[(int)currentDayShownNum.Value - 1][5], (int)currentDayShownNum.Value, true);
+            string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][5].Split(',');
             teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
             teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
             UpdateGame6Panel(teamsPlaying);
@@ -555,6 +704,11 @@ namespace LeagueSimulation
         {
             string team1Record = league.GetTeamRecord(teamsPlaying[0]);
             string team2Record = league.GetTeamRecord(teamsPlaying[1]);
+            if (league.Playoffs)
+            {
+                team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[1]));
+            }
             game6TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
             game6TeamsLabel.Refresh();
             game6WatchGameButton.Hide();
@@ -564,8 +718,11 @@ namespace LeagueSimulation
 
         private void game7SimGameButton_Click(object sender, EventArgs e)
         {
-            league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][6], (int)currentDayShownNum.Value, true);
-            string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][6].Split(',');
+            List<List<string>> schedule = new List<List<string>>();
+            if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
+            else schedule = league.CurrentSchedule;
+            league.SimulateGame(schedule[(int)currentDayShownNum.Value - 1][6], (int)currentDayShownNum.Value, true);
+            string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][6].Split(',');
             teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
             teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
             UpdateGame7Panel(teamsPlaying);
@@ -575,6 +732,11 @@ namespace LeagueSimulation
         {
             string team1Record = league.GetTeamRecord(teamsPlaying[0]);
             string team2Record = league.GetTeamRecord(teamsPlaying[1]);
+            if (league.Playoffs)
+            {
+                team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[1]));
+            }
             game7TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
             game7TeamsLabel.Refresh();
             game7WatchGameButton.Hide();
@@ -584,8 +746,11 @@ namespace LeagueSimulation
 
         private void game8SimGameButton_Click(object sender, EventArgs e)
         {
-            league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][7], (int)currentDayShownNum.Value, true);
-            string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][7].Split(',');
+            List<List<string>> schedule = new List<List<string>>();
+            if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
+            else schedule = league.CurrentSchedule;
+            league.SimulateGame(schedule[(int)currentDayShownNum.Value - 1][7], (int)currentDayShownNum.Value, true);
+            string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][7].Split(',');
             teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
             teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
             UpdateGame8Panel(teamsPlaying);
@@ -596,6 +761,11 @@ namespace LeagueSimulation
 
             string team1Record = league.GetTeamRecord(teamsPlaying[0]);
             string team2Record = league.GetTeamRecord(teamsPlaying[1]);
+            if (league.Playoffs)
+            {
+                team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[1]));
+            }
             game8TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
             game8TeamsLabel.Refresh();
             game8WatchGameButton.Hide();
@@ -692,8 +862,11 @@ namespace LeagueSimulation
 
         private void game1WatchGameButton_Click(object sender, EventArgs e)
         {
-            (List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][0], (int)currentDayShownNum.Value);
-            string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][0].Split(',');
+            List<List<string>> schedule = new List<List<string>>();
+            if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
+            else schedule = league.CurrentSchedule;
+            string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][0].Split(',');
+            (List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][0], (int)currentDayShownNum.Value);
             teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
             teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
             UpdateGame1Panel(teamsPlaying);
@@ -767,11 +940,14 @@ namespace LeagueSimulation
 
         private void simDayButton_Click(object sender, EventArgs e)
         {
-            league.SimulateDay(league.CurrentSchedule[(int)currentDayShownNum.Value - 1], (int)currentDayShownNum.Value, true);
+            List<List<string>> schedule = new List<List<string>>();
+            if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
+            else schedule = league.CurrentSchedule;
+            league.SimulateDay(schedule[(int)currentDayShownNum.Value - 1], (int)currentDayShownNum.Value, league.Playoffs);
 
             // now we update all the buttons on the screen
             {
-                List<string> gamesInDay = league.CurrentSchedule[(int)currentDayShownNum.Value - 1];
+                List<string> gamesInDay = schedule[(int)currentDayShownNum.Value - 1];
                 if (gamesInDay.Count > 0)
                 {
                     string[] teamsPlaying = gamesInDay[0].Split(",");
@@ -869,17 +1045,19 @@ namespace LeagueSimulation
         // this button simulates a month within a season
         private void button1_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < 123; i++)
+            List<List<string>> schedule = new List<List<string>>();
+            if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
+            else schedule = league.CurrentSchedule;
+            for (int i = 0; i < 30; i++)
             {
-                if (i >= league.CurrentSchedule.Count) break;
-                league.SimulateDay(league.CurrentSchedule[(int)currentDayShownNum.Value - 1 + i], (int)currentDayShownNum.Value + i, false);
+                if (i >= schedule.Count) break;
+                league.SimulateDay(schedule[(int)currentDayShownNum.Value - 1 + i], (int)currentDayShownNum.Value + i, league.Playoffs);
             }
-            //league.SetPlayerAverageStats();
 
 
             // now we update all the buttons on the screen
             {
-                List<string> gamesInDay = league.CurrentSchedule[(int)currentDayShownNum.Value - 1];
+                List<string> gamesInDay = schedule[(int)currentDayShownNum.Value - 1];
                 if (gamesInDay.Count > 0)
                 {
                     string[] teamsPlaying = gamesInDay[0].Split(",");
@@ -976,8 +1154,11 @@ namespace LeagueSimulation
 
         private void game2WatchGameButton_Click(object sender, EventArgs e)
         {
-            (List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][1], (int)currentDayShownNum.Value);
-            string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][1].Split(',');
+            List<List<string>> schedule = new List<List<string>>();
+            if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
+            else schedule = league.CurrentSchedule;
+            string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][1].Split(',');
+            (List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][1], (int)currentDayShownNum.Value);
             teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
             teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
             UpdateGame2Panel(teamsPlaying);
@@ -986,8 +1167,11 @@ namespace LeagueSimulation
 
         private void game3WatchGameButton_Click(object sender, EventArgs e)
         {
-            (List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][2], (int)currentDayShownNum.Value);
-            string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][2].Split(',');
+            List<List<string>> schedule = new List<List<string>>();
+            if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
+            else schedule = league.CurrentSchedule;
+            string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][2].Split(',');
+            (List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][2], (int)currentDayShownNum.Value);
             teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
             teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
             UpdateGame3Panel(teamsPlaying);
@@ -996,8 +1180,11 @@ namespace LeagueSimulation
 
         private void game4WatchGameButton_Click(object sender, EventArgs e)
         {
-            (List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][3], (int)currentDayShownNum.Value);
-            string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][3].Split(',');
+            List<List<string>> schedule = new List<List<string>>();
+            if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
+            else schedule = league.CurrentSchedule;
+            string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][3].Split(',');
+            (List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][3], (int)currentDayShownNum.Value);
             teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
             teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
             UpdateGame4Panel(teamsPlaying);
@@ -1006,8 +1193,11 @@ namespace LeagueSimulation
 
         private void game5WatchGameButton_Click(object sender, EventArgs e)
         {
-            (List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][4], (int)currentDayShownNum.Value);
-            string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][4].Split(',');
+            List<List<string>> schedule = new List<List<string>>();
+            if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
+            else schedule = league.CurrentSchedule;
+            string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][4].Split(',');
+            (List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][4], (int)currentDayShownNum.Value);
             teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
             teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
             UpdateGame5Panel(teamsPlaying);
@@ -1016,8 +1206,11 @@ namespace LeagueSimulation
 
         private void game6WatchGameButton_Click(object sender, EventArgs e)
         {
-            (List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][5], (int)currentDayShownNum.Value);
-            string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][5].Split(',');
+            List<List<string>> schedule = new List<List<string>>();
+            if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
+            else schedule = league.CurrentSchedule;
+            string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][5].Split(',');
+            (List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][5], (int)currentDayShownNum.Value);
             teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
             teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
             UpdateGame6Panel(teamsPlaying);
@@ -1026,8 +1219,11 @@ namespace LeagueSimulation
 
         private void game7WatchGameButton_Click(object sender, EventArgs e)
         {
-            (List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][6], (int)currentDayShownNum.Value);
-            string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][6].Split(',');
+            List<List<string>> schedule = new List<List<string>>();
+            if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
+            else schedule = league.CurrentSchedule;
+            string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][6].Split(',');
+            (List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][6], (int)currentDayShownNum.Value);
             teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
             teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
             UpdateGame7Panel(teamsPlaying);
@@ -1036,8 +1232,11 @@ namespace LeagueSimulation
 
         private void game8WatchGameButton_Click(object sender, EventArgs e)
         {
-            (List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][7], (int)currentDayShownNum.Value);
-            string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][7].Split(',');
+            List<List<string>> schedule = new List<List<string>>();
+            if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
+            else schedule = league.CurrentSchedule;
+            string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][7].Split(',');
+            (List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][7], (int)currentDayShownNum.Value);
             teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
             teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
             UpdateGame8Panel(teamsPlaying);
@@ -1099,7 +1298,7 @@ namespace LeagueSimulation
             for (int i = 0; i < league.CurrentSchedule.Count; i++)
             {
                 if (i >= league.CurrentSchedule.Count) break;
-                league.SimulateDay(league.CurrentSchedule[(int)currentDayShownNum.Value - 1 + i], (int)currentDayShownNum.Value + i, false);
+                league.SimulateDay(league.CurrentSchedule[(int)currentDayShownNum.Value - 1 + i], (int)currentDayShownNum.Value + i, league.Playoffs);
             }
             //league.SetPlayerAverageStats();
 

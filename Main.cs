@@ -8,7 +8,7 @@ namespace LeagueSimulation
         public League CurrentLeague { get; set; }
         public Main()
         {
-            string currentUser = "nzuobm";
+            string currentUser = "FiercePC";
             this.CurrentUser = currentUser;
             InitializeComponent();
         }

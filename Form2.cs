@@ -22,10 +22,8 @@ namespace LeagueSimulation
             this.SaveState = saveState;
             InitializeComponent();
             this.CurrentLeague = loadGame;
-            if (!CurrentLeague.Playoffs)
-            {
-                LoadDashboard(new DashboardUserControl(loadGame));
-            }
+            LoadDashboard(new DashboardUserControl(loadGame));
+
         }
 
         private void LoadDashboard(UserControl dashboardUserControl)
@@ -69,6 +67,14 @@ namespace LeagueSimulation
             displayPanel.Controls.Add(leagueLeadersUserControl);
         }
 
+        private void LoadPlayoffs(PlayoffsUserControl playoffsUserControl)
+        {
+            // clear current data in the display panel
+            displayPanel.Controls.Clear();
+            // add the league leader control to the display panel
+            displayPanel.Controls.Add(playoffsUserControl);
+        }
+
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)
         {
             Application.Exit();
@@ -104,14 +110,19 @@ namespace LeagueSimulation
             LoadRoster(new RosterUserControl(CurrentLeague));
         }
 
-        private void toolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void leagueLeadersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             LoadLeagueLeaders(new LeagueLeadersUserControl(CurrentLeague));
+        }
+
+        // playoffs menu click
+        private void toolStripMenuItem5_Click(object sender, EventArgs e)
+        {
+            if (CurrentLeague.Playoffs == false)
+            {
+                MessageBox.Show(text: "The playoffs haven't started yet. Come back when the regular season finishes");
+            }
+            else LoadPlayoffs(new PlayoffsUserControl(CurrentLeague));
         }
     }
 }

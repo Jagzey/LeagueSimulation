@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\nzuobm\\OneDrive - The Kings School Chester\\A-Level\\Computer Science\\NEA Project\\Project Files\\LeagueSimulation\\LeagueSimulation\\LeagueSimulation.csproj": {}
+    "C:\\Users\\FiercePC\\OneDrive - The Kings School Chester\\A-Level\\Computer Science\\NEA Project\\Project Files\\LeagueSimulation\\LeagueSimulation\\LeagueSimulation.csproj": {}
   },
   "projects": {
-    "C:\\Users\\nzuobm\\OneDrive - The Kings School Chester\\A-Level\\Computer Science\\NEA Project\\Project Files\\LeagueSimulation\\LeagueSimulation\\LeagueSimulation.csproj": {
+    "C:\\Users\\FiercePC\\OneDrive - The Kings School Chester\\A-Level\\Computer Science\\NEA Project\\Project Files\\LeagueSimulation\\LeagueSimulation\\LeagueSimulation.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\nzuobm\\OneDrive - The Kings School Chester\\A-Level\\Computer Science\\NEA Project\\Project Files\\LeagueSimulation\\LeagueSimulation\\LeagueSimulation.csproj",
+        "projectUniqueName": "C:\\Users\\FiercePC\\OneDrive - The Kings School Chester\\A-Level\\Computer Science\\NEA Project\\Project Files\\LeagueSimulation\\LeagueSimulation\\LeagueSimulation.csproj",
         "projectName": "LeagueSimulation",
-        "projectPath": "C:\\Users\\nzuobm\\OneDrive - The Kings School Chester\\A-Level\\Computer Science\\NEA Project\\Project Files\\LeagueSimulation\\LeagueSimulation\\LeagueSimulation.csproj",
-        "packagesPath": "C:\\Users\\nzuobm\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\nzuobm\\OneDrive - The Kings School Chester\\A-Level\\Computer Science\\NEA Project\\Project Files\\LeagueSimulation\\LeagueSimulation\\obj\\",
+        "projectPath": "C:\\Users\\FiercePC\\OneDrive - The Kings School Chester\\A-Level\\Computer Science\\NEA Project\\Project Files\\LeagueSimulation\\LeagueSimulation\\LeagueSimulation.csproj",
+        "packagesPath": "C:\\Users\\FiercePC\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\FiercePC\\OneDrive - The Kings School Chester\\A-Level\\Computer Science\\NEA Project\\Project Files\\LeagueSimulation\\LeagueSimulation\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\nzuobm\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\FiercePC\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,7 +26,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {

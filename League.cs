@@ -1,4 +1,5 @@
-﻿using System.Data.SQLite;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Data.SQLite;
 
 namespace LeagueSimulation
 {
@@ -15,6 +16,7 @@ namespace LeagueSimulation
         private int currentSeason = 0;
         private int gamesPlayed = 0;
         private bool playoffs = false;
+        private string playoffsRound = "";
         private string userTeamName = "";
 
         private List<List<string>> currentSchedule = new List<List<string>>();
@@ -29,6 +31,7 @@ namespace LeagueSimulation
         public int GamesPlayed { get; set; }
         public string UserTeamName { get; set; }
         public bool Playoffs { get; set; }
+        public string PlayoffsRound { get; set; }   
         public List<List<string>> CurrentSchedule { get; set; }
         public List<List<string>> CurrentPlayoffsSchedule { get; set; }
 
@@ -57,29 +60,6 @@ namespace LeagueSimulation
                         conferenceId INTEGER PRIMARY KEY AUTOINCREMENT,
                         conferenceName TEXT NOT NULL
                         );";
-
-                // create team game stats table
-                string createTeamGameStatsTableQuery = @"
-                    CREATE TABLE IF NOT EXISTS teamGameStats(
-                    gameId INTEGER NOT NULL,
-                    teamId INTEGER NOT NULL,
-                    teamName TEXT NOT NULL,
-                    opponentName TEXT NOT NULL,
-                    location TEXT NOT NULL,
-                    result TEXT NOT NULL,
-                    score TEXT NOT NULL,
-                    FGPCT REAL NOT NULL,
-                    TFGPCT REAL NOT NULL,
-                    PTS INTEGER NOT NULL,
-                    REB INTEGER NOT NULL,
-                    AST INTEGER NOT NULL,
-                    STL INTEGER NOT NULL,
-                    BLK INTEGER NOT NULL,
-                    TOV INTEGER NOT NULL,
-                    FOREIGN KEY (gameId) REFERENCES playerGameStats(gameId),
-                    FOREIGN KEY (teamId) REFERENCES teams(teamId),
-                    PRIMARY KEY (gameId, teamId)
-                    );";
 
                 // create players table
                 string createPlayersTableQuery = @"
@@ -119,7 +99,6 @@ namespace LeagueSimulation
                         playerOnTeamId INTEGER PRIMARY KEY AUTOINCREMENT,
                         playerId INTEGER NOT NULL,
                         teamId INTEGER NOT NULL,
-                        rosterSpot INTEGER,
                         dateJoined TEXT NOT NULL,
                         dateLeft TEXT NOT NULL
                         );";
@@ -146,32 +125,6 @@ namespace LeagueSimulation
                         FOREIGN KEY (playerId) REFERENCES players(playerId)
                         );";
 
-                string createPlayerSeasonTableQuery = @"
-                        CREATE TABLE playersSeasonStats(
-                        seasonId INTEGER NOT NULL,
-                        playerId INTEGER NOT NULL,
-                        teamId INTEGER NOT NULL,
-                        teamName TEXT NOT NULL,
-                        playerForename TEXT NOT NULL,
-                        playerSurname TEXT NOT NULL,
-                        position TEXT NOT NULL,
-                        gameValue DECIMAL (3,1) NOT NULL,
-                        MP DECIMAL (3,1) NOT NULL,
-                        FGPCT DECIMAL (3,1) NOT NULL,
-                        TFGPCT DECIMAL (3,1) NOT NULL,
-                        PTS DECIMAL (3,1) NOT NULL,
-                        REB DECIMAL (3,1) NOT NULL,
-                        AST DECIMAL (3,1) NOT NULL,
-                        STL DECIMAL (3,1) NOT NULL,
-                        BLK DECIMAL (3,1) NOT NULL,
-                        TOV DECIMAL (3,1) NOT NULL,
-                        PF DECIMAL (3,1) NOT NULL,
-                        FOREIGN KEY (seasonId) REFERENCES seasonSchedule(seasonId),
-                        FOREIGN KEY (teamId) REFERENCES teams(teamId),
-                        FOREIGN KEY (playerId) REFERENCES players(playerId),
-                        PRIMARY KEY (seasonId, playerId, teamId)
-                        );";
-
                 string createScheduleTableQuery = @"
                     CREATE TABLE seasonSchedule(
                     gameId INTEGER NOT NULL,
@@ -190,11 +143,11 @@ namespace LeagueSimulation
                     dayId INTEGER NOT NULL,
                     conferenceId INTEGER NOT NULL,
                     seed INTEGER NOT NULL,
-                    round TEXT NOT NULL,
+                    playoffsRound TEXT NOT NULL,
                     homeTeamId INTEGER NOT NULL,
                     awayTeamId INTEGER NOT NULL,
                     gameCompleted BOOLEAN NOT NULL,
-                    PRIMARY KEY (seasonId, dayId, playoffsGameId)
+                    PRIMARY KEY (playoffsGameId AUTOINCREMENT)
                     );";
 
                 string leagueTableQuery = @"
@@ -227,6 +180,7 @@ namespace LeagueSimulation
                     positionName TEXT NOT NULL,
                     description TEXT NOT NULL
                     );";
+
                 using (var command = new SQLiteCommand(connection))
                 {
                     command.CommandText = createTeamsTableQuery;
@@ -235,16 +189,10 @@ namespace LeagueSimulation
                     command.CommandText = createConferenceQuery;
                     command.ExecuteNonQuery();
 
-                    command.CommandText = createTeamGameStatsTableQuery;
-                    command.ExecuteNonQuery();
-
                     command.CommandText = createPlayersTableQuery;
                     command.ExecuteNonQuery();
 
                     command.CommandText = createPlayerOnTeamTableQuery;
-                    command.ExecuteNonQuery();
-
-                    command.CommandText = createPlayerSeasonTableQuery;
                     command.ExecuteNonQuery();
 
                     command.CommandText = createPlayerGameStatsQuery;
@@ -923,12 +871,19 @@ namespace LeagueSimulation
         {
             List<string> teams = new List<string>();
             string getTeamsQuery = $@"
-                WITH TeamGameScores AS (
+                WITH AllTeams AS (
+                -- Select all teams in the league for the season
+                SELECT DISTINCT 
+                    t.teamId, 
+                    t.teamName, 
+                    t.conferenceId
+                FROM teams t
+                WHERE t.conferenceId = {conferenceId} -- Filter by conference
+            ),
+            TeamGameScores AS (
                 SELECT
                     sg.seasonId,
                     sg.gameId,
-                    sg.homeTeamId AS homeTeamId,
-                    sg.awayTeamId AS awayTeamId,
                     CASE 
                         WHEN sg.homeTeamId = p.teamId THEN sg.homeTeamId
                         WHEN sg.awayTeamId = p.teamId THEN sg.awayTeamId
@@ -936,14 +891,132 @@ namespace LeagueSimulation
                     SUM(pgs.PTS) AS teamScore
                 FROM
                     seasonSchedule sg
-                JOIN
-                    playerGameStats pgs ON sg.gameId = pgs.gameId
+                JOIN playerGameStats pgs ON sg.gameId = pgs.gameId
+                AND pgs.isPlayoffs = FALSE
+                JOIN players p ON p.playerId = pgs.playerId
+                WHERE
+                    sg.gameCompleted = 1 -- Only include completed games
+                AND sg.seasonId = {CurrentSeason}
+                GROUP BY
+                    sg.seasonId, sg.gameId, teamId
+            ),
+            Wins AS (
+                SELECT
+                    tgs.seasonId,
+                    tgs.teamId,
+                    COUNT(*) AS wins
+                FROM
+                    TeamGameScores tgs
+                JOIN TeamGameScores opp ON tgs.gameId = opp.gameId
+                    AND tgs.teamId != opp.teamId -- Opponent
+                WHERE
+                    tgs.teamScore > opp.teamScore -- Current team scored more
+                GROUP BY
+                    tgs.seasonId, tgs.teamId
+            ),
+            Losses AS (
+                SELECT
+                    tgs.seasonId,
+                    tgs.teamId,
+                    COUNT(*) AS losses
+                FROM
+                    TeamGameScores tgs
+                JOIN TeamGameScores opp ON tgs.gameId = opp.gameId
+                    AND tgs.teamId != opp.teamId -- Opponent
+                WHERE
+                    tgs.teamScore < opp.teamScore -- Current team scored less
+                GROUP BY
+                    tgs.seasonId, tgs.teamId
+            ),
+            CombinedResults AS (
+                SELECT 
+                    at.teamId,
+                    at.teamName,
+                    COALESCE(w.wins, 0) AS wins,
+                    COALESCE(l.losses, 0) AS losses
+                FROM
+                    AllTeams at
+                LEFT JOIN Wins w ON at.teamId = w.teamId
+                LEFT JOIN Losses l ON at.teamId = l.teamId
+            )
+            SELECT 
+                cr.teamId,
+                cr.teamName,
+                cr.wins,
+                cr.losses,
+                CASE 
+                    WHEN (cr.wins + cr.losses) > 0 THEN cr.wins * 1.0 / (cr.wins + cr.losses)
+                    ELSE 0.0
+                END AS winPct
+            FROM 
+                CombinedResults cr
+            ORDER BY winPct DESC
+            ;";
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var command = new SQLiteCommand(getTeamsQuery, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read()) teams.Add(reader.GetString(reader.GetOrdinal("teamName")));
+                    }
+                }
+            }
+
+            return teams;
+        }
+
+        public List<string> GetPlayoffGamesByRound(string round)
+        {
+            List<string> games = new List<string>();
+            string getGamesQuery = $@"
+                SELECT homeTeamId, awayTeamId, conferenceId
+                FROM playoffsSchedule ps
+                WHERE playoffsRound = '{round}'
+                ;";
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var command = new SQLiteCommand(getGamesQuery, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            games.Add($"{reader.GetInt32(0)},{reader.GetInt32(1)},{reader.GetInt32(2)}");
+                        }
+                    }
+                }
+            }
+                return games;        
+        }
+
+        public string GetSeriesRecordByRound(string team1Id, string team2Id, int conferenceId)
+        {
+            string getRecordQuery = $@"
+                WITH TeamGameScores AS (
+                SELECT
+                    ps.seasonId,
+                    ps.playoffsGameId AS gameId,
+                    ps.playoffsRound,
+                    ps.homeTeamId AS homeTeamId,
+                    ps.awayTeamId AS awayTeamId,
+                    CASE 
+                        WHEN ps.homeTeamId = p.teamId THEN ps.homeTeamId
+                        WHEN ps.awayTeamId = p.teamId THEN ps.awayTeamId
+                    END AS teamId,
+                    SUM(pgs.PTS) AS teamScore
+                FROM
+                    playoffsSchedule ps
+                JOIN 
+                    playerGameStats pgs ON ps.playoffsGameId = pgs.gameId  AND pgs.isPlayoffs = 1
                 JOIN
                     players p ON p.playerId = pgs.playerId
                 WHERE
-                    sg.gameCompleted = 1
+                    ps.gameCompleted = 1
                 GROUP BY
-                    sg.seasonId, sg.gameId, teamId
+                    ps.seasonId, gameId, teamId
             ),
             Wins AS (
                 SELECT
@@ -955,6 +1028,7 @@ namespace LeagueSimulation
                 JOIN
                     TeamGameScores opp ON tgs.gameId = opp.gameId
                         AND tgs.teamId != opp.teamId
+                        AND opp.teamId = {team2Id} -- set teamId of opposition so that round is not needed
                 WHERE
                     tgs.teamScore > opp.teamScore
                 GROUP BY
@@ -990,29 +1064,28 @@ namespace LeagueSimulation
                 cr.seasonId,
                 cr.teamId,
                 t.teamName,
-                cr.wins * 1.0 / (cr.wins + cr.losses) AS winPct
-    
+                cr.wins,
+                cr.losses
             FROM 
                 CombinedResults cr
             JOIN
                 teams t ON cr.teamId = t.teamId
             WHERE
-                cr.seasonId = 1 AND t.conferenceId = {conferenceId}
-            ORDER BY winPct DESC
+                cr.seasonId = {CurrentSeason} -- seasonId
+                AND cr.teamId = {team1Id}; -- teamId
             ;";
             using (var connection = new SQLiteConnection(ConnectionString))
             {
                 connection.Open();
-                using (var command = new SQLiteCommand(getTeamsQuery, connection))
+                using (var command = new SQLiteCommand(getRecordQuery,connection))
                 {
                     using (var reader = command.ExecuteReader())
                     {
-                        while (reader.Read()) teams.Add(reader.GetString(reader.GetOrdinal("teamName")));
+                        while (reader.Read()) return $"{reader.GetInt32(reader.GetOrdinal("wins"))}-{reader.GetInt32(reader.GetOrdinal("losses"))}";
                     }
                 }
             }
-
-            return teams;
+            return "0-0";
         }
 
         public string GetWinPercentageFromRecord(string teamRecord)
@@ -1030,6 +1103,23 @@ namespace LeagueSimulation
         public string GetTeamNameFromId(string id)
         {
             string getIdQuery = $"SELECT teamName FROM teams WHERE teamId = {id}";
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var command = new SQLiteCommand(getIdQuery, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read()) return reader.GetString(0);
+                    }
+                }
+            }
+            return "";
+        }
+
+        public string GetCityNameFromId(string id)
+        {
+            string getIdQuery = $"SELECT city FROM teams WHERE teamId = {id}";
             using (var connection = new SQLiteConnection(ConnectionString))
             {
                 connection.Open();
@@ -1063,14 +1153,38 @@ namespace LeagueSimulation
             }
             return 0;
         }
-        public int GetUserLeaguePositionInConf() => GetConferenceTeamsByWinPct(GetUserConferenceId()).IndexOf(UserTeamName) + 1;
+
+        public int GetConferenceIdFromTeamId(string teamId)
+        {
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                string getConferenceQuery = $@"SELECT conferenceId from teams WHERE teamId = '{teamId}';";
+                using (var command = new SQLiteCommand(getConferenceQuery, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            // returns the conference of the user's team
+                            return reader.GetInt32(0);
+                        }
+                    }
+                }
+            }
+            return 0;
+        }
+        public int GetLeaguePositionInConf(int conferenceId, string teamName) => GetConferenceTeamsByWinPct(conferenceId).IndexOf(teamName) + 1;
         public List<string> GetConferenceTeams(int conferenceId) => GetConferenceTeamsByWinPct(conferenceId);
         public List<string> GetTeamUpcomingGames()
         {
             List<string> teamUpcomingGames = new List<string>();
-            for (int i = CurrentDay; i < CurrentSchedule.Count; i++)
+            List<List<string>> schedule = new List<List<string>>();
+            if (Playoffs) schedule = CurrentPlayoffsSchedule;
+            else schedule = CurrentSchedule;
+            for (int i = CurrentDay; i < schedule.Count; i++)
             {
-                List<string> currentScheduleDay = CurrentSchedule[i];
+                List<string> currentScheduleDay = schedule[i];
                 foreach (string game in currentScheduleDay)
                 {
                     string[] gameSplit = game.Split(',');
@@ -1097,6 +1211,8 @@ namespace LeagueSimulation
         }
         public List<string> GetGamesForDay(int day) => CurrentSchedule[day - 1];
 
+        public List<string> GetPlayoffGamesForDay(int day) => CurrentPlayoffsSchedule[day - 1];
+
         public void CreateLeague()
         {
             // we initialise the database and teams of the league
@@ -1113,6 +1229,7 @@ namespace LeagueSimulation
             // we get the schedule from the database
             CurrentSchedule = LoadLeagueSchedule();
             LoadLeagueData();
+            if (Playoffs) CurrentPlayoffsSchedule = LoadPlayoffsSchedule();
         }
 
         public void InsertLeagueSchedule(List<List<string>> schedule)
@@ -1194,7 +1311,10 @@ namespace LeagueSimulation
         public void UpdateLeagueDataIfNeeded(int currentDayOfGames)
         {
             bool allGamesComplete = true;
-            foreach (string game in CurrentSchedule[currentDayOfGames - 1])
+            List<List<string>> schedule = new List<List<string>>();
+            if (Playoffs) schedule = CurrentPlayoffsSchedule;
+            else schedule = CurrentSchedule;
+            foreach (string game in schedule[currentDayOfGames - 1])
             {
                 string[] teamsPlaying = game.Split(",");
                 if (!CheckIfGameCompleted(currentDayOfGames, teamsPlaying[0], teamsPlaying[1]))
@@ -1244,6 +1364,8 @@ namespace LeagueSimulation
                             CurrentDay = currentDay;
                             CurrentSeason = currentSeason;
                             UserTeamName = userTeamName;
+                            Playoffs = CheckIfPlayoffs();
+                            if (Playoffs) PlayoffsRound = GetPlayoffsRound();
                         }
                     }
                 }
@@ -1261,6 +1383,7 @@ namespace LeagueSimulation
                 string getScheduleQuery = $@"
                     SELECT *
                     FROM seasonSchedule
+                    WHERE seasonId = {CurrentSeason}
                     ;";
 
                 using (var command = new SQLiteCommand(getScheduleQuery, connection))
@@ -1292,6 +1415,87 @@ namespace LeagueSimulation
                 }
             }
             return scheduleToPull;
+        }
+
+        public List<List<string>> LoadPlayoffsSchedule()
+        {
+            List<List<string>> scheduleToPull = new List<List<string>>();
+            int gameCounter = 0;
+            int dayCounter = 0;
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                string getScheduleQuery = $@"
+                    SELECT *
+                    FROM playoffsSchedule
+                    WHERE seasonId = {CurrentSeason}
+                    ORDER BY dayId
+                    ;";
+
+                using (var command = new SQLiteCommand(getScheduleQuery, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        List<string> scheduleDayToPull = new List<string>();
+                        while (reader.Read())
+                        {
+                            if (reader.GetInt32(reader.GetOrdinal("seasonId")) != CurrentSeason) continue;
+                            if (reader.GetInt32(reader.GetOrdinal("playoffsGameId")) > gameCounter)
+                            {
+                                gameCounter = reader.GetInt32(reader.GetOrdinal("playoffsGameId"));
+                            }
+                            string team1 = reader.GetInt32(reader.GetOrdinal("homeTeamId")).ToString();
+                            string team2 = reader.GetInt32(reader.GetOrdinal("awayTeamId")).ToString();
+                            string scheduleGameToPull = $"{team1},{team2}";
+                            if (reader.GetInt32(reader.GetOrdinal("dayId")) > dayCounter)
+                            {
+                                if (scheduleDayToPull.Count > 0) scheduleToPull.Add(scheduleDayToPull);
+                                scheduleDayToPull = new List<string>();
+                                dayCounter = reader.GetInt32(reader.GetOrdinal("dayId"));
+
+                            }
+                            scheduleDayToPull.Add(scheduleGameToPull);
+                        }
+                        if (scheduleDayToPull.Count > 0) scheduleToPull.Add(scheduleDayToPull);
+                    }
+                }
+            }
+            return scheduleToPull;
+            return new List<List<string>>();
+        }
+
+        public bool CheckIfPlayoffs()
+        {
+            string checkForPlayoffsQuery = $"SELECT COUNT(*) FROM playoffsSchedule WHERE seasonId = {CurrentSeason}";
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var command = new SQLiteCommand(checkForPlayoffsQuery, connection))
+                {
+                    using (var reader = command.ExecuteReader()) while (reader.Read()) return reader.GetInt32(0) > 0;
+                }
+            }
+            return false;
+        }
+
+        public string GetPlayoffsRound()
+        {
+            string getRoundQuery = $@"
+                SELECT ps.playoffsRound
+                FROM playoffsSchedule ps
+                WHERE seasonId = 1
+                ORDER BY playoffsGameId DESC
+                LIMIT 1
+            ";
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var command = new SQLiteCommand(getRoundQuery, connection))
+                {
+                    using (var reader = command.ExecuteReader()) while (reader.Read()) return reader.GetString(0);
+                }
+            }
+            return "";
         }
 
         // this function generates a schedule if the user creates a league
@@ -1687,15 +1891,15 @@ namespace LeagueSimulation
                     string currentGame = currentDay[j];
                     string[] teamsPlaying = currentGame.Split(',');
                     string insertGameQuery = $@"
-                    INSERT INTO playoffsSchedule(seasonId,dayId,conferenceId,round,seed,homeTeamId,awayTeamId,gameCompleted)
+                    INSERT INTO playoffsSchedule(seasonId,dayId,conferenceId,playoffsRound,seed,homeTeamId,awayTeamId,gameCompleted)
                     VALUES(
                     {CurrentSeason},
                     {CurrentDay + 1 + i},
                     {1},
-                    'First Round',
+                    '{PlayoffsRound}',
                     {j + 1},
-                    {teamsPlaying[0]},
-                    {teamsPlaying[1]},
+                    {GetIdFromTeamName(teamsPlaying[0])},
+                    {GetIdFromTeamName(teamsPlaying[1])},
                     FALSE
                     );";
 
@@ -1710,6 +1914,39 @@ namespace LeagueSimulation
                     }
                 }
                 
+            }
+
+            for (int i = 0; i < westPlayoffGames.Count; i++)
+            {
+                List<string> currentDay = westPlayoffGames[i];
+                for (int j = 0; j < currentDay.Count; j++)
+                {
+                    string currentGame = currentDay[j];
+                    string[] teamsPlaying = currentGame.Split(',');
+                    string insertGameQuery = $@"
+                    INSERT INTO playoffsSchedule(seasonId,dayId,conferenceId,playoffsRound,seed,homeTeamId,awayTeamId,gameCompleted)
+                    VALUES(
+                    {CurrentSeason},
+                    {CurrentDay + 1 + i},
+                    {2},
+                    '{PlayoffsRound}',
+                    {j + 1},
+                    {GetIdFromTeamName(teamsPlaying[0])},
+                    {GetIdFromTeamName(teamsPlaying[1])},
+                    FALSE
+                    );";
+
+                    using (var connection = new SQLiteConnection(ConnectionString))
+                    {
+                        connection.Open();
+                        using (var command = new SQLiteCommand(connection))
+                        {
+                            command.CommandText = insertGameQuery;
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                }
+
             }
         }
 
@@ -1760,33 +1997,6 @@ namespace LeagueSimulation
             return playoffTeams;
         }
 
-        public void CreatePlayoffsScheduleRecords(List<List<string>> teamsInPlayoffs)
-        {
-            List<string> eastPlayoffTeams = teamsInPlayoffs[0];
-            List<string> westPlayoffTeams = teamsInPlayoffs[1];
-            using (var connection = new SQLiteConnection(ConnectionString))
-            {
-                connection.Open();
-                string insertGameIntoPlayoffsQuery = "";
-                // here we set the first games for the first round of the east playoffs
-                int gameId = 0;
-                for (int i = 0; i < eastPlayoffTeams.Count / 2; i++)
-                {
-                    gameId++;
-                    string homeTeam = eastPlayoffTeams[i];
-                    string awayTeam = eastPlayoffTeams[(eastPlayoffTeams.Count - 1) - i];
-                    insertGameIntoPlayoffsQuery = $@"
-                            INSERT into seasonSchedule(seasonId,dayId,gameId,round,homeTeam,awayTeam,gameCompleted)
-                                VALUES({CurrentSeason},{1},
-                                {gameId},
-                                'First Round',
-                                '{homeTeam}',
-                                '{awayTeam}',
-                                FALSE)
-                            ;";
-                }
-            }
-        }
         public Team ExtractTeamFromTeamName(string teamName)
         {
             // use this pseudo-team class to get the team names in the correct format
@@ -1842,7 +2052,33 @@ namespace LeagueSimulation
                 string checkGameCompletedQuery = $@"
                     SELECT gameCompleted
                     FROM seasonSchedule
-                    WHERE homeTeamId = {homeTeamId} AND awayTeamId = {awayTeamId} AND dayId = '{currentDay}'
+                    WHERE homeTeamId = {homeTeamId} AND awayTeamId = {awayTeamId} AND dayId = '{currentDay}' AND seasonId = {CurrentSeason}
+                ;";
+
+                using (SQLiteCommand command = new SQLiteCommand(checkGameCompletedQuery, connection))
+                {
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            return reader.GetBoolean(0);
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        public bool CheckIfPlayoffGameCompleted(int currentDay, string homeTeamId, string awayTeamId)
+        {
+            ConnectionString = $"Data Source={LeagueFileName};Version=3;";
+            using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                string checkGameCompletedQuery = $@"
+                    SELECT gameCompleted
+                    FROM playoffsSchedule
+                    WHERE homeTeamId = {homeTeamId} AND awayTeamId = {awayTeamId} AND dayId = {currentDay} AND seasonId = {CurrentSeason}
                 ;";
 
                 using (SQLiteCommand command = new SQLiteCommand(checkGameCompletedQuery, connection))
@@ -1863,7 +2099,22 @@ namespace LeagueSimulation
             using (var connection = new SQLiteConnection(ConnectionString))
             {
                 connection.Open();
-                string updateGameComplete = $"UPDATE seasonSchedule SET gameCompleted = {true} WHERE dayId = '{currentDay}' AND homeTeamId = {homeTeam} AND awayTeamId = {awayTeam};";
+                string updateGameComplete = $"UPDATE seasonSchedule SET gameCompleted = {true} WHERE dayId = {currentDay} AND homeTeamId = {homeTeam} AND awayTeamId = {awayTeam} AND seasonId = {CurrentSeason};";
+                using (var command = new SQLiteCommand(connection))
+                {
+                    command.CommandText = updateGameComplete;
+                    command.ExecuteNonQuery();
+                }
+            }
+
+        }
+
+        public void SetPlayoffGameToComplete(int currentDay, string homeTeam, string awayTeam)
+        {
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                string updateGameComplete = $"UPDATE playoffsSchedule SET gameCompleted = {true} WHERE dayId = {currentDay} AND homeTeamId = {homeTeam} AND awayTeamId = {awayTeam} AND seasonId = {CurrentSeason};";
                 using (var command = new SQLiteCommand(connection))
                 {
                     command.CommandText = updateGameComplete;
@@ -1893,7 +2144,7 @@ namespace LeagueSimulation
             return variableFileName;
         }
 
-        public void SimulateDay(List<string> games, int currentDaySimulated, bool updateStats)
+        public void SimulateDay(List<string> games, int currentDaySimulated, bool playoffs)
         {
             // simulate games within the day
             foreach (string game in games)
@@ -1901,7 +2152,7 @@ namespace LeagueSimulation
                 string[] teamsPlaying = game.Split(',');
                 if (!CheckIfGameCompleted(currentDaySimulated, teamsPlaying[0], teamsPlaying[1]))
                 {
-                    SimulateGame(game, currentDaySimulated, updateStats);
+                    SimulateGame(game, currentDaySimulated, playoffs);
                 }
 
             }
@@ -1914,13 +2165,20 @@ namespace LeagueSimulation
             // simulate game specified by user
             GamesPlayed++;
             string[] teamsPlaying = game.Split(",");
-            if (!CheckIfGameCompleted(currentDayOfGame, teamsPlaying[0], teamsPlaying[1]))
+            bool gameComplete = false;
+            if (Playoffs) gameComplete = CheckIfPlayoffGameCompleted(currentDayOfGame, teamsPlaying[0], teamsPlaying[1]);
+            else gameComplete = CheckIfGameCompleted(currentDayOfGame, teamsPlaying[0], teamsPlaying[1]);
+            if (!gameComplete)
             {
                 Team team1 = ExtractTeamFromTeamName(GetTeamNameFromId(teamsPlaying[0]));
                 Team team2 = ExtractTeamFromTeamName(GetTeamNameFromId(teamsPlaying[1]));
-                int gameId = GetGameId(game, currentDayOfGame);
+
+                int gameId = 0;
+                if (Playoffs) gameId = GetPlayoffGameId(game, currentDayOfGame);
+                else gameId = GetGameId(game, currentDayOfGame);
                 GameGenerator simulatedGame = new GameGenerator(team1, team2, ConnectionString, CurrentUser, CurrentSaveState, gameId, Playoffs, this);
-                SetGameToComplete(currentDayOfGame, teamsPlaying[0], teamsPlaying[1]);
+                if (Playoffs) SetPlayoffGameToComplete(currentDayOfGame, teamsPlaying[0], teamsPlaying[1]);
+                else SetGameToComplete(currentDayOfGame, teamsPlaying[0], teamsPlaying[1]);
             }
 
             // we check if all games are complete in the day, then increment currentDay if so
@@ -1928,11 +2186,17 @@ namespace LeagueSimulation
             // we check everyday up to the current game being simulated, where i is the current day
             // if all games are complete, then we increase the season currentDay
 
-            for (int j = 0; j < CurrentSchedule[currentDayOfGame - 1].Count; j++)
+            List<List<string>> schedule = new List<List<string>>();
+            if (Playoffs) schedule = CurrentPlayoffsSchedule;
+            else schedule = CurrentSchedule;
+            for (int j = 0; j < schedule[currentDayOfGame - 1].Count; j++)
             {
-                string currentGame = CurrentSchedule[currentDayOfGame - 1][j];
+                string currentGame = schedule[currentDayOfGame - 1][j];
                 string[] currentTeamsPlaying = currentGame.Split(",");
-                if (!CheckIfGameCompleted(currentDayOfGame, currentTeamsPlaying[0], currentTeamsPlaying[1]))
+                gameComplete = false;
+                if (Playoffs) gameComplete = CheckIfPlayoffGameCompleted(currentDayOfGame, currentTeamsPlaying[0], currentTeamsPlaying[1]);
+                else gameComplete = CheckIfGameCompleted(currentDayOfGame, currentTeamsPlaying[0], currentTeamsPlaying[1]);
+                if (!gameComplete)
                 {
                     allGamesComplete = false; break;
                 }
@@ -1941,13 +2205,35 @@ namespace LeagueSimulation
             {
                 // here, we move the league into playoffs mode
                 Playoffs = true;
+                PlayoffsRound = "First Round";
                 CurrentDay = 0;
+                SetCurrentDayForPlayoffs();
                 GeneratePlayoffsFirstRound();
+                CurrentPlayoffsSchedule = LoadPlayoffsSchedule();
             }
-
             if (allGamesComplete)
             {
                 CurrentDay++;
+                UpdateLeagueDataIfNeeded(currentDayOfGame);
+            }
+        }
+
+        public bool CheckIfPlayoffRoundNeedsMoreGames()
+        {
+
+        }
+
+        public void SetCurrentDayForPlayoffs()
+        {
+            string setDayToOneQuery = "UPDATE league SET currentDay = 1";
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var command = new SQLiteCommand(connection))
+                {
+                    command.CommandText = setDayToOneQuery;
+                    command.ExecuteNonQuery();
+                }
             }
         }
 
@@ -1956,14 +2242,19 @@ namespace LeagueSimulation
             // simulate game specified by user
             GamesPlayed++;
             string[] teamsPlaying = game.Split(",");
-            if (!CheckIfGameCompleted(GamesPlayed, teamsPlaying[0], teamsPlaying[1]))
+            bool gameComplete = false;
+            if (Playoffs) gameComplete = CheckIfPlayoffGameCompleted(currentDayOfGame, teamsPlaying[0], teamsPlaying[1]);
+            else gameComplete = CheckIfGameCompleted(currentDayOfGame, teamsPlaying[0], teamsPlaying[1]);
+            if (!gameComplete)
             {
                 Team team1 = ExtractTeamFromTeamName(GetTeamNameFromId(teamsPlaying[0]));
                 Team team2 = ExtractTeamFromTeamName(GetTeamNameFromId(teamsPlaying[1]));
-                int gameId = GetGameId(game, currentDayOfGame);
+                int gameId = 0; 
+                if (Playoffs) gameId = GetPlayoffGameId(game, currentDayOfGame);
+                else GetGameId(game, currentDayOfGame);
                 GameGenerator simulatedGame = new GameGenerator(team1, team2, ConnectionString, CurrentUser, CurrentSaveState, gameId, Playoffs, this);
-                SetGameToComplete(currentDayOfGame, teamsPlaying[0], teamsPlaying[1]);
-                //SetPlayerAverageStats();
+                if (Playoffs) SetPlayoffGameToComplete(currentDayOfGame, teamsPlaying[0], teamsPlaying[1]);
+                else SetGameToComplete(currentDayOfGame, teamsPlaying[0], teamsPlaying[1]);
                 return (simulatedGame.CommentatorPhrases, simulatedGame.ScoreAfterEachPhrase);
             }
             return (new List<string>(), new List<string>());
@@ -2035,6 +2326,35 @@ namespace LeagueSimulation
                     WHERE dayId = {currentDayOfGame}
                     AND homeTeamId = {teamsPlaying[0]}
                     AND awayTeamId = {teamsPlaying[1]}
+                    AND seasonId = {CurrentSeason}
+                    ;";
+                using (var command = new SQLiteCommand(getGameIdQuery, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            return reader.GetInt32(0);
+                        }
+                    }
+                }
+            }
+            return -1;
+        }
+
+        public int GetPlayoffGameId(string game, int currentDayOfGame)
+        {
+            string[] teamsPlaying = game.Split(",");
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                string getGameIdQuery = $@"
+                    SELECT playoffsGameId
+                    FROM playoffsSchedule
+                    WHERE dayId = {currentDayOfGame}
+                    AND homeTeamId = {teamsPlaying[0]}
+                    AND awayTeamId = {teamsPlaying[1]}
+                    AND seasonId = {CurrentSeason}
                     ;";
                 using (var command = new SQLiteCommand(getGameIdQuery, connection))
                 {

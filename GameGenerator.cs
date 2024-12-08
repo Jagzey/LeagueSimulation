@@ -326,7 +326,13 @@ namespace LeagueSimulation
             {
                 string team1Record = CurrentLeague.GetTeamRecord(team1.teamName);
                 string team2Record = CurrentLeague.GetTeamRecord(team2.teamName);
-                CommentatorPhrases.Add($"Welcome player! Today, we are watching the {team1.teamName} ({team1Record}) vs. {team2.teamName} ({team2Record}) live. Enjoy!");
+                if (playoffs)
+                {
+                    team1Record = CurrentLeague.GetSeriesRecordByRound(team1.TeamId.ToString(), team2.TeamId.ToString(), CurrentLeague.GetConferenceIdFromTeamId(team1.TeamId.ToString()));
+                    team1Record = CurrentLeague.GetSeriesRecordByRound(team2.TeamId.ToString(), team1.TeamId.ToString(), CurrentLeague.GetConferenceIdFromTeamId(team1.TeamId.ToString()));
+                    CommentatorPhrases.Add($"Welcome player! Today, we are watching the {team1.teamName} ({team1Record}) vs. {team2.teamName} ({team2Record}) live in the {CurrentLeague.PlayoffsRound} of the playoffs. Enjoy!");
+                }
+                else CommentatorPhrases.Add($"Welcome player! Today, we are watching the {team1.teamName} ({team1Record}) vs. {team2.teamName} ({team2Record}) live. Enjoy!");
                 ScoreAfterEachPhrase.Add($"0-0");
             }
 
@@ -372,24 +378,20 @@ namespace LeagueSimulation
                     }
                     else
                     {
-                        // we simulate the game as a regular season game, if playoffs is false
-                        if (!playoffs)
-                        {
-                            // now we add the stats accumulated, into the games table; as a playoff game
-                            InsertPlayerGameData(gameId, playoffs);
+                        // now we add the stats accumulated, into the games table; as a playoff game
+                        InsertPlayerGameData(gameId, playoffs);
 
-                            // we add the final commentator phrase and score to the lists
-                            CommentatorPhrases.Add($"The game {team1.teamName} vs. {team2.teamName} has come to an end as the clock runs out.");
-                            (int, int) score = TeamGameStats.CalculateScore(team1Stats, team2Stats);
-                            ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+                        // we add the final commentator phrase and score to the lists
+                        CommentatorPhrases.Add($"The game {team1.teamName} vs. {team2.teamName} has come to an end as the clock runs out.");
+                        (int, int) score = TeamGameStats.CalculateScore(team1Stats, team2Stats);
+                        ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
 
-                            // Now we work out the name of the winner of the game, then display it
-                            string nameOfWinner = "";
-                            if (team1Stats.Sum(x => x.Points) > team2Stats.Sum(x => x.Points)) nameOfWinner = team1.teamName;
-                            else nameOfWinner = team2.teamName;
-                            CommentatorPhrases.Add($"The game score finished as {score.Item1}-{score.Item2}, as the win goes to the {nameOfWinner}. ");
-                            ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
-                        }
+                        // Now we work out the name of the winner of the game, then display it
+                        string nameOfWinner = "";
+                        if (team1Stats.Sum(x => x.Points) > team2Stats.Sum(x => x.Points)) nameOfWinner = team1.teamName;
+                        else nameOfWinner = team2.teamName;
+                        CommentatorPhrases.Add($"The game score finished as {score.Item1}-{score.Item2}, as the win goes to the {nameOfWinner}. ");
+                        ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
 
                     }
                 }
@@ -1094,7 +1096,7 @@ namespace LeagueSimulation
 
         public int CalculateReboundProbability()
         {
-           
+
             List<PlayerInGame> offense;
             List<PlayerInGame> defense;
             if (possession == 1)

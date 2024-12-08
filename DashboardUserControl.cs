@@ -112,7 +112,7 @@ namespace LeagueSimulation
                 seasonDayLabel.Text += $"{league.CurrentDay}";
                 seasonYearLabel.Text += $"{league.CurrentSeason + 2023}";
                 string conferencePositionText = "";
-                int conferencePosition = league.GetUserLeaguePositionInConf();
+                int conferencePosition = league.GetLeaguePositionInConf(league.GetUserConferenceId(), league.UserTeamName);
                 if (conferencePosition == 1)
                 {
                     conferencePositionText = "1st in conference";
