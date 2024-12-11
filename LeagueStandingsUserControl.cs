@@ -196,5 +196,10 @@ namespace LeagueSimulation
 
             }
         }
+
+        private void westernConferenceStandingsLabel_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

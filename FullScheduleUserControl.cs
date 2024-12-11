@@ -13,7 +13,7 @@ namespace LeagueSimulation
             this.league = league;
             InitializeComponent();
             currentDayShownNum.Value = league.CurrentDay;
-        
+
             FillLabels();
         }
 
@@ -879,9 +879,12 @@ namespace LeagueSimulation
             scheduleDisplayPanel.Controls.Clear();
 
             scheduleDisplayPanel.Controls.Add(userControl.panel2);
-            scheduleDisplayPanel.Controls.Add(userControl.flowLayoutPanel2);
+            scheduleDisplayPanel.Controls.Add(userControl.label3);
+            scheduleDisplayPanel.Controls.Add(userControl.commentatorPhrasesLabel);
+            scheduleDisplayPanel.Size = new Size(650, 40000);
             userControl.panel2.Show();
-            userControl.flowLayoutPanel2.Show();
+            userControl.label3.Show();
+            userControl.commentatorPhrasesLabel.Show();
             scheduleDisplayPanel.Refresh();
 
             int commentatorCounter = 0;
@@ -908,7 +911,8 @@ namespace LeagueSimulation
                     }
                 }
                 userControl.panel2.Refresh();
-                userControl.flowLayoutPanel2.Refresh();
+                userControl.label3.Refresh();
+                userControl.commentatorPhrasesLabel.Refresh();
 
             }
 
@@ -1398,6 +1402,11 @@ namespace LeagueSimulation
                     UpdateGame13Panel(teamsPlaying);
                 }
             }
+        }
+
+        private void scheduleDisplayPanel_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

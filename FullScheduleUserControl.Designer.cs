@@ -1140,7 +1140,6 @@
             // currentDayShownNum
             // 
             currentDayShownNum.Location = new Point(125, 55);
-            currentDayShownNum.Maximum = new decimal(new int[] { league.CurrentSchedule.Count, 0, 0, 0 });
             currentDayShownNum.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             currentDayShownNum.Name = "currentDayShownNum";
             currentDayShownNum.Size = new Size(66, 23);
@@ -1202,8 +1201,9 @@
             scheduleDisplayPanel.FlowDirection = FlowDirection.TopDown;
             scheduleDisplayPanel.Location = new Point(3, 3);
             scheduleDisplayPanel.Name = "scheduleDisplayPanel";
-            scheduleDisplayPanel.Size = new Size(641, 2800);
+            scheduleDisplayPanel.Size = new Size(641, 2184);
             scheduleDisplayPanel.TabIndex = 5;
+            scheduleDisplayPanel.Paint += scheduleDisplayPanel_Paint;
             // 
             // FullScheduleUserControl
             // 

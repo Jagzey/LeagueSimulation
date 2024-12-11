@@ -46,7 +46,7 @@
             fullScheduleMenuItem = new ToolStripMenuItem();
             toolStripMenuItem16 = new ToolStripMenuItem();
             toolStripMenuItem17 = new ToolStripMenuItem();
-            toolStripMenuItem18 = new ToolStripMenuItem();
+            playerStatsMenuItem = new ToolStripMenuItem();
             toolStripMenuItem19 = new ToolStripMenuItem();
             leagueLeadersToolStripMenuItem = new ToolStripMenuItem();
             toolStripMenuItem20 = new ToolStripMenuItem();
@@ -136,14 +136,14 @@
             // leagueStandingsMenuItem
             // 
             leagueStandingsMenuItem.Name = "leagueStandingsMenuItem";
-            leagueStandingsMenuItem.Size = new Size(180, 28);
+            leagueStandingsMenuItem.Size = new Size(154, 28);
             leagueStandingsMenuItem.Text = "Standings";
             leagueStandingsMenuItem.Click += leagueStandingsMenuItem_Click;
             // 
             // toolStripMenuItem5
             // 
             toolStripMenuItem5.Name = "toolStripMenuItem5";
-            toolStripMenuItem5.Size = new Size(180, 28);
+            toolStripMenuItem5.Size = new Size(154, 28);
             toolStripMenuItem5.Text = "Playoffs";
             toolStripMenuItem5.Click += toolStripMenuItem5_Click;
             // 
@@ -182,16 +182,17 @@
             // 
             // toolStripMenuItem17
             // 
-            toolStripMenuItem17.DropDownItems.AddRange(new ToolStripItem[] { toolStripMenuItem18, toolStripMenuItem19, leagueLeadersToolStripMenuItem });
+            toolStripMenuItem17.DropDownItems.AddRange(new ToolStripItem[] { playerStatsMenuItem, toolStripMenuItem19, leagueLeadersToolStripMenuItem });
             toolStripMenuItem17.Name = "toolStripMenuItem17";
             toolStripMenuItem17.Size = new Size(180, 28);
             toolStripMenuItem17.Text = "Stats";
             // 
-            // toolStripMenuItem18
+            // playerStatsMenuItem
             // 
-            toolStripMenuItem18.Name = "toolStripMenuItem18";
-            toolStripMenuItem18.Size = new Size(198, 28);
-            toolStripMenuItem18.Text = "Player Stats";
+            playerStatsMenuItem.Name = "playerStatsMenuItem";
+            playerStatsMenuItem.Size = new Size(198, 28);
+            playerStatsMenuItem.Text = "Player Stats";
+            playerStatsMenuItem.Click += playerStatsMenuItem_Click;
             // 
             // toolStripMenuItem19
             // 
@@ -263,7 +264,7 @@
         private ToolStripMenuItem fullScheduleMenuItem;
         private ToolStripMenuItem toolStripMenuItem16;
         private ToolStripMenuItem toolStripMenuItem17;
-        private ToolStripMenuItem toolStripMenuItem18;
+        private ToolStripMenuItem playerStatsMenuItem;
         private ToolStripMenuItem toolStripMenuItem19;
         private ToolStripMenuItem toolStripMenuItem20;
         private ToolStripMenuItem backToStartMenuToolStripMenuItem;

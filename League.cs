@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Data.SQLite;
+﻿using System.Data.SQLite;
 
 namespace LeagueSimulation
 {
@@ -31,7 +30,7 @@ namespace LeagueSimulation
         public int GamesPlayed { get; set; }
         public string UserTeamName { get; set; }
         public bool Playoffs { get; set; }
-        public string PlayoffsRound { get; set; }   
+        public string PlayoffsRound { get; set; }
         public List<List<string>> CurrentSchedule { get; set; }
         public List<List<string>> CurrentPlayoffsSchedule { get; set; }
 
@@ -700,23 +699,6 @@ namespace LeagueSimulation
 
         public string GetTeamStatistic(string stat)
         {
-            /* using (var connection = new SQLiteConnection(ConnectionString))
-             {
-                 connection.Open();
-                 string getTeamStatQuery = $"SELECT AVG({stat}) FROM teamGameStats WHERE teamName = '{this.UserTeamName}';";
-                 using (var command = new SQLiteCommand(getTeamStatQuery, connection))
-                 {
-                     using (var reader = command.ExecuteReader())
-                     {
-                         while (reader.Read())
-                         {
-                             if (reader.IsDBNull(0)) return "";
-                             return $"{Math.Round(reader.GetDouble(0), 1)}";
-                         }
-                     }
-                 }
-
-             }*/
             string teamLeaderQuery = $@"
                     WITH TeamAverage{stat} AS (
                         SELECT
@@ -789,10 +771,12 @@ namespace LeagueSimulation
                             seasonSchedule sg
                         JOIN
                             playerGameStats pgs ON sg.gameId = pgs.gameId
+
                         JOIN
                             players p ON p.playerId = pgs.playerId
                         WHERE
                             sg.gameCompleted = 1
+                            AND pgs.isPlayoffs = 0
                         GROUP BY
                             sg.seasonId, sg.gameId, teamId
                     ),
@@ -989,7 +973,7 @@ namespace LeagueSimulation
                     }
                 }
             }
-                return games;        
+            return games;
         }
 
         public string GetSeriesRecordByRound(string team1Id, string team2Id, int conferenceId)
@@ -1010,11 +994,11 @@ namespace LeagueSimulation
                 FROM
                     playoffsSchedule ps
                 JOIN 
-                    playerGameStats pgs ON ps.playoffsGameId = pgs.gameId  AND pgs.isPlayoffs = 1
+                    playerGameStats pgs ON ps.playoffsGameId = pgs.gameId AND pgs.isPlayoffs = 1
                 JOIN
                     players p ON p.playerId = pgs.playerId
                 WHERE
-                    ps.gameCompleted = 1
+                    ps.gameCompleted = 1 AND ps.playoffsRound = '{PlayoffsRound}'
                 GROUP BY
                     ps.seasonId, gameId, teamId
             ),
@@ -1077,7 +1061,103 @@ namespace LeagueSimulation
             using (var connection = new SQLiteConnection(ConnectionString))
             {
                 connection.Open();
-                using (var command = new SQLiteCommand(getRecordQuery,connection))
+                using (var command = new SQLiteCommand(getRecordQuery, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read()) return $"{reader.GetInt32(reader.GetOrdinal("wins"))}-{reader.GetInt32(reader.GetOrdinal("losses"))}";
+                    }
+                }
+            }
+            return "0-0";
+        }
+
+        public string GetSeriesRecordByGivenRound(string team1Id, string team2Id, string round)
+        {
+            string getRecordQuery = $@"
+                WITH TeamGameScores AS (
+                SELECT
+                    ps.seasonId,
+                    ps.playoffsGameId AS gameId,
+                    ps.playoffsRound,
+                    ps.homeTeamId AS homeTeamId,
+                    ps.awayTeamId AS awayTeamId,
+                    CASE 
+                        WHEN ps.homeTeamId = p.teamId THEN ps.homeTeamId
+                        WHEN ps.awayTeamId = p.teamId THEN ps.awayTeamId
+                    END AS teamId,
+                    SUM(pgs.PTS) AS teamScore
+                FROM
+                    playoffsSchedule ps
+                JOIN 
+                    playerGameStats pgs ON ps.playoffsGameId = pgs.gameId AND pgs.isPlayoffs = 1
+                JOIN
+                    players p ON p.playerId = pgs.playerId
+                WHERE
+                    ps.gameCompleted = 1 AND ps.playoffsRound = '{round}'
+                GROUP BY
+                    ps.seasonId, gameId, teamId
+            ),
+            Wins AS (
+                SELECT
+                    tgs.seasonId,
+                    tgs.teamId,
+                    COUNT(*) AS wins
+                FROM
+                    TeamGameScores tgs
+                JOIN
+                    TeamGameScores opp ON tgs.gameId = opp.gameId
+                        AND tgs.teamId != opp.teamId
+                        AND opp.teamId = {team2Id} -- set teamId of opposition so that round is not needed
+                WHERE
+                    tgs.teamScore > opp.teamScore
+                GROUP BY
+                    tgs.seasonId, tgs.teamId
+            ),
+            Losses AS (
+                SELECT
+                    tgs.seasonId,
+                    tgs.teamId,
+                    COUNT(*) AS losses
+                FROM
+                    TeamGameScores tgs
+                JOIN
+                    TeamGameScores opp ON tgs.gameId = opp.gameId
+                        AND tgs.teamId != opp.teamId
+                WHERE
+                    tgs.teamScore < opp.teamScore
+                GROUP BY
+                    tgs.seasonId, tgs.teamId
+            ),
+            CombinedResults AS (
+                SELECT 
+                    tgs.seasonId,
+                    tgs.teamId,
+                    COALESCE(w.wins, 0) AS wins,
+                    COALESCE(l.losses, 0) AS losses
+                FROM
+                    (SELECT DISTINCT seasonId, teamId FROM TeamGameScores) tgs
+                LEFT JOIN Wins w ON tgs.seasonId = w.seasonId AND tgs.teamId = w.teamId
+                LEFT JOIN Losses l ON tgs.seasonId = l.seasonId AND tgs.teamId = l.teamId
+            )
+            SELECT 
+                cr.seasonId,
+                cr.teamId,
+                t.teamName,
+                cr.wins,
+                cr.losses
+            FROM 
+                CombinedResults cr
+            JOIN
+                teams t ON cr.teamId = t.teamId
+            WHERE
+                cr.seasonId = {CurrentSeason} -- seasonId
+                AND cr.teamId = {team1Id}; -- teamId
+            ;";
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var command = new SQLiteCommand(getRecordQuery, connection))
                 {
                     using (var reader = command.ExecuteReader())
                     {
@@ -1317,7 +1397,10 @@ namespace LeagueSimulation
             foreach (string game in schedule[currentDayOfGames - 1])
             {
                 string[] teamsPlaying = game.Split(",");
-                if (!CheckIfGameCompleted(currentDayOfGames, teamsPlaying[0], teamsPlaying[1]))
+                bool gameComplete = false;
+                if (Playoffs) gameComplete = CheckIfPlayoffGameCompleted(currentDayOfGames, teamsPlaying[0], teamsPlaying[1]);
+                else gameComplete = CheckIfGameCompleted(currentDayOfGames, teamsPlaying[0], teamsPlaying[1]);
+                if (!gameComplete)
                 {
                     allGamesComplete = false; break;
                 }
@@ -1849,7 +1932,7 @@ namespace LeagueSimulation
                 eastPlayoffTeams.RemoveAt(i);
                 westPlayoffTeams.RemoveAt(i);
             }
-            
+
             // here we generate the first 4 games for the east and west coast for the 1st round of the playoffs
             for (int i = 0; i < 8; i++)
             {
@@ -1913,7 +1996,7 @@ namespace LeagueSimulation
                         }
                     }
                 }
-                
+
             }
 
             for (int i = 0; i < westPlayoffGames.Count; i++)
@@ -1948,6 +2031,662 @@ namespace LeagueSimulation
                 }
 
             }
+        }
+
+        public void GeneratePlayoffsSecondRound()
+        {
+            // we need to get the winners of all the eastern conference series in the 1st round
+            string getWinnersQuery = $@"
+                WITH TeamGameScores AS (
+                SELECT
+                    ps.seasonId,
+                    ps.playoffsGameId AS gameId,
+                    ps.playoffsRound,
+                    ps.homeTeamId AS homeTeamId,
+                    ps.awayTeamId AS awayTeamId,
+                    ps.seed,
+                    ps.conferenceId,
+                    CASE 
+                        WHEN ps.homeTeamId = p.teamId THEN ps.homeTeamId
+                        WHEN ps.awayTeamId = p.teamId THEN ps.awayTeamId
+                    END AS teamId,
+                    SUM(pgs.PTS) AS teamScore
+                FROM
+                    playoffsSchedule ps
+                JOIN 
+                    playerGameStats pgs ON ps.playoffsGameId = pgs.gameId  AND pgs.isPlayoffs = 1
+                JOIN
+                    players p ON p.playerId = pgs.playerId
+                WHERE
+                    ps.gameCompleted = 1
+                GROUP BY
+                    ps.seasonId, gameId, teamId
+            ),
+            Wins AS (
+                SELECT
+                    tgs.seasonId,
+                    tgs.teamId,
+                    COUNT(*) AS wins
+                FROM
+                    TeamGameScores tgs
+                JOIN
+                    TeamGameScores opp ON tgs.gameId = opp.gameId
+                        AND tgs.teamId != opp.teamId
+                WHERE
+                    tgs.teamScore > opp.teamScore
+                GROUP BY
+                    tgs.seasonId, tgs.teamId
+            ),
+            Losses AS (
+                SELECT
+                    tgs.seasonId,
+                    tgs.teamId,
+                    COUNT(*) AS losses
+                FROM
+                    TeamGameScores tgs
+                JOIN
+                    TeamGameScores opp ON tgs.gameId = opp.gameId
+                        AND tgs.teamId != opp.teamId
+                WHERE
+                    tgs.teamScore < opp.teamScore
+                GROUP BY
+                    tgs.seasonId, tgs.teamId
+            ),
+            CombinedResults AS (
+                SELECT 
+                    tgs.seasonId,
+                    tgs.teamId,
+                    tgs.seed,
+                    tgs.playoffsRound,
+                    tgs.conferenceId,
+                    COALESCE(w.wins, 0) AS wins,
+                    COALESCE(l.losses, 0) AS losses
+                FROM
+                    (SELECT DISTINCT seasonId, teamId, seed, playoffsRound, conferenceId FROM TeamGameScores) tgs
+                LEFT JOIN Wins w ON tgs.seasonId = w.seasonId AND tgs.teamId = w.teamId
+                LEFT JOIN Losses l ON tgs.seasonId = l.seasonId AND tgs.teamId = l.teamId
+            ),
+            UniqueSeriesTeams AS (
+                SELECT 
+                    cr.seasonId,
+                    cr.teamId,
+                    t.teamName,
+                    cr.wins,
+                    cr.losses,
+                    (cr.wins + cr.losses) AS gamesPlayed,
+                    cr.seed,
+                    cr.conferenceId,
+                    cr.playoffsRound,
+                    ROW_NUMBER() OVER (PARTITION BY cr.seed, cr.conferenceId ORDER BY cr.wins DESC) AS row_num
+                FROM 
+                    CombinedResults cr
+                JOIN 
+                    teams t ON cr.teamId = t.teamId
+                WHERE 
+                    cr.seasonId = 1 AND
+                    cr.playoffsRound = 'First Round'
+            )
+            SELECT 
+                seasonId,
+                teamId,
+                teamName,
+                wins,
+                losses,
+                gamesPlayed,
+                seed,
+                conferenceId,
+                playoffsRound
+            FROM 
+                UniqueSeriesTeams
+            WHERE 
+                wins == 4
+            ORDER BY 
+                conferenceId, seed
+            ";
+            List<int> eastTeamIds = new List<int>();
+            List<int> eastSeeds = new List<int>();
+            List<int> westTeamIds = new List<int>();
+            List<int> westSeeds = new List<int>();
+            List<List<string>> eastPlayoffGames = new List<List<string>>();
+            List<List<string>> westPlayoffGames = new List<List<string>>();
+            // this connection gets all the winners of all the series in the 1st round
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var command = new SQLiteCommand(getWinnersQuery, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int conferenceId = reader.GetInt32(reader.GetOrdinal("conferenceId"));
+                            // handle east teams
+                            if (conferenceId == 1)
+                            {
+                                eastTeamIds.Add(reader.GetInt32(reader.GetOrdinal("teamId")));
+                                eastSeeds.Add(reader.GetInt32(reader.GetOrdinal("seed")));
+                            }
+                            else if (conferenceId == 2)
+                            {
+                                westTeamIds.Add(reader.GetInt32(reader.GetOrdinal("teamId")));
+                                westSeeds.Add(reader.GetInt32(reader.GetOrdinal("seed")));
+                            }
+                        }
+                    }
+                }
+            }
+            for (int i = 0; i < 8; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    List<string> currentDay = new List<string>()
+                    {
+                        // we add the seed 1-2 game, then the 3-4 game
+                        $"{eastTeamIds[0]},{eastTeamIds[1]}",
+                        $"{eastTeamIds[2]},{eastTeamIds[3]}"
+                    };
+                    eastPlayoffGames.Add(currentDay);
+                }
+                else
+                {
+                    List<string> currentDay = new List<string>()
+                    {
+                        $"{westTeamIds[0]},{westTeamIds[1]}",
+                        $"{westTeamIds[2]},{westTeamIds[3]}"
+                    };
+
+                    westPlayoffGames.Add(currentDay);
+                }
+            }
+
+            for (int i = 0; i < eastPlayoffGames.Count; i++)
+            {
+                List<string> currentDay = eastPlayoffGames[i];
+                for (int j = 0; j < currentDay.Count; j++)
+                {
+                    string currentGame = currentDay[j];
+                    string[] teamsPlaying = currentGame.Split(',');
+                    string insertGameQuery = $@"
+                    INSERT INTO playoffsSchedule(seasonId,dayId,conferenceId,playoffsRound,seed,homeTeamId,awayTeamId,gameCompleted)
+                    VALUES(
+                    {CurrentSeason},
+                    {CurrentDay + 1 + i},
+                    {1},
+                    '{PlayoffsRound}',
+                    {j + 1},
+                    {teamsPlaying[0]},
+                    {teamsPlaying[1]},
+                    FALSE
+                    );";
+
+                    using (var connection = new SQLiteConnection(ConnectionString))
+                    {
+                        connection.Open();
+                        using (var command = new SQLiteCommand(connection))
+                        {
+                            command.CommandText = insertGameQuery;
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                }
+
+            }
+
+            for (int i = 0; i < westPlayoffGames.Count; i++)
+            {
+                List<string> currentDay = westPlayoffGames[i];
+                for (int j = 0; j < currentDay.Count; j++)
+                {
+                    string currentGame = currentDay[j];
+                    string[] teamsPlaying = currentGame.Split(',');
+                    string insertGameQuery = $@"
+                    INSERT INTO playoffsSchedule(seasonId,dayId,conferenceId,playoffsRound,seed,homeTeamId,awayTeamId,gameCompleted)
+                    VALUES(
+                    {CurrentSeason},
+                    {CurrentDay + 1 + i},
+                    {2},
+                    '{PlayoffsRound}',
+                    {j + 1},
+                    {teamsPlaying[0]},
+                    {teamsPlaying[1]},
+                    FALSE
+                    );";
+
+                    using (var connection = new SQLiteConnection(ConnectionString))
+                    {
+                        connection.Open();
+                        using (var command = new SQLiteCommand(connection))
+                        {
+                            command.CommandText = insertGameQuery;
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                }
+
+            }
+
+        }
+
+        public void GeneratePlayoffsConferenceFinals()
+        {
+            // we need to get the winners of all the eastern conference series in the 2nd round
+            // we make the winners play the ECF series; then same for the western conference
+            string getWinnersQuery = $@"
+                WITH TeamGameScores AS (
+                SELECT
+                    ps.seasonId,
+                    ps.playoffsGameId AS gameId,
+                    ps.playoffsRound,
+                    ps.homeTeamId AS homeTeamId,
+                    ps.awayTeamId AS awayTeamId,
+                    ps.seed,
+                    ps.conferenceId,
+                    CASE 
+                        WHEN ps.homeTeamId = p.teamId THEN ps.homeTeamId
+                        WHEN ps.awayTeamId = p.teamId THEN ps.awayTeamId
+                    END AS teamId,
+                    SUM(pgs.PTS) AS teamScore
+                FROM
+                    playoffsSchedule ps
+                JOIN 
+                    playerGameStats pgs ON ps.playoffsGameId = pgs.gameId  AND pgs.isPlayoffs = 1
+                JOIN
+                    players p ON p.playerId = pgs.playerId
+                WHERE
+                    ps.gameCompleted = 1
+                    AND ps.playoffsRound = 'Second Round'
+                GROUP BY
+                    ps.seasonId, gameId, teamId
+            ),
+            Wins AS (
+                SELECT
+                    tgs.seasonId,
+                    tgs.teamId,
+                    COUNT(*) AS wins
+                FROM
+                    TeamGameScores tgs
+                JOIN
+                    TeamGameScores opp ON tgs.gameId = opp.gameId
+                        AND tgs.teamId != opp.teamId
+                WHERE
+                    tgs.teamScore > opp.teamScore
+                GROUP BY
+                    tgs.seasonId, tgs.teamId
+            ),
+            Losses AS (
+                SELECT
+                    tgs.seasonId,
+                    tgs.teamId,
+                    COUNT(*) AS losses
+                FROM
+                    TeamGameScores tgs
+                JOIN
+                    TeamGameScores opp ON tgs.gameId = opp.gameId
+                        AND tgs.teamId != opp.teamId
+                WHERE
+                    tgs.teamScore < opp.teamScore
+                GROUP BY
+                    tgs.seasonId, tgs.teamId
+            ),
+            CombinedResults AS (
+                SELECT 
+                    tgs.seasonId,
+                    tgs.teamId,
+                    tgs.seed,
+                    tgs.playoffsRound,
+                    tgs.conferenceId,
+                    COALESCE(w.wins, 0) AS wins,
+                    COALESCE(l.losses, 0) AS losses
+                FROM
+                    (SELECT DISTINCT seasonId, teamId, seed, playoffsRound, conferenceId FROM TeamGameScores) tgs
+                LEFT JOIN Wins w ON tgs.seasonId = w.seasonId AND tgs.teamId = w.teamId
+                LEFT JOIN Losses l ON tgs.seasonId = l.seasonId AND tgs.teamId = l.teamId
+            ),
+            UniqueSeriesTeams AS (
+                SELECT 
+                    cr.seasonId,
+                    cr.teamId,
+                    t.teamName,
+                    cr.wins,
+                    cr.losses,
+                    (cr.wins + cr.losses) AS gamesPlayed,
+                    cr.seed,
+                    cr.conferenceId,
+                    cr.playoffsRound,
+                    ROW_NUMBER() OVER (PARTITION BY cr.seed, cr.conferenceId ORDER BY cr.wins DESC) AS row_num
+                FROM 
+                    CombinedResults cr
+                JOIN 
+                    teams t ON cr.teamId = t.teamId
+                WHERE 
+                    cr.seasonId = 1 AND
+                    cr.playoffsRound = 'Second Round'
+            )
+            SELECT 
+                seasonId,
+                teamId,
+                teamName,
+                wins,
+                losses,
+                gamesPlayed,
+                seed,
+                conferenceId,
+                playoffsRound
+            FROM 
+                UniqueSeriesTeams
+            WHERE 
+                wins == 4
+            ORDER BY 
+                conferenceId, seed
+            ";
+            List<int> eastTeamIds = new List<int>();
+            List<int> eastSeeds = new List<int>();
+            List<int> westTeamIds = new List<int>();
+            List<int> westSeeds = new List<int>();
+            List<List<string>> eastPlayoffGames = new List<List<string>>();
+            List<List<string>> westPlayoffGames = new List<List<string>>();
+            // this connection gets all the winners of all the series in the 1st round
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var command = new SQLiteCommand(getWinnersQuery, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int conferenceId = reader.GetInt32(reader.GetOrdinal("conferenceId"));
+                            // handle east teams
+                            if (conferenceId == 1)
+                            {
+                                eastTeamIds.Add(reader.GetInt32(reader.GetOrdinal("teamId")));
+                                eastSeeds.Add(reader.GetInt32(reader.GetOrdinal("seed")));
+                            }
+                            else if (conferenceId == 2)
+                            {
+                                westTeamIds.Add(reader.GetInt32(reader.GetOrdinal("teamId")));
+                                westSeeds.Add(reader.GetInt32(reader.GetOrdinal("seed")));
+                            }
+                        }
+                    }
+                }
+            }
+            for (int i = 0; i < 8; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    List<string> currentDay = new List<string>()
+                    {
+                        // we add the ECF game
+                        $"{eastTeamIds[0]},{eastTeamIds[1]}"
+                    };
+                    eastPlayoffGames.Add(currentDay);
+                }
+                else
+                {
+                    List<string> currentDay = new List<string>()
+                    {
+                        // we add the WCF game
+                        $"{westTeamIds[0]},{westTeamIds[1]}"
+                    };
+
+                    westPlayoffGames.Add(currentDay);
+                }
+            }
+
+            for (int i = 0; i < eastPlayoffGames.Count; i++)
+            {
+                List<string> currentDay = eastPlayoffGames[i];
+                for (int j = 0; j < currentDay.Count; j++)
+                {
+                    string currentGame = currentDay[j];
+                    string[] teamsPlaying = currentGame.Split(',');
+                    string insertGameQuery = $@"
+                    INSERT INTO playoffsSchedule(seasonId,dayId,conferenceId,playoffsRound,seed,homeTeamId,awayTeamId,gameCompleted)
+                    VALUES(
+                    {CurrentSeason},
+                    {CurrentDay + 1 + i},
+                    {1},
+                    '{PlayoffsRound}',
+                    {j + 1},
+                    {teamsPlaying[0]},
+                    {teamsPlaying[1]},
+                    FALSE
+                    );";
+
+                    using (var connection = new SQLiteConnection(ConnectionString))
+                    {
+                        connection.Open();
+                        using (var command = new SQLiteCommand(connection))
+                        {
+                            command.CommandText = insertGameQuery;
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                }
+
+            }
+
+            for (int i = 0; i < westPlayoffGames.Count; i++)
+            {
+                List<string> currentDay = westPlayoffGames[i];
+                for (int j = 0; j < currentDay.Count; j++)
+                {
+                    string currentGame = currentDay[j];
+                    string[] teamsPlaying = currentGame.Split(',');
+                    string insertGameQuery = $@"
+                    INSERT INTO playoffsSchedule(seasonId,dayId,conferenceId,playoffsRound,seed,homeTeamId,awayTeamId,gameCompleted)
+                    VALUES(
+                    {CurrentSeason},
+                    {CurrentDay + 1 + i},
+                    {2},
+                    '{PlayoffsRound}',
+                    {j + 1},
+                    {teamsPlaying[0]},
+                    {teamsPlaying[1]},
+                    FALSE
+                    );";
+
+                    using (var connection = new SQLiteConnection(ConnectionString))
+                    {
+                        connection.Open();
+                        using (var command = new SQLiteCommand(connection))
+                        {
+                            command.CommandText = insertGameQuery;
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                }
+
+            }
+
+        }
+
+        public void GeneratePlayoffsFinals()
+        {
+            // we need to get the winners of the ECF and WCF, then put them into a head-to-head Finals!
+            string getWinnersQuery = $@"
+                WITH TeamGameScores AS (
+                SELECT
+                    ps.seasonId,
+                    ps.playoffsGameId AS gameId,
+                    ps.playoffsRound,
+                    ps.homeTeamId AS homeTeamId,
+                    ps.awayTeamId AS awayTeamId,
+                    ps.seed,
+                    ps.conferenceId,
+                    CASE 
+                        WHEN ps.homeTeamId = p.teamId THEN ps.homeTeamId
+                        WHEN ps.awayTeamId = p.teamId THEN ps.awayTeamId
+                    END AS teamId,
+                    SUM(pgs.PTS) AS teamScore
+                FROM
+                    playoffsSchedule ps
+                JOIN 
+                    playerGameStats pgs ON ps.playoffsGameId = pgs.gameId  AND pgs.isPlayoffs = 1
+                JOIN
+                    players p ON p.playerId = pgs.playerId
+                WHERE
+                    ps.gameCompleted = 1
+                    AND ps.playoffsRound = 'Conference Finals'
+                GROUP BY
+                    ps.seasonId, gameId, teamId
+            ),
+            Wins AS (
+                SELECT
+                    tgs.seasonId,
+                    tgs.teamId,
+                    COUNT(*) AS wins
+                FROM
+                    TeamGameScores tgs
+                JOIN
+                    TeamGameScores opp ON tgs.gameId = opp.gameId
+                        AND tgs.teamId != opp.teamId
+                WHERE
+                    tgs.teamScore > opp.teamScore
+                GROUP BY
+                    tgs.seasonId, tgs.teamId
+            ),
+            Losses AS (
+                SELECT
+                    tgs.seasonId,
+                    tgs.teamId,
+                    COUNT(*) AS losses
+                FROM
+                    TeamGameScores tgs
+                JOIN
+                    TeamGameScores opp ON tgs.gameId = opp.gameId
+                        AND tgs.teamId != opp.teamId
+                WHERE
+                    tgs.teamScore < opp.teamScore
+                GROUP BY
+                    tgs.seasonId, tgs.teamId
+            ),
+            CombinedResults AS (
+                SELECT 
+                    tgs.seasonId,
+                    tgs.teamId,
+                    tgs.seed,
+                    tgs.playoffsRound,
+                    tgs.conferenceId,
+                    COALESCE(w.wins, 0) AS wins,
+                    COALESCE(l.losses, 0) AS losses
+                FROM
+                    (SELECT DISTINCT seasonId, teamId, seed, playoffsRound, conferenceId FROM TeamGameScores) tgs
+                LEFT JOIN Wins w ON tgs.seasonId = w.seasonId AND tgs.teamId = w.teamId
+                LEFT JOIN Losses l ON tgs.seasonId = l.seasonId AND tgs.teamId = l.teamId
+            ),
+            UniqueSeriesTeams AS (
+                SELECT 
+                    cr.seasonId,
+                    cr.teamId,
+                    t.teamName,
+                    cr.wins,
+                    cr.losses,
+                    (cr.wins + cr.losses) AS gamesPlayed,
+                    cr.seed,
+                    cr.conferenceId,
+                    cr.playoffsRound,
+                    ROW_NUMBER() OVER (PARTITION BY cr.seed, cr.conferenceId ORDER BY cr.wins DESC) AS row_num
+                FROM 
+                    CombinedResults cr
+                JOIN 
+                    teams t ON cr.teamId = t.teamId
+                WHERE 
+                    cr.seasonId = 1 AND
+                    cr.playoffsRound = 'Conference Finals'
+            )
+            SELECT 
+                seasonId,
+                teamId,
+                teamName,
+                wins,
+                losses,
+                gamesPlayed,
+                seed,
+                conferenceId,
+                playoffsRound
+            FROM 
+                UniqueSeriesTeams
+            WHERE 
+                wins == 4
+            ORDER BY 
+                conferenceId, seed
+            ";
+            int eastTeamId = 0;
+            List<int> eastSeeds = new List<int>();
+            int westTeamId = 0;
+            List<int> westSeeds = new List<int>();
+            List<List<string>> finalsPlayoffGames = new List<List<string>>();
+            // this connection gets all the winners of all the series in the 1st round
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var command = new SQLiteCommand(getWinnersQuery, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int conferenceId = reader.GetInt32(reader.GetOrdinal("conferenceId"));
+                            // handle east teams
+                            if (conferenceId == 1)
+                            {
+                                eastTeamId = reader.GetInt32(reader.GetOrdinal("teamId"));
+                                eastSeeds.Add(reader.GetInt32(reader.GetOrdinal("seed")));
+                            }
+                            else if (conferenceId == 2)
+                            {
+                                westTeamId = reader.GetInt32(reader.GetOrdinal("teamId"));
+                                westSeeds.Add(reader.GetInt32(reader.GetOrdinal("seed")));
+                            }
+                        }
+                    }
+                }
+            }
+            for (int i = 0; i < 4; i++)
+            {
+                List<string> currentDay = new List<string>()
+                    {
+                        // we add the finals game
+                        $"{eastTeamId},{westTeamId}"
+                    };
+                finalsPlayoffGames.Add(currentDay);
+            }
+
+            for (int i = 0; i < finalsPlayoffGames.Count; i++)
+            {
+                List<string> currentDay = finalsPlayoffGames[i];
+                for (int j = 0; j < currentDay.Count; j++)
+                {
+                    string currentGame = currentDay[j];
+                    string[] teamsPlaying = currentGame.Split(',');
+                    string insertGameQuery = $@"
+                    INSERT INTO playoffsSchedule(seasonId,dayId,conferenceId,playoffsRound,seed,homeTeamId,awayTeamId,gameCompleted)
+                    VALUES(
+                    {CurrentSeason},
+                    {CurrentDay + 1 + i},
+                    {0},
+                    '{PlayoffsRound}',
+                    {1},
+                    {teamsPlaying[0]},
+                    {teamsPlaying[1]},
+                    FALSE
+                    );";
+
+                    using (var connection = new SQLiteConnection(ConnectionString))
+                    {
+                        connection.Open();
+                        using (var command = new SQLiteCommand(connection))
+                        {
+                            command.CommandText = insertGameQuery;
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                }
+
+            }
+
         }
 
         public List<List<string>> GetTeamsInPlayoffs()
@@ -2150,7 +2889,10 @@ namespace LeagueSimulation
             foreach (string game in games)
             {
                 string[] teamsPlaying = game.Split(',');
-                if (!CheckIfGameCompleted(currentDaySimulated, teamsPlaying[0], teamsPlaying[1]))
+                bool gameComplete = false;
+                if (Playoffs) gameComplete = CheckIfPlayoffGameCompleted(currentDaySimulated, teamsPlaying[0], teamsPlaying[1]);
+                else gameComplete = CheckIfGameCompleted(currentDaySimulated, teamsPlaying[0], teamsPlaying[1]);
+                if (!gameComplete)
                 {
                     SimulateGame(game, currentDaySimulated, playoffs);
                 }
@@ -2201,6 +2943,26 @@ namespace LeagueSimulation
                     allGamesComplete = false; break;
                 }
             }
+            // here we check if we need to add any additional games
+            if (Playoffs)
+            {
+                // if all series are complete; we advance to the next round
+                if (CheckIfFullPlayoffRoundGamesComplete())
+                {
+                    MoveToNextPlayoffRound();
+                    if (PlayoffsRound == "Second Round") GeneratePlayoffsSecondRound();
+                    else if (PlayoffsRound == "Conference Finals") GeneratePlayoffsConferenceFinals();
+                    else if (PlayoffsRound == "Finals") GeneratePlayoffsFinals();
+                    CurrentPlayoffsSchedule = LoadPlayoffsSchedule();
+                }
+                // if all game 4s are complete, game 5s are complete etc. we add any initial games
+                // for any uncomplete series
+                if (CheckIfInitialPlayoffRoundGamesComplete())
+                {
+                    AddAnyNeededPlayoffGames();
+                    CurrentPlayoffsSchedule = LoadPlayoffsSchedule();
+                }
+            }
             if (GamesPlayed == 1230)
             {
                 // here, we move the league into playoffs mode
@@ -2214,14 +2976,355 @@ namespace LeagueSimulation
             if (allGamesComplete)
             {
                 CurrentDay++;
-                UpdateLeagueDataIfNeeded(currentDayOfGame);
+                UpdateLeagueDataIfNeeded(CurrentDay - 1);
             }
         }
 
-        public bool CheckIfPlayoffRoundNeedsMoreGames()
+        public void MoveToNextPlayoffRound()
+        {
+            if (PlayoffsRound == "First Round") PlayoffsRound = "Second Round";
+            else if (PlayoffsRound == "Second Round") PlayoffsRound = "Conference Finals";
+            else if (PlayoffsRound == "Conference Finals") PlayoffsRound = "Finals";
+            else if (PlayoffsRound == "Finals") AdvanceToNextSeason();
+        }
+
+        public void AdvanceToNextSeason()
         {
 
         }
+
+        public bool CheckIfInitialPlayoffRoundGamesComplete()
+        {
+            string checkSeriesCompleteQuery = $@"
+                SELECT COUNT(*)
+                FROM playoffsSchedule
+                WHERE playoffsRound = '{PlayoffsRound}'
+                AND gameCompleted = 0
+            ";
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var command = new SQLiteCommand(checkSeriesCompleteQuery, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            if (reader.GetInt32(0) == 0) return true;
+                            else return false;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        public bool CheckIfFullPlayoffRoundGamesComplete()
+        {
+            string checkFullRoundGamesCompleteQuery = $@"
+                    WITH TeamGameScores AS (
+                SELECT
+                    ps.seasonId,
+                    ps.playoffsGameId AS gameId,
+                    ps.playoffsRound,
+                    ps.homeTeamId AS homeTeamId,
+                    ps.awayTeamId AS awayTeamId,
+                    ps.seed,
+                    ps.conferenceId,
+                    CASE 
+                        WHEN ps.homeTeamId = p.teamId THEN ps.homeTeamId
+                        WHEN ps.awayTeamId = p.teamId THEN ps.awayTeamId
+                    END AS teamId,
+                    SUM(pgs.PTS) AS teamScore
+                FROM
+                    playoffsSchedule ps
+                JOIN 
+                    playerGameStats pgs ON ps.playoffsGameId = pgs.gameId  AND pgs.isPlayoffs = 1
+                JOIN
+                    players p ON p.playerId = pgs.playerId
+                WHERE
+                    ps.gameCompleted = 1 AND ps.playoffsRound = '{PlayoffsRound}'
+                GROUP BY
+                    ps.seasonId, gameId, teamId
+            ),
+            Wins AS (
+                SELECT
+                    tgs.seasonId,
+                    tgs.teamId,
+                    COUNT(*) AS wins
+                FROM
+                    TeamGameScores tgs
+                JOIN
+                    TeamGameScores opp ON tgs.gameId = opp.gameId
+                        AND tgs.teamId != opp.teamId
+                WHERE
+                    tgs.teamScore > opp.teamScore
+                GROUP BY
+                    tgs.seasonId, tgs.teamId
+            ),
+            Losses AS (
+                SELECT
+                    tgs.seasonId,
+                    tgs.teamId,
+                    COUNT(*) AS losses
+                FROM
+                    TeamGameScores tgs
+                JOIN
+                    TeamGameScores opp ON tgs.gameId = opp.gameId
+                        AND tgs.teamId != opp.teamId
+                WHERE
+                    tgs.teamScore < opp.teamScore
+                GROUP BY
+                    tgs.seasonId, tgs.teamId
+            ),
+            CombinedResults AS (
+                SELECT 
+                    tgs.seasonId,
+                    tgs.teamId,
+                    tgs.seed,
+                    tgs.playoffsRound,
+                    tgs.conferenceId,
+                    COALESCE(w.wins, 0) AS wins,
+                    COALESCE(l.losses, 0) AS losses
+                FROM
+                    (SELECT DISTINCT seasonId, teamId, seed, playoffsRound, conferenceId FROM TeamGameScores) tgs
+                LEFT JOIN Wins w ON tgs.seasonId = w.seasonId AND tgs.teamId = w.teamId
+                LEFT JOIN Losses l ON tgs.seasonId = l.seasonId AND tgs.teamId = l.teamId
+            ),
+            UniqueSeriesTeams AS (
+                SELECT 
+                    cr.seasonId,
+                    cr.teamId,
+                    t.teamName,
+                    cr.wins,
+                    cr.losses,
+                    (cr.wins + cr.losses) AS gamesPlayed,
+                    cr.seed,
+                    cr.conferenceId,
+                    cr.playoffsRound,
+                    ROW_NUMBER() OVER (PARTITION BY cr.seed, cr.conferenceId ORDER BY cr.wins DESC) AS row_num
+                FROM 
+                    CombinedResults cr
+                JOIN 
+                    teams t ON cr.teamId = t.teamId
+                WHERE 
+                    cr.seasonId = 1 AND
+                    cr.playoffsRound = '{PlayoffsRound}'
+            ),
+            UncompleteSeries AS(
+            SELECT 
+                seasonId,
+                teamId,
+                teamName,
+                wins,
+                losses,
+                gamesPlayed,
+                seed,
+                conferenceId,
+                playoffsRound
+            FROM 
+                UniqueSeriesTeams
+            WHERE 
+                --row_num = 1
+             (wins < 4 AND losses < 4)
+            ORDER BY 
+                conferenceId, seed
+	            )
+            SELECT DISTINCT us.seed, us.conferenceId, ps.homeTeamId, ps.awayTeamId
+            FROM UncompleteSeries us
+            JOIN playoffsSchedule ps ON ps.seed = us.seed 
+            AND ps.conferenceId = us.conferenceId
+            AND ps.playoffsRound = '{PlayoffsRound}'
+                ";
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var command = new SQLiteCommand(checkFullRoundGamesCompleteQuery, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            if (reader.IsDBNull(0)) return true;
+                            else return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+        public void AddAnyNeededPlayoffGames()
+        {
+            string getUncompleteSeriesQuery = $@"
+                WITH TeamGameScores AS (
+                SELECT
+                    ps.seasonId,
+                    ps.playoffsGameId AS gameId,
+                    ps.playoffsRound,
+                    ps.homeTeamId AS homeTeamId,
+                    ps.awayTeamId AS awayTeamId,
+		            ps.seed,
+		            ps.conferenceId,
+                    CASE 
+                        WHEN ps.homeTeamId = p.teamId THEN ps.homeTeamId
+                        WHEN ps.awayTeamId = p.teamId THEN ps.awayTeamId
+                    END AS teamId,
+                    SUM(pgs.PTS) AS teamScore
+                FROM
+                    playoffsSchedule ps
+                JOIN 
+                    playerGameStats pgs ON ps.playoffsGameId = pgs.gameId  AND pgs.isPlayoffs = 1
+                JOIN
+                    players p ON p.playerId = pgs.playerId
+                WHERE
+                    ps.gameCompleted = 1
+                    AND ps.playoffsRound = '{PlayoffsRound}'
+                GROUP BY
+                    ps.seasonId, gameId, teamId
+            ),
+            Wins AS (
+                SELECT
+                    tgs.seasonId,
+                    tgs.teamId,
+                    COUNT(*) AS wins
+                FROM
+                    TeamGameScores tgs
+                JOIN
+                    TeamGameScores opp ON tgs.gameId = opp.gameId
+                        AND tgs.teamId != opp.teamId
+                WHERE
+                    tgs.teamScore > opp.teamScore
+                GROUP BY
+                    tgs.seasonId, tgs.teamId
+            ),
+            Losses AS (
+                SELECT
+                    tgs.seasonId,
+                    tgs.teamId,
+                    COUNT(*) AS losses
+                FROM
+                    TeamGameScores tgs
+                JOIN
+                    TeamGameScores opp ON tgs.gameId = opp.gameId
+                        AND tgs.teamId != opp.teamId
+                WHERE
+                    tgs.teamScore < opp.teamScore
+                GROUP BY
+                    tgs.seasonId, tgs.teamId
+            ),
+            CombinedResults AS (
+                SELECT 
+                    tgs.seasonId,
+                    tgs.teamId,
+		            tgs.seed,
+		            tgs.playoffsRound,
+		            tgs.conferenceId,
+                    COALESCE(w.wins, 0) AS wins,
+                    COALESCE(l.losses, 0) AS losses
+                FROM
+                    (SELECT DISTINCT seasonId, teamId, seed, playoffsRound, conferenceId FROM TeamGameScores) tgs
+                LEFT JOIN Wins w ON tgs.seasonId = w.seasonId AND tgs.teamId = w.teamId
+                LEFT JOIN Losses l ON tgs.seasonId = l.seasonId AND tgs.teamId = l.teamId
+            ),
+            UniqueSeriesTeams AS (
+                SELECT 
+                    cr.seasonId,
+                    cr.teamId,
+                    t.teamName,
+                    cr.wins,
+                    cr.losses,
+                    (cr.wins + cr.losses) AS gamesPlayed,
+                    cr.seed,
+                    cr.conferenceId,
+                    cr.playoffsRound,
+                    ROW_NUMBER() OVER (PARTITION BY cr.seed, cr.conferenceId ORDER BY cr.wins DESC) AS row_num
+                FROM 
+                    CombinedResults cr
+                JOIN 
+                    teams t ON cr.teamId = t.teamId
+                WHERE 
+                    cr.seasonId = 1 AND
+		            cr.playoffsRound = '{PlayoffsRound}'
+            ),
+            UncompleteSeries AS (SELECT 
+                seasonId,
+                teamId,
+                teamName,
+                wins,
+                losses,
+                gamesPlayed,
+                seed,
+                conferenceId,
+                playoffsRound
+            FROM 
+                UniqueSeriesTeams
+            WHERE 
+                row_num = 1
+	            AND wins < 4
+            ORDER BY 
+                conferenceId, seed
+	            )
+	            SELECT DISTINCT us.seed, us.conferenceId, ps.homeTeamId, ps.awayTeamId
+	            FROM UncompleteSeries us
+	            JOIN playoffsSchedule ps ON ps.seed = us.seed 
+	            AND ps.conferenceId = us.conferenceId
+                AND ps.playoffsRound = '{PlayoffsRound}'
+            ";
+            List<int> seeds = new List<int>();
+            List<int> conferenceIds = new List<int>();
+            List<int> homeTeamIds = new List<int>();
+            List<int> awayTeamIds = new List<int>();
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var command = new SQLiteCommand(getUncompleteSeriesQuery, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            seeds.Add(reader.GetInt32(reader.GetOrdinal("seed")));
+                            conferenceIds.Add(reader.GetInt32(reader.GetOrdinal("conferenceId")));
+                            homeTeamIds.Add(reader.GetInt32(reader.GetOrdinal("homeTeamId")));
+                            awayTeamIds.Add(reader.GetInt32(reader.GetOrdinal("awayTeamId")));
+                        }
+                    }
+                }
+            }
+            // add any extra games to the next round and don't move on to the next game
+            for (int i = 0; i < seeds.Count; i++)
+            {
+                int currentSeed = seeds[i];
+                int currentConferenceId = conferenceIds[i];
+                int currentHomeTeamId = homeTeamIds[i];
+                int curentAwayTeamId = awayTeamIds[i];
+                // now we insert this game into the database
+                string insertPlayoffGameQuery = $@"
+                    INSERT INTO playoffsSchedule(seasonId,dayId,conferenceId,seed,playoffsRound,homeTeamId,awayTeamId,gameCompleted)
+                    VALUES(
+                    {CurrentSeason},
+                    {CurrentDay + 1},
+                    {currentConferenceId},
+                    {currentSeed},
+                    '{PlayoffsRound}',
+                    {currentHomeTeamId},
+                    {curentAwayTeamId},
+                    {false}
+                    );
+                    ";
+                using (var connection = new SQLiteConnection(ConnectionString))
+                {
+                    connection.Open();
+                    using (var command = new SQLiteCommand(connection))
+                    {
+                        command.CommandText = insertPlayoffGameQuery;
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+        }
+        // the smallest unit of light in a bitmap display, shining with a certain percentage of RGB in red, green and blue
 
         public void SetCurrentDayForPlayoffs()
         {
@@ -2249,9 +3352,9 @@ namespace LeagueSimulation
             {
                 Team team1 = ExtractTeamFromTeamName(GetTeamNameFromId(teamsPlaying[0]));
                 Team team2 = ExtractTeamFromTeamName(GetTeamNameFromId(teamsPlaying[1]));
-                int gameId = 0; 
+                int gameId = 0;
                 if (Playoffs) gameId = GetPlayoffGameId(game, currentDayOfGame);
-                else GetGameId(game, currentDayOfGame);
+                else gameId = GetGameId(game, currentDayOfGame);
                 GameGenerator simulatedGame = new GameGenerator(team1, team2, ConnectionString, CurrentUser, CurrentSaveState, gameId, Playoffs, this);
                 if (Playoffs) SetPlayoffGameToComplete(currentDayOfGame, teamsPlaying[0], teamsPlaying[1]);
                 else SetGameToComplete(currentDayOfGame, teamsPlaying[0], teamsPlaying[1]);

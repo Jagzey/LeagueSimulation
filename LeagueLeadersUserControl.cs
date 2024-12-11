@@ -214,9 +214,43 @@ namespace LeagueSimulation
 
         }
 
+        public int GetPlayerIdFromName(string firstname, string surname)
+        {
+            string getPlayerIdQuery = $"SELECT p.playerId FROM players p WHERE p.playerForename = '{firstname}' AND p.playerSurname = '{surname}';";
+            using (var connection = new SQLiteConnection(league.ConnectionString))
+            {
+                connection.Open();
+                using (var command = new SQLiteCommand(getPlayerIdQuery, connection))
+                {
+                    using (var reader  = command.ExecuteReader()) while (reader.Read()) return reader.GetInt32(0);
+                }
+            }
+            return 1;
+        }
         private void currentStat_SelectedIndexChanged(object sender, EventArgs e)
         {
             FillLabels();
+        }
+
+        private void leagueLeaderDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // makes sure we don't check in the title row
+            if (e.RowIndex >= 0)
+            {
+                // get dataTable from gridView
+                DataTable dt = (DataTable)leagueLeaderDataGridView.DataSource;
+
+                // access data row we need
+                DataRow dataRow = dt.Rows[e.RowIndex];
+
+                int playerId = GetPlayerIdFromName((string)dataRow["playerForename"], (string)dataRow["playerSurname"]);
+                PlayerStatsUserControl playerStatsUserControl = new PlayerStatsUserControl(league, playerId);
+                leagueLeadersFlowLayoutPanel.Size = new Size(630, 1500);
+                leagueLeadersFlowLayoutPanel.Controls.Clear();
+                leagueLeadersFlowLayoutPanel.Controls.Add(playerStatsUserControl);
+                
+            }
+
         }
     }
 

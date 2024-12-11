@@ -99,6 +99,7 @@
             leagueLeaderDataGridView.ReadOnly = true;
             leagueLeaderDataGridView.Size = new Size(623, 312);
             leagueLeaderDataGridView.TabIndex = 3;
+            leagueLeaderDataGridView.CellContentClick += leagueLeaderDataGridView_CellContentClick;
             // 
             // PlayerFirstname
             // 

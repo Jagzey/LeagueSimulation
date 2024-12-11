@@ -75,6 +75,12 @@ namespace LeagueSimulation
             displayPanel.Controls.Add(playoffsUserControl);
         }
 
+        public void LoadPlayerStats(PlayerStatsUserControl playerStatsUserControl)
+        {
+            displayPanel.Controls.Clear();
+            displayPanel.Controls.Add(playerStatsUserControl);
+        }
+
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)
         {
             Application.Exit();
@@ -123,6 +129,13 @@ namespace LeagueSimulation
                 MessageBox.Show(text: "The playoffs haven't started yet. Come back when the regular season finishes");
             }
             else LoadPlayoffs(new PlayoffsUserControl(CurrentLeague));
+        }
+
+        private void playerStatsMenuItem_Click(object sender, EventArgs e)
+        {
+            Random random = new Random();
+            int playerId = random.Next(1, 450);
+            LoadPlayerStats(new PlayerStatsUserControl(CurrentLeague, playerId));
         }
     }
 }

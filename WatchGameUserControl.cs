@@ -53,10 +53,5 @@ namespace LeagueSimulation
         {
             playbackSpeed.Value = playbackSpeed.Minimum;
         }
-
-        private void teamsPlayingLabel_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }
