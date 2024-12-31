@@ -43,6 +43,8 @@ namespace LeagueSimulation
         private int overall = 0;
         private int age = 0;
         private int potential = 0;
+        private double gameValue = 0;
+        private double minutesPlayed = 0;
 
         // getters and setters for player's attribtues
         public int Age { get; set; }
@@ -70,6 +72,8 @@ namespace LeagueSimulation
         public int Stamina { get; set; }
         public int Overall { get; set; }
         public int Potential { get; set; }
+        public double MinutesPlayed { get; set; }
+        public double GameValue { get; set; }
 
 
 
@@ -612,14 +616,14 @@ namespace LeagueSimulation
                         dunk += multipler;
 
                         // calculate midRange
-                        statsMean = 63;
+                        statsMean = 68;
                         statsStdev = 1.9;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
-                        statsMean = 68;
+                        statsMean = 74;
                         statsStdev = 2;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
@@ -711,14 +715,14 @@ namespace LeagueSimulation
                         dunk += multipler;
 
                         // calculate midRange
-                        statsMean = 50;
+                        statsMean = 51;
                         statsStdev = 1.9;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
-                        statsMean = 53;
+                        statsMean = 59;
                         statsStdev = 2;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
@@ -820,7 +824,7 @@ namespace LeagueSimulation
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
-                        statsMean = 52;
+                        statsMean = 55;
                         statsStdev = 2;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
@@ -1231,14 +1235,14 @@ namespace LeagueSimulation
                         if (dunk > 99) dunk = 99;
 
                         // calculate midRange
-                        statsMean = 66;
+                        statsMean = 72;
                         statsStdev = 1.9;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
-                        statsMean = 66;
+                        statsMean = 70;
                         statsStdev = 2;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
@@ -1856,14 +1860,14 @@ namespace LeagueSimulation
                         if (dunk > 99) dunk = 99;
 
                         // calculate midRange
-                        statsMean = 73;
+                        statsMean = 75;
                         statsStdev = 1.9;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
-                        statsMean = 66;
+                        statsMean = 69;
                         statsStdev = 2;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
@@ -3115,12 +3119,18 @@ namespace LeagueSimulation
         }
 
 
-        public void GenerateAgeOvrAndPotential(double overallMean)
+        public void GenerateAgeOvrAndPotential(double overallMean, bool isRookie)
         {
             // we generate the age of the current player
             double ageMean = 25;
             double ageStDev = 3;
+            if (isRookie)
+            {
+                ageMean = 20;
+                ageStDev = 0.5;
+            }
             int age = (int)GenerateRandomNormalDistribution(ageMean, ageStDev);
+            if (age < 18) age = 18;
             this.Age = age;
 
             // we make sure players that are older than 31 and younger than 23, are not very good
@@ -3177,7 +3187,31 @@ namespace LeagueSimulation
             GenerateSecondaryPlaystyle(this.Height, this.PrimaryPlaystyle, this.SecondaryPlaystyle);
 
             // generate stats, age, overall and the position of the player
-            GenerateAgeOvrAndPotential(meanOverall);
+            GenerateAgeOvrAndPotential(meanOverall, false);
+            GenerateStats(this.position, this.PrimaryPlaystyle, this.SecondaryPlaystyle);
+        }
+
+        public void GenerateRookie(string pos, int teamId, string teamName, string forename, string surname, int meanOverall)
+        {
+            // add team information to player
+            this.TeamId = teamId;
+            this.teamName = teamName;
+
+            // add name to player
+            playerForename = forename;
+            playerSurname = surname;
+            // height and weight of player
+            position = pos;
+            // generates height and weight for the player
+            RandomHeight(this.position);
+            RandomWeight(this.position, this.Height);
+
+            // generate the playstyles of the player
+            GeneratePrimaryPlaystyle();
+            GenerateSecondaryPlaystyle(this.Height, this.PrimaryPlaystyle, this.SecondaryPlaystyle);
+
+            // generate stats, age, overall and the position of the player
+            GenerateAgeOvrAndPotential(meanOverall, true);
             GenerateStats(this.position, this.PrimaryPlaystyle, this.SecondaryPlaystyle);
         }
 

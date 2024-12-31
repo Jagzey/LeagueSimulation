@@ -197,6 +197,7 @@
             game1ViewGameResults.TabIndex = 3;
             game1ViewGameResults.Text = "View Game Results";
             game1ViewGameResults.UseVisualStyleBackColor = true;
+            game1ViewGameResults.Click += game1ViewGameResults_Click;
             // 
             // game1SimGameButton
             // 
@@ -262,6 +263,7 @@
             game2ViewGameResults.TabIndex = 7;
             game2ViewGameResults.Text = "View Game Results";
             game2ViewGameResults.UseVisualStyleBackColor = true;
+            game2ViewGameResults.Click += game2ViewGameResults_Click;
             // 
             // game2SimGameButton
             // 
@@ -336,6 +338,7 @@
             game3ViewGameResults.TabIndex = 7;
             game3ViewGameResults.Text = "View Game Results";
             game3ViewGameResults.UseVisualStyleBackColor = true;
+            game3ViewGameResults.Click += game3ViewGameResults_Click;
             // 
             // game3SimGameButton
             // 
@@ -410,6 +413,7 @@
             game4ViewGameResults.TabIndex = 7;
             game4ViewGameResults.Text = "View Game Results";
             game4ViewGameResults.UseVisualStyleBackColor = true;
+            game4ViewGameResults.Click += game4ViewGameResults_Click;
             // 
             // game4SimGameButton
             // 
@@ -484,6 +488,7 @@
             game5ViewGameResults.TabIndex = 7;
             game5ViewGameResults.Text = "View Game Results";
             game5ViewGameResults.UseVisualStyleBackColor = true;
+            game5ViewGameResults.Click += game5ViewGameResults_Click;
             // 
             // game5SimGameButton
             // 
@@ -558,6 +563,7 @@
             game6ViewGameResults.TabIndex = 7;
             game6ViewGameResults.Text = "View Game Results";
             game6ViewGameResults.UseVisualStyleBackColor = true;
+            game6ViewGameResults.Click += game6ViewGameResults_Click;
             // 
             // game6SimGameButton
             // 
@@ -632,6 +638,7 @@
             game7ViewGameResults.TabIndex = 7;
             game7ViewGameResults.Text = "View Game Results";
             game7ViewGameResults.UseVisualStyleBackColor = true;
+            game7ViewGameResults.Click += game7ViewGameResults_Click;
             // 
             // game7SimGameButton
             // 
@@ -706,6 +713,7 @@
             game8ViewGameResults.TabIndex = 7;
             game8ViewGameResults.Text = "View Game Results";
             game8ViewGameResults.UseVisualStyleBackColor = true;
+            game8ViewGameResults.Click += game8ViewGameResults_Click;
             // 
             // game8SimGameButton
             // 
@@ -780,6 +788,7 @@
             game9ViewGameResults.TabIndex = 7;
             game9ViewGameResults.Text = "View Game Results";
             game9ViewGameResults.UseVisualStyleBackColor = true;
+            game9ViewGameResults.Click += game9ViewGameResults_Click;
             // 
             // game9SimGameButton
             // 
@@ -854,6 +863,7 @@
             game10ViewGameResults.TabIndex = 7;
             game10ViewGameResults.Text = "View Game Results";
             game10ViewGameResults.UseVisualStyleBackColor = true;
+            game10ViewGameResults.Click += game10ViewGameResults_Click;
             // 
             // game10SimGameButton
             // 
@@ -928,6 +938,7 @@
             game11ViewGameResults.TabIndex = 7;
             game11ViewGameResults.Text = "View Game Results";
             game11ViewGameResults.UseVisualStyleBackColor = true;
+            game11ViewGameResults.Click += game11ViewGameResults_Click;
             // 
             // game11SimGameButton
             // 
@@ -1002,6 +1013,7 @@
             game12ViewGameResults.TabIndex = 7;
             game12ViewGameResults.Text = "View Game Results";
             game12ViewGameResults.UseVisualStyleBackColor = true;
+            game12ViewGameResults.Click += game12ViewGameResults_Click;
             // 
             // game12SimGameButton
             // 
@@ -1076,6 +1088,7 @@
             game13ViewGameResults.TabIndex = 7;
             game13ViewGameResults.Text = "View Game Results";
             game13ViewGameResults.UseVisualStyleBackColor = true;
+            game13ViewGameResults.Click += game13ViewGameResults_Click;
             // 
             // game13SimGameButton
             // 
@@ -1203,7 +1216,6 @@
             scheduleDisplayPanel.Name = "scheduleDisplayPanel";
             scheduleDisplayPanel.Size = new Size(641, 2184);
             scheduleDisplayPanel.TabIndex = 5;
-            scheduleDisplayPanel.Paint += scheduleDisplayPanel_Paint;
             // 
             // FullScheduleUserControl
             // 

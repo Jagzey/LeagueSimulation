@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Windows.Forms;
 
 namespace LeagueSimulation
 {
@@ -12,6 +13,8 @@ namespace LeagueSimulation
         {
             this.league = league;
             InitializeComponent();
+            if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
+            else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
             currentDayShownNum.Value = league.CurrentDay;
 
             FillLabels();
@@ -873,6 +876,25 @@ namespace LeagueSimulation
             LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
         }
 
+        public void LoadViewGameResultsUserControl(ViewGameResultsUserControl userControl)
+        {
+            MenuForm menuForm = new MenuForm();
+            menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
+            menuForm.menuFormLayoutPanel.Width = userControl.Width + 10;
+            menuForm.Width = userControl.Width + 40;
+            menuForm.menuFormLayoutPanel.Controls.Add(userControl);
+            this.Hide();
+            menuForm.Show();
+            // we hide the contents held in the full schedule currently
+            //scheduleDisplayPanel.Controls.Clear();
+            //scheduleDisplayPanel.Controls.Add(userControl);
+        }
+
+        private void MenuForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            this.Show(); // Show the main form again when second form is closed 
+        }
+
         private async void LoadWatchGameUserControl(WatchGameUserControl userControl)
         {
             // we hide the contents held in the full schedule currently
@@ -1304,7 +1326,6 @@ namespace LeagueSimulation
                 if (i >= league.CurrentSchedule.Count) break;
                 league.SimulateDay(league.CurrentSchedule[(int)currentDayShownNum.Value - 1 + i], (int)currentDayShownNum.Value + i, league.Playoffs);
             }
-            //league.SetPlayerAverageStats();
 
 
             // now we update all the buttons on the screen
@@ -1404,9 +1425,226 @@ namespace LeagueSimulation
             }
         }
 
-        private void scheduleDisplayPanel_Paint(object sender, PaintEventArgs e)
+        private void game1ViewGameResults_Click(object sender, EventArgs e)
         {
-
+            string teamsPlaying = "";
+            int gameId = 0;
+            if (league.Playoffs)
+            {
+                teamsPlaying = league.CurrentPlayoffsSchedule[(int)currentDayShownNum.Value - 1][0];
+                gameId = league.GetPlayoffGameId(teamsPlaying, (int)currentDayShownNum.Value);
+            }
+            else
+            {
+                teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][0];
+                gameId = league.GetGameId(teamsPlaying, (int)currentDayShownNum.Value);
+            }
+            LoadViewGameResultsUserControl(new ViewGameResultsUserControl(league, gameId));
         }
+
+        private void game2ViewGameResults_Click(object sender, EventArgs e)
+        {
+            string teamsPlaying = "";
+            int gameId = 0;
+            if (league.Playoffs)
+            {
+                teamsPlaying = league.CurrentPlayoffsSchedule[(int)currentDayShownNum.Value - 1][1];
+                gameId = league.GetPlayoffGameId(teamsPlaying, (int)currentDayShownNum.Value);
+            }
+            else
+            {
+                teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][1];
+                gameId = league.GetGameId(teamsPlaying, (int)currentDayShownNum.Value);
+            }
+            LoadViewGameResultsUserControl(new ViewGameResultsUserControl(league, gameId));
+        }
+
+        private void game3ViewGameResults_Click(object sender, EventArgs e)
+        {
+            string teamsPlaying = "";
+            int gameId = 0;
+            if (league.Playoffs)
+            {
+                teamsPlaying = league.CurrentPlayoffsSchedule[(int)currentDayShownNum.Value - 1][2];
+                gameId = league.GetPlayoffGameId(teamsPlaying, (int)currentDayShownNum.Value);
+            }
+            else
+            {
+                teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][2];
+                gameId = league.GetGameId(teamsPlaying, (int)currentDayShownNum.Value);
+            }
+            LoadViewGameResultsUserControl(new ViewGameResultsUserControl(league, gameId));
+        }
+
+        private void game4ViewGameResults_Click(object sender, EventArgs e)
+        {
+            string teamsPlaying = "";
+            int gameId = 0;
+            if (league.Playoffs)
+            {
+                teamsPlaying = league.CurrentPlayoffsSchedule[(int)currentDayShownNum.Value - 1][3];
+                gameId = league.GetPlayoffGameId(teamsPlaying, (int)currentDayShownNum.Value);
+            }
+            else
+            {
+                teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][3];
+                gameId = league.GetGameId(teamsPlaying, (int)currentDayShownNum.Value);
+            }
+            LoadViewGameResultsUserControl(new ViewGameResultsUserControl(league, gameId));
+        }
+
+        private void game5ViewGameResults_Click(object sender, EventArgs e)
+        {
+            string teamsPlaying = "";
+            int gameId = 0;
+            if (league.Playoffs)
+            {
+                teamsPlaying = league.CurrentPlayoffsSchedule[(int)currentDayShownNum.Value - 1][4];
+                gameId = league.GetPlayoffGameId(teamsPlaying, (int)currentDayShownNum.Value);
+            }
+            else
+            {
+                teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][4];
+                gameId = league.GetGameId(teamsPlaying, (int)currentDayShownNum.Value);
+            }
+            LoadViewGameResultsUserControl(new ViewGameResultsUserControl(league, gameId));
+        }
+
+        private void game6ViewGameResults_Click(object sender, EventArgs e)
+        {
+            string teamsPlaying = "";
+            int gameId = 0;
+            if (league.Playoffs)
+            {
+                teamsPlaying = league.CurrentPlayoffsSchedule[(int)currentDayShownNum.Value - 1][5];
+                gameId = league.GetPlayoffGameId(teamsPlaying, (int)currentDayShownNum.Value);
+            }
+            else
+            {
+                teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][5];
+                gameId = league.GetGameId(teamsPlaying, (int)currentDayShownNum.Value);
+            }
+            LoadViewGameResultsUserControl(new ViewGameResultsUserControl(league, gameId));
+        }
+
+        private void game7ViewGameResults_Click(object sender, EventArgs e)
+        {
+            string teamsPlaying = "";
+            int gameId = 0;
+            if (league.Playoffs)
+            {
+                teamsPlaying = league.CurrentPlayoffsSchedule[(int)currentDayShownNum.Value - 1][6];
+                gameId = league.GetPlayoffGameId(teamsPlaying, (int)currentDayShownNum.Value);
+            }
+            else
+            {
+                teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][6];
+                gameId = league.GetGameId(teamsPlaying, (int)currentDayShownNum.Value);
+            }
+            LoadViewGameResultsUserControl(new ViewGameResultsUserControl(league, gameId));
+        }
+
+        private void game8ViewGameResults_Click(object sender, EventArgs e)
+        {
+            string teamsPlaying = "";
+            int gameId = 0;
+            if (league.Playoffs)
+            {
+                teamsPlaying = league.CurrentPlayoffsSchedule[(int)currentDayShownNum.Value - 1][7];
+                gameId = league.GetPlayoffGameId(teamsPlaying, (int)currentDayShownNum.Value);
+            }
+            else
+            {
+                teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][7];
+                gameId = league.GetGameId(teamsPlaying, (int)currentDayShownNum.Value);
+            }
+            LoadViewGameResultsUserControl(new ViewGameResultsUserControl(league, gameId));
+        }
+
+        private void game9ViewGameResults_Click(object sender, EventArgs e)
+        {
+            string teamsPlaying = "";
+            int gameId = 0;
+            if (league.Playoffs)
+            {
+                teamsPlaying = league.CurrentPlayoffsSchedule[(int)currentDayShownNum.Value - 1][8];
+                gameId = league.GetPlayoffGameId(teamsPlaying, (int)currentDayShownNum.Value);
+            }
+            else
+            {
+                teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][8];
+                gameId = league.GetGameId(teamsPlaying, (int)currentDayShownNum.Value);
+            }
+            LoadViewGameResultsUserControl(new ViewGameResultsUserControl(league, gameId));
+        }
+
+        private void game10ViewGameResults_Click(object sender, EventArgs e)
+        {
+            string teamsPlaying = "";
+            int gameId = 0;
+            if (league.Playoffs)
+            {
+                teamsPlaying = league.CurrentPlayoffsSchedule[(int)currentDayShownNum.Value - 1][9];
+                gameId = league.GetPlayoffGameId(teamsPlaying, (int)currentDayShownNum.Value);
+            }
+            else
+            {
+                teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][9];
+                gameId = league.GetGameId(teamsPlaying, (int)currentDayShownNum.Value);
+            }
+            LoadViewGameResultsUserControl(new ViewGameResultsUserControl(league, gameId));
+        }
+
+        private void game11ViewGameResults_Click(object sender, EventArgs e)
+        {
+            string teamsPlaying = "";
+            int gameId = 0;
+            if (league.Playoffs)
+            {
+                teamsPlaying = league.CurrentPlayoffsSchedule[(int)currentDayShownNum.Value - 1][10];
+                gameId = league.GetPlayoffGameId(teamsPlaying, (int)currentDayShownNum.Value);
+            }
+            else
+            {
+                teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][10];
+                gameId = league.GetGameId(teamsPlaying, (int)currentDayShownNum.Value);
+            }
+            LoadViewGameResultsUserControl(new ViewGameResultsUserControl(league, gameId));
+        }
+
+        private void game12ViewGameResults_Click(object sender, EventArgs e)
+        {
+            string teamsPlaying = "";
+            int gameId = 0;
+            if (league.Playoffs)
+            {
+                teamsPlaying = league.CurrentPlayoffsSchedule[(int)currentDayShownNum.Value - 1][11];
+                gameId = league.GetPlayoffGameId(teamsPlaying, (int)currentDayShownNum.Value);
+            }
+            else
+            {
+                teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][11];
+                gameId = league.GetGameId(teamsPlaying, (int)currentDayShownNum.Value);
+            }
+            LoadViewGameResultsUserControl(new ViewGameResultsUserControl(league, gameId));
+        }
+
+        private void game13ViewGameResults_Click(object sender, EventArgs e)
+        {
+            string teamsPlaying = "";
+            int gameId = 0;
+            if (league.Playoffs)
+            {
+                teamsPlaying = league.CurrentPlayoffsSchedule[(int)currentDayShownNum.Value - 1][12];
+                gameId = league.GetPlayoffGameId(teamsPlaying, (int)currentDayShownNum.Value);
+            }
+            else
+            {
+                teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][12];
+                gameId = league.GetGameId(teamsPlaying, (int)currentDayShownNum.Value);
+            }
+            LoadViewGameResultsUserControl(new ViewGameResultsUserControl(league, gameId));
+        }
+
     }
 }

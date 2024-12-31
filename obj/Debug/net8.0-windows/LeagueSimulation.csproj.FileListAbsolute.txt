@@ -85,3 +85,6 @@ C:\Users\nzuobm\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA
 C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\obj\Debug\net8.0-windows\LeagueSimulation.PlayoffsUserControl.resources
 C:\Users\nzuobm\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\obj\Debug\net8.0-windows\LeagueSimulation.PlayoffsUserControl.resources
 C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\obj\Debug\net8.0-windows\LeagueSimulation.PlayerStatsUserControl.resources
+C:\Users\nzuobm\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\obj\Debug\net8.0-windows\LeagueSimulation.PlayerStatsUserControl.resources
+C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\obj\Debug\net8.0-windows\LeagueSimulation.MenuForm.resources
+C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\obj\Debug\net8.0-windows\LeagueSimulation.SeasonSummaryUserControl.resources

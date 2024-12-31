@@ -28,7 +28,8 @@ namespace LeagueSimulation
 
         private void LoadDashboard(UserControl dashboardUserControl)
         {
-            saveStateLabel.Text = $"Current League save state: {SaveState}";
+            saveStateLabel.Text = $"Current save state: {SaveState}";
+            label1.Text += CurrentLeague.UserTeamName;
             // clear current data in the displayPanel
             displayPanel.Controls.Clear();
             // add the dashboard user control to the display panel
@@ -79,6 +80,12 @@ namespace LeagueSimulation
         {
             displayPanel.Controls.Clear();
             displayPanel.Controls.Add(playerStatsUserControl);
+        }
+
+        public void LoadViewGameResults(ViewGameResultsUserControl viewGameResultsUserControl)
+        {
+            displayPanel.Controls.Clear();
+            displayPanel.Controls.Add(viewGameResultsUserControl);
         }
 
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)

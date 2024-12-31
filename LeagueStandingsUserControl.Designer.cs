@@ -145,6 +145,7 @@
             westFifteenthPositionLabel.TabIndex = 17;
             westFifteenthPositionLabel.Text = "2. Team 2 (0-0)";
             westFifteenthPositionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            westFifteenthPositionLabel.Click += westFifteenthPositionLabel_Click;
             // 
             // westFourteenthPositionLabel
             // 
@@ -154,6 +155,7 @@
             westFourteenthPositionLabel.TabIndex = 16;
             westFourteenthPositionLabel.Text = "2. Team 2 (0-0)";
             westFourteenthPositionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            westFourteenthPositionLabel.Click += westFourteenthPositionLabel_Click;
             // 
             // westThirteenthPositionLabel
             // 
@@ -163,6 +165,7 @@
             westThirteenthPositionLabel.TabIndex = 15;
             westThirteenthPositionLabel.Text = "2. Team 2 (0-0)";
             westThirteenthPositionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            westThirteenthPositionLabel.Click += westThirteenthPositionLabel_Click;
             // 
             // westTwelfthPositionLabel
             // 
@@ -172,6 +175,7 @@
             westTwelfthPositionLabel.TabIndex = 14;
             westTwelfthPositionLabel.Text = "2. Team 2 (0-0)";
             westTwelfthPositionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            westTwelfthPositionLabel.Click += westTwelfthPositionLabel_Click;
             // 
             // westEleventhPositionLabel
             // 
@@ -181,6 +185,7 @@
             westEleventhPositionLabel.TabIndex = 13;
             westEleventhPositionLabel.Text = "2. Team 2 (0-0)";
             westEleventhPositionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            westEleventhPositionLabel.Click += westEleventhPositionLabel_Click;
             // 
             // westTenthPositionLabel
             // 
@@ -190,6 +195,7 @@
             westTenthPositionLabel.TabIndex = 12;
             westTenthPositionLabel.Text = "2. Team 2 (0-0)";
             westTenthPositionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            westTenthPositionLabel.Click += westTenthPositionLabel_Click;
             // 
             // westNinthPositionLabel
             // 
@@ -199,6 +205,7 @@
             westNinthPositionLabel.TabIndex = 11;
             westNinthPositionLabel.Text = "1. Team 1 (0-0)";
             westNinthPositionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            westNinthPositionLabel.Click += westNinthPositionLabel_Click;
             // 
             // label9
             // 
@@ -216,6 +223,7 @@
             westEighthPositionLabel.TabIndex = 8;
             westEighthPositionLabel.Text = "2. Team 2 (0-0)";
             westEighthPositionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            westEighthPositionLabel.Click += westEighthPositionLabel_Click;
             // 
             // westSeventhPositionLabel
             // 
@@ -225,6 +233,7 @@
             westSeventhPositionLabel.TabIndex = 7;
             westSeventhPositionLabel.Text = "2. Team 2 (0-0)";
             westSeventhPositionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            westSeventhPositionLabel.Click += westSeventhPositionLabel_Click;
             // 
             // westSixthPositionLabel
             // 
@@ -234,6 +243,7 @@
             westSixthPositionLabel.TabIndex = 6;
             westSixthPositionLabel.Text = "2. Team 2 (0-0)";
             westSixthPositionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            westSixthPositionLabel.Click += westSixthPositionLabel_Click;
             // 
             // westFifthPositionLabel
             // 
@@ -243,6 +253,7 @@
             westFifthPositionLabel.TabIndex = 5;
             westFifthPositionLabel.Text = "2. Team 2 (0-0)";
             westFifthPositionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            westFifthPositionLabel.Click += westFifthPositionLabel_Click;
             // 
             // westFourthPositionLabel
             // 
@@ -252,6 +263,7 @@
             westFourthPositionLabel.TabIndex = 4;
             westFourthPositionLabel.Text = "2. Team 2 (0-0)";
             westFourthPositionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            westFourthPositionLabel.Click += westFourthPositionLabel_Click;
             // 
             // westThirdPositionLabel
             // 
@@ -261,6 +273,7 @@
             westThirdPositionLabel.TabIndex = 3;
             westThirdPositionLabel.Text = "2. Team 2 (0-0)";
             westThirdPositionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            westThirdPositionLabel.Click += westThirdPositionLabel_Click;
             // 
             // westSecondPositionLabel
             // 
@@ -270,6 +283,7 @@
             westSecondPositionLabel.TabIndex = 2;
             westSecondPositionLabel.Text = "2. Team 2 (0-0)";
             westSecondPositionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            westSecondPositionLabel.Click += westSecondPositionLabel_Click;
             // 
             // westFirstPositionLabel
             // 
@@ -279,6 +293,7 @@
             westFirstPositionLabel.TabIndex = 1;
             westFirstPositionLabel.Text = "1. Team 1 (0-0)";
             westFirstPositionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            westFirstPositionLabel.Click += westFirstPositionLabel_Click;
             // 
             // westernConferenceStandingsLabel
             // 
@@ -334,6 +349,7 @@
             eastFifteenthPositionLabel.TabIndex = 17;
             eastFifteenthPositionLabel.Text = "2. Team 2 (0-0)";
             eastFifteenthPositionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            eastFifteenthPositionLabel.Click += eastFifteenthPositionLabel_Click;
             // 
             // eastFourteenthPositionLabel
             // 
@@ -343,6 +359,7 @@
             eastFourteenthPositionLabel.TabIndex = 16;
             eastFourteenthPositionLabel.Text = "2. Team 2 (0-0)";
             eastFourteenthPositionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            eastFourteenthPositionLabel.Click += eastFourteenthPositionLabel_Click;
             // 
             // eastThirteenthPositionLabel
             // 
@@ -352,6 +369,7 @@
             eastThirteenthPositionLabel.TabIndex = 15;
             eastThirteenthPositionLabel.Text = "2. Team 2 (0-0)";
             eastThirteenthPositionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            eastThirteenthPositionLabel.Click += eastThirteenthPositionLabel_Click;
             // 
             // eastTwelfthPositionLabel
             // 
@@ -361,6 +379,7 @@
             eastTwelfthPositionLabel.TabIndex = 14;
             eastTwelfthPositionLabel.Text = "2. Team 2 (0-0)";
             eastTwelfthPositionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            eastTwelfthPositionLabel.Click += eastTwelfthPositionLabel_Click;
             // 
             // eastEleventhPositionLabel
             // 
@@ -370,6 +389,7 @@
             eastEleventhPositionLabel.TabIndex = 13;
             eastEleventhPositionLabel.Text = "2. Team 2 (0-0)";
             eastEleventhPositionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            eastEleventhPositionLabel.Click += eastEleventhPositionLabel_Click;
             // 
             // eastTenthPositionLabel
             // 
@@ -379,6 +399,7 @@
             eastTenthPositionLabel.TabIndex = 12;
             eastTenthPositionLabel.Text = "2. Team 2 (0-0)";
             eastTenthPositionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            eastTenthPositionLabel.Click += eastTenthPositionLabel_Click;
             // 
             // eastNinthPositionLabel
             // 
@@ -388,6 +409,7 @@
             eastNinthPositionLabel.TabIndex = 11;
             eastNinthPositionLabel.Text = "1. Team 1 (0-0)";
             eastNinthPositionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            eastNinthPositionLabel.Click += eastNinthPositionLabel_Click;
             // 
             // label10
             // 
@@ -405,6 +427,7 @@
             eastEighthPositionLabel.TabIndex = 8;
             eastEighthPositionLabel.Text = "2. Team 2 (0-0)";
             eastEighthPositionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            eastEighthPositionLabel.Click += eastEighthPositionLabel_Click;
             // 
             // eastSeventhPositionLabel
             // 
@@ -414,6 +437,7 @@
             eastSeventhPositionLabel.TabIndex = 7;
             eastSeventhPositionLabel.Text = "2. Team 2 (0-0)";
             eastSeventhPositionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            eastSeventhPositionLabel.Click += eastSeventhPositionLabel_Click;
             // 
             // eastSixthPositionLabel
             // 
@@ -423,6 +447,7 @@
             eastSixthPositionLabel.TabIndex = 6;
             eastSixthPositionLabel.Text = "2. Team 2 (0-0)";
             eastSixthPositionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            eastSixthPositionLabel.Click += eastSixthPositionLabel_Click;
             // 
             // eastFifthPositionLabel
             // 
@@ -432,6 +457,7 @@
             eastFifthPositionLabel.TabIndex = 5;
             eastFifthPositionLabel.Text = "2. Team 2 (0-0)";
             eastFifthPositionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            eastFifthPositionLabel.Click += eastFifthPositionLabel_Click;
             // 
             // eastFourthPositionLabel
             // 
@@ -441,6 +467,7 @@
             eastFourthPositionLabel.TabIndex = 4;
             eastFourthPositionLabel.Text = "2. Team 2 (0-0)";
             eastFourthPositionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            eastFourthPositionLabel.Click += eastFourthPositionLabel_Click;
             // 
             // eastThirdPositionLabel
             // 
@@ -450,6 +477,7 @@
             eastThirdPositionLabel.TabIndex = 3;
             eastThirdPositionLabel.Text = "2. Team 2 (0-0)";
             eastThirdPositionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            eastThirdPositionLabel.Click += eastThirdPositionLabel_Click;
             // 
             // eastSecondPositionLabel
             // 
@@ -459,6 +487,7 @@
             eastSecondPositionLabel.TabIndex = 2;
             eastSecondPositionLabel.Text = "2. Team 2 (0-0)";
             eastSecondPositionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            eastSecondPositionLabel.Click += eastSecondPositionLabel_Click;
             // 
             // eastFirstPositionLabel
             // 
@@ -468,6 +497,7 @@
             eastFirstPositionLabel.TabIndex = 1;
             eastFirstPositionLabel.Text = "1. Team 1 (0-0)";
             eastFirstPositionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            eastFirstPositionLabel.Click += eastFirstPositionLabel_Click;
             // 
             // easternConferenceStandingsLabel
             // 

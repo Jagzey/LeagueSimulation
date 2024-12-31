@@ -51,6 +51,7 @@
             leagueLeadersToolStripMenuItem = new ToolStripMenuItem();
             toolStripMenuItem20 = new ToolStripMenuItem();
             displayPanel = new FlowLayoutPanel();
+            label1 = new Label();
             menuStrip1.SuspendLayout();
             panel1.SuspendLayout();
             menuStrip2.SuspendLayout();
@@ -222,11 +223,21 @@
             displayPanel.TabIndex = 3;
             displayPanel.WrapContents = false;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(144, 9);
+            label1.Name = "label1";
+            label1.Size = new Size(67, 15);
+            label1.TabIndex = 4;
+            label1.Text = "User Team: ";
+            // 
             // Form2
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(label1);
             Controls.Add(displayPanel);
             Controls.Add(panel1);
             Controls.Add(saveStateLabel);
@@ -270,5 +281,6 @@
         private ToolStripMenuItem backToStartMenuToolStripMenuItem;
         private FlowLayoutPanel displayPanel;
         private ToolStripMenuItem leagueLeadersToolStripMenuItem;
+        private Label label1;
     }
 }

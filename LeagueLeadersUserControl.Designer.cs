@@ -33,6 +33,7 @@
             currentStat = new ComboBox();
             label2 = new Label();
             label1 = new Label();
+            label3 = new Label();
             leagueLeaderDataGridView = new DataGridView();
             PlayerFirstname = new DataGridViewTextBoxColumn();
             PlayerSurname = new DataGridViewTextBoxColumn();
@@ -45,6 +46,7 @@
             // leagueLeadersFlowLayoutPanel
             // 
             leagueLeadersFlowLayoutPanel.Controls.Add(leagueLeadersTitlePanel);
+            leagueLeadersFlowLayoutPanel.Controls.Add(label3);
             leagueLeadersFlowLayoutPanel.Controls.Add(leagueLeaderDataGridView);
             leagueLeadersFlowLayoutPanel.Location = new Point(3, 3);
             leagueLeadersFlowLayoutPanel.Name = "leagueLeadersFlowLayoutPanel";
@@ -65,7 +67,7 @@
             // 
             currentStat.DropDownStyle = ComboBoxStyle.DropDownList;
             currentStat.FormattingEnabled = true;
-            currentStat.Items.AddRange(new object[] { "Points", "Rebounds", "Assists", "Steals", "Turnovers", "Blocks" });
+            currentStat.Items.AddRange(new object[] { "Points", "Rebounds", "Assists", "Steals", "Turnovers", "Blocks", "Game Value", "Defense Value" });
             currentStat.Location = new Point(50, 16);
             currentStat.Name = "currentStat";
             currentStat.Size = new Size(142, 23);
@@ -84,22 +86,31 @@
             // label1
             // 
             label1.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(198, 5);
+            label1.Location = new Point(208, 2);
             label1.Name = "label1";
             label1.Size = new Size(251, 42);
             label1.TabIndex = 1;
             label1.Text = "League Leaders Menu";
             label1.TextAlign = ContentAlignment.MiddleCenter;
             // 
+            // label3
+            // 
+            label3.Location = new Point(3, 58);
+            label3.Name = "label3";
+            label3.Size = new Size(44, 23);
+            label3.TabIndex = 4;
+            // 
             // leagueLeaderDataGridView
             // 
+            leagueLeaderDataGridView.AllowUserToAddRows = false;
+            leagueLeaderDataGridView.AllowUserToDeleteRows = false;
             leagueLeaderDataGridView.Columns.AddRange(new DataGridViewColumn[] { PlayerFirstname, PlayerSurname, TeamName });
-            leagueLeaderDataGridView.Location = new Point(3, 61);
+            leagueLeaderDataGridView.Location = new Point(53, 61);
             leagueLeaderDataGridView.Name = "leagueLeaderDataGridView";
             leagueLeaderDataGridView.ReadOnly = true;
-            leagueLeaderDataGridView.Size = new Size(623, 312);
+            leagueLeaderDataGridView.Size = new Size(524, 312);
             leagueLeaderDataGridView.TabIndex = 3;
-            leagueLeaderDataGridView.CellContentClick += leagueLeaderDataGridView_CellContentClick;
+            leagueLeaderDataGridView.CellClick += leagueLeaderDataGridView_CellClick;
             // 
             // PlayerFirstname
             // 
@@ -123,7 +134,7 @@
             TeamName.HeaderText = "Team Name";
             TeamName.Name = "TeamName";
             TeamName.ReadOnly = true;
-            TeamName.Width = 200;
+            TeamName.Width = 160;
             // 
             // LeagueLeadersUserControl
             // 
@@ -139,6 +150,11 @@
             ResumeLayout(false);
         }
 
+        private void LeagueLeaderDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         private FlowLayoutPanel leagueLeadersFlowLayoutPanel;
@@ -150,5 +166,6 @@
         private DataGridViewTextBoxColumn PlayerFirstname;
         private DataGridViewTextBoxColumn PlayerSurname;
         private DataGridViewTextBoxColumn TeamName;
+        private Label label3;
     }
 }

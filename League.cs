@@ -1,4 +1,10 @@
-﻿using System.Data.SQLite;
+﻿using System.Collections.Generic;
+using System.Data.SQLite;
+using static System.ComponentModel.Design.ObjectSelectorEditor;
+using static System.Data.Entity.Infrastructure.Design.Executor;
+using System.Runtime.Intrinsics.X86;
+using System.Xml.Linq;
+using static System.Windows.Forms.AxHost;
 
 namespace LeagueSimulation
 {
@@ -98,8 +104,10 @@ namespace LeagueSimulation
                         playerOnTeamId INTEGER PRIMARY KEY AUTOINCREMENT,
                         playerId INTEGER NOT NULL,
                         teamId INTEGER NOT NULL,
-                        dateJoined TEXT NOT NULL,
-                        dateLeft TEXT NOT NULL
+                        dayJoined INTEGER NOT NULL,
+                        yearJoined INTEGER NOT NULL,
+                        dayLeft INTEGER NOT NULL,
+                        yearLeft INTEGER NOT NULL
                         );";
 
                 string createPlayerGameStatsQuery = @"
@@ -180,6 +188,51 @@ namespace LeagueSimulation
                     description TEXT NOT NULL
                     );";
 
+                string progressionQuery = $@"
+                    CREATE TABLE playerProgression(
+                    progressionId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                    playerId INTEGER NOT NULL,
+                    seasonId INTEGER NOT NULL,
+                    progression INTEGER NOT NULL
+                    );";
+
+                string awardsTeamQuery = $@"
+                    CREATE TABLE seasonTeamAwards(
+                    seasonId INTEGER NOT NULL,
+                    positionId INTEGER NOT NULL,
+                    AllNBAOne INTEGER NOT NULL,
+                    AllNBATwo INTEGER NOT NULL,
+                    AllNBAThree INTEGER NOT NULL,
+                    AllDefenseOne INTEGER NOT NULL,
+                    AllDefenseTwo INTEGER NOT NULL,
+                    AllDefenseThree INTEGER NOT NULL,
+                    PRIMARY KEY (seasonId, positionId)
+                    );";
+
+                string awardsNonTeamQuery = $@"
+                    CREATE TABLE seasonNonTeamAwards(
+                    seasonId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                    MVP INTEGER NOT NULL,
+                    DPOY INTEGER NOT NULL,
+                    Champion INTEGER NOT NULL,
+                    FMVP INTEGER NOT NULL,
+                    CFMVP INTEGER NOT NULL,
+                    ROY INTEGER NOT NULL,
+                    MPLeader INTEGER NOT NULL,
+                    PTSLeader INTEGER NOT NULL,
+                    REBLeader INTEGER NOT NULL,
+                    ASTLeader INTEGER NOT NULL,
+                    STLLeader INTEGER NOT NULL,
+                    BLKLeader INTEGER NOT NULL,
+                    TOVLeader INTEGER NOT NULL,
+                    FGMLeader INTEGER NOT NULL,
+                    FGALeader INTEGER NOT NULL,
+                    FGPCTLeader INTEGER NOT NULL,
+                    TFGMLeader INTEGER NOT NULL,
+                    TFGALeader INTEGER NOT NULL,
+                    TFGPCTLeader INTEGER NOT NULL
+                    );";
+
                 using (var command = new SQLiteCommand(connection))
                 {
                     command.CommandText = createTeamsTableQuery;
@@ -213,6 +266,15 @@ namespace LeagueSimulation
                     command.ExecuteNonQuery();
 
                     command.CommandText = positionQuery;
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = progressionQuery;
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = awardsNonTeamQuery;
+                    command.ExecuteNonQuery();
+
+                    command.CommandText = awardsTeamQuery;
                     command.ExecuteNonQuery();
                 }
             }
@@ -446,12 +508,14 @@ namespace LeagueSimulation
                             {
                                 Player player = team1Players[j];
                                 player.PlayerId = j + 1;
-                                string addPlayerOnTeamQuery = $@"INSERT INTO playerOnTeam(playerId,teamId,dateJoined,dateLeft)
+                                string addPlayerOnTeamQuery = $@"INSERT INTO playerOnTeam(playerId,teamId,dayJoined,yearJoined,dayLeft,yearLeft)
                                 VALUES(
                                 {player.PlayerId + (i * 15)},
                                 {team.TeamId},
-                                '1/2024',
-                                '999/9999'
+                                1,
+                                2024,
+                                999,
+                                9999
                                 );";
 
                                 command.CommandText = addPlayerOnTeamQuery;
@@ -647,23 +711,31 @@ namespace LeagueSimulation
             {
                 connection.Open();
                 string teamLeaderQuery = $@"
-                    WITH PlayerAverage{stat} AS (
+                    WITH currentPlayers AS (
+                    SELECT playerId, teamId
+                    FROM playerOnTeam pot
+                    WHERE dayJoined <= {CurrentDay} AND yearJoined <= {CurrentSeason + 2023}
+                    AND dayLeft >= {CurrentDay} AND yearLeft >= {CurrentSeason + 2023}
+                    AND pot.teamId = {GetIdFromTeamName(UserTeamName)} -- Replace with the given teamId
+                    ),
+                    PlayerAverage{stat} AS (
                         SELECT
                             p.playerId,
                             p.playerForename,
                             p.playerSurname,
                             AVG(pgs.{stat}) AS avg{stat}
                         FROM
-                            league l
+                            league l, currentPlayers cp
                         JOIN
                             seasonSchedule sg ON sg.seasonId = l.currentSeason
                         JOIN
                             playerGameStats pgs ON sg.gameId = pgs.gameId
+                            AND pgs.playerId = cp.playerId
                         JOIN
-                            players p ON p.playerId = pgs.playerId
+                            players p ON p.playerId = cp.playerId
                         WHERE
                             sg.gameCompleted = 1 -- Only include completed games
-                            AND p.teamId = {GetIdFromTeamName(UserTeamName)} -- Replace with the given teamId
+                            
                         GROUP BY
                             p.playerId, p.playerForename, p.playerSurname
                     )
@@ -700,25 +772,32 @@ namespace LeagueSimulation
         public string GetTeamStatistic(string stat)
         {
             string teamLeaderQuery = $@"
-                    WITH TeamAverage{stat} AS (
+                    WITH currentPlayers AS (
+                    SELECT playerId, teamId
+                    FROM playerOnTeam pot
+                    WHERE dayJoined <= {CurrentDay} AND yearJoined <= {CurrentSeason + 2023}
+                    AND dayLeft >= {CurrentDay} AND yearLeft >= {CurrentSeason + 2023}
+                    AND pot.teamId = {GetIdFromTeamName(UserTeamName)} -- Replace with the given teamId
+                    ),
+                    TeamAverage{stat} AS (
                         SELECT
                             p.teamId,
                             sg.gameId,
                             sg.seasonId,
                             SUM(pgs.{stat}) AS total{stat}
                         FROM
-                            seasonSchedule sg
+                            seasonSchedule sg, currentPlayers cp
                         JOIN
                             league l ON l.currentSeason = sg.seasonId
                         JOIN
                             playerGameStats pgs ON sg.gameId = pgs.gameId
+                            AND cp.playerId = pgs.playerId
                         JOIN
-                            players p ON p.playerId = pgs.playerId
+                            players p ON p.playerId = cp.playerId
                         WHERE
                             sg.gameCompleted = 1 -- Only include completed games
-                            AND p.teamId = {GetIdFromTeamName(UserTeamName)} -- Replace with the given teamId
                         GROUP BY
-                            p.teamId, sg.gameId, sg.seasonId
+                            cp.teamId, sg.gameId, sg.seasonId
                     )
                     SELECT
                         tav.teamId,
@@ -1394,17 +1473,21 @@ namespace LeagueSimulation
             List<List<string>> schedule = new List<List<string>>();
             if (Playoffs) schedule = CurrentPlayoffsSchedule;
             else schedule = CurrentSchedule;
-            foreach (string game in schedule[currentDayOfGames - 1])
+            if (currentDayOfGames != 0)
             {
-                string[] teamsPlaying = game.Split(",");
-                bool gameComplete = false;
-                if (Playoffs) gameComplete = CheckIfPlayoffGameCompleted(currentDayOfGames, teamsPlaying[0], teamsPlaying[1]);
-                else gameComplete = CheckIfGameCompleted(currentDayOfGames, teamsPlaying[0], teamsPlaying[1]);
-                if (!gameComplete)
+                foreach (string game in schedule[currentDayOfGames - 1])
                 {
-                    allGamesComplete = false; break;
+                    string[] teamsPlaying = game.Split(",");
+                    bool gameComplete = false;
+                    if (Playoffs) gameComplete = CheckIfPlayoffGameCompleted(currentDayOfGames, teamsPlaying[0], teamsPlaying[1]);
+                    else gameComplete = CheckIfGameCompleted(currentDayOfGames, teamsPlaying[0], teamsPlaying[1]);
+                    if (!gameComplete)
+                    {
+                        allGamesComplete = false; break;
+                    }
                 }
             }
+            
             if (allGamesComplete)
             {
                 using (var connection = new SQLiteConnection(ConnectionString))
@@ -2735,6 +2818,80 @@ namespace LeagueSimulation
             }
             return playoffTeams;
         }
+        public int GetGameDay(int gameId)
+        {
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                string tablePicker = "season";
+                if (Playoffs) tablePicker = "playoffs";
+                string getEasternConferenceTeamsInPlayoffsQuery = $@"
+                    SELECT dayId
+                    FROM {tablePicker}Schedule ss
+                    WHERE ss.gameId = {gameId}
+                ;";
+
+                using (var command = new SQLiteCommand(getEasternConferenceTeamsInPlayoffsQuery, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            return reader.GetInt32(0);
+                        }
+                    }
+                }
+            }
+            return -1;
+        }
+        public string GetGameScore(int gameId)
+        {
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                string tablePicker = "season";
+                string gamePicker = "g";
+                if (Playoffs) { tablePicker = "playoffs"; gamePicker = "playoffsG"; }
+                string getEasternConferenceTeamsInPlayoffsQuery = $@"
+                    WITH currentPlayers AS (
+                    SELECT playerId, teamId
+                    FROM playerOnTeam
+                    WHERE dayJoined <= {CurrentDay} AND yearJoined <= {CurrentSeason + 2023}
+                    AND dayLeft >= {CurrentDay} AND yearLeft >= {CurrentSeason + 2023}
+                ),
+	                homeTeamPoints AS (
+                    SELECT SUM(pgs.PTS) as teamPoints
+                    FROM playerGameStats pgs
+                    JOIN {tablePicker}Schedule ss ON ss.{gamePicker}ameId = pgs.gameId
+	                JOIN currentPlayers cp ON cp.teamId = ss.homeTeamId
+	                AND pgs.playerId = cp.playerId
+                    WHERE pgs.gameId = {gameId}
+                ),
+                    awayTeamPoints AS (
+                    SELECT SUM(pgs.PTS) as teamPoints
+                    FROM playerGameStats pgs
+                    JOIN {tablePicker}Schedule ss ON ss.{gamePicker}ameId = pgs.gameId
+	                JOIN currentPlayers cp ON cp.teamId = ss.awayTeamId
+	                AND pgs.playerId = cp.playerId
+                    WHERE pgs.gameId = {gameId}
+                )
+                    SELECT *
+                    FROM homeTeamPoints, awayTeamPoints
+                ;";
+
+                using (var command = new SQLiteCommand(getEasternConferenceTeamsInPlayoffsQuery, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            return $"{reader.GetInt32(0)}-{reader.GetInt32(1)}";
+                        }
+                    }
+                }
+            }
+            return "";
+        }
 
         public Team ExtractTeamFromTeamName(string teamName)
         {
@@ -2925,6 +3082,7 @@ namespace LeagueSimulation
 
             // we check if all games are complete in the day, then increment currentDay if so
             bool allGamesComplete = true;
+
             // we check everyday up to the current game being simulated, where i is the current day
             // if all games are complete, then we increase the season currentDay
 
@@ -2953,11 +3111,11 @@ namespace LeagueSimulation
                     if (PlayoffsRound == "Second Round") GeneratePlayoffsSecondRound();
                     else if (PlayoffsRound == "Conference Finals") GeneratePlayoffsConferenceFinals();
                     else if (PlayoffsRound == "Finals") GeneratePlayoffsFinals();
-                    CurrentPlayoffsSchedule = LoadPlayoffsSchedule();
+                    if (Playoffs) CurrentPlayoffsSchedule = LoadPlayoffsSchedule();
                 }
                 // if all game 4s are complete, game 5s are complete etc. we add any initial games
                 // for any uncomplete series
-                if (CheckIfInitialPlayoffRoundGamesComplete())
+                if (CheckIfInitialPlayoffRoundGamesComplete() && Playoffs)
                 {
                     AddAnyNeededPlayoffGames();
                     CurrentPlayoffsSchedule = LoadPlayoffsSchedule();
@@ -2990,7 +3148,1148 @@ namespace LeagueSimulation
 
         public void AdvanceToNextSeason()
         {
+            // hand out awards
+            {
+                // start with getting the non-team award winners
+                int MVP = 0;
+                int DPOY = 0;
+                int FMVP = 0;
+                int CFMVP = 0;
+                int ROY = 0;
+                int Champion = 0;
+                string setMVPQuery = $@"
+                SELECT 
+                p.playerId,
+                AVG(pgs.gameValue) as gameValue
 
+
+                FROM players p, league l
+                JOIN playerGameStats pgs ON pgs.playerId = p.playerId 
+                AND pgs.isPlayoffs = 0
+                JOIN seasonSchedule ss ON ss.gameId = pgs.gameId
+                AND ss.seasonId = {CurrentSeason}
+                JOIN secondaryPlaystyle sp ON sp.secondaryPlaystyleId = p.secondaryPlaystyleId
+                JOIN position pos ON pos.positionId = p.positionId
+                GROUP BY p.playerId
+                ORDER BY gameValue DESC
+                LIMIT 1
+                ";
+                using (var connection = new SQLiteConnection(ConnectionString))
+                {
+                    connection.Open();
+                    using (var command = new SQLiteCommand(setMVPQuery, connection))
+                    {
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                MVP = reader.GetInt32(reader.GetOrdinal("playerId"));
+                            }
+                        }
+                    }
+                }
+                string setDPOYQuery = $@"WITH playerData AS (SELECT
+                p.playerId,
+                ROUND(AVG(pgs.gameValue), 1) as gameValue,
+                ROUND(AVG(pgs.REB), 1) as REB,
+                ROUND(AVG(pgs.STL), 1) as STL,
+                ROUND(AVG(pgs.BLK), 1) as BLK
+                
+
+
+                FROM players p, league l
+                JOIN playerGameStats pgs ON pgs.playerId = p.playerId AND pgs.isPlayoffs = 0
+                JOIN seasonSchedule ss ON ss.gameId = pgs.gameId
+                AND ss.seasonId = {CurrentSeason}
+                JOIN secondaryPlaystyle sp ON sp.secondaryPlaystyleId = p.secondaryPlaystyleId
+                JOIN position pos ON pos.positionId = p.positionId
+                GROUP BY p.playerId
+                )
+				SELECT pd.*, 1.3 * BLK + STL + 0.04 * gameValue + 0.3 * REB AS defenseValue
+				FROM playerData pd
+				ORDER BY defenseValue DESC
+                LIMIT 1
+                ";
+                using (var connection = new SQLiteConnection(ConnectionString))
+                {
+                    connection.Open();
+                    using (var command = new SQLiteCommand(setDPOYQuery, connection))
+                    {
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                DPOY = reader.GetInt32(reader.GetOrdinal("playerId"));
+                            }
+                        }
+                    }
+                }
+                string setFMVPQuery = $@"
+                SELECT 
+                p.playerId,
+                ROUND(AVG(pgs.gameValue), 1) as gameValue
+
+
+                FROM players p, league l
+                JOIN playerGameStats pgs ON pgs.playerId = p.playerId 
+                AND pgs.isPlayoffs = 1
+                JOIN playoffsSchedule ps ON ps.playoffsGameId = pgs.gameId
+                AND ps.playoffsRound = 'Finals'
+                AND ps.seasonId = {CurrentSeason}
+                JOIN secondaryPlaystyle sp ON sp.secondaryPlaystyleId = p.secondaryPlaystyleId
+                JOIN position pos ON pos.positionId = p.positionId
+                GROUP BY p.playerId
+                ORDER BY gameValue DESC
+                LIMIT 1		
+                ";
+                using (var connection = new SQLiteConnection(ConnectionString))
+                {
+                    connection.Open();
+                    using (var command = new SQLiteCommand(setFMVPQuery, connection))
+                    {
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                FMVP = reader.GetInt32(reader.GetOrdinal("playerId"));
+                            }
+                        }
+                    }
+                }
+                string setCFMVPQuery = $@"
+                SELECT 
+                p.playerId,
+                ROUND(AVG(pgs.gameValue), 1) as gameValue
+
+
+                FROM players p, league l
+                JOIN playerGameStats pgs ON pgs.playerId = p.playerId 
+                AND pgs.isPlayoffs = 1
+                JOIN playoffsSchedule ps ON ps.playoffsGameId = pgs.gameId
+                AND ps.playoffsRound = 'Conference Finals'
+                JOIN secondaryPlaystyle sp ON sp.secondaryPlaystyleId = p.secondaryPlaystyleId
+                JOIN position pos ON pos.positionId = p.positionId
+                GROUP BY p.playerId
+                ORDER BY gameValue DESC
+                LIMIT 1		
+                ";
+                using (var connection = new SQLiteConnection(ConnectionString))
+                {
+                    connection.Open();
+                    using (var command = new SQLiteCommand(setCFMVPQuery, connection))
+                    {
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                CFMVP = reader.GetInt32(reader.GetOrdinal("playerId"));
+                            }
+                        }
+                    }
+                }
+                string setROYQuery = $@"
+                WITH playerData AS (SELECT
+                p.playerId,
+                ROUND(AVG(pgs.gameValue), 1) as gameValue
+
+
+                FROM players p, league l
+                JOIN playerGameStats pgs ON pgs.playerId = p.playerId AND pgs.isPlayoffs = 0
+                JOIN seasonSchedule ss ON ss.gameId = pgs.gameId
+                JOIN secondaryPlaystyle sp ON sp.secondaryPlaystyleId = p.secondaryPlaystyleId
+                JOIN position pos ON pos.positionId = p.positionId
+                GROUP BY p.playerId, ss.seasonId
+                )
+                SELECT pd.*, 
+                COUNT(*) as seasonsPlayed
+                FROM playerData pd
+                GROUP BY playerId
+                HAVING seasonsPlayed = 1
+                ORDER BY gameValue DESC
+                LIMIT 1
+                
+                ";
+                using (var connection = new SQLiteConnection(ConnectionString))
+                {
+                    connection.Open();
+                    using (var command = new SQLiteCommand(setROYQuery, connection))
+                    {
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                ROY = reader.GetInt32(reader.GetOrdinal("playerId"));
+                            }
+                        }
+                    }
+                }
+                string setChampionQuery = $@"
+                WITH currentPlayers AS (
+                SELECT pot.playerId, pot.teamId AS currentTeamId
+                FROM playerOnTeam pot
+                WHERE dayJoined <= 124 AND yearJoined <= 2024
+                AND dayLeft > 124 AND yearLeft > 2024
+                ),
+                TeamGameScores AS (
+                    SELECT
+                        ps.seasonId,
+                        ps.playoffsGameId AS gameId,
+                        ps.playoffsRound,
+                        ps.homeTeamId AS homeTeamId,
+                        ps.awayTeamId AS awayTeamId,
+                        ps.seed,
+                        ps.conferenceId,
+                        CASE
+                        WHEN ps.homeTeamId = cp.currentTeamId THEN ps.homeTeamId
+                        WHEN ps.awayTeamId = cp.currentTeamId THEN ps.awayTeamId
+                        END AS derivedTeamId,
+                        SUM(pgs.PTS) AS teamScore
+                    FROM
+                        playoffsSchedule ps
+                    JOIN 
+                        playerGameStats pgs ON ps.playoffsGameId = pgs.gameId  AND pgs.isPlayoffs = 1
+                    JOIN
+                        currentPlayers cp ON cp.playerId = pgs.playerId
+                    JOIN
+                        players p ON p.playerId = cp.playerId
+                    WHERE
+                        ps.gameCompleted = 1 
+                        AND ps.playoffsRound = 'Finals'
+                    GROUP BY
+                        ps.seasonId, gameId, derivedTeamId
+                ),
+                Wins AS (
+                    SELECT
+                        tgs.seasonId,
+                        tgs.derivedTeamId as teamId,
+                        COUNT(*) AS wins
+                    FROM
+                        TeamGameScores tgs
+                    JOIN
+                        TeamGameScores opp ON tgs.gameId = opp.gameId
+                            AND tgs.derivedTeamId != opp.derivedTeamId
+                    WHERE
+                        tgs.teamScore > opp.teamScore
+                    GROUP BY
+                        tgs.seasonId, tgs.derivedTeamId
+                ),
+                Losses AS (
+                    SELECT
+                        tgs.seasonId,
+                        tgs.derivedTeamId as teamId,
+                        COUNT(*) AS losses
+                    FROM
+                        TeamGameScores tgs
+                    JOIN
+                        TeamGameScores opp ON tgs.gameId = opp.gameId
+                            AND tgs.derivedTeamId != opp.derivedTeamId
+                    WHERE
+                        tgs.teamScore < opp.teamScore
+                    GROUP BY
+                        tgs.seasonId, tgs.derivedTeamId
+                ),
+                CombinedResults AS (
+                    SELECT 
+                        tgs.seasonId,
+                        tgs.derivedTeamId as teamId,
+                        tgs.seed,
+                        tgs.playoffsRound,
+                        tgs.conferenceId,
+                        COALESCE(w.wins, 0) AS wins,
+                        COALESCE(l.losses, 0) AS losses
+                    FROM
+                        (SELECT DISTINCT seasonId, derivedTeamId, seed, playoffsRound, conferenceId FROM TeamGameScores) tgs
+                    LEFT JOIN Wins w ON tgs.seasonId = w.seasonId AND tgs.derivedTeamId = w.teamId
+                    LEFT JOIN Losses l ON tgs.seasonId = l.seasonId AND tgs.derivedTeamId = l.teamId
+                ),
+                UniqueSeriesTeams AS (
+                    SELECT 
+                        cr.seasonId,
+                        cr.teamId,
+                        t.teamName,
+                        cr.wins,
+                        cr.losses,
+                        (cr.wins + cr.losses) AS gamesPlayed,
+                        cr.seed,
+                        cr.conferenceId,
+                        cr.playoffsRound,
+                        ROW_NUMBER() OVER (PARTITION BY cr.seed, cr.conferenceId ORDER BY cr.wins DESC) AS row_num
+                    FROM 
+                        CombinedResults cr
+                    JOIN 
+                        teams t ON cr.teamId = t.teamId
+                    WHERE 
+                        cr.seasonId = 1 AND
+                        cr.playoffsRound = 'Finals'
+                ),
+                UncompleteSeries AS(
+                SELECT 
+                    seasonId,
+                    teamId,
+                    teamName,
+                    wins,
+                    losses,
+                    gamesPlayed,
+                    seed,
+                    conferenceId,
+                    playoffsRound
+                FROM 
+                    UniqueSeriesTeams
+                WHERE 
+                    --row_num = 1
+                 (wins == 4)
+                ORDER BY 
+                    conferenceId, seed
+                    )
+                SELECT DISTINCT 
+                us.seed, 
+                us.teamId AS winner,
+                us.conferenceId, 
+                us.wins,
+                us.losses
+                FROM UncompleteSeries us
+                JOIN playoffsSchedule ps ON ps.seed = us.seed 
+                AND ps.conferenceId = us.conferenceId
+                AND ps.playoffsRound = 'Finals'
+                ";
+                using (var connection = new SQLiteConnection(ConnectionString))
+                {
+                    connection.Open();
+                    using (var command = new SQLiteCommand(setChampionQuery, connection))
+                    {
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Champion = reader.GetInt32(reader.GetOrdinal("winner"));
+                            }
+                        }
+                    }
+                }
+
+                // this gets the leaders for all the stats
+                Dictionary<string, int> statsLeaders = new Dictionary<string, int>()
+                { 
+                  {"MP", 0},
+                  { "PTS", 0},
+                  { "REB", 0},
+                  { "AST", 0},
+                  { "STL", 0},
+                  { "BLK", 0},
+                  { "TOV", 0},
+                  { "FGM", 0},
+                  { "FGA", 0},
+                  { "FGPCT", 0},
+                  { "TFGM", 0},
+                  { "TFGA", 0},
+                  { "TFGPCT", 0},
+                };
+                foreach (string stat in statsLeaders.Keys)
+                {
+                    string setStatQuery = $@"
+                    SELECT 
+                    p.playerId,
+                    AVG(pgs.{stat}) as {stat}
+
+
+                    FROM players p, league l
+                    JOIN playerGameStats pgs ON pgs.playerId = p.playerId 
+                    AND pgs.isPlayoffs = 0
+                    JOIN seasonSchedule ss ON ss.gameId = pgs.gameId
+                    AND ss.seasonId = {CurrentSeason}
+                    JOIN secondaryPlaystyle sp ON sp.secondaryPlaystyleId = p.secondaryPlaystyleId
+                    JOIN position pos ON pos.positionId = p.positionId
+                    GROUP BY p.playerId, ss.seasonId
+                    ORDER BY AVG(pgs.{stat}) DESC
+                    LIMIT 1
+                    ";
+                    if (stat.Contains("PCT"))
+                    {
+                        string shortenedStat = stat.Replace("PCT", "");
+                        setStatQuery = $@"
+                        SELECT 
+                        p.playerId,
+                        COALESCE(SUM(pgs.{shortenedStat}M) * 100.0 / SUM(pgs.{shortenedStat}A), 0.0) as {stat}
+
+
+                        FROM players p, league l
+                        JOIN playerGameStats pgs ON pgs.playerId = p.playerId 
+                        AND pgs.isPlayoffs = 0
+                        JOIN seasonSchedule ss ON ss.gameId = pgs.gameId
+                        AND ss.seasonId = {CurrentSeason}
+                        JOIN secondaryPlaystyle sp ON sp.secondaryPlaystyleId = p.secondaryPlaystyleId
+                        JOIN position pos ON pos.positionId = p.positionId
+                        GROUP BY p.playerId, ss.seasonId
+                        HAVING SUM(pgs.{shortenedStat}M) > 70
+                        ORDER BY {stat} DESC
+                        LIMIT 1
+                        ";
+                    }
+                    using (var connection = new SQLiteConnection(ConnectionString))
+                    {
+                        connection.Open();
+                        using (var command = new SQLiteCommand(setStatQuery, connection))
+                        {
+                            using (var reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    statsLeaders[stat] = reader.GetInt32(reader.GetOrdinal("playerId"));
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // now we finally set the nonTeamAwards in the database
+                string setAwardsQuery = $@"
+                    INSERT INTO seasonNonTeamAwards(MVP, DPOY, FMVP, CFMVP, ROY, Champion, MPLeader,
+                    PTSLeader, REBLeader, ASTLeader, STLLeader, BLKLeader, TOVLeader, FGMLeader, 
+                    FGALeader, FGPCTLeader, TFGMLeader, TFGALeader, TFGPCTLeader)
+                    VALUES(
+                    {MVP},
+                    {DPOY},
+                    {FMVP},
+                    {CFMVP},
+                    {ROY},
+                    {Champion},
+                    {statsLeaders["MP"]},
+                    {statsLeaders["PTS"]},
+                    {statsLeaders["REB"]},
+                    {statsLeaders["AST"]},
+                    {statsLeaders["STL"]},
+                    {statsLeaders["BLK"]},
+                    {statsLeaders["TOV"]},
+                    {statsLeaders["FGM"]},
+                    {statsLeaders["FGA"]},
+                    {statsLeaders["FGPCT"]},
+                    {statsLeaders["TFGM"]},
+                    {statsLeaders["TFGA"]},
+                    {statsLeaders["TFGPCT"]}
+                    );";
+                using (var connection = new SQLiteConnection(ConnectionString))
+                {
+                    connection.Open();
+                    using (var command = new SQLiteCommand(connection))
+                    {
+                        command.CommandText = setAwardsQuery;
+                        command.ExecuteNonQuery();
+                    }
+                }
+
+                // set the team awards
+                List<string> positions = new List<string>()
+                {"PG", "SG", "SF", "PF", "C" };
+                int posCounter = 0;
+                foreach (string position in positions)
+                {
+                    posCounter++;
+                    List<int> allNBAPos = new List<int>();
+                    List<int> allDefPos = new List<int>();
+                    string setAllNBAQuery = $@"
+                    SELECT 
+                    p.playerId,
+                    p.playerForename || ' ' || p.playerSurname as name,
+                    ((l.currentSeason + 2023) - p.dateOfBirth) AS age,
+                    pos.positionShort as playerPosition,
+                    AVG(pgs.gameValue) as gameValue
+
+
+                    FROM players p, league l
+                    JOIN playerGameStats pgs ON pgs.playerId = p.playerId AND pgs.isPlayoffs = 0
+                    JOIN seasonSchedule ss ON ss.gameId = pgs.gameId
+                    AND ss.seasonId = 1
+                    JOIN secondaryPlaystyle sp ON sp.secondaryPlaystyleId = p.secondaryPlaystyleId
+                    JOIN position pos ON pos.positionId = p.positionId
+                    WHERE playerPosition = '{position}'
+                    GROUP BY p.playerId, ss.seasonId
+                    ORDER BY gameValue DESC
+                    LIMIT 3
+                    ";
+                    using (var connection = new SQLiteConnection(ConnectionString))
+                    {
+                        connection.Open();
+                        using (var command = new SQLiteCommand(setAllNBAQuery, connection))
+                        {
+                            using (var reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    allNBAPos.Add(reader.GetInt32(reader.GetOrdinal("playerId")));
+                                }
+                            }
+                        }
+                    }
+                    string setAllDefQuery = $@"
+                    WITH playerData AS (SELECT 
+                    p.playerId,
+                    p.playerForename || ' ' || p.playerSurname as name,
+                    ((l.currentSeason + 2023) - p.dateOfBirth) AS age,
+                    pos.positionShort as playerPosition,
+                    AVG(pgs.REB) as REB,
+                    AVG(pgs.STL) as STL,
+                    AVG(pgs.BLK) as BLK,
+                    AVG(pgs.gameValue) as gameValue
+
+
+                    FROM players p, league l
+                    JOIN playerGameStats pgs ON pgs.playerId = p.playerId AND pgs.isPlayoffs = 0
+                    JOIN seasonSchedule ss ON ss.gameId = pgs.gameId
+                    AND ss.seasonId = 1
+                    JOIN secondaryPlaystyle sp ON sp.secondaryPlaystyleId = p.secondaryPlaystyleId
+                    JOIN position pos ON pos.positionId = p.positionId
+                    WHERE playerPosition = '{position}'
+                    GROUP BY p.playerId, ss.seasonId
+                    )
+                    SELECT 
+                    pd.*,
+                    1.3 * BLK + STL + 0.04 * gameValue + 0.3 * REB AS defenseValue
+                    FROM playerData pd
+                    ORDER BY defenseValue DESC
+                    LIMIT 3
+                    ";
+                    using (var connection = new SQLiteConnection(ConnectionString))
+                    {
+                        connection.Open();
+                        using (var command = new SQLiteCommand(setAllDefQuery, connection))
+                        {
+                            using (var reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    allDefPos.Add(reader.GetInt32(reader.GetOrdinal("playerId")));
+                                }
+                            }
+                        }
+                    }
+
+                    // now we finally set the nonTeamAwards in the database
+                    string setTeamAwardsQuery = $@"
+                    INSERT INTO seasonTeamAwards(seasonId, positionId, AllNBAOne, AllNBATwo, AllNBAThree,
+                    AllDefenseOne, AllDefenseTwo, AllDefenseThree)
+                    VALUES(
+                    {CurrentSeason},
+                    {posCounter},
+                    {allNBAPos[0]},
+                    {allNBAPos[1]},
+                    {allNBAPos[2]},
+                    {allDefPos[0]},
+                    {allDefPos[1]},
+                    {allDefPos[2]}
+                    );";
+
+                    using (var connection = new SQLiteConnection(ConnectionString))
+                    {
+                        connection.Open();
+                        using (var command = new SQLiteCommand(connection))
+                        {
+                            command.CommandText = setTeamAwardsQuery;
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                }
+            }
+
+            //carry out player retirement and give out rookies
+            {
+                // extract all the players in the current league
+                List<Player> players = new List<Player>();
+                string getPlayersQuery = $@"
+                    SELECT 
+                    p.playerId,
+                    p.playerForename,
+                    p.playerSurname,
+                    ((l.currentSeason + 2023) - p.dateOfBirth) AS age,
+                    t.teamId,
+                    t.teamName,
+                    pos.positionShort as playerPosition,
+                    printf('%d''%d', p.height / 12, p.height % 12) as height,
+                    p.height as intHeight,
+                    p.weight,
+                    pp.playstyle as pPlaystyle,
+                    sp.playstyle as sPlaystyle,
+                    p.overall,
+                    p.potential,
+                    ROUND(AVG(pgs.gameValue), 1) as gameValue,
+                    ROUND(AVG(pgs.MP), 1) AS minutesPlayed,
+                    p.overall,
+                    p.potential,
+                    p.layup,
+                    p.dunk,
+                    p.midRange,
+                    p.threePoint,
+                    p.freeThrow,
+                    p.passing,
+                    p.ballHandle,
+                    p.defense,
+                    p.steal,
+                    p.block,
+                    p.rebound,
+                    p.speed,
+                    p.stamina,
+                    p.strength
+
+                    FROM players p, league l
+                    JOIN playerGameStats pgs ON pgs.playerId = p.playerId
+                    AND pgs.isPlayoffs = FALSE
+                    JOIN playerOnTeam pot ON yearJoined <= 2024
+                        AND yearLeft >= 2024
+                        AND pot.playerId = p.playerId
+                    JOIN
+                            teams t ON t.teamId = pot.teamId
+                    AND t.teamId != 0
+                    JOIN secondaryPlaystyle sp ON sp.secondaryPlaystyleId = p.secondaryPlaystyleId
+                    JOIN primaryPlaystyle pp ON sp.primaryPlaystyleId = pp.primaryPlaystyleId
+                    JOIN position pos ON pos.positionId = p.positionId
+                    WHERE age > 30
+                    GROUP BY p.playerId
+                    ";
+                using (var connection = new SQLiteConnection(ConnectionString))
+                {
+                    connection.Open();
+                    using (var command = new SQLiteCommand(getPlayersQuery, connection))
+                    {
+                        using (var reader = command.ExecuteReader())
+                        {
+
+                            while (reader.Read())
+                            {
+                                Player player = new Player();
+                                player.PlayerId = reader.GetInt32(reader.GetOrdinal("playerId"));
+                                player.Age = reader.GetInt32(reader.GetOrdinal("age"));
+                                player.position = reader.GetString(reader.GetOrdinal("playerPosition"));
+                                player.PrimaryPlaystyle = reader.GetString(reader.GetOrdinal("pPlaystyle"));
+                                player.SecondaryPlaystyle = reader.GetString(reader.GetOrdinal("sPlaystyle"));
+                                player.Height = reader.GetInt32(reader.GetOrdinal("intHeight")); // height in inches
+                                player.Weight = reader.GetInt32(reader.GetOrdinal("weight")); // weight in lbs
+                                player.playerForename = reader.GetString(reader.GetOrdinal("playerForename"));
+                                player.playerSurname = reader.GetString(reader.GetOrdinal("playerSurname"));
+                                player.TeamId = reader.GetInt32(reader.GetOrdinal("teamId"));
+                                player.teamName = reader.GetString(reader.GetOrdinal("teamName"));
+                                player.Layup = reader.GetInt32(reader.GetOrdinal("layup"));
+                                player.Dunk = reader.GetInt32(reader.GetOrdinal("dunk"));
+                                player.MidRange = reader.GetInt32(reader.GetOrdinal("midRange"));
+                                player.ThreePoint = reader.GetInt32(reader.GetOrdinal("threePoint"));
+                                player.FreeThrow = reader.GetInt32(reader.GetOrdinal("freeThrow"));
+                                player.Passing = reader.GetInt32(reader.GetOrdinal("passing"));
+                                player.BallHandle = reader.GetInt32(reader.GetOrdinal("ballHandle"));
+                                player.Defense = reader.GetInt32(reader.GetOrdinal("defense"));
+                                player.Steal = reader.GetInt32(reader.GetOrdinal("steal"));
+                                player.Block = reader.GetInt32(reader.GetOrdinal("block"));
+                                player.Rebound = reader.GetInt32(reader.GetOrdinal("rebound"));
+                                player.Speed = reader.GetInt32(reader.GetOrdinal("speed"));
+                                player.Strength = reader.GetInt32(reader.GetOrdinal("strength"));
+                                player.Stamina = reader.GetInt32(reader.GetOrdinal("stamina"));
+                                player.Overall = reader.GetInt32(reader.GetOrdinal("overall"));
+                                player.Potential = reader.GetInt32(reader.GetOrdinal("potential"));
+                                player.MinutesPlayed = reader.GetDouble(reader.GetOrdinal("minutesPlayed"));
+                                player.GameValue = reader.GetDouble(reader.GetOrdinal("gameValue"));
+                                players.Add(player);
+                            }
+                        }
+                    }
+                }
+                foreach (Player player in players)
+                {
+                    if (player.Age < 31) continue;
+                    double playerGameValue = player.GameValue;
+                    double avgGameValue = -1;
+                    string averageGameValueQuery = $@"
+                    SELECT ROUND(AVG(pgs.gameValue), 1) as gameValue
+                    FROM players p
+                    JOIN playerGameStats pgs ON pgs.playerId = p.playerId AND pgs.isPlayoffs = 0
+                    WHERE overall < {player.Overall + 6} AND overall > {player.Overall - 6}
+                    ORDER BY ROUND(AVG(pgs.gameValue), 1) DESC
+
+                    ";
+                    using (var connection = new SQLiteConnection(ConnectionString))
+                    {
+                        connection.Open();
+                        using (var command = new SQLiteCommand(averageGameValueQuery, connection))
+                        {
+                            using (var reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    if (reader.IsDBNull(0)) avgGameValue = 5;
+                                    else avgGameValue = reader.GetDouble(0);
+                                } 
+                            }
+                        }
+                    }
+                    double playerGameValueDiff = playerGameValue - avgGameValue;
+                    double retireProbability = 0;
+                    // convert range of gameValueDiff (-9 to 15) to (-0.3 to 0.45)
+                    playerGameValueDiff = (-0.3 + (0.3 + 0.45) * (playerGameValueDiff + 9) / (15 + 9)) * -1;
+                    // convert player age from (31-40) to (0.10-1)
+                    double ageVariable = 0.10 + (1-0.10) * (double)(player.Age - 31) / (40 - 31);
+                    if (player.Age > 40) ageVariable = 100;
+                    retireProbability = playerGameValueDiff + ageVariable;
+
+                    // inititate retirement (playerOnTeam and teamId goes to zero)
+                    if (new Random().NextDouble() < retireProbability)
+                    {
+                        int currentTeamId = player.TeamId;
+                        string setRetirementQuery = $@"
+                            UPDATE playerOnTeam
+                            SET dayLeft = (SELECT MAX(dayId) + 1 FROM seasonSchedule ss WHERE ss.seasonId = {CurrentSeason}),
+                            yearLeft = {CurrentSeason + 2023}
+                            WHERE playerId = {player.PlayerId}
+                        ";
+                        string setTeamIdToZeroQuery = $@"
+                            UPDATE players
+                            SET teamId = 0
+                            WHERE playerId = {player.PlayerId}
+                        ";
+
+                        using (var connection = new SQLiteConnection(ConnectionString))
+                        {
+                            connection.Open();
+                            using (var command = new SQLiteCommand(connection))
+                            {
+                                command.CommandText = setRetirementQuery;
+                                command.ExecuteNonQuery();
+
+                                command.CommandText = setTeamIdToZeroQuery;
+                                command.ExecuteNonQuery();
+                            }
+                        }
+
+                        // now we add a rookie (his son) in his place
+                        Player rookiePlayer = new Player();
+                        int playerId = 0;
+                        // here we need to get the surname for this rookie
+                        string currentSuffix = "";
+                        string finalSuffix = "";
+                        if (player.playerSurname.Contains(" ")) currentSuffix = player.playerSurname.Split(" ")[1];
+                        List<string> newSuffixes = GeneratePlayerSuffix(currentSuffix);
+                        currentSuffix = newSuffixes[0];
+                        finalSuffix = newSuffixes[1];
+                        // update the dad's surname to add 'Sr.'
+                        using (var connection = new SQLiteConnection(ConnectionString))
+                        {
+                            connection.Open();
+                            using (var command = new SQLiteCommand(connection))
+                            {
+                                string setSurnameQuery = $"UPDATE players SET playerSurname = '{player.playerSurname + " " + currentSuffix}' WHERE playerId = {player.PlayerId}";
+                                command.CommandText = setSurnameQuery;
+                                command.ExecuteNonQuery();
+                            }
+                        }
+                        // now we generate the rookie's stats
+                        rookiePlayer.GenerateRookie(player.position, player.TeamId, player.teamName, player.playerForename, player.playerSurname + " " + finalSuffix, 67);
+                        
+
+                        // here we get the position, playstyle and playerOnTeamId for this specific player; to add
+                        int playerOnTeamId = 0;
+                        string getPlayerOnTeamIdQuery = @$"
+                                    SELECT playerOnTeam.playerOnTeamId 
+                                    FROM playerOnTeam
+                                    WHERE playerOnTeam.playerId = {player.PlayerId}";
+
+                        int positionId = 0;
+                        string getPositionIdQuery = @$"
+                                    SELECT positionId 
+                                    FROM position 
+                                    WHERE position.positionShort = '{player.position}'
+                                    ";
+
+                        int playstyleId = 0;
+                        string getPlaystyleIdQuery = @$"
+                                    SELECT secondaryPlaystyleId
+                                    FROM secondaryPlaystyle
+                                    WHERE secondaryPlaystyle.playstyle = '{player.SecondaryPlaystyle}'
+                                    ";
+
+                        // this connection sets the player's data in the database
+                        using (var connection = new SQLiteConnection(ConnectionString))
+                        {
+                            connection.Open();
+                            using (var command = new SQLiteCommand(connection))
+                            {
+                                string addPlayerOnTeamQuery = $@"INSERT INTO playerOnTeam(playerId,teamId,dayJoined,yearJoined,dayLeft,yearLeft)
+                                VALUES(
+                                {0},
+                                {player.TeamId},
+                                1,
+                                {CurrentSeason + 2023 + 1},
+                                999,
+                                9999
+                                );";
+                                command.CommandText = addPlayerOnTeamQuery;
+                                command.ExecuteNonQuery();
+
+                                string setPlayerOnTeamIdQuery = $@"
+                                UPDATE playerOnTeam SET playerId = (playerOnTeamId) WHERE playerId = {playerId}
+                                ";
+                                command.CommandText = setPlayerOnTeamIdQuery;
+                                command.ExecuteNonQuery();
+                            }
+
+                            // this gets the playerId of the rookie
+                            string getPlayerId = $@"SELECT MAX(pot.playerId) FROM playerOnTeam pot";
+                            using (var command2 = new SQLiteCommand(getPlayerId, connection))
+                            {
+                                using (var reader = command2.ExecuteReader())
+                                {
+                                    while (reader.Read()) playerId = reader.GetInt32(0);
+
+                                }
+                            }
+
+                            // get the positionId, playstyleId and playerOnTeamId so that we can add the player at the end
+                            getPlayerOnTeamIdQuery = @$"
+                                    SELECT playerOnTeam.playerOnTeamId 
+                                    FROM playerOnTeam
+                                    WHERE playerOnTeam.playerId = {playerId}";
+                            using (var command2 = new SQLiteCommand(getPlayerOnTeamIdQuery, connection))
+                            {
+                                using (var reader = command2.ExecuteReader())
+                                {
+                                    while (reader.Read())
+                                    {
+                                        playerOnTeamId = reader.GetInt32(0);
+                                    }
+                                }
+                            }
+                            getPositionIdQuery = @$"
+                                    SELECT positionId 
+                                    FROM position 
+                                    WHERE position.positionShort = '{player.position}'
+                                    ";
+                            using (var command2 = new SQLiteCommand(getPositionIdQuery, connection))
+                            {
+                                using (var reader = command2.ExecuteReader())
+                                {
+                                    while (reader.Read())
+                                    {
+                                        positionId = reader.GetInt32(0);
+                                    }
+                                }
+                            }
+                            getPlaystyleIdQuery = @$"
+                                    SELECT secondaryPlaystyleId
+                                    FROM secondaryPlaystyle
+                                    WHERE secondaryPlaystyle.playstyle = '{player.SecondaryPlaystyle}'
+                                    ";
+                            using (var command2 = new SQLiteCommand(getPlaystyleIdQuery, connection))
+                            {
+                                using (var reader = command2.ExecuteReader())
+                                {
+                                    while (reader.Read())
+                                    {
+                                        playstyleId = reader.GetInt32(0);
+                                    }
+                                }
+                            }
+
+                            using (var command = new SQLiteCommand(connection))
+                            {
+                                string addPlayerQuery = $@"INSERT INTO players(playerOnTeamId, teamId,playerForename,playerSurname,positionId,dateOfBirth,overall,potential,
+                                secondaryPlaystyleId,height,weight,closeShot,layup,dunk,midRange,threePoint,freeThrow,passing,ballHandle,defense,
+                                steal,block,rebound,speed,strength,stamina)
+                                VALUES(
+                                {playerOnTeamId},
+                                {rookiePlayer.TeamId},
+                                '{rookiePlayer.playerForename}',
+                                '{rookiePlayer.playerSurname}',
+                                {positionId},
+                                {2024 + CurrentSeason - rookiePlayer.Age},
+                                {rookiePlayer.Overall},
+                                {rookiePlayer.Potential},
+                                {playstyleId},
+                                {rookiePlayer.Height},
+                                {rookiePlayer.Weight},
+                                {rookiePlayer.CloseShot},
+                                {rookiePlayer.Layup},
+                                {rookiePlayer.Dunk},
+                                {rookiePlayer.MidRange},
+                                {rookiePlayer.ThreePoint},
+                                {rookiePlayer.FreeThrow},
+                                {rookiePlayer.Passing},
+                                {rookiePlayer.BallHandle},
+                                {rookiePlayer.Defense},
+                                {rookiePlayer.Steal},
+                                {rookiePlayer.Block},
+                                {rookiePlayer.Rebound},
+                                {rookiePlayer.Speed},
+                                {rookiePlayer.Strength},
+                                {rookiePlayer.Stamina}
+                                );";
+
+
+                                command.CommandText = addPlayerQuery;
+                                command.ExecuteNonQuery();
+                            }
+                        }
+
+                    }
+                }
+
+            }
+
+            // carry out player progression
+            {
+                // extract all the players in the current league
+                List<Player> players = new List<Player>();
+                string getPlayersQuery = $@"
+                    SELECT 
+                    p.playerId,
+                    p.playerForename,
+                    p.playerSurname,
+                    ((l.currentSeason + 2023) - p.dateOfBirth) AS age,
+                    t.teamId,
+                    t.teamName,
+                    pos.positionShort as playerPosition,
+                    printf('%d''%d', p.height / 12, p.height % 12) as height,
+                    p.height as intHeight,
+                    p.weight,
+                    pp.playstyle as pPlaystyle,
+                    sp.playstyle as sPlaystyle,
+                    p.overall,
+                    p.potential,
+                    ROUND(AVG(pgs.gameValue), 1) as gameValue,
+                    ROUND(AVG(pgs.MP), 1) AS minutesPlayed,
+                    p.overall,
+                    p.potential,
+                    p.layup,
+                    p.dunk,
+                    p.midRange,
+                    p.threePoint,
+                    p.freeThrow,
+                    p.passing,
+                    p.ballHandle,
+                    p.defense,
+                    p.steal,
+                    p.block,
+                    p.rebound,
+                    p.speed,
+                    p.stamina,
+                    p.strength
+
+                    FROM players p, league l
+                    JOIN playerGameStats pgs ON pgs.playerId = p.playerId
+                    AND pgs.isPlayoffs = FALSE
+                    JOIN playerOnTeam pot ON dayJoined <= {CurrentSchedule.Count} AND yearJoined <= {2023 +  CurrentSeason}
+                        AND dayLeft >= 1 AND yearLeft >= {2023 + 1 + CurrentSeason}
+                        AND pot.playerId = p.playerId
+                    JOIN
+                            teams t ON t.teamId = pot.teamId
+                    AND t.teamId != 0
+                    JOIN secondaryPlaystyle sp ON sp.secondaryPlaystyleId = p.secondaryPlaystyleId
+                    JOIN primaryPlaystyle pp ON sp.primaryPlaystyleId = pp.primaryPlaystyleId
+                    JOIN position pos ON pos.positionId = p.positionId
+                    GROUP BY p.playerId
+                    ";
+                using (var connection = new SQLiteConnection(ConnectionString))
+                {
+                    connection.Open();
+                    using (var command = new SQLiteCommand(getPlayersQuery, connection))
+                    {
+                        using (var reader = command.ExecuteReader())
+                        {
+
+                            while (reader.Read())
+                            {
+                                Player player = new Player();
+                                player.PlayerId = reader.GetInt32(reader.GetOrdinal("playerId"));
+                                player.Age = reader.GetInt32(reader.GetOrdinal("age"));
+                                player.position = reader.GetString(reader.GetOrdinal("playerPosition"));
+                                player.PrimaryPlaystyle = reader.GetString(reader.GetOrdinal("pPlaystyle"));
+                                player.SecondaryPlaystyle = reader.GetString(reader.GetOrdinal("sPlaystyle"));
+                                player.Height = reader.GetInt32(reader.GetOrdinal("intHeight")); // height in inches
+                                player.Weight = reader.GetInt32(reader.GetOrdinal("weight")); // weight in lbs
+                                player.playerForename = reader.GetString(reader.GetOrdinal("playerForename"));
+                                player.playerSurname = reader.GetString(reader.GetOrdinal("playerSurname"));
+                                player.TeamId = reader.GetInt32(reader.GetOrdinal("teamId"));
+                                player.teamName = reader.GetString(reader.GetOrdinal("teamName"));
+                                player.Layup = reader.GetInt32(reader.GetOrdinal("layup"));
+                                player.Dunk = reader.GetInt32(reader.GetOrdinal("dunk"));
+                                player.MidRange = reader.GetInt32(reader.GetOrdinal("midRange"));
+                                player.ThreePoint = reader.GetInt32(reader.GetOrdinal("threePoint"));
+                                player.FreeThrow = reader.GetInt32(reader.GetOrdinal("freeThrow"));
+                                player.Passing = reader.GetInt32(reader.GetOrdinal("passing"));
+                                player.BallHandle = reader.GetInt32(reader.GetOrdinal("ballHandle"));
+                                player.Defense = reader.GetInt32(reader.GetOrdinal("defense"));
+                                player.Steal = reader.GetInt32(reader.GetOrdinal("steal"));
+                                player.Block = reader.GetInt32(reader.GetOrdinal("block"));
+                                player.Rebound = reader.GetInt32(reader.GetOrdinal("rebound"));
+                                player.Speed = reader.GetInt32(reader.GetOrdinal("speed"));
+                                player.Strength = reader.GetInt32(reader.GetOrdinal("strength"));
+                                player.Stamina = reader.GetInt32(reader.GetOrdinal("stamina"));
+                                player.Overall = reader.GetInt32(reader.GetOrdinal("overall"));
+                                player.Potential = reader.GetInt32(reader.GetOrdinal("potential"));
+                                player.MinutesPlayed = reader.GetDouble(reader.GetOrdinal("minutesPlayed"));
+                                player.GameValue = reader.GetDouble(reader.GetOrdinal("gameValue"));
+                                players.Add(player);
+                            }
+                        }
+                    }
+                }
+
+                // find the average gameValue from players with overall, x - 5 < x < x + 5
+                // where x is the current player's overall e.g. 85 < x < 95 where overall is 90
+                // then we compare the current player's gameValue with average to calculate a new overall
+                // then apply attribute boosts
+                foreach (Player player in players)
+                {
+                    double playerGameValue = player.GameValue;
+                    double avgGameValue = -1;
+                    string averageGameValueQuery = $@"
+                    SELECT ROUND(AVG(pgs.gameValue), 1) as gameValue
+                    FROM players p
+                    JOIN playerGameStats pgs ON pgs.playerId = p.playerId AND pgs.isPlayoffs = 0
+                    WHERE overall < {player.Overall + 6} AND overall > {player.Overall - 6}
+                    ORDER BY ROUND(AVG(pgs.gameValue), 1) DESC
+
+                    ";
+                    using (var connection = new SQLiteConnection(ConnectionString))
+                    {
+                        connection.Open();
+                        using (var command = new SQLiteCommand(averageGameValueQuery, connection))
+                        {
+                            using (var reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    if (reader.IsDBNull(0)) avgGameValue = 5;
+                                    else avgGameValue = reader.GetDouble(0);
+                                }
+                            }
+                        }
+                    }
+
+                    // now we set the boost the player gets
+                    double finalBoost = 0;
+                    double playerGameValueDiff = playerGameValue - avgGameValue;
+                    // convert range of gameValueDiff (-18 to 25) to (-5 to 6)
+                    playerGameValueDiff = -5 + (5 + 6) * (playerGameValueDiff + 18) / (25 + 18);
+                    // convert range of age (18 to 35) to (-7 to 7)
+                    double ageVariable = -1 * (-7 + (7 + 7) * (player.Age - 18) / (35 - 18));
+                    finalBoost += playerGameValueDiff + ageVariable;
+                    // slightly randomises the boost, so there could be a slight increase or decrease in performance
+                    double finalBoostMultiplier = Player.GenerateRandomNormalDistribution(1, 0.12);
+                    finalBoost *= finalBoostMultiplier;
+                    finalBoost = Math.Round(finalBoost);
+                    if (player.Overall + finalBoost < 60 || player.Potential + finalBoost < 60) finalBoost = 0;
+                    else if (player.Overall + finalBoost > 99) finalBoost = 99 - player.Overall;
+                    else if (player.Potential + finalBoost > 99) finalBoost = 99 - player.Potential;
+                  
+
+                    // now we set the attributes
+                    {
+                        player.Layup += (int)finalBoost;
+                        if (player.Layup > 99) player.Layup = 99;
+                        else if (player.Layup < 25) player.Layup = 25;
+                        player.Dunk += (int)finalBoost;
+                        if (player.Dunk > 99) player.Dunk = 99;
+                        else if (player.Dunk < 25) player.Dunk = 25;
+                        player.MidRange += (int)finalBoost;
+                        if (player.MidRange > 99) player.MidRange = 99;
+                        else if (player.MidRange < 25) player.MidRange = 25;
+                        player.ThreePoint += (int)finalBoost;
+                        if (player.ThreePoint > 99) player.ThreePoint = 99;
+                        else if (player.ThreePoint < 25) player.ThreePoint = 25;
+                        player.FreeThrow += (int)finalBoost;
+                        if (player.FreeThrow > 99) player.FreeThrow = 99;
+                        else if (player.FreeThrow < 25) player.FreeThrow = 25;
+                        player.Passing += (int)finalBoost;
+                        if (player.Passing > 99) player.Passing = 99;
+                        else if (player.Passing < 25) player.Passing = 25;
+                        player.BallHandle += (int)finalBoost;
+                        if (player.BallHandle > 99) player.BallHandle = 99;
+                        else if (player.BallHandle < 25) player.BallHandle = 25;
+                        player.Defense += (int)finalBoost;
+                        if (player.Defense > 99) player.Defense = 99;
+                        else if (player.Defense < 25) player.Defense = 25;
+                        player.Steal += (int)finalBoost;
+                        if (player.Steal > 99) player.Steal = 99;
+                        else if (player.Steal < 25) player.Steal = 25;
+                        player.Block += (int)finalBoost;
+                        if (player.Block > 99) player.Block = 99;
+                        else if (player.Block < 25) player.Block = 25;
+                        player.Rebound += (int)finalBoost;
+                        if (player.Rebound > 99) player.Rebound = 99;
+                        else if (player.Rebound < 25) player.Rebound = 25;
+                        player.Speed += (int)finalBoost;
+                        if (player.Speed > 99) player.Speed = 99;
+                        else if (player.Speed < 25) player.Speed = 25;
+                        player.Stamina += (int)finalBoost;
+                        if (player.Stamina > 99) player.Stamina = 99;
+                        else if (player.Stamina < 25) player.Stamina = 25;
+                    }
+                    if (finalBoost < -3) { }
+                    int finalPotBoost = (int)finalBoost - 3;
+                    if (finalPotBoost < -6) player.Potential += 6 + finalPotBoost;
+                    else if (finalPotBoost < 0) { finalPotBoost = 0; }
+                    
+                    player.Overall += (int)finalBoost;
+                    player.Potential += (int)finalPotBoost;
+                    if (player.Overall > player.Potential) { player.Potential = player.Overall + finalPotBoost; }
+
+                    //update player's stats in database
+                    string setPlayerStatsQuery = $@"
+                    UPDATE players 
+                    SET layup = {player.Layup},
+                    dunk = {player.Dunk},
+                    midRange = {player.MidRange},
+                    threePoint = {player.ThreePoint},
+                    freeThrow = {player.FreeThrow},
+                    passing = {player.Passing},
+                    ballHandle = {player.BallHandle},
+                    defense = {player.Defense},
+                    steal = {player.Steal},
+                    block = {player.Block},
+                    rebound = {player.Rebound},
+                    speed = {player.Speed},
+                    stamina = {player.Stamina},
+                    overall = {player.Overall},
+                    potential = {player.Potential}
+                    WHERE playerId = {player.PlayerId}
+                    ";
+                    //now we add the player's progression to the database
+                    string insertProgressionQuery = $@"INSERT INTO playerProgression(playerId, seasonId, progression)
+                    VALUES({player.PlayerId}, {CurrentSeason}, {finalBoost})";
+                    using (var connection = new SQLiteConnection(ConnectionString))
+                    {
+                        connection.Open();
+                        using (var command = new SQLiteCommand(connection))
+                        {
+                            command.CommandText = insertProgressionQuery;
+                            command.ExecuteNonQuery();
+
+                            command.CommandText = setPlayerStatsQuery;
+                            command.ExecuteNonQuery();
+                        }
+                    }
+
+                }
+                
+            }
+
+            // move league into next season
+            {
+                Playoffs = false;
+                PlayoffsRound = "";
+                CurrentDay = 1;
+                CurrentSeason = 2;
+
+                // we generate a schedule for season 2
+                List<List<string>> newSchedule = GenerateSchedule();
+                InsertLeagueSchedule(newSchedule);
+            }
+        }
+
+        public List<string> GeneratePlayerSuffix(string currentSuffix)
+        {
+            string finalSuffix = "";
+            if (currentSuffix == "") { finalSuffix = "Jr."; currentSuffix = "Sr."; }
+            else if (currentSuffix == "Jr.") { finalSuffix = "III"; }
+            else if (currentSuffix == "III") { finalSuffix = "IV"; }
+            else if (currentSuffix == "IV") { finalSuffix = "V"; }
+            else if (currentSuffix == "V") { finalSuffix = "VI"; }
+
+            return new List<string>() { currentSuffix, finalSuffix };
         }
 
         public bool CheckIfInitialPlayoffRoundGamesComplete()
@@ -3360,7 +4659,75 @@ namespace LeagueSimulation
                 else SetGameToComplete(currentDayOfGame, teamsPlaying[0], teamsPlaying[1]);
                 return (simulatedGame.CommentatorPhrases, simulatedGame.ScoreAfterEachPhrase);
             }
+
+            // we check everyday up to the current game being simulated, where i is the current day
+            // if all games are complete, then we increase the season currentDay
+            bool allGamesComplete = true;
+            List<List<string>> schedule = new List<List<string>>();
+            if (Playoffs) schedule = CurrentPlayoffsSchedule;
+            else schedule = CurrentSchedule;
+            for (int j = 0; j < schedule[currentDayOfGame - 1].Count; j++)
+            {
+                string currentGame = schedule[currentDayOfGame - 1][j];
+                string[] currentTeamsPlaying = currentGame.Split(",");
+                gameComplete = false;
+                if (Playoffs) gameComplete = CheckIfPlayoffGameCompleted(currentDayOfGame, currentTeamsPlaying[0], currentTeamsPlaying[1]);
+                else gameComplete = CheckIfGameCompleted(currentDayOfGame, currentTeamsPlaying[0], currentTeamsPlaying[1]);
+                if (!gameComplete)
+                {
+                    allGamesComplete = false; break;
+                }
+            }
+            // here we check if we need to add any additional games
+            if (Playoffs)
+            {
+                // if all series are complete; we advance to the next round
+                if (CheckIfFullPlayoffRoundGamesComplete())
+                {
+                    MoveToNextPlayoffRound();
+                    if (PlayoffsRound == "Second Round") GeneratePlayoffsSecondRound();
+                    else if (PlayoffsRound == "Conference Finals") GeneratePlayoffsConferenceFinals();
+                    else if (PlayoffsRound == "Finals") GeneratePlayoffsFinals();
+                    CurrentPlayoffsSchedule = LoadPlayoffsSchedule();
+                }
+                // if all game 4s are complete, game 5s are complete etc. we add any initial games
+                // for any uncomplete series
+                if (CheckIfInitialPlayoffRoundGamesComplete())
+                {
+                    AddAnyNeededPlayoffGames();
+                    CurrentPlayoffsSchedule = LoadPlayoffsSchedule();
+                }
+            }
+            if (GamesPlayed == 1230)
+            {
+                // here, we move the league into playoffs mode
+                Playoffs = true;
+                PlayoffsRound = "First Round";
+                CurrentDay = 0;
+                SetCurrentDayForPlayoffs();
+                GeneratePlayoffsFirstRound();
+                CurrentPlayoffsSchedule = LoadPlayoffsSchedule();
+            }
+            if (allGamesComplete)
+            {
+                CurrentDay++;
+                UpdateLeagueDataIfNeeded(CurrentDay - 1);
+            }
             return (new List<string>(), new List<string>());
+        }
+
+        public string GetTeamNameFromCity(string city)
+        {
+            string getPlayerIdQuery = $"SELECT t.teamName FROM teams t WHERE t.city LIKE '{city}%';";
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var command = new SQLiteCommand(getPlayerIdQuery, connection))
+                {
+                    using (var reader = command.ExecuteReader()) while (reader.Read()) return reader.GetString(0);
+                }
+            }
+            return "";
         }
 
         public Player GetPlayerFromId(int playerId)
@@ -3415,6 +4782,20 @@ namespace LeagueSimulation
                 }
             }
             return playerTeam1;
+        }
+
+        public int GetPlayerIdFromName(string firstname, string surname)
+        {
+            string getPlayerIdQuery = $"SELECT p.playerId FROM players p WHERE p.playerForename = '{firstname}' AND p.playerSurname = '{surname}';";
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var command = new SQLiteCommand(getPlayerIdQuery, connection))
+                {
+                    using (var reader = command.ExecuteReader()) while (reader.Read()) return reader.GetInt32(0);
+                }
+            }
+            return 1;
         }
 
         public int GetGameId(string game, int currentDayOfGame)

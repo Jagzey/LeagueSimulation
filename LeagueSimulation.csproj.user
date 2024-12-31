@@ -19,6 +19,9 @@
     <Compile Update="Main.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="MenuForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="PlayerStatsUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -26,6 +29,9 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="RosterUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="SeasonSummaryUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="ViewGameResultsUserControl.cs">

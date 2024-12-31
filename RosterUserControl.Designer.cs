@@ -30,6 +30,7 @@
         {
             rosterFlowLayoutPanel = new FlowLayoutPanel();
             panel1 = new Panel();
+            teamRecordLabel = new Label();
             currentTeamRoster = new ComboBox();
             label1 = new Label();
             rosterLabel = new Label();
@@ -61,6 +62,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(teamRecordLabel);
             panel1.Controls.Add(currentTeamRoster);
             panel1.Controls.Add(label1);
             panel1.Controls.Add(rosterLabel);
@@ -68,6 +70,15 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(609, 60);
             panel1.TabIndex = 3;
+            // 
+            // teamRecordLabel
+            // 
+            teamRecordLabel.AutoSize = true;
+            teamRecordLabel.Location = new Point(402, 24);
+            teamRecordLabel.Name = "teamRecordLabel";
+            teamRecordLabel.Size = new Size(81, 15);
+            teamRecordLabel.TabIndex = 10;
+            teamRecordLabel.Text = "Team Record: ";
             // 
             // currentTeamRoster
             // 
@@ -101,12 +112,15 @@
             // 
             // rosterDataGridView
             // 
+            rosterDataGridView.AllowUserToAddRows = false;
+            rosterDataGridView.AllowUserToDeleteRows = false;
             rosterDataGridView.Columns.AddRange(new DataGridViewColumn[] { PlayerFirstname, PlayerSurname, Overall, Potential, Position, Age, MinutesPlayed, FGPCT, Points, Rebounds, Assists });
             rosterDataGridView.Location = new Point(3, 69);
             rosterDataGridView.Name = "rosterDataGridView";
             rosterDataGridView.ReadOnly = true;
             rosterDataGridView.Size = new Size(625, 312);
             rosterDataGridView.TabIndex = 2;
+            rosterDataGridView.CellClick += rosterDataGridView_CellClick;
             // 
             // PlayerFirstname
             // 
@@ -218,7 +232,7 @@
         private Label label1;
         private Label rosterLabel;
         private DataGridView rosterDataGridView;
-        private ComboBox currentTeamRoster;
+        public ComboBox currentTeamRoster;
         private DataGridViewTextBoxColumn PlayerFirstname;
         private DataGridViewTextBoxColumn PlayerSurname;
         private DataGridViewTextBoxColumn Overall;
@@ -230,5 +244,6 @@
         private DataGridViewTextBoxColumn Points;
         private DataGridViewTextBoxColumn Rebounds;
         private DataGridViewTextBoxColumn Assists;
+        private Label teamRecordLabel;
     }
 }
