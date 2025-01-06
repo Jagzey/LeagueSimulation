@@ -19,6 +19,8 @@ namespace LeagueSimulation
 
         public void FillLabels()
         {
+            if (!league.Playoffs) playoffsLabel.Hide();
+            else { string round = league.PlayoffsRound;  playoffsLabel.Text += $"\n {round.ToUpper()}"; }
             // we work out the conference standings in the dashboard
             {
                 List<string> userConferenceTeams = league.GetConferenceTeams(league.GetUserConferenceId());
@@ -182,6 +184,7 @@ namespace LeagueSimulation
             tenthPositionLabel = new Label();
             ninthPositionLabel = new Label();
             dashboardPanel1 = new Panel();
+            playoffsLabel = new Label();
             seasonYearLabel = new Label();
             seasonDayLabel = new Label();
             teamConfPositionLabel = new Label();
@@ -341,6 +344,7 @@ namespace LeagueSimulation
             // 
             // dashboardPanel1
             // 
+            dashboardPanel1.Controls.Add(playoffsLabel);
             dashboardPanel1.Controls.Add(seasonYearLabel);
             dashboardPanel1.Controls.Add(seasonDayLabel);
             dashboardPanel1.Controls.Add(teamConfPositionLabel);
@@ -350,8 +354,18 @@ namespace LeagueSimulation
             dashboardPanel1.Controls.Add(dashboardPanel);
             dashboardPanel1.Location = new Point(206, 3);
             dashboardPanel1.Name = "dashboardPanel1";
-            dashboardPanel1.Size = new Size(235, 181);
+            dashboardPanel1.Size = new Size(235, 287);
             dashboardPanel1.TabIndex = 4;
+            // 
+            // playoffsLabel
+            // 
+            playoffsLabel.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            playoffsLabel.Location = new Point(36, 191);
+            playoffsLabel.Name = "playoffsLabel";
+            playoffsLabel.Size = new Size(170, 83);
+            playoffsLabel.TabIndex = 12;
+            playoffsLabel.Text = "PLAYOFFS";
+            playoffsLabel.TextAlign = ContentAlignment.TopCenter;
             // 
             // seasonYearLabel
             // 
@@ -728,6 +742,7 @@ namespace LeagueSimulation
         private Panel panel2;
         private Label seasonDayLabel;
         private Label seasonYearLabel;
+        private Label playoffsLabel;
         private Label? dashboardPanel;
     }
 }

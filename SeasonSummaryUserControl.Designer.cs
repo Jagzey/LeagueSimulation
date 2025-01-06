@@ -30,39 +30,47 @@
         {
             seasonSummaryPanel = new Panel();
             seasonSummaryDataPanel = new Panel();
+            wfmvpPlayerStats = new Label();
+            wfmvpPlayerInfo = new Label();
+            label13 = new Label();
+            efmvpPlayerStats = new Label();
+            efmvpPlayerInfo = new Label();
+            label10 = new Label();
+            label5 = new Label();
+            easternConferenceBestRecordTeam = new Label();
             retiredPlayer2 = new Label();
             retiredPlayer1 = new Label();
             label8 = new Label();
             allDefense3SGPlayerStats = new Label();
-            label41 = new Label();
+            allDefense3SGPlayerInfo = new Label();
             allDefense3SFPlayerStats = new Label();
-            label43 = new Label();
+            allDefense3SFPlayerInfo = new Label();
             allDefense3PFPlayerStats = new Label();
-            label45 = new Label();
+            allDefense3PFPlayerInfo = new Label();
             allDefense3CPlayerStats = new Label();
-            label47 = new Label();
+            allDefense3CPlayerInfo = new Label();
             allDefense3PGPlayerStats = new Label();
-            label49 = new Label();
+            allDefense3PGPlayerInfo = new Label();
             label50 = new Label();
             allDefense2SGPlayerStats = new Label();
-            label52 = new Label();
+            allDefense2SGPlayerInfo = new Label();
             allDefense2SFPlayerStats = new Label();
-            label54 = new Label();
+            allDefense2SFPlayerInfo = new Label();
             allDefense2PFPlayerStats = new Label();
-            label56 = new Label();
+            allDefense2PFPlayerInfo = new Label();
             allDefense2CPlayerStats = new Label();
-            label58 = new Label();
+            allDefense2CPlayerInfo = new Label();
             allDefense2PGPlayerStats = new Label();
-            label60 = new Label();
+            allDefense2PGPlayerInfo = new Label();
             label61 = new Label();
             allDefense1SGPlayerStats = new Label();
-            label63 = new Label();
+            allDefense1SGPlayerInfo = new Label();
             allDefense1SFPlayerStats = new Label();
-            label65 = new Label();
+            allDefense1SFPlayerInfo = new Label();
             allDefense1PFPlayerStats = new Label();
-            label67 = new Label();
+            allDefense1PFPlayerInfo = new Label();
             allDefense1CPlayerStats = new Label();
-            label69 = new Label();
+            allDefense1CPlayerInfo = new Label();
             allDefense1PGPlayerStats = new Label();
             allDefense1PGPlayerInfo = new Label();
             label72 = new Label();
@@ -103,17 +111,14 @@
             westernConferenceBestRecordTeam = new Label();
             label2 = new Label();
             royPlayerStats = new Label();
-            mipPlayerStats = new Label();
             dpoyPlayerStats = new Label();
             fmvpPlayerStats = new Label();
             mvpPlayerStats = new Label();
             royPlayerInfo = new Label();
-            mipPlayerInfo = new Label();
             dpoyPlayerInfo = new Label();
             mvpPlayerInfo = new Label();
             fmvpPlayerInfo = new Label();
             label1 = new Label();
-            label4 = new Label();
             label3 = new Label();
             dpoyTitleLabel = new Label();
             mvpTitleLabel = new Label();
@@ -122,13 +127,13 @@
             bestRecordsTitleLabel = new Label();
             leagueChampsTitleLabel = new Label();
             seasonSummaryTitlePanel = new Panel();
+            seasonSummaryYear = new NumericUpDown();
             titleLabel = new Label();
             seasonYearLabel = new Label();
-            easternConferenceBestRecordTeam = new Label();
-            label5 = new Label();
             seasonSummaryPanel.SuspendLayout();
             seasonSummaryDataPanel.SuspendLayout();
             seasonSummaryTitlePanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)seasonSummaryYear).BeginInit();
             SuspendLayout();
             // 
             // seasonSummaryPanel
@@ -142,41 +147,47 @@
             // 
             // seasonSummaryDataPanel
             // 
+            seasonSummaryDataPanel.Controls.Add(wfmvpPlayerStats);
+            seasonSummaryDataPanel.Controls.Add(wfmvpPlayerInfo);
+            seasonSummaryDataPanel.Controls.Add(label13);
+            seasonSummaryDataPanel.Controls.Add(efmvpPlayerStats);
+            seasonSummaryDataPanel.Controls.Add(efmvpPlayerInfo);
+            seasonSummaryDataPanel.Controls.Add(label10);
             seasonSummaryDataPanel.Controls.Add(label5);
             seasonSummaryDataPanel.Controls.Add(easternConferenceBestRecordTeam);
             seasonSummaryDataPanel.Controls.Add(retiredPlayer2);
             seasonSummaryDataPanel.Controls.Add(retiredPlayer1);
             seasonSummaryDataPanel.Controls.Add(label8);
             seasonSummaryDataPanel.Controls.Add(allDefense3SGPlayerStats);
-            seasonSummaryDataPanel.Controls.Add(label41);
+            seasonSummaryDataPanel.Controls.Add(allDefense3SGPlayerInfo);
             seasonSummaryDataPanel.Controls.Add(allDefense3SFPlayerStats);
-            seasonSummaryDataPanel.Controls.Add(label43);
+            seasonSummaryDataPanel.Controls.Add(allDefense3SFPlayerInfo);
             seasonSummaryDataPanel.Controls.Add(allDefense3PFPlayerStats);
-            seasonSummaryDataPanel.Controls.Add(label45);
+            seasonSummaryDataPanel.Controls.Add(allDefense3PFPlayerInfo);
             seasonSummaryDataPanel.Controls.Add(allDefense3CPlayerStats);
-            seasonSummaryDataPanel.Controls.Add(label47);
+            seasonSummaryDataPanel.Controls.Add(allDefense3CPlayerInfo);
             seasonSummaryDataPanel.Controls.Add(allDefense3PGPlayerStats);
-            seasonSummaryDataPanel.Controls.Add(label49);
+            seasonSummaryDataPanel.Controls.Add(allDefense3PGPlayerInfo);
             seasonSummaryDataPanel.Controls.Add(label50);
             seasonSummaryDataPanel.Controls.Add(allDefense2SGPlayerStats);
-            seasonSummaryDataPanel.Controls.Add(label52);
+            seasonSummaryDataPanel.Controls.Add(allDefense2SGPlayerInfo);
             seasonSummaryDataPanel.Controls.Add(allDefense2SFPlayerStats);
-            seasonSummaryDataPanel.Controls.Add(label54);
+            seasonSummaryDataPanel.Controls.Add(allDefense2SFPlayerInfo);
             seasonSummaryDataPanel.Controls.Add(allDefense2PFPlayerStats);
-            seasonSummaryDataPanel.Controls.Add(label56);
+            seasonSummaryDataPanel.Controls.Add(allDefense2PFPlayerInfo);
             seasonSummaryDataPanel.Controls.Add(allDefense2CPlayerStats);
-            seasonSummaryDataPanel.Controls.Add(label58);
+            seasonSummaryDataPanel.Controls.Add(allDefense2CPlayerInfo);
             seasonSummaryDataPanel.Controls.Add(allDefense2PGPlayerStats);
-            seasonSummaryDataPanel.Controls.Add(label60);
+            seasonSummaryDataPanel.Controls.Add(allDefense2PGPlayerInfo);
             seasonSummaryDataPanel.Controls.Add(label61);
             seasonSummaryDataPanel.Controls.Add(allDefense1SGPlayerStats);
-            seasonSummaryDataPanel.Controls.Add(label63);
+            seasonSummaryDataPanel.Controls.Add(allDefense1SGPlayerInfo);
             seasonSummaryDataPanel.Controls.Add(allDefense1SFPlayerStats);
-            seasonSummaryDataPanel.Controls.Add(label65);
+            seasonSummaryDataPanel.Controls.Add(allDefense1SFPlayerInfo);
             seasonSummaryDataPanel.Controls.Add(allDefense1PFPlayerStats);
-            seasonSummaryDataPanel.Controls.Add(label67);
+            seasonSummaryDataPanel.Controls.Add(allDefense1PFPlayerInfo);
             seasonSummaryDataPanel.Controls.Add(allDefense1CPlayerStats);
-            seasonSummaryDataPanel.Controls.Add(label69);
+            seasonSummaryDataPanel.Controls.Add(allDefense1CPlayerInfo);
             seasonSummaryDataPanel.Controls.Add(allDefense1PGPlayerStats);
             seasonSummaryDataPanel.Controls.Add(allDefense1PGPlayerInfo);
             seasonSummaryDataPanel.Controls.Add(label72);
@@ -217,17 +228,14 @@
             seasonSummaryDataPanel.Controls.Add(westernConferenceBestRecordTeam);
             seasonSummaryDataPanel.Controls.Add(label2);
             seasonSummaryDataPanel.Controls.Add(royPlayerStats);
-            seasonSummaryDataPanel.Controls.Add(mipPlayerStats);
             seasonSummaryDataPanel.Controls.Add(dpoyPlayerStats);
             seasonSummaryDataPanel.Controls.Add(fmvpPlayerStats);
             seasonSummaryDataPanel.Controls.Add(mvpPlayerStats);
             seasonSummaryDataPanel.Controls.Add(royPlayerInfo);
-            seasonSummaryDataPanel.Controls.Add(mipPlayerInfo);
             seasonSummaryDataPanel.Controls.Add(dpoyPlayerInfo);
             seasonSummaryDataPanel.Controls.Add(mvpPlayerInfo);
             seasonSummaryDataPanel.Controls.Add(fmvpPlayerInfo);
             seasonSummaryDataPanel.Controls.Add(label1);
-            seasonSummaryDataPanel.Controls.Add(label4);
             seasonSummaryDataPanel.Controls.Add(label3);
             seasonSummaryDataPanel.Controls.Add(dpoyTitleLabel);
             seasonSummaryDataPanel.Controls.Add(mvpTitleLabel);
@@ -240,11 +248,91 @@
             seasonSummaryDataPanel.Size = new Size(988, 599);
             seasonSummaryDataPanel.TabIndex = 1;
             // 
+            // wfmvpPlayerStats
+            // 
+            wfmvpPlayerStats.AutoSize = true;
+            wfmvpPlayerStats.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            wfmvpPlayerStats.Location = new Point(16, 238);
+            wfmvpPlayerStats.Name = "wfmvpPlayerStats";
+            wfmvpPlayerStats.Size = new Size(124, 13);
+            wfmvpPlayerStats.TabIndex = 102;
+            wfmvpPlayerStats.Text = "33.2pts, 11.0reb, 3.8ast";
+            // 
+            // wfmvpPlayerInfo
+            // 
+            wfmvpPlayerInfo.AutoSize = true;
+            wfmvpPlayerInfo.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            wfmvpPlayerInfo.Location = new Point(16, 218);
+            wfmvpPlayerInfo.Name = "wfmvpPlayerInfo";
+            wfmvpPlayerInfo.Size = new Size(189, 20);
+            wfmvpPlayerInfo.TabIndex = 101;
+            wfmvpPlayerInfo.Text = "Marcus Anderson (Toronto)";
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label13.Location = new Point(16, 198);
+            label13.Name = "label13";
+            label13.Size = new Size(73, 20);
+            label13.TabIndex = 100;
+            label13.Text = "WFMVP: ";
+            // 
+            // efmvpPlayerStats
+            // 
+            efmvpPlayerStats.AutoSize = true;
+            efmvpPlayerStats.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            efmvpPlayerStats.Location = new Point(16, 173);
+            efmvpPlayerStats.Name = "efmvpPlayerStats";
+            efmvpPlayerStats.Size = new Size(124, 13);
+            efmvpPlayerStats.TabIndex = 99;
+            efmvpPlayerStats.Text = "33.2pts, 11.0reb, 3.8ast";
+            // 
+            // efmvpPlayerInfo
+            // 
+            efmvpPlayerInfo.AutoSize = true;
+            efmvpPlayerInfo.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            efmvpPlayerInfo.Location = new Point(16, 153);
+            efmvpPlayerInfo.Name = "efmvpPlayerInfo";
+            efmvpPlayerInfo.Size = new Size(189, 20);
+            efmvpPlayerInfo.TabIndex = 98;
+            efmvpPlayerInfo.Text = "Marcus Anderson (Toronto)";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label10.Location = new Point(16, 133);
+            label10.Name = "label10";
+            label10.Size = new Size(66, 20);
+            label10.TabIndex = 97;
+            label10.Text = "EFMVP: ";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label5.Location = new Point(16, 332);
+            label5.Name = "label5";
+            label5.Size = new Size(144, 20);
+            label5.TabIndex = 96;
+            label5.Text = "Western Conference:";
+            // 
+            // easternConferenceBestRecordTeam
+            // 
+            easternConferenceBestRecordTeam.AutoSize = true;
+            easternConferenceBestRecordTeam.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            easternConferenceBestRecordTeam.Location = new Point(16, 302);
+            easternConferenceBestRecordTeam.Name = "easternConferenceBestRecordTeam";
+            easternConferenceBestRecordTeam.Size = new Size(156, 20);
+            easternConferenceBestRecordTeam.TabIndex = 95;
+            easternConferenceBestRecordTeam.Text = "Toronto Titans (65-17)";
+            // 
             // retiredPlayer2
             // 
             retiredPlayer2.AutoSize = true;
             retiredPlayer2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            retiredPlayer2.Location = new Point(680, 62);
+            retiredPlayer2.Location = new Point(784, 62);
             retiredPlayer2.Name = "retiredPlayer2";
             retiredPlayer2.Size = new Size(96, 15);
             retiredPlayer2.TabIndex = 93;
@@ -254,7 +342,7 @@
             // 
             retiredPlayer1.AutoSize = true;
             retiredPlayer1.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            retiredPlayer1.Location = new Point(680, 46);
+            retiredPlayer1.Location = new Point(784, 46);
             retiredPlayer1.Name = "retiredPlayer1";
             retiredPlayer1.Size = new Size(129, 15);
             retiredPlayer1.TabIndex = 92;
@@ -264,7 +352,7 @@
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label8.Location = new Point(680, 22);
+            label8.Location = new Point(784, 22);
             label8.Name = "label8";
             label8.Size = new Size(118, 20);
             label8.TabIndex = 91;
@@ -274,107 +362,107 @@
             // 
             allDefense3SGPlayerStats.AutoSize = true;
             allDefense3SGPlayerStats.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            allDefense3SGPlayerStats.Location = new Point(468, 453);
+            allDefense3SGPlayerStats.Location = new Point(523, 453);
             allDefense3SGPlayerStats.Name = "allDefense3SGPlayerStats";
             allDefense3SGPlayerStats.Size = new Size(118, 13);
             allDefense3SGPlayerStats.TabIndex = 90;
             allDefense3SGPlayerStats.Text = "31.2pts, 9.0reb, 6.8ast";
             // 
-            // label41
+            // allDefense3SGPlayerInfo
             // 
-            label41.AutoSize = true;
-            label41.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label41.Location = new Point(468, 438);
-            label41.Name = "label41";
-            label41.Size = new Size(162, 15);
-            label41.TabIndex = 89;
-            label41.Text = "DeShawn Thompson (Seattle)";
+            allDefense3SGPlayerInfo.AutoSize = true;
+            allDefense3SGPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            allDefense3SGPlayerInfo.Location = new Point(523, 438);
+            allDefense3SGPlayerInfo.Name = "allDefense3SGPlayerInfo";
+            allDefense3SGPlayerInfo.Size = new Size(162, 15);
+            allDefense3SGPlayerInfo.TabIndex = 89;
+            allDefense3SGPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
             // allDefense3SFPlayerStats
             // 
             allDefense3SFPlayerStats.AutoSize = true;
             allDefense3SFPlayerStats.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            allDefense3SFPlayerStats.Location = new Point(468, 481);
+            allDefense3SFPlayerStats.Location = new Point(523, 481);
             allDefense3SFPlayerStats.Name = "allDefense3SFPlayerStats";
             allDefense3SFPlayerStats.Size = new Size(118, 13);
             allDefense3SFPlayerStats.TabIndex = 88;
             allDefense3SFPlayerStats.Text = "31.2pts, 9.0reb, 6.8ast";
             // 
-            // label43
+            // allDefense3SFPlayerInfo
             // 
-            label43.AutoSize = true;
-            label43.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label43.Location = new Point(468, 466);
-            label43.Name = "label43";
-            label43.Size = new Size(162, 15);
-            label43.TabIndex = 87;
-            label43.Text = "DeShawn Thompson (Seattle)";
+            allDefense3SFPlayerInfo.AutoSize = true;
+            allDefense3SFPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            allDefense3SFPlayerInfo.Location = new Point(523, 466);
+            allDefense3SFPlayerInfo.Name = "allDefense3SFPlayerInfo";
+            allDefense3SFPlayerInfo.Size = new Size(162, 15);
+            allDefense3SFPlayerInfo.TabIndex = 87;
+            allDefense3SFPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
             // allDefense3PFPlayerStats
             // 
             allDefense3PFPlayerStats.AutoSize = true;
             allDefense3PFPlayerStats.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            allDefense3PFPlayerStats.Location = new Point(468, 509);
+            allDefense3PFPlayerStats.Location = new Point(523, 509);
             allDefense3PFPlayerStats.Name = "allDefense3PFPlayerStats";
             allDefense3PFPlayerStats.Size = new Size(118, 13);
             allDefense3PFPlayerStats.TabIndex = 86;
             allDefense3PFPlayerStats.Text = "31.2pts, 9.0reb, 6.8ast";
             // 
-            // label45
+            // allDefense3PFPlayerInfo
             // 
-            label45.AutoSize = true;
-            label45.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label45.Location = new Point(468, 494);
-            label45.Name = "label45";
-            label45.Size = new Size(162, 15);
-            label45.TabIndex = 85;
-            label45.Text = "DeShawn Thompson (Seattle)";
+            allDefense3PFPlayerInfo.AutoSize = true;
+            allDefense3PFPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            allDefense3PFPlayerInfo.Location = new Point(523, 494);
+            allDefense3PFPlayerInfo.Name = "allDefense3PFPlayerInfo";
+            allDefense3PFPlayerInfo.Size = new Size(162, 15);
+            allDefense3PFPlayerInfo.TabIndex = 85;
+            allDefense3PFPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
             // allDefense3CPlayerStats
             // 
             allDefense3CPlayerStats.AutoSize = true;
             allDefense3CPlayerStats.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            allDefense3CPlayerStats.Location = new Point(468, 537);
+            allDefense3CPlayerStats.Location = new Point(523, 537);
             allDefense3CPlayerStats.Name = "allDefense3CPlayerStats";
             allDefense3CPlayerStats.Size = new Size(118, 13);
             allDefense3CPlayerStats.TabIndex = 84;
             allDefense3CPlayerStats.Text = "31.2pts, 9.0reb, 6.8ast";
             // 
-            // label47
+            // allDefense3CPlayerInfo
             // 
-            label47.AutoSize = true;
-            label47.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label47.Location = new Point(468, 522);
-            label47.Name = "label47";
-            label47.Size = new Size(162, 15);
-            label47.TabIndex = 83;
-            label47.Text = "DeShawn Thompson (Seattle)";
+            allDefense3CPlayerInfo.AutoSize = true;
+            allDefense3CPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            allDefense3CPlayerInfo.Location = new Point(523, 522);
+            allDefense3CPlayerInfo.Name = "allDefense3CPlayerInfo";
+            allDefense3CPlayerInfo.Size = new Size(162, 15);
+            allDefense3CPlayerInfo.TabIndex = 83;
+            allDefense3CPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
             // allDefense3PGPlayerStats
             // 
             allDefense3PGPlayerStats.AutoSize = true;
             allDefense3PGPlayerStats.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            allDefense3PGPlayerStats.Location = new Point(468, 425);
+            allDefense3PGPlayerStats.Location = new Point(523, 425);
             allDefense3PGPlayerStats.Name = "allDefense3PGPlayerStats";
             allDefense3PGPlayerStats.Size = new Size(118, 13);
             allDefense3PGPlayerStats.TabIndex = 82;
             allDefense3PGPlayerStats.Text = "31.2pts, 9.0reb, 6.8ast";
             // 
-            // label49
+            // allDefense3PGPlayerInfo
             // 
-            label49.AutoSize = true;
-            label49.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label49.Location = new Point(468, 410);
-            label49.Name = "label49";
-            label49.Size = new Size(162, 15);
-            label49.TabIndex = 81;
-            label49.Text = "DeShawn Thompson (Seattle)";
+            allDefense3PGPlayerInfo.AutoSize = true;
+            allDefense3PGPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            allDefense3PGPlayerInfo.Location = new Point(523, 410);
+            allDefense3PGPlayerInfo.Name = "allDefense3PGPlayerInfo";
+            allDefense3PGPlayerInfo.Size = new Size(162, 15);
+            allDefense3PGPlayerInfo.TabIndex = 81;
+            allDefense3PGPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
             // label50
             // 
             label50.AutoSize = true;
             label50.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label50.Location = new Point(468, 390);
+            label50.Location = new Point(523, 390);
             label50.Name = "label50";
             label50.Size = new Size(50, 20);
             label50.TabIndex = 80;
@@ -384,107 +472,107 @@
             // 
             allDefense2SGPlayerStats.AutoSize = true;
             allDefense2SGPlayerStats.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            allDefense2SGPlayerStats.Location = new Point(468, 281);
+            allDefense2SGPlayerStats.Location = new Point(523, 281);
             allDefense2SGPlayerStats.Name = "allDefense2SGPlayerStats";
             allDefense2SGPlayerStats.Size = new Size(118, 13);
             allDefense2SGPlayerStats.TabIndex = 79;
             allDefense2SGPlayerStats.Text = "31.2pts, 9.0reb, 6.8ast";
             // 
-            // label52
+            // allDefense2SGPlayerInfo
             // 
-            label52.AutoSize = true;
-            label52.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label52.Location = new Point(468, 266);
-            label52.Name = "label52";
-            label52.Size = new Size(162, 15);
-            label52.TabIndex = 78;
-            label52.Text = "DeShawn Thompson (Seattle)";
+            allDefense2SGPlayerInfo.AutoSize = true;
+            allDefense2SGPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            allDefense2SGPlayerInfo.Location = new Point(523, 266);
+            allDefense2SGPlayerInfo.Name = "allDefense2SGPlayerInfo";
+            allDefense2SGPlayerInfo.Size = new Size(162, 15);
+            allDefense2SGPlayerInfo.TabIndex = 78;
+            allDefense2SGPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
             // allDefense2SFPlayerStats
             // 
             allDefense2SFPlayerStats.AutoSize = true;
             allDefense2SFPlayerStats.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            allDefense2SFPlayerStats.Location = new Point(468, 309);
+            allDefense2SFPlayerStats.Location = new Point(523, 309);
             allDefense2SFPlayerStats.Name = "allDefense2SFPlayerStats";
             allDefense2SFPlayerStats.Size = new Size(118, 13);
             allDefense2SFPlayerStats.TabIndex = 77;
             allDefense2SFPlayerStats.Text = "31.2pts, 9.0reb, 6.8ast";
             // 
-            // label54
+            // allDefense2SFPlayerInfo
             // 
-            label54.AutoSize = true;
-            label54.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label54.Location = new Point(468, 294);
-            label54.Name = "label54";
-            label54.Size = new Size(162, 15);
-            label54.TabIndex = 76;
-            label54.Text = "DeShawn Thompson (Seattle)";
+            allDefense2SFPlayerInfo.AutoSize = true;
+            allDefense2SFPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            allDefense2SFPlayerInfo.Location = new Point(523, 294);
+            allDefense2SFPlayerInfo.Name = "allDefense2SFPlayerInfo";
+            allDefense2SFPlayerInfo.Size = new Size(162, 15);
+            allDefense2SFPlayerInfo.TabIndex = 76;
+            allDefense2SFPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
             // allDefense2PFPlayerStats
             // 
             allDefense2PFPlayerStats.AutoSize = true;
             allDefense2PFPlayerStats.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            allDefense2PFPlayerStats.Location = new Point(468, 337);
+            allDefense2PFPlayerStats.Location = new Point(523, 337);
             allDefense2PFPlayerStats.Name = "allDefense2PFPlayerStats";
             allDefense2PFPlayerStats.Size = new Size(118, 13);
             allDefense2PFPlayerStats.TabIndex = 75;
             allDefense2PFPlayerStats.Text = "31.2pts, 9.0reb, 6.8ast";
             // 
-            // label56
+            // allDefense2PFPlayerInfo
             // 
-            label56.AutoSize = true;
-            label56.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label56.Location = new Point(468, 322);
-            label56.Name = "label56";
-            label56.Size = new Size(162, 15);
-            label56.TabIndex = 74;
-            label56.Text = "DeShawn Thompson (Seattle)";
+            allDefense2PFPlayerInfo.AutoSize = true;
+            allDefense2PFPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            allDefense2PFPlayerInfo.Location = new Point(523, 322);
+            allDefense2PFPlayerInfo.Name = "allDefense2PFPlayerInfo";
+            allDefense2PFPlayerInfo.Size = new Size(162, 15);
+            allDefense2PFPlayerInfo.TabIndex = 74;
+            allDefense2PFPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
             // allDefense2CPlayerStats
             // 
             allDefense2CPlayerStats.AutoSize = true;
             allDefense2CPlayerStats.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            allDefense2CPlayerStats.Location = new Point(468, 365);
+            allDefense2CPlayerStats.Location = new Point(523, 365);
             allDefense2CPlayerStats.Name = "allDefense2CPlayerStats";
             allDefense2CPlayerStats.Size = new Size(118, 13);
             allDefense2CPlayerStats.TabIndex = 73;
             allDefense2CPlayerStats.Text = "31.2pts, 9.0reb, 6.8ast";
             // 
-            // label58
+            // allDefense2CPlayerInfo
             // 
-            label58.AutoSize = true;
-            label58.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label58.Location = new Point(468, 350);
-            label58.Name = "label58";
-            label58.Size = new Size(162, 15);
-            label58.TabIndex = 72;
-            label58.Text = "DeShawn Thompson (Seattle)";
+            allDefense2CPlayerInfo.AutoSize = true;
+            allDefense2CPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            allDefense2CPlayerInfo.Location = new Point(523, 350);
+            allDefense2CPlayerInfo.Name = "allDefense2CPlayerInfo";
+            allDefense2CPlayerInfo.Size = new Size(162, 15);
+            allDefense2CPlayerInfo.TabIndex = 72;
+            allDefense2CPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
             // allDefense2PGPlayerStats
             // 
             allDefense2PGPlayerStats.AutoSize = true;
             allDefense2PGPlayerStats.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            allDefense2PGPlayerStats.Location = new Point(468, 253);
+            allDefense2PGPlayerStats.Location = new Point(523, 253);
             allDefense2PGPlayerStats.Name = "allDefense2PGPlayerStats";
             allDefense2PGPlayerStats.Size = new Size(118, 13);
             allDefense2PGPlayerStats.TabIndex = 71;
             allDefense2PGPlayerStats.Text = "31.2pts, 9.0reb, 6.8ast";
             // 
-            // label60
+            // allDefense2PGPlayerInfo
             // 
-            label60.AutoSize = true;
-            label60.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label60.Location = new Point(468, 238);
-            label60.Name = "label60";
-            label60.Size = new Size(162, 15);
-            label60.TabIndex = 70;
-            label60.Text = "DeShawn Thompson (Seattle)";
+            allDefense2PGPlayerInfo.AutoSize = true;
+            allDefense2PGPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            allDefense2PGPlayerInfo.Location = new Point(523, 238);
+            allDefense2PGPlayerInfo.Name = "allDefense2PGPlayerInfo";
+            allDefense2PGPlayerInfo.Size = new Size(162, 15);
+            allDefense2PGPlayerInfo.TabIndex = 70;
+            allDefense2PGPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
             // label61
             // 
             label61.AutoSize = true;
             label61.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label61.Location = new Point(468, 218);
+            label61.Location = new Point(523, 218);
             label61.Name = "label61";
             label61.Size = new Size(67, 20);
             label61.TabIndex = 69;
@@ -494,87 +582,87 @@
             // 
             allDefense1SGPlayerStats.AutoSize = true;
             allDefense1SGPlayerStats.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            allDefense1SGPlayerStats.Location = new Point(468, 105);
+            allDefense1SGPlayerStats.Location = new Point(523, 105);
             allDefense1SGPlayerStats.Name = "allDefense1SGPlayerStats";
             allDefense1SGPlayerStats.Size = new Size(118, 13);
             allDefense1SGPlayerStats.TabIndex = 68;
             allDefense1SGPlayerStats.Text = "31.2pts, 9.0reb, 6.8ast";
             // 
-            // label63
+            // allDefense1SGPlayerInfo
             // 
-            label63.AutoSize = true;
-            label63.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label63.Location = new Point(468, 90);
-            label63.Name = "label63";
-            label63.Size = new Size(162, 15);
-            label63.TabIndex = 67;
-            label63.Text = "DeShawn Thompson (Seattle)";
+            allDefense1SGPlayerInfo.AutoSize = true;
+            allDefense1SGPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            allDefense1SGPlayerInfo.Location = new Point(523, 90);
+            allDefense1SGPlayerInfo.Name = "allDefense1SGPlayerInfo";
+            allDefense1SGPlayerInfo.Size = new Size(162, 15);
+            allDefense1SGPlayerInfo.TabIndex = 67;
+            allDefense1SGPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
             // allDefense1SFPlayerStats
             // 
             allDefense1SFPlayerStats.AutoSize = true;
             allDefense1SFPlayerStats.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            allDefense1SFPlayerStats.Location = new Point(468, 133);
+            allDefense1SFPlayerStats.Location = new Point(523, 133);
             allDefense1SFPlayerStats.Name = "allDefense1SFPlayerStats";
             allDefense1SFPlayerStats.Size = new Size(118, 13);
             allDefense1SFPlayerStats.TabIndex = 66;
             allDefense1SFPlayerStats.Text = "31.2pts, 9.0reb, 6.8ast";
             // 
-            // label65
+            // allDefense1SFPlayerInfo
             // 
-            label65.AutoSize = true;
-            label65.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label65.Location = new Point(468, 118);
-            label65.Name = "label65";
-            label65.Size = new Size(162, 15);
-            label65.TabIndex = 65;
-            label65.Text = "DeShawn Thompson (Seattle)";
+            allDefense1SFPlayerInfo.AutoSize = true;
+            allDefense1SFPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            allDefense1SFPlayerInfo.Location = new Point(523, 118);
+            allDefense1SFPlayerInfo.Name = "allDefense1SFPlayerInfo";
+            allDefense1SFPlayerInfo.Size = new Size(162, 15);
+            allDefense1SFPlayerInfo.TabIndex = 65;
+            allDefense1SFPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
             // allDefense1PFPlayerStats
             // 
             allDefense1PFPlayerStats.AutoSize = true;
             allDefense1PFPlayerStats.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            allDefense1PFPlayerStats.Location = new Point(468, 161);
+            allDefense1PFPlayerStats.Location = new Point(523, 161);
             allDefense1PFPlayerStats.Name = "allDefense1PFPlayerStats";
             allDefense1PFPlayerStats.Size = new Size(118, 13);
             allDefense1PFPlayerStats.TabIndex = 64;
             allDefense1PFPlayerStats.Text = "31.2pts, 9.0reb, 6.8ast";
             // 
-            // label67
+            // allDefense1PFPlayerInfo
             // 
-            label67.AutoSize = true;
-            label67.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label67.Location = new Point(468, 146);
-            label67.Name = "label67";
-            label67.Size = new Size(162, 15);
-            label67.TabIndex = 63;
-            label67.Text = "DeShawn Thompson (Seattle)";
+            allDefense1PFPlayerInfo.AutoSize = true;
+            allDefense1PFPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            allDefense1PFPlayerInfo.Location = new Point(523, 146);
+            allDefense1PFPlayerInfo.Name = "allDefense1PFPlayerInfo";
+            allDefense1PFPlayerInfo.Size = new Size(162, 15);
+            allDefense1PFPlayerInfo.TabIndex = 63;
+            allDefense1PFPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
             // allDefense1CPlayerStats
             // 
             allDefense1CPlayerStats.AutoSize = true;
             allDefense1CPlayerStats.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            allDefense1CPlayerStats.Location = new Point(468, 189);
+            allDefense1CPlayerStats.Location = new Point(523, 189);
             allDefense1CPlayerStats.Name = "allDefense1CPlayerStats";
             allDefense1CPlayerStats.Size = new Size(118, 13);
             allDefense1CPlayerStats.TabIndex = 62;
             allDefense1CPlayerStats.Text = "31.2pts, 9.0reb, 6.8ast";
             // 
-            // label69
+            // allDefense1CPlayerInfo
             // 
-            label69.AutoSize = true;
-            label69.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label69.Location = new Point(468, 174);
-            label69.Name = "label69";
-            label69.Size = new Size(162, 15);
-            label69.TabIndex = 61;
-            label69.Text = "DeShawn Thompson (Seattle)";
+            allDefense1CPlayerInfo.AutoSize = true;
+            allDefense1CPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            allDefense1CPlayerInfo.Location = new Point(523, 174);
+            allDefense1CPlayerInfo.Name = "allDefense1CPlayerInfo";
+            allDefense1CPlayerInfo.Size = new Size(162, 15);
+            allDefense1CPlayerInfo.TabIndex = 61;
+            allDefense1CPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
             // allDefense1PGPlayerStats
             // 
             allDefense1PGPlayerStats.AutoSize = true;
             allDefense1PGPlayerStats.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            allDefense1PGPlayerStats.Location = new Point(468, 77);
+            allDefense1PGPlayerStats.Location = new Point(523, 77);
             allDefense1PGPlayerStats.Name = "allDefense1PGPlayerStats";
             allDefense1PGPlayerStats.Size = new Size(115, 13);
             allDefense1PGPlayerStats.TabIndex = 60;
@@ -584,7 +672,7 @@
             // 
             allDefense1PGPlayerInfo.AutoSize = true;
             allDefense1PGPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            allDefense1PGPlayerInfo.Location = new Point(468, 62);
+            allDefense1PGPlayerInfo.Location = new Point(523, 62);
             allDefense1PGPlayerInfo.Name = "allDefense1PGPlayerInfo";
             allDefense1PGPlayerInfo.Size = new Size(162, 15);
             allDefense1PGPlayerInfo.TabIndex = 59;
@@ -594,7 +682,7 @@
             // 
             label72.AutoSize = true;
             label72.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label72.Location = new Point(468, 42);
+            label72.Location = new Point(523, 42);
             label72.Name = "label72";
             label72.Size = new Size(48, 20);
             label72.TabIndex = 58;
@@ -604,7 +692,7 @@
             // 
             label73.AutoSize = true;
             label73.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label73.Location = new Point(468, 22);
+            label73.Location = new Point(523, 22);
             label73.Name = "label73";
             label73.Size = new Size(144, 20);
             label73.TabIndex = 57;
@@ -944,7 +1032,7 @@
             // 
             westernConferenceBestRecordTeam.AutoSize = true;
             westernConferenceBestRecordTeam.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            westernConferenceBestRecordTeam.Location = new Point(16, 266);
+            westernConferenceBestRecordTeam.Location = new Point(16, 352);
             westernConferenceBestRecordTeam.Name = "westernConferenceBestRecordTeam";
             westernConferenceBestRecordTeam.Size = new Size(199, 20);
             westernConferenceBestRecordTeam.TabIndex = 23;
@@ -964,27 +1052,17 @@
             // 
             royPlayerStats.AutoSize = true;
             royPlayerStats.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            royPlayerStats.Location = new Point(21, 534);
+            royPlayerStats.Location = new Point(21, 558);
             royPlayerStats.Name = "royPlayerStats";
             royPlayerStats.Size = new Size(118, 13);
             royPlayerStats.TabIndex = 20;
             royPlayerStats.Text = "16.0pts, 4.0reb, 3.2ast";
             // 
-            // mipPlayerStats
-            // 
-            mipPlayerStats.AutoSize = true;
-            mipPlayerStats.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            mipPlayerStats.Location = new Point(21, 472);
-            mipPlayerStats.Name = "mipPlayerStats";
-            mipPlayerStats.Size = new Size(118, 13);
-            mipPlayerStats.TabIndex = 19;
-            mipPlayerStats.Text = "20.2pts, 1.9reb, 8.2ast";
-            // 
             // dpoyPlayerStats
             // 
             dpoyPlayerStats.AutoSize = true;
             dpoyPlayerStats.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dpoyPlayerStats.Location = new Point(21, 410);
+            dpoyPlayerStats.Location = new Point(21, 494);
             dpoyPlayerStats.Name = "dpoyPlayerStats";
             dpoyPlayerStats.Size = new Size(118, 13);
             dpoyPlayerStats.TabIndex = 18;
@@ -994,7 +1072,7 @@
             // 
             fmvpPlayerStats.AutoSize = true;
             fmvpPlayerStats.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            fmvpPlayerStats.Location = new Point(16, 147);
+            fmvpPlayerStats.Location = new Point(16, 112);
             fmvpPlayerStats.Name = "fmvpPlayerStats";
             fmvpPlayerStats.Size = new Size(124, 13);
             fmvpPlayerStats.TabIndex = 17;
@@ -1004,7 +1082,7 @@
             // 
             mvpPlayerStats.AutoSize = true;
             mvpPlayerStats.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            mvpPlayerStats.Location = new Point(21, 349);
+            mvpPlayerStats.Location = new Point(16, 425);
             mvpPlayerStats.Name = "mvpPlayerStats";
             mvpPlayerStats.Size = new Size(118, 13);
             mvpPlayerStats.TabIndex = 16;
@@ -1014,27 +1092,17 @@
             // 
             royPlayerInfo.AutoSize = true;
             royPlayerInfo.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            royPlayerInfo.Location = new Point(16, 514);
+            royPlayerInfo.Location = new Point(16, 532);
             royPlayerInfo.Name = "royPlayerInfo";
             royPlayerInfo.Size = new Size(145, 20);
             royPlayerInfo.TabIndex = 15;
             royPlayerInfo.Text = "Charles Lee (Detroit)";
             // 
-            // mipPlayerInfo
-            // 
-            mipPlayerInfo.AutoSize = true;
-            mipPlayerInfo.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            mipPlayerInfo.Location = new Point(16, 452);
-            mipPlayerInfo.Name = "mipPlayerInfo";
-            mipPlayerInfo.Size = new Size(163, 20);
-            mipPlayerInfo.TabIndex = 14;
-            mipPlayerInfo.Text = "Michael Lee (Charlotte)";
-            // 
             // dpoyPlayerInfo
             // 
             dpoyPlayerInfo.AutoSize = true;
             dpoyPlayerInfo.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dpoyPlayerInfo.Location = new Point(16, 390);
+            dpoyPlayerInfo.Location = new Point(16, 474);
             dpoyPlayerInfo.Name = "dpoyPlayerInfo";
             dpoyPlayerInfo.Size = new Size(205, 20);
             dpoyPlayerInfo.TabIndex = 13;
@@ -1044,7 +1112,7 @@
             // 
             mvpPlayerInfo.AutoSize = true;
             mvpPlayerInfo.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            mvpPlayerInfo.Location = new Point(16, 329);
+            mvpPlayerInfo.Location = new Point(16, 406);
             mvpPlayerInfo.Name = "mvpPlayerInfo";
             mvpPlayerInfo.Size = new Size(205, 20);
             mvpPlayerInfo.TabIndex = 12;
@@ -1054,7 +1122,7 @@
             // 
             fmvpPlayerInfo.AutoSize = true;
             fmvpPlayerInfo.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            fmvpPlayerInfo.Location = new Point(16, 128);
+            fmvpPlayerInfo.Location = new Point(16, 92);
             fmvpPlayerInfo.Name = "fmvpPlayerInfo";
             fmvpPlayerInfo.Size = new Size(189, 20);
             fmvpPlayerInfo.TabIndex = 11;
@@ -1064,27 +1132,17 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(16, 494);
+            label1.Location = new Point(16, 512);
             label1.Name = "label1";
             label1.Size = new Size(142, 20);
             label1.TabIndex = 10;
             label1.Text = "Rookie of the Year:";
             // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label4.Location = new Point(16, 432);
-            label4.Name = "label4";
-            label4.Size = new Size(173, 20);
-            label4.TabIndex = 9;
-            label4.Text = "Most Improved Player: ";
-            // 
             // label3
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label3.Location = new Point(16, 102);
+            label3.Location = new Point(16, 72);
             label3.Name = "label3";
             label3.Size = new Size(58, 20);
             label3.TabIndex = 8;
@@ -1094,7 +1152,7 @@
             // 
             dpoyTitleLabel.AutoSize = true;
             dpoyTitleLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            dpoyTitleLabel.Location = new Point(16, 370);
+            dpoyTitleLabel.Location = new Point(16, 454);
             dpoyTitleLabel.Name = "dpoyTitleLabel";
             dpoyTitleLabel.Size = new Size(210, 20);
             dpoyTitleLabel.TabIndex = 7;
@@ -1104,7 +1162,7 @@
             // 
             mvpTitleLabel.AutoSize = true;
             mvpTitleLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            mvpTitleLabel.Location = new Point(16, 309);
+            mvpTitleLabel.Location = new Point(16, 386);
             mvpTitleLabel.Name = "mvpTitleLabel";
             mvpTitleLabel.Size = new Size(160, 20);
             mvpTitleLabel.TabIndex = 6;
@@ -1124,7 +1182,7 @@
             // 
             eastLabelTitle.AutoSize = true;
             eastLabelTitle.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            eastLabelTitle.Location = new Point(16, 198);
+            eastLabelTitle.Location = new Point(16, 282);
             eastLabelTitle.Name = "eastLabelTitle";
             eastLabelTitle.Size = new Size(139, 20);
             eastLabelTitle.TabIndex = 3;
@@ -1134,7 +1192,7 @@
             // 
             bestRecordsTitleLabel.AutoSize = true;
             bestRecordsTitleLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            bestRecordsTitleLabel.Location = new Point(16, 168);
+            bestRecordsTitleLabel.Location = new Point(16, 261);
             bestRecordsTitleLabel.Name = "bestRecordsTitleLabel";
             bestRecordsTitleLabel.Size = new Size(104, 20);
             bestRecordsTitleLabel.TabIndex = 2;
@@ -1152,12 +1210,24 @@
             // 
             // seasonSummaryTitlePanel
             // 
+            seasonSummaryTitlePanel.Controls.Add(seasonSummaryYear);
             seasonSummaryTitlePanel.Controls.Add(titleLabel);
             seasonSummaryTitlePanel.Controls.Add(seasonYearLabel);
             seasonSummaryTitlePanel.Location = new Point(3, 3);
             seasonSummaryTitlePanel.Name = "seasonSummaryTitlePanel";
             seasonSummaryTitlePanel.Size = new Size(988, 53);
             seasonSummaryTitlePanel.TabIndex = 0;
+            // 
+            // seasonSummaryYear
+            // 
+            seasonSummaryYear.Location = new Point(106, 16);
+            seasonSummaryYear.Maximum = new decimal(new int[] { 2024, 0, 0, 0 });
+            seasonSummaryYear.Minimum = new decimal(new int[] { 2024, 0, 0, 0 });
+            seasonSummaryYear.Name = "seasonSummaryYear";
+            seasonSummaryYear.Size = new Size(120, 23);
+            seasonSummaryYear.TabIndex = 2;
+            seasonSummaryYear.Value = new decimal(new int[] { 2024, 0, 0, 0 });
+            seasonSummaryYear.ValueChanged += seasonSummaryYear_ValueChanged;
             // 
             // titleLabel
             // 
@@ -1179,26 +1249,6 @@
             seasonYearLabel.TabIndex = 0;
             seasonYearLabel.Text = "Season Year: ";
             // 
-            // easternConferenceBestRecordTeam
-            // 
-            easternConferenceBestRecordTeam.AutoSize = true;
-            easternConferenceBestRecordTeam.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            easternConferenceBestRecordTeam.Location = new Point(16, 218);
-            easternConferenceBestRecordTeam.Name = "easternConferenceBestRecordTeam";
-            easternConferenceBestRecordTeam.Size = new Size(156, 20);
-            easternConferenceBestRecordTeam.TabIndex = 95;
-            easternConferenceBestRecordTeam.Text = "Toronto Titans (65-17)";
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label5.Location = new Point(16, 248);
-            label5.Name = "label5";
-            label5.Size = new Size(144, 20);
-            label5.TabIndex = 96;
-            label5.Text = "Western Conference:";
-            // 
             // SeasonSummaryUserControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1211,6 +1261,7 @@
             seasonSummaryDataPanel.PerformLayout();
             seasonSummaryTitlePanel.ResumeLayout(false);
             seasonSummaryTitlePanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)seasonSummaryYear).EndInit();
             ResumeLayout(false);
         }
 
@@ -1226,19 +1277,16 @@
         private Label leagueChampsTeamLabel;
         private Label westernConferenceBestRecordTeam;
         private Label royPlayerInfo;
-        private Label mipPlayerInfo;
         private Label dpoyPlayerInfo;
         private Label mvpPlayerInfo;
         private Label fmvpPlayerInfo;
         private Label label1;
-        private Label label4;
         private Label label3;
         private Label dpoyTitleLabel;
         private Label mvpTitleLabel;
         private Label fmvpPlayerStats;
         private Label mvpPlayerStats;
         private Label royPlayerStats;
-        private Label mipPlayerStats;
         private Label dpoyPlayerStats;
         private Label label6;
         //private Label easternConferenceBestRecordLabel;
@@ -1255,35 +1303,35 @@
         private Label allNBA1PGPlayerStats;
         private Label allNBA1PGPlayerInfo;
         private Label allDefense3SGPlayerStats;
-        private Label label41;
+        private Label allDefense3SGPlayerInfo;
         private Label allDefense3SFPlayerStats;
-        private Label label43;
+        private Label allDefense3SFPlayerInfo;
         private Label allDefense3PFPlayerStats;
-        private Label label45;
+        private Label allDefense3PFPlayerInfo;
         private Label allDefense3CPlayerStats;
-        private Label label47;
+        private Label allDefense3CPlayerInfo;
         private Label allDefense3PGPlayerStats;
-        private Label label49;
+        private Label allDefense3PGPlayerInfo;
         private Label label50;
         private Label allDefense2SGPlayerStats;
-        private Label label52;
+        private Label allDefense2SGPlayerInfo;
         private Label allDefense2SFPlayerStats;
-        private Label label54;
+        private Label allDefense2SFPlayerInfo;
         private Label allDefense2PFPlayerStats;
-        private Label label56;
+        private Label allDefense2PFPlayerInfo;
         private Label allDefense2CPlayerStats;
-        private Label label58;
+        private Label allDefense2CPlayerInfo;
         private Label allDefense2PGPlayerStats;
-        private Label label60;
+        private Label allDefense2PGPlayerInfo;
         private Label label61;
         private Label allDefense1SGPlayerStats;
-        private Label label63;
+        private Label allDefense1SGPlayerInfo;
         private Label allDefense1SFPlayerStats;
-        private Label label65;
+        private Label allDefense1SFPlayerInfo;
         private Label allDefense1PFPlayerStats;
-        private Label label67;
+        private Label allDefense1PFPlayerInfo;
         private Label allDefense1CPlayerStats;
-        private Label label69;
+        private Label allDefense1CPlayerInfo;
         private Label allDefense1PGPlayerStats;
         private Label allDefense1PGPlayerInfo;
         private Label label72;
@@ -1316,5 +1364,12 @@
         private Label eastLabelTitle;
         private Label easternConferenceBestRecordTeam;
         private Label label5;
+        private Label wfmvpPlayerStats;
+        private Label wfmvpPlayerInfo;
+        private Label label13;
+        private Label efmvpPlayerStats;
+        private Label efmvpPlayerInfo;
+        private Label label10;
+        private NumericUpDown seasonSummaryYear;
     }
 }

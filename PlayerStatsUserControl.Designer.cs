@@ -61,21 +61,6 @@
             BLK = new DataGridViewTextBoxColumn();
             TOV = new DataGridViewTextBoxColumn();
             attributesGridView = new DataGridView();
-            summaryGridView = new DataGridView();
-            gamesPlayed = new DataGridViewTextBoxColumn();
-            PTS = new DataGridViewTextBoxColumn();
-            REB = new DataGridViewTextBoxColumn();
-            AST = new DataGridViewTextBoxColumn();
-            FGPCT = new DataGridViewTextBoxColumn();
-            TFGPCT = new DataGridViewTextBoxColumn();
-            ageLabel = new Label();
-            dateOfBirthLabel = new Label();
-            playstyleLabel = new Label();
-            positionLabel = new Label();
-            weightLabel = new Label();
-            heightLabel = new Label();
-            teamNameLabel = new Label();
-            playerNameLabel = new Label();
             ageAttributes = new DataGridViewTextBoxColumn();
             overallAttributes = new DataGridViewTextBoxColumn();
             potentialAttributes = new DataGridViewTextBoxColumn();
@@ -92,6 +77,21 @@
             rebound = new DataGridViewTextBoxColumn();
             speed = new DataGridViewTextBoxColumn();
             stamina = new DataGridViewTextBoxColumn();
+            summaryGridView = new DataGridView();
+            gamesPlayed = new DataGridViewTextBoxColumn();
+            PTS = new DataGridViewTextBoxColumn();
+            REB = new DataGridViewTextBoxColumn();
+            AST = new DataGridViewTextBoxColumn();
+            FGPCT = new DataGridViewTextBoxColumn();
+            TFGPCT = new DataGridViewTextBoxColumn();
+            ageLabel = new Label();
+            dateOfBirthLabel = new Label();
+            playstyleLabel = new Label();
+            positionLabel = new Label();
+            weightLabel = new Label();
+            heightLabel = new Label();
+            teamNameLabel = new Label();
+            playerNameLabel = new Label();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)playerIdUpDown).BeginInit();
             panel2.SuspendLayout();
@@ -155,16 +155,15 @@
             panel2.Controls.Add(playerNameLabel);
             panel2.Location = new Point(3, 52);
             panel2.Name = "panel2";
-            panel2.Size = new Size(887, 720);
+            panel2.Size = new Size(887, 671);
             panel2.TabIndex = 1;
             // 
             // awardsLabel
             // 
-            awardsLabel.AutoSize = true;
             awardsLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            awardsLabel.Location = new Point(443, 43);
+            awardsLabel.Location = new Point(442, 12);
             awardsLabel.Name = "awardsLabel";
-            awardsLabel.Size = new Size(61, 20);
+            awardsLabel.Size = new Size(264, 261);
             awardsLabel.TabIndex = 11;
             awardsLabel.Text = "Awards:";
             // 
@@ -190,7 +189,7 @@
             dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
             seasonDataGridView.DefaultCellStyle = dataGridViewCellStyle2;
-            seasonDataGridView.Location = new Point(35, 459);
+            seasonDataGridView.Location = new Point(35, 429);
             seasonDataGridView.Name = "seasonDataGridView";
             seasonDataGridView.ReadOnly = true;
             dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -382,7 +381,7 @@
             dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
             dataGridViewCellStyle6.WrapMode = DataGridViewTriState.False;
             attributesGridView.DefaultCellStyle = dataGridViewCellStyle6;
-            attributesGridView.Location = new Point(35, 296);
+            attributesGridView.Location = new Point(35, 276);
             attributesGridView.Name = "attributesGridView";
             attributesGridView.ReadOnly = true;
             dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -395,146 +394,6 @@
             attributesGridView.RowHeadersDefaultCellStyle = dataGridViewCellStyle7;
             attributesGridView.Size = new Size(823, 137);
             attributesGridView.TabIndex = 9;
-            // 
-            // summaryGridView
-            // 
-            summaryGridView.AllowUserToAddRows = false;
-            summaryGridView.AllowUserToDeleteRows = false;
-            summaryGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            summaryGridView.Columns.AddRange(new DataGridViewColumn[] { gamesPlayed, PTS, REB, AST, FGPCT, TFGPCT });
-            summaryGridView.Location = new Point(35, 133);
-            summaryGridView.Name = "summaryGridView";
-            summaryGridView.ReadOnly = true;
-            summaryGridView.Size = new Size(394, 137);
-            summaryGridView.TabIndex = 8;
-            // 
-            // gamesPlayed
-            // 
-            gamesPlayed.DataPropertyName = "gamesPlayed";
-            gamesPlayed.HeaderText = "GP";
-            gamesPlayed.Name = "gamesPlayed";
-            gamesPlayed.ReadOnly = true;
-            gamesPlayed.Width = 50;
-            // 
-            // PTS
-            // 
-            PTS.DataPropertyName = "PTS";
-            PTS.HeaderText = "PTS";
-            PTS.Name = "PTS";
-            PTS.ReadOnly = true;
-            PTS.Width = 60;
-            // 
-            // REB
-            // 
-            REB.DataPropertyName = "REB";
-            REB.HeaderText = "REB";
-            REB.Name = "REB";
-            REB.ReadOnly = true;
-            REB.Width = 60;
-            // 
-            // AST
-            // 
-            AST.DataPropertyName = "AST";
-            AST.HeaderText = "AST";
-            AST.Name = "AST";
-            AST.ReadOnly = true;
-            AST.Width = 60;
-            // 
-            // FGPCT
-            // 
-            FGPCT.DataPropertyName = "FGPCT";
-            FGPCT.HeaderText = "FG%";
-            FGPCT.Name = "FGPCT";
-            FGPCT.ReadOnly = true;
-            FGPCT.Width = 60;
-            // 
-            // TFGPCT
-            // 
-            TFGPCT.DataPropertyName = "TFGPCT";
-            TFGPCT.HeaderText = "3P%";
-            TFGPCT.Name = "TFGPCT";
-            TFGPCT.ReadOnly = true;
-            TFGPCT.Width = 60;
-            // 
-            // ageLabel
-            // 
-            ageLabel.AutoSize = true;
-            ageLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            ageLabel.Location = new Point(712, 208);
-            ageLabel.Name = "ageLabel";
-            ageLabel.Size = new Size(59, 20);
-            ageLabel.TabIndex = 7;
-            ageLabel.Text = "Age: 25";
-            // 
-            // dateOfBirthLabel
-            // 
-            dateOfBirthLabel.AutoSize = true;
-            dateOfBirthLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dateOfBirthLabel.Location = new Point(709, 179);
-            dateOfBirthLabel.Name = "dateOfBirthLabel";
-            dateOfBirthLabel.Size = new Size(135, 20);
-            dateOfBirthLabel.TabIndex = 6;
-            dateOfBirthLabel.Text = "Date Of Birth: 1999";
-            // 
-            // playstyleLabel
-            // 
-            playstyleLabel.AutoSize = true;
-            playstyleLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            playstyleLabel.Location = new Point(712, 150);
-            playstyleLabel.Name = "playstyleLabel";
-            playstyleLabel.Size = new Size(123, 20);
-            playstyleLabel.TabIndex = 5;
-            playstyleLabel.Text = "Playstyle: Finisher";
-            // 
-            // positionLabel
-            // 
-            positionLabel.AutoSize = true;
-            positionLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            positionLabel.Location = new Point(712, 115);
-            positionLabel.Name = "positionLabel";
-            positionLabel.Size = new Size(77, 20);
-            positionLabel.TabIndex = 4;
-            positionLabel.Text = "Position: C";
-            // 
-            // weightLabel
-            // 
-            weightLabel.AutoSize = true;
-            weightLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            weightLabel.Location = new Point(709, 79);
-            weightLabel.Name = "weightLabel";
-            weightLabel.Size = new Size(110, 20);
-            weightLabel.TabIndex = 3;
-            weightLabel.Text = "Weight: 210 lbs";
-            // 
-            // heightLabel
-            // 
-            heightLabel.AutoSize = true;
-            heightLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            heightLabel.Location = new Point(709, 43);
-            heightLabel.Name = "heightLabel";
-            heightLabel.Size = new Size(80, 20);
-            heightLabel.TabIndex = 2;
-            heightLabel.Text = "Height: 6'5";
-            // 
-            // teamNameLabel
-            // 
-            teamNameLabel.AutoSize = true;
-            teamNameLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            teamNameLabel.Location = new Point(50, 85);
-            teamNameLabel.Name = "teamNameLabel";
-            teamNameLabel.Size = new Size(213, 20);
-            teamNameLabel.TabIndex = 1;
-            teamNameLabel.Text = "Team Name: New York Bankers";
-            // 
-            // playerNameLabel
-            // 
-            playerNameLabel.AutoSize = true;
-            playerNameLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            playerNameLabel.Location = new Point(50, 36);
-            playerNameLabel.Name = "playerNameLabel";
-            playerNameLabel.Size = new Size(179, 20);
-            playerNameLabel.TabIndex = 0;
-            playerNameLabel.Text = "Name: Dontae Thompson";
             // 
             // ageAttributes
             // 
@@ -664,6 +523,146 @@
             stamina.ReadOnly = true;
             stamina.Width = 65;
             // 
+            // summaryGridView
+            // 
+            summaryGridView.AllowUserToAddRows = false;
+            summaryGridView.AllowUserToDeleteRows = false;
+            summaryGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            summaryGridView.Columns.AddRange(new DataGridViewColumn[] { gamesPlayed, PTS, REB, AST, FGPCT, TFGPCT });
+            summaryGridView.Location = new Point(35, 103);
+            summaryGridView.Name = "summaryGridView";
+            summaryGridView.ReadOnly = true;
+            summaryGridView.Size = new Size(385, 69);
+            summaryGridView.TabIndex = 8;
+            // 
+            // gamesPlayed
+            // 
+            gamesPlayed.DataPropertyName = "gamesPlayed";
+            gamesPlayed.HeaderText = "GP";
+            gamesPlayed.Name = "gamesPlayed";
+            gamesPlayed.ReadOnly = true;
+            gamesPlayed.Width = 50;
+            // 
+            // PTS
+            // 
+            PTS.DataPropertyName = "PTS";
+            PTS.HeaderText = "PTS";
+            PTS.Name = "PTS";
+            PTS.ReadOnly = true;
+            PTS.Width = 60;
+            // 
+            // REB
+            // 
+            REB.DataPropertyName = "REB";
+            REB.HeaderText = "REB";
+            REB.Name = "REB";
+            REB.ReadOnly = true;
+            REB.Width = 60;
+            // 
+            // AST
+            // 
+            AST.DataPropertyName = "AST";
+            AST.HeaderText = "AST";
+            AST.Name = "AST";
+            AST.ReadOnly = true;
+            AST.Width = 60;
+            // 
+            // FGPCT
+            // 
+            FGPCT.DataPropertyName = "FGPCT";
+            FGPCT.HeaderText = "FG%";
+            FGPCT.Name = "FGPCT";
+            FGPCT.ReadOnly = true;
+            FGPCT.Width = 60;
+            // 
+            // TFGPCT
+            // 
+            TFGPCT.DataPropertyName = "TFGPCT";
+            TFGPCT.HeaderText = "3P%";
+            TFGPCT.Name = "TFGPCT";
+            TFGPCT.ReadOnly = true;
+            TFGPCT.Width = 60;
+            // 
+            // ageLabel
+            // 
+            ageLabel.AutoSize = true;
+            ageLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            ageLabel.Location = new Point(712, 196);
+            ageLabel.Name = "ageLabel";
+            ageLabel.Size = new Size(59, 20);
+            ageLabel.TabIndex = 7;
+            ageLabel.Text = "Age: 25";
+            // 
+            // dateOfBirthLabel
+            // 
+            dateOfBirthLabel.AutoSize = true;
+            dateOfBirthLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dateOfBirthLabel.Location = new Point(712, 163);
+            dateOfBirthLabel.Name = "dateOfBirthLabel";
+            dateOfBirthLabel.Size = new Size(135, 20);
+            dateOfBirthLabel.TabIndex = 6;
+            dateOfBirthLabel.Text = "Date Of Birth: 1999";
+            // 
+            // playstyleLabel
+            // 
+            playstyleLabel.AutoSize = true;
+            playstyleLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            playstyleLabel.Location = new Point(712, 122);
+            playstyleLabel.Name = "playstyleLabel";
+            playstyleLabel.Size = new Size(123, 20);
+            playstyleLabel.TabIndex = 5;
+            playstyleLabel.Text = "Playstyle: Finisher";
+            // 
+            // positionLabel
+            // 
+            positionLabel.AutoSize = true;
+            positionLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            positionLabel.Location = new Point(712, 85);
+            positionLabel.Name = "positionLabel";
+            positionLabel.Size = new Size(77, 20);
+            positionLabel.TabIndex = 4;
+            positionLabel.Text = "Position: C";
+            // 
+            // weightLabel
+            // 
+            weightLabel.AutoSize = true;
+            weightLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            weightLabel.Location = new Point(712, 48);
+            weightLabel.Name = "weightLabel";
+            weightLabel.Size = new Size(110, 20);
+            weightLabel.TabIndex = 3;
+            weightLabel.Text = "Weight: 210 lbs";
+            // 
+            // heightLabel
+            // 
+            heightLabel.AutoSize = true;
+            heightLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            heightLabel.Location = new Point(712, 12);
+            heightLabel.Name = "heightLabel";
+            heightLabel.Size = new Size(80, 20);
+            heightLabel.TabIndex = 2;
+            heightLabel.Text = "Height: 6'5";
+            // 
+            // teamNameLabel
+            // 
+            teamNameLabel.AutoSize = true;
+            teamNameLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            teamNameLabel.Location = new Point(50, 65);
+            teamNameLabel.Name = "teamNameLabel";
+            teamNameLabel.Size = new Size(213, 20);
+            teamNameLabel.TabIndex = 1;
+            teamNameLabel.Text = "Team Name: New York Bankers";
+            // 
+            // playerNameLabel
+            // 
+            playerNameLabel.AutoSize = true;
+            playerNameLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            playerNameLabel.Location = new Point(50, 12);
+            playerNameLabel.Name = "playerNameLabel";
+            playerNameLabel.Size = new Size(179, 20);
+            playerNameLabel.TabIndex = 0;
+            playerNameLabel.Text = "Name: Dontae Thompson";
+            // 
             // PlayerStatsUserControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -671,7 +670,7 @@
             Controls.Add(panel2);
             Controls.Add(panel1);
             Name = "PlayerStatsUserControl";
-            Size = new Size(893, 775);
+            Size = new Size(893, 728);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)playerIdUpDown).EndInit();

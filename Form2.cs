@@ -26,10 +26,10 @@ namespace LeagueSimulation
 
         }
 
-        private void LoadDashboard(UserControl dashboardUserControl)
+        private void LoadDashboard(DashboardUserControl dashboardUserControl)
         {
             saveStateLabel.Text = $"Current save state: {SaveState}";
-            label1.Text += CurrentLeague.UserTeamName;
+            label1.Text = $"User Team: {CurrentLeague.UserTeamName}";
             // clear current data in the displayPanel
             displayPanel.Controls.Clear();
             // add the dashboard user control to the display panel
@@ -76,16 +76,34 @@ namespace LeagueSimulation
             displayPanel.Controls.Add(playoffsUserControl);
         }
 
-        public void LoadPlayerStats(PlayerStatsUserControl playerStatsUserControl)
+        public void LoadPlayerStats(PlayerStatsUserControl userControl)
         {
-            displayPanel.Controls.Clear();
-            displayPanel.Controls.Add(playerStatsUserControl);
+            MenuForm menuForm = new MenuForm();
+            menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
+            menuForm.menuFormLayoutPanel.Width = userControl.Width + 10;
+            menuForm.Width = userControl.Width + 40;
+            menuForm.menuFormLayoutPanel.Controls.Add(userControl);
+            this.Hide();
+            menuForm.Show();
         }
 
         public void LoadViewGameResults(ViewGameResultsUserControl viewGameResultsUserControl)
         {
             displayPanel.Controls.Clear();
             displayPanel.Controls.Add(viewGameResultsUserControl);
+        }
+
+        public void LoadSeasonSummary(SeasonSummaryUserControl userControl)
+        {
+            MenuForm menuForm = new MenuForm();
+            menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
+            menuForm.menuFormLayoutPanel.Width = userControl.Width + 10;
+            menuForm.Width = userControl.Width + 40;
+            menuForm.menuFormLayoutPanel.Height = userControl.Height + 10;
+            menuForm.Height = userControl.Height + 40;
+            menuForm.menuFormLayoutPanel.Controls.Add(userControl);
+            this.Hide();
+            menuForm.Show();
         }
 
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)
@@ -143,6 +161,17 @@ namespace LeagueSimulation
             Random random = new Random();
             int playerId = random.Next(1, 450);
             LoadPlayerStats(new PlayerStatsUserControl(CurrentLeague, playerId));
+        }
+
+        private void seasonSummaryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (CurrentLeague.CurrentSeason > 1) LoadSeasonSummary(new SeasonSummaryUserControl(CurrentLeague));
+            else MessageBox.Show(text: "The season hasn't finished yet. Come back when the full season finishes");
+        }
+
+        private void MenuForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            this.Show(); // Show the main form again when second form is closed 
         }
     }
 }

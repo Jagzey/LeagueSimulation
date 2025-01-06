@@ -40,6 +40,7 @@ namespace LeagueSimulation
                     SELECT *
                     FROM seasonSchedule ss
                     WHERE ss.gameId = {gameId}
+                    AND ss.seasonId = {league.CurrentSeason}
                     ;";
                     if (league.Playoffs)
                     {
@@ -47,6 +48,7 @@ namespace LeagueSimulation
                         SELECT *
                         FROM playoffsSchedule ss
                         WHERE ss.playoffsGameId = {gameId}
+                        AND ss.seasonId = {league.CurrentSeason}
                     ;";
                     }
 
@@ -64,7 +66,11 @@ namespace LeagueSimulation
                 }
                 team1Record = league.GetTeamRecord(team1Name);
                 team2Record = league.GetTeamRecord(team2Name);
-
+                if (league.Playoffs)
+                {
+                    team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(team1Name).ToString(), league.GetIdFromTeamName(team2Name).ToString(), league.GetConferenceIdFromTeamId(team1Name));
+                    team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(team2Name).ToString(), league.GetIdFromTeamName(team1Name).ToString(), league.GetConferenceIdFromTeamId(team1Name));
+                }
                 gameResultLabel.Text = $"{team1Name} ({team1Record}) {gameScore} {team2Name} ({team2Record})";
             }
 
@@ -99,10 +105,11 @@ namespace LeagueSimulation
                         pgs.BLK,
                         pgs.TOV
 
-                        FROM currentPlayers p, league l
+                        FROM currentPlayers cp, league l
                         JOIN playerGameStats pgs ON pgs.playerId = p.playerId
                         AND pgs.isPlayoffs = {league.Playoffs}
                         AND pgs.gameId = {gameId} -- gameId for the results
+                        AND pgs.seasonId = {league.CurrentSeason}
                         JOIN players p ON cp.playerId = p.playerId
                         JOIN teams t ON cp.teamId = t.teamId
                         AND t.teamName = '{team1Name}' -- teamName to input
@@ -153,6 +160,7 @@ namespace LeagueSimulation
                         JOIN playerGameStats pgs ON pgs.playerId = p.playerId
                         AND pgs.isPlayoffs = {league.Playoffs}
                         AND pgs.gameId = {gameId} -- gameId for the results
+                        AND pgs.seasonId = {league.CurrentSeason}
                         JOIN players p ON cp.playerId = p.playerId
                         JOIN teams t ON cp.teamId = t.teamId
                         AND t.teamName = '{team2Name}' -- teamName to input

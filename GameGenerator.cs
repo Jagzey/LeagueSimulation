@@ -37,11 +37,12 @@ namespace LeagueSimulation
         {
             List<Player> teamOnePlayers = new List<Player>();
             List<Player> teamTwoPlayers = new List<Player>();
+            Dictionary<int, int> rosterSpots = CalculateRosterSpots(team1.TeamId).Concat(CalculateRosterSpots(team2.TeamId)).ToDictionary(kv => kv.Key, kv => kv.Value);
             // extract the players from team1 and team2 and put them into their respective players lists
             using (var connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
-                string team1PlayersQuery = $@"
+                string teamPlayersQuery = $@"
                     WITH currentPlayers AS (
 	                    SELECT playerId, teamId
 	                    FROM playerOnTeam
@@ -49,7 +50,28 @@ namespace LeagueSimulation
 	                    AND dayLeft >= {CurrentLeague.CurrentDay} AND yearLeft >= {CurrentLeague.CurrentSeason + 2023}
                     )
                     SELECT 
-                    p.*,
+                    p.playerId,
+                    p.height,
+                    p.weight,
+                    p.playerForename,
+                    p.playerSurname,
+                    p.closeShot,
+                    p.layup,
+                    p.dunk,
+                    p.midRange,
+                    p.threePoint,
+                    p.freeThrow,
+                    p.passing,
+                    p.ballHandle,
+                    p.defense,
+                    p.steal,
+                    p.block,
+                    p.rebound,
+                    p.speed,
+                    p.strength,
+                    p.stamina,
+                    p.overall,
+                    cp.teamId,
                     pos.positionShort AS positionShort,
                     sp.playstyle AS secondaryPlaystyle,
                     pp.playstyle AS primaryPlaystyle
@@ -64,120 +86,161 @@ namespace LeagueSimulation
                     LEFT JOIN
                         primaryPlaystyle pp ON sp.primaryPlaystyleId = pp.primaryPlaystyleId
                     WHERE
-                        cp.teamId = {team1.TeamId};
+                        cp.teamId = {team1.TeamId}
+                        OR cp.teamId = {team2.TeamId};
                 ";
-
-                string team2PlayersQuery = $@"
-                    WITH currentPlayers AS (
-	                    SELECT playerId, teamId
-	                    FROM playerOnTeam
-	                    WHERE dayJoined <= {CurrentLeague.CurrentDay} AND yearJoined <= {CurrentLeague.CurrentSeason + 2023}
-	                    AND dayLeft >= {CurrentLeague.CurrentDay} AND yearLeft >= {CurrentLeague.CurrentSeason + 2023}
-                    )
-                    SELECT 
-                    p.*,
-                    pos.positionShort AS positionShort,
-                    sp.playstyle AS secondaryPlaystyle,
-                    pp.playstyle AS primaryPlaystyle
-                    FROM
-                        currentPlayers cp
-                    JOIN
-                        players p ON p.playerId = cp.playerId
-                    LEFT JOIN
-                        position pos ON p.positionId = pos.positionId
-                    LEFT JOIN
-                        secondaryPlaystyle sp ON p.secondaryPlaystyleId = sp.secondaryPlaystyleId
-                    LEFT JOIN
-                        primaryPlaystyle pp ON sp.primaryPlaystyleId = pp.primaryPlaystyleId
-                    WHERE
-                        cp.teamId = {team2.TeamId};
-                ";
-                using (var command = new SQLiteCommand(team1PlayersQuery, connection))
+                using (var command = new SQLiteCommand(teamPlayersQuery, connection))
                 {
                     // this reader, will extract all the players from team1, and put them into the list
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            // extract data from a player in database, and put into a player class
-                            Player playerTeam1 = new Player();
-                            playerTeam1.PlayerId = reader.GetInt32(reader.GetOrdinal("playerId"));
-                            playerTeam1.position = reader.GetString(reader.GetOrdinal("positionShort"));
-                            playerTeam1.PrimaryPlaystyle = reader.GetString(reader.GetOrdinal("primaryPlaystyle"));
-                            playerTeam1.SecondaryPlaystyle = reader.GetString(reader.GetOrdinal("secondaryPlaystyle"));
-                            playerTeam1.RosterSpot = League.CalculatePlayerRosterSpot(playerTeam1.PlayerId, connectionString);
-                            playerTeam1.Height = reader.GetInt32(reader.GetOrdinal("height")); // height in inches
-                            playerTeam1.Weight = reader.GetInt32(reader.GetOrdinal("weight")); // weight in lbs
-                            playerTeam1.playerForename = reader.GetString(reader.GetOrdinal("playerForename"));
-                            playerTeam1.playerSurname = reader.GetString(reader.GetOrdinal("playerSurname"));
-                            playerTeam1.TeamId = reader.GetInt32(reader.GetOrdinal("teamId"));
-                            playerTeam1.teamName = team1.teamName;
-                            playerTeam1.CloseShot = reader.GetInt32(reader.GetOrdinal("closeShot"));
-                            playerTeam1.Layup = reader.GetInt32(reader.GetOrdinal("layup"));
-                            playerTeam1.Dunk = reader.GetInt32(reader.GetOrdinal("dunk"));
-                            playerTeam1.MidRange = reader.GetInt32(reader.GetOrdinal("midRange"));
-                            playerTeam1.ThreePoint = reader.GetInt32(reader.GetOrdinal("threePoint"));
-                            playerTeam1.FreeThrow = reader.GetInt32(reader.GetOrdinal("freeThrow"));
-                            playerTeam1.Passing = reader.GetInt32(reader.GetOrdinal("passing"));
-                            playerTeam1.BallHandle = reader.GetInt32(reader.GetOrdinal("ballHandle"));
-                            playerTeam1.Defense = reader.GetInt32(reader.GetOrdinal("defense"));
-                            playerTeam1.Steal = reader.GetInt32(reader.GetOrdinal("steal"));
-                            playerTeam1.Block = reader.GetInt32(reader.GetOrdinal("block"));
-                            playerTeam1.Rebound = reader.GetInt32(reader.GetOrdinal("rebound"));
-                            playerTeam1.Speed = reader.GetInt32(reader.GetOrdinal("speed"));
-                            playerTeam1.Strength = reader.GetInt32(reader.GetOrdinal("strength"));
-                            playerTeam1.Stamina = reader.GetInt32(reader.GetOrdinal("stamina"));
-                            playerTeam1.Overall = reader.GetInt32(reader.GetOrdinal("overall"));
+                            int currentTeamId = reader.GetInt32(reader.GetOrdinal("teamId"));                            // extract data from a player in database, and put into a player class
+                            Player player = new Player();
+                            player.PlayerId = reader.GetInt32(reader.GetOrdinal("playerId"));
+                            player.position = reader.GetString(reader.GetOrdinal("positionShort"));
+                            player.PrimaryPlaystyle = reader.GetString(reader.GetOrdinal("primaryPlaystyle"));
+                            player.SecondaryPlaystyle = reader.GetString(reader.GetOrdinal("secondaryPlaystyle"));
+                            player.RosterSpot = rosterSpots[player.PlayerId];
+                            player.Height = reader.GetInt32(reader.GetOrdinal("height")); // height in inches
+                            player.Weight = reader.GetInt32(reader.GetOrdinal("weight")); // weight in lbs
+                            player.playerForename = reader.GetString(reader.GetOrdinal("playerForename"));
+                            player.playerSurname = reader.GetString(reader.GetOrdinal("playerSurname"));
+                            player.TeamId = reader.GetInt32(reader.GetOrdinal("teamId"));
+                            player.teamName = team1.teamName;
+                            player.CloseShot = reader.GetInt32(reader.GetOrdinal("closeShot"));
+                            player.Layup = reader.GetInt32(reader.GetOrdinal("layup"));
+                            player.Dunk = reader.GetInt32(reader.GetOrdinal("dunk"));
+                            player.MidRange = reader.GetInt32(reader.GetOrdinal("midRange"));
+                            player.ThreePoint = reader.GetInt32(reader.GetOrdinal("threePoint"));
+                            player.FreeThrow = reader.GetInt32(reader.GetOrdinal("freeThrow"));
+                            player.Passing = reader.GetInt32(reader.GetOrdinal("passing"));
+                            player.BallHandle = reader.GetInt32(reader.GetOrdinal("ballHandle"));
+                            player.Defense = reader.GetInt32(reader.GetOrdinal("defense"));
+                            player.Steal = reader.GetInt32(reader.GetOrdinal("steal"));
+                            player.Block = reader.GetInt32(reader.GetOrdinal("block"));
+                            player.Rebound = reader.GetInt32(reader.GetOrdinal("rebound"));
+                            player.Speed = reader.GetInt32(reader.GetOrdinal("speed"));
+                            player.Strength = reader.GetInt32(reader.GetOrdinal("strength"));
+                            player.Stamina = reader.GetInt32(reader.GetOrdinal("stamina"));
+                            player.Overall = reader.GetInt32(reader.GetOrdinal("overall"));
                             // add this extracted player to players list
-                            teamOnePlayers.Add(playerTeam1);
-                        }
-                    }
-                }
-
-                using (var command2 = new SQLiteCommand(team2PlayersQuery, connection))
-                {
-                    // this reader, will extract all the players from team2, and put them into the list
-                    using (SQLiteDataReader reader = command2.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            // extract data from a player in database, and put into a player class
-                            Player playerTeam2 = new Player();
-                            playerTeam2.PlayerId = reader.GetInt32(reader.GetOrdinal("playerId"));
-                            playerTeam2.position = reader.GetString(reader.GetOrdinal("positionShort"));
-                            playerTeam2.PrimaryPlaystyle = reader.GetString(reader.GetOrdinal("primaryPlaystyle"));
-                            playerTeam2.SecondaryPlaystyle = reader.GetString(reader.GetOrdinal("secondaryPlaystyle"));
-                            playerTeam2.RosterSpot = League.CalculatePlayerRosterSpot(playerTeam2.PlayerId, connectionString);
-                            playerTeam2.Height = reader.GetInt32(reader.GetOrdinal("height")); // height in inches
-                            playerTeam2.Weight = reader.GetInt32(reader.GetOrdinal("weight")); // weight in lbs
-                            playerTeam2.playerForename = reader.GetString(reader.GetOrdinal("playerForename"));
-                            playerTeam2.playerSurname = reader.GetString(reader.GetOrdinal("playerSurname"));
-                            playerTeam2.TeamId = reader.GetInt32(reader.GetOrdinal("teamId"));
-                            playerTeam2.teamName = team2.teamName;
-                            playerTeam2.CloseShot = reader.GetInt32(reader.GetOrdinal("closeShot"));
-                            playerTeam2.Layup = reader.GetInt32(reader.GetOrdinal("layup"));
-                            playerTeam2.Dunk = reader.GetInt32(reader.GetOrdinal("dunk"));
-                            playerTeam2.MidRange = reader.GetInt32(reader.GetOrdinal("midRange"));
-                            playerTeam2.ThreePoint = reader.GetInt32(reader.GetOrdinal("threePoint"));
-                            playerTeam2.FreeThrow = reader.GetInt32(reader.GetOrdinal("freeThrow"));
-                            playerTeam2.Passing = reader.GetInt32(reader.GetOrdinal("passing"));
-                            playerTeam2.BallHandle = reader.GetInt32(reader.GetOrdinal("ballHandle"));
-                            playerTeam2.Defense = reader.GetInt32(reader.GetOrdinal("defense"));
-                            playerTeam2.Steal = reader.GetInt32(reader.GetOrdinal("steal"));
-                            playerTeam2.Block = reader.GetInt32(reader.GetOrdinal("block"));
-                            playerTeam2.Rebound = reader.GetInt32(reader.GetOrdinal("rebound"));
-                            playerTeam2.Speed = reader.GetInt32(reader.GetOrdinal("speed"));
-                            playerTeam2.Strength = reader.GetInt32(reader.GetOrdinal("strength"));
-                            playerTeam2.Stamina = reader.GetInt32(reader.GetOrdinal("stamina"));
-                            playerTeam2.Overall = reader.GetInt32(reader.GetOrdinal("overall"));
-                            // add this extracted player to players list
-                            teamTwoPlayers.Add(playerTeam2);
+                            if (currentTeamId == team1.TeamId)
+                            {
+                                player.teamName = team1.teamName;
+                                teamOnePlayers.Add(player);
+                            }
+                            else if (currentTeamId == team2.TeamId)
+                            {
+                                player.teamName = team2.teamName;
+                                teamTwoPlayers.Add(player);
+                            }
                         }
                     }
                 }
 
                 return (teamOnePlayers, teamTwoPlayers);
             }
+        }
+
+        public Dictionary<int, int> CalculateRosterSpots(int teamId)
+        {
+            Dictionary<int, int> rosterSpots = new Dictionary<int, int>();
+            // initially, we get the highest overalls for each position, then sort by rosterSpot
+            string getRosterSpotQuery = $@"
+                WITH currentPlayers AS (
+                SELECT 
+                    playerId, 
+                    teamId
+                FROM 
+                    playerOnTeam pot
+                WHERE 
+                    dayJoined <= {CurrentLeague.CurrentDay} AND yearJoined <= {CurrentLeague.CurrentSeason + 2023}
+                    AND dayLeft >= {CurrentLeague.CurrentDay} AND yearLeft >= {CurrentLeague.CurrentSeason + 2023}
+            ),
+            RankedByPosition AS (
+                SELECT
+                    p.playerId,
+                    p.teamId,
+                    p.positionId,
+                    p.overall,
+                    ROW_NUMBER() OVER (
+                        PARTITION BY p.positionId
+                        ORDER BY p.overall DESC
+                    ) AS positionRank
+                FROM
+                    players p
+                JOIN
+                    teams t ON p.teamId = t.teamId
+                JOIN
+                    currentPlayers cp ON p.playerId = cp.playerId
+                WHERE
+                    p.teamId = {teamId} -- Filter by the given team
+            ),
+            TopFive AS (
+                SELECT
+                    rbp.playerId,
+                    rbp.teamId,
+                    rbp.positionId,
+                    rbp.overall,
+                    rbp.positionRank,
+                    ROW_NUMBER() OVER (
+                        ORDER BY rbp.positionId, rbp.overall DESC
+                    ) AS rosterSpot
+                FROM
+                    RankedByPosition rbp
+                WHERE
+                    rbp.positionRank = 1 -- Only the top player in each position
+                LIMIT 5 -- Ensure exactly 5 players (one per position)
+            ),
+            RemainingPlayers AS (
+                SELECT
+                    rbp.playerId,
+                    rbp.teamId,
+                    rbp.positionId,
+                    rbp.overall,
+                    rbp.positionRank,
+                    ROW_NUMBER() OVER (
+                        ORDER BY rbp.positionId, rbp.overall DESC
+                    ) + 5 AS rosterSpot
+                FROM
+                    RankedByPosition rbp
+                JOIN
+                    players p ON p.playerId = rbp.playerId
+                JOIN
+                    teams t ON p.teamId = t.teamId
+                WHERE 
+                    rbp.positionRank > 1
+                --LIMIT 10 -- Only include the remaining 10 players
+            )
+            SELECT
+                playerId,
+                teamId,
+                positionId,
+                overall,
+                rosterSpot
+            FROM (
+                SELECT * FROM TopFive
+                UNION ALL
+                SELECT * FROM RemainingPlayers
+            ) rosteredPlayers
+            ORDER BY
+                rosterSpot;
+
+                ";
+            using (var connection = new SQLiteConnection(CurrentLeague.ConnectionString))
+            {
+                connection.Open();
+                using (var command = new SQLiteCommand(getRosterSpotQuery, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read()) rosterSpots.Add(reader.GetInt32(reader.GetOrdinal("playerId")), reader.GetInt32(reader.GetOrdinal("rosterSpot")));
+                    }
+                }
+            }
+            return rosterSpots;
         }
 
         private void AddPlayersIntoInGame()
@@ -461,19 +524,19 @@ namespace LeagueSimulation
 
                     double prob2PAttempted = 0;
                     // events after a 2 point is attempted
-                    double prob2PMade = 0.41;
+                    double prob2PMade = 0.40;
                     double prob2PBlocked = 0.006;
                     double prob2PMissed = 0.586;
 
                     double probLayupAttempted = 0;
                     // events after a layup is attempted
-                    double probLayupMade = 0.56;
+                    double probLayupMade = 0.55;
                     double probLayupBlocked = 0.062;
                     double probLayupMissed = 0.418;
 
                     double probDunkAttempted = 0;
                     // events after a dunk is attempted
-                    double probDunkMade = 0.55;
+                    double probDunkMade = 0.54;
                     double probDunkBlocked = 0.05;
                     double probDunkMissed = 0.50;
 
@@ -485,17 +548,17 @@ namespace LeagueSimulation
                     double passerContribution = 1;
                     if (playerWhoPassed != null && playerWhoPassed != playerWithBall && playerWhoPassed.playerStats.TeamId == playerWithBall.playerStats.TeamId)
                     {
-                        // convert pass from (45 - 99) to (0 - 0.30)
-                        passerContribution += 0.30 * (playerWhoPassed.playerStats.Passing - 45) / (99 - 45);
+                        // convert pass from (45 - 99) to (0 - 0.25)
+                        passerContribution += 0.25 * (playerWhoPassed.playerStats.Passing - 45) / (99 - 45);
                         passerContribution += (playerWhoPassed.Assists * 0.002) / 1.16;
                     }
                     if (passerContribution > 1.18) { }
 
                     double probFoulAfterShot = 0;
                     //double probTurnover = 0;
-
+                    if (playerWithBall.playerStats.Overall > 96) { };
                     List<double> attemptedEventProbabilites = new List<double>();
-                    attemptedEventProbabilites = CalculateEventProbabilities(prob3PAttempted, prob2PAttempted, probLayupAttempted, probDunkAttempted, probPassAttempted);
+                    attemptedEventProbabilites = CalculateEventProbabilities(prob3PAttempted, prob2PAttempted, probLayupAttempted, probDunkAttempted, probPassAttempted, passerContribution);
 
                     // set the attempted event probabilities based on function above
                     prob3PAttempted = attemptedEventProbabilites[0];
@@ -519,16 +582,16 @@ namespace LeagueSimulation
                             double dBlockStat = playerWithBallMatchup.playerStats.Block;
                             double dDefenseStat = playerWithBallMatchup.playerStats.Defense;
 
-                            // convert 3 point stat (40-99) to (-0.13 - 0.13)
-                            oThreePointStat = -0.13 + (0.13 + 0.13) * (oThreePointStat - 40) / (99 - 40);
-                            if (playerWithBall.ThreePointMade > 3 && playerWithBall.GameValue > 14) oThreePointStat += 0.028 + 0.002 * (playerWithBall.ThreePointMade - 2);
+                            // convert 3 point stat (40-99) to (-0.12 - 0.12)
+                            oThreePointStat = -0.07 + (0.07 + 0.07) * (oThreePointStat - 40) / (99 - 40);
+                            if (playerWithBall.ThreePointMade > 3 && playerWithBall.GameValue > 14 && playerWithBall.playerStats.SecondaryPlaystyle != "Playmaker" && playerWithBall.playerStats.PrimaryPlaystyle == "Offensive") oThreePointStat += 0.020 + 0.002 * (playerWithBall.ThreePointMade - 2);
                             if (playerWithBall.ThreePointMade > 10) oThreePointStat -= 0.0007 * (playerWithBall.FieldGoalMade - 10);
                             // convert height difference (-8 - 8) to (-0.07 to 0.07)
                             heightDifference = -0.07 + (0.07 + 0.07) * (heightDifference + 8) / (8 + 8);
                             // convert block stat (40-99) to (-0.009 - 0.045)
                             dBlockStat = -0.009 + (0.045 + 0.009) * (dBlockStat - 40) / (99 - 40);
-                            // convert defense stat (40-99) to (-0.14 - 0.14)
-                            dDefenseStat = -0.14 + (0.14 + 0.14) * (dDefenseStat - 40) / (99 - 40);
+                            // convert defense stat (40-99) to (-0.10 - 0.10)
+                            dDefenseStat = -0.10 + (0.10 + 0.10) * (dDefenseStat - 40) / (99 - 40);
                             dDefenseStat *= -1;
 
                             // this sets the probabilities of the forthcoming events
@@ -557,9 +620,9 @@ namespace LeagueSimulation
                                 if (playerWhoPassed == null)
                                 {
                                     // now we change possession
-                                    if (possession == 1) possession = 2;
-                                    else possession = 1;
-                                    continue;
+                                    //if (possession == 1) possession = 2;
+                                    //else possession = 1;
+                                    //continue;
                                 }
                                 else if (playerWhoPassed != playerWithBall && playerWhoPassed.playerStats.TeamId == playerWithBall.playerStats.TeamId)
                                 {
@@ -626,16 +689,16 @@ namespace LeagueSimulation
                             double dBlockStat = playerWithBallMatchup.playerStats.Block;
                             double dDefenseStat = playerWithBallMatchup.playerStats.Defense;
 
-                            // convert 2 point stat (40-99) to (-0.14 - 0.14)
-                            oTwoPointStat = -0.14 + (0.14 + 0.14) * (oTwoPointStat - 40) / (99 - 40);
-                            if (playerWithBall.FieldGoalMade > 4 && playerWithBall.GameValue > 13) oTwoPointStat += 0.034 + 0.0014 * (playerWithBall.FieldGoalMade - 4);
+                            // convert 2 point stat (40-99) to (-0.10 - 0.10)
+                            oTwoPointStat = -0.08 + (0.08 + 0.08) * (oTwoPointStat - 40) / (99 - 40);
+                            if (playerWithBall.FieldGoalMade > 4 && playerWithBall.GameValue > 13 && playerWithBall.playerStats.SecondaryPlaystyle != "Playmaker" && playerWithBall.playerStats.PrimaryPlaystyle == "Offensive") oTwoPointStat += 0.024 + 0.0006 * (playerWithBall.FieldGoalMade - 4);
                             if (playerWithBall.FieldGoalMade > 20) oTwoPointStat -= 0.0007 * (playerWithBall.FieldGoalMade - 20);
                             // convert height difference (-8 - 8) to (-0.05 to 0.05)
                             heightDifference = -0.05 + (0.05 + 0.05) * (heightDifference + 8) / (8 + 8);
                             // convert block stat (40-99) to (-0.009 - 0.029)
                             dBlockStat = -0.009 + (0.029 + 0.009) * (dBlockStat - 40) / (99 - 40);
                             // convert defense stat (40-99) to (-0.13 - 0.13)
-                            dDefenseStat = -0.13 + (0.13 + 0.13) * (dDefenseStat - 40) / (99 - 40);
+                            dDefenseStat = -0.10 + (0.10 + 0.10) * (dDefenseStat - 40) / (99 - 40);
                             dDefenseStat *= -1;
 
                             // this sets the probabilities of the forthcoming events
@@ -731,15 +794,15 @@ namespace LeagueSimulation
                             double dDefenseStat = playerWithBallMatchup.playerStats.Defense;
 
                             // convert 2 point stat (40-99) to (-0.11 - 0.11)
-                            oLayupStat = -0.11 + (0.11 + 0.11) * (oLayupStat - 40) / (99 - 40);
-                            if (playerWithBall.FieldGoalMade > 4 && playerWithBall.GameValue > 13) oLayupStat += 0.034 + 0.0015 * playerWithBall.FieldGoalMade;
+                            oLayupStat = -0.09 + (0.09 + 0.09) * (oLayupStat - 40) / (99 - 40);
+                            if (playerWithBall.FieldGoalMade > 4 && playerWithBall.GameValue > 13 && playerWithBall.playerStats.SecondaryPlaystyle != "Playmaker" && playerWithBall.playerStats.PrimaryPlaystyle == "Offensive") oLayupStat += 0.022 + 0.0008 * playerWithBall.FieldGoalMade;
                             if (playerWithBall.FieldGoalMade > 20) oLayupStat -= 0.0007 * (playerWithBall.FieldGoalMade - 20);
                             // convert height difference (-8 - 8) to (-0.11 to 0.11)
                             heightDifference = -0.11 + (0.11 + 0.11) * (heightDifference + 8) / (8 + 8);
                             // convert block stat (40-99) to (-0.005 - 0.26)
                             dBlockStat = -0.005 + (0.005 + 0.26) * (dBlockStat - 40) / (99 - 40);
-                            // convert defense stat (40-99) to (-0.13 - 0.13)
-                            dDefenseStat = -0.13 + (0.13 + 0.13) * (dDefenseStat - 40) / (99 - 40);
+                            // convert defense stat (40-99) to (-0.11 - 0.11)
+                            dDefenseStat = -0.11 + (0.11 + 0.11) * (dDefenseStat - 40) / (99 - 40);
                             dDefenseStat *= -1;
 
                             // this sets the probabilities of the forthcoming events
@@ -832,15 +895,15 @@ namespace LeagueSimulation
                             double dDefenseStat = playerWithBallMatchup.playerStats.Defense;
 
                             // convert 2 point stat (40-99) to (-0.11 - 0.11)
-                            oDunkStat = -0.11 + (0.11 + 0.11) * (oDunkStat - 40) / (99 - 40);
-                            if (playerWithBall.FieldGoalMade > 4 && playerWithBall.GameValue > 13) oDunkStat += 0.029 + 0.0012 * playerWithBall.FieldGoalMade;
+                            oDunkStat = -0.07 + (0.07 + 0.07) * (oDunkStat - 40) / (99 - 40);
+                            if (playerWithBall.FieldGoalMade > 4 && playerWithBall.GameValue > 13 && playerWithBall.playerStats.SecondaryPlaystyle != "Playmaker" && playerWithBall.playerStats.PrimaryPlaystyle == "Offensive") oDunkStat += 0.023 + 0.0010 * playerWithBall.FieldGoalMade;
                             if (playerWithBall.FieldGoalMade > 20) oDunkStat -= 0.0007 * (playerWithBall.FieldGoalMade - 20);
                             // convert height difference (-8 - 8) to (-0.12 to 0.12)
                             heightDifference = -0.12 + (0.12 + 0.12) * (heightDifference + 8) / (8 + 8);
                             // convert block stat (40-99) to (-0.005 - 0.30)
                             dBlockStat = -0.005 + (0.005 + 0.30) * (dBlockStat - 40) / (99 - 40);
                             // convert defense stat (40-99) to (-0.14 - 0.14)
-                            dDefenseStat = -0.14 + (0.14 + 0.14) * (dDefenseStat - 40) / (99 - 40);
+                            dDefenseStat = -0.10 + (0.10 + 0.10) * (dDefenseStat - 40) / (99 - 40);
                             dDefenseStat *= -1;
 
                             // this sets the probabilities of the forthcoming events
@@ -970,12 +1033,16 @@ namespace LeagueSimulation
                                         overallsSum += player.playerStats.Overall;
                                         playersToPass.Add(player);
                                     }
-                                    // convert gameValue from range (-21 - 75) to (-5.0 - 10) to add to chance they get the ball
-                                    double gameValue1 = -5 + (5 + 10) * (playersToPass[0].GameValue + 5) / (5 + 52);
-                                    double gameValue2 = -5 + (5 + 10) * (playersToPass[1].GameValue + 5) / (5 + 52);
-                                    double gameValue3 = -5 + (5 + 10) * (playersToPass[2].GameValue + 5) / (5 + 52);
-                                    double gameValue4 = -5 + (5 + 10) * (playersToPass[3].GameValue + 5) / (5 + 52);
-
+                                    // convert gameValue from range (-5 - 60) to (-3.6 - 3.9) to add to chance they get the ball
+                                    double gameValue1 = -3.6 + (3.9 + 3.6) * (playersToPass[0].GameValue + 5) / (5 + 60);
+                                    if (gameValue1 > 5.3) gameValue1 = 5.3;
+                                    double gameValue2 = -3.6 + (3.9 + 3.6) * (playersToPass[1].GameValue + 5) / (5 + 60);
+                                    if (gameValue2 > 5.3) gameValue1 = 5.3;
+                                    double gameValue3 = -3.6 + (3.9 + 3.6) * (playersToPass[2].GameValue + 5) / (5 + 60);
+                                    if (gameValue3 > 5.3) gameValue1 = 5.3;
+                                    double gameValue4 = -3.6 + (3.9 + 3.6) * (playersToPass[3].GameValue + 5) / (5 + 60);
+                                    if (gameValue4 > 5.3) gameValue1 = 5.3;
+                                    playersToPass = playersToPass.OrderByDescending(x => x.playerStats.Overall).ToList();
                                     double playstyleVariable1 = 0;
                                     double playstyleVariable2 = 0;
                                     double playstyleVariable3 = 0;
@@ -988,16 +1055,16 @@ namespace LeagueSimulation
                                         {
                                             if (player.playerStats.SecondaryPlaystyle == "Shooter" || player.playerStats.SecondaryPlaystyle == "Finisher")
                                             {
-                                                currentPlaystyleVariable = 20;
+                                                currentPlaystyleVariable = 9;
                                             }
                                             else if (player.playerStats.SecondaryPlaystyle == "Playmaker")
                                             {
-                                                currentPlaystyleVariable = -12;
+                                                currentPlaystyleVariable = -10;
                                             }
                                         }
                                         else if (player.playerStats.PrimaryPlaystyle == "Defensive")
                                         {
-                                            currentPlaystyleVariable = -20;
+                                            currentPlaystyleVariable = -15;
                                         }
 
                                         if (i == 0) playstyleVariable1 = currentPlaystyleVariable;
@@ -1017,14 +1084,14 @@ namespace LeagueSimulation
 
                                     // this section checks the overalls of the players who could be passed to
                                     double randomProb = random.NextDouble();
-                                    double overall1 = playersToPass[0].playerStats.Overall + gameValue1;
-                                    if (playersToPass[0].FieldGoalMade > 4) overall1 += 0.25 + playersToPass[0].FieldGoalMade * 0.2;
-                                    double overall2 = playersToPass[1].playerStats.Overall + gameValue2;
-                                    if (playersToPass[1].FieldGoalMade > 4) overall2 += 0.25 + playersToPass[0].FieldGoalMade * 0.2;
-                                    double overall3 = playersToPass[2].playerStats.Overall + gameValue3;
-                                    if (playersToPass[2].FieldGoalMade > 4) overall3 += 0.25 + playersToPass[0].FieldGoalMade * 0.2;
-                                    double overall4 = playersToPass[3].playerStats.Overall + gameValue4;
-                                    if (playersToPass[3].FieldGoalMade > 4) overall4 += 0.25 + playersToPass[0].FieldGoalMade * 0.2;
+                                    double overall1 = playersToPass[0].playerStats.Overall - 5 + gameValue1;
+                                    if (playersToPass[0].FieldGoalMade > 6) overall1 += 0.20 + playersToPass[0].FieldGoalMade * 0.028;
+                                    double overall2 = playersToPass[1].playerStats.Overall - 2 + gameValue2;
+                                    if (playersToPass[1].FieldGoalMade > 6) overall2 += 0.20 + playersToPass[0].FieldGoalMade * 0.028;
+                                    double overall3 = playersToPass[2].playerStats.Overall + 4 + gameValue3;
+                                    if (playersToPass[2].FieldGoalMade > 6) overall3 += 0.20 + playersToPass[0].FieldGoalMade * 0.028;
+                                    double overall4 = playersToPass[3].playerStats.Overall + 5 + gameValue4;
+                                    if (playersToPass[3].FieldGoalMade > 6) overall4 += 0.20 + playersToPass[0].FieldGoalMade * 0.028;
                                     PlayerInGame potentialPlayerWithBall;
                                     if (randomProb < overall1 / overallsSum)
                                     {
@@ -1180,11 +1247,11 @@ namespace LeagueSimulation
                 PlayerInGame sf = offense.Where(x => x.playerStats.position == "SF").ToList()[0];
                 PlayerInGame pf = offense.Where(x => x.playerStats.position == "PF").ToList()[0];
                 PlayerInGame c = offense.Where(x => x.playerStats.position == "C").ToList()[0];
-                double pgRebound = (double)pg.playerStats.Rebound / (double)reboundSum - 0.08;
-                double sgRebound = (double)sg.playerStats.Rebound / (double)reboundSum - 0.06;
-                double sfRebound = (double)sf.playerStats.Rebound / (double)reboundSum - 0.03;
-                double pfRebound = (double)pf.playerStats.Rebound / (double)reboundSum + 0.07;
-                double cRebound = (double)c.playerStats.Rebound / (double)reboundSum + 0.10;
+                double pgRebound = (double)pg.playerStats.Rebound / (double)reboundSum - 0.05;
+                double sgRebound = (double)sg.playerStats.Rebound / (double)reboundSum - 0.02;
+                double sfRebound = (double)sf.playerStats.Rebound / (double)reboundSum + 0.01;
+                double pfRebound = (double)pf.playerStats.Rebound / (double)reboundSum + 0.04;
+                double cRebound = (double)c.playerStats.Rebound / (double)reboundSum + 0.07;
                 if (randomReboundProbability < pgRebound)
                 {
                     CommentatorPhrases.Add($"{pg.playerStats.playerForename} {pg.playerStats.playerSurname} got the offensive rebound for the {pg.playerStats.teamName}");
@@ -1263,11 +1330,11 @@ namespace LeagueSimulation
                 PlayerInGame sf = defense.Where(x => x.playerStats.position == "SF").ToList()[0];
                 PlayerInGame pf = defense.Where(x => x.playerStats.position == "PF").ToList()[0];
                 PlayerInGame c = defense.Where(x => x.playerStats.position == "C").ToList()[0];
-                double pgRebound = (double)pg.playerStats.Rebound / (double)reboundSum - 0.14;
-                double sgRebound = (double)sg.playerStats.Rebound / (double)reboundSum - 0.08;
-                double sfRebound = (double)sf.playerStats.Rebound / (double)reboundSum - 0.01;
+                double pgRebound = (double)pg.playerStats.Rebound / (double)reboundSum - 0.10;
+                double sgRebound = (double)sg.playerStats.Rebound / (double)reboundSum - 0.07;
+                double sfRebound = (double)sf.playerStats.Rebound / (double)reboundSum + 0.01;
                 double pfRebound = (double)pf.playerStats.Rebound / (double)reboundSum + 0.07;
-                double cRebound = (double)c.playerStats.Rebound / (double)reboundSum + 0.16;
+                double cRebound = (double)c.playerStats.Rebound / (double)reboundSum + 0.11;
                 if (randomReboundProbability < pgRebound)
                 {
                     CommentatorPhrases.Add($"{pg.playerStats.playerForename} {pg.playerStats.playerSurname} got the defensive rebound for the {pg.playerStats.teamName}");
@@ -1368,10 +1435,13 @@ namespace LeagueSimulation
                 using (var command = new SQLiteCommand(connection))
                 {
                     // add this team's stats from the game into the database
+                    string fullTransactionQuery = $"BEGIN TRANSACTION; \n";
+                    fullTransactionQuery += "INSERT into playerGameStats(seasonId,gameId,playerId,gameValue,isPlayoffs,MP,FGM,FGA,TFGM,TFGA,PTS,REB,AST,STL,BLK,TOV,PF)\r\n VALUES";
                     foreach (PlayerInGame player in team1)
                     {
-                        string addGameStatsQuery = $@"INSERT into playerGameStats(gameId,playerId,gameValue,isPlayoffs,MP,FGM,FGA,TFGM,TFGA,PTS,REB,AST,STL,BLK,TOV,PF)
-                            VALUES(
+                        if (player.MinutesToPlay < 0) player.MinutesToPlay = 0;
+                        fullTransactionQuery += $@"(
+                            {CurrentLeague.CurrentSeason},
                             {gameId},
                             {player.playerStats.PlayerId},
                             {Math.Round(player.GameValue, 2)},
@@ -1388,16 +1458,13 @@ namespace LeagueSimulation
                             {player.Blocks},
                             {player.Turnovers},
                             {player.PersonalFouls}
-                            );";
-
-                        command.CommandText = addGameStatsQuery;
-                        command.ExecuteNonQuery();
+                            )," + "\n";
                     }
 
                     foreach (PlayerInGame player in team2)
                     {
-                        string addGameStatsQuery = $@"INSERT into playerGameStats(gameId,playerId,gameValue,isPlayoffs,MP,FGM,FGA,TFGM,TFGA,PTS,REB,AST,STL,BLK,TOV,PF)
-                            VALUES(
+                        fullTransactionQuery += $@"(
+                            {CurrentLeague.CurrentSeason},
                             {gameId},
                             {player.playerStats.PlayerId},
                             {Math.Round(player.GameValue, 2)},
@@ -1414,71 +1481,77 @@ namespace LeagueSimulation
                             {player.Blocks},
                             {player.Turnovers},
                             {player.PersonalFouls}
-                            );";
+                            )," + "\n";
 
-                        command.CommandText = addGameStatsQuery;
-                        command.ExecuteNonQuery();
+                        //command.CommandText = addGameStatsQuery;
+                        //command.ExecuteNonQuery();
                     }
+                    fullTransactionQuery = fullTransactionQuery.Substring(0, fullTransactionQuery.Length - 2) + ";";
+                    if (team1Stats.Sum(x => x.Points) > team2Stats.Sum(x => x.Points) && !CurrentLeague.Playoffs)
+                    {
+                        fullTransactionQuery += $"UPDATE teamResults SET wins = wins + 1 WHERE teamId = {team1Players[0].TeamId} AND seasonId = {CurrentLeague.CurrentSeason};";
+                        fullTransactionQuery += $"UPDATE teamResults SET losses = losses + 1 WHERE teamId = {team2Players[0].TeamId} AND seasonId = {CurrentLeague.CurrentSeason};";
+                    }
+                    else if (!CurrentLeague.Playoffs)
+                    {
+                        fullTransactionQuery += $"UPDATE teamResults SET wins = wins + 1 WHERE teamId = {team2Players[0].TeamId} AND seasonId = {CurrentLeague.CurrentSeason};";
+                        fullTransactionQuery += $"UPDATE teamResults SET losses = losses + 1 WHERE teamId = {team1Players[0].TeamId} AND seasonId = {CurrentLeague.CurrentSeason};";
+                    }
+                    fullTransactionQuery += "COMMIT;";
+                    command.CommandText = fullTransactionQuery;
+                    command.ExecuteNonQuery();
                 }
             }
         }
 
-        public List<double> CalculateEventProbabilities(double threePointAttempted, double twoPointAttempted, double layupAttempted, double dunkAttempted, double passAttempted)
+        public List<double> CalculateEventProbabilities(double threePointAttempted, double twoPointAttempted, double layupAttempted, double dunkAttempted, double passAttempted, double passerContribution)
         { 
-            // we checked the passer's pass and assist numbers to increase the chance of a shot being attempted
-            double passerContribution = 1;
-            if (playerWhoPassed != null && playerWhoPassed != playerWithBall && playerWhoPassed.playerStats.TeamId == playerWithBall.playerStats.TeamId)
-            {
-                // convert pass from (45-99) to (0 - 0.25)
-                passerContribution += 0.25 * (playerWhoPassed.playerStats.Passing - 45) / (99 - 45);
-                passerContribution += playerWhoPassed.Assists * 0.02;
-            }
 
             List<double> attemptedProbablities = new List<double>();
-            // work out 3 point attempted probabilities, (50-99) to (0-0.31)
+            // work out 3 point attempted probabilities, (50-99) to (0-0.30)
             double threePointStat = playerWithBall.playerStats.ThreePoint;
-            threePointAttempted = 0.31 * (threePointStat - 50) / (99 - 50);
+            threePointAttempted = 0.30 * (threePointStat - 50) / (99 - 50);
             if (threePointAttempted < 0) threePointAttempted = 0;
             threePointAttempted *= passerContribution;
             attemptedProbablities.Add(threePointAttempted);
 
-            // work out 2 point attempted probabilities, (50-99) to (0-0.28)
+            // work out 2 point attempted probabilities, (50-99) to (0-0.27)
             double twoPointStat = playerWithBall.playerStats.MidRange;
-            twoPointAttempted = 0.28 * (twoPointStat - 50) / (99 - 50);
+            twoPointAttempted = 0.27 * (twoPointStat - 50) / (99 - 50);
             if (twoPointAttempted < 0) twoPointAttempted = 0;
-            twoPointAttempted *= passerContribution;
+            twoPointAttempted *= passerContribution * 1.15;
             attemptedProbablities.Add(twoPointAttempted);
 
-            // work out layup attempted probabilities, (45-99) to (0.003-0.29)
+            // work out layup attempted probabilities, (45-99) to (0.003-0.28)
             double layupStat = playerWithBall.playerStats.Layup;
             if (playerWithBall.playerStats.CloseShot > layupStat) layupStat = playerWithBall.playerStats.CloseShot;
-            layupAttempted = 0.003 + 0.29 * (layupStat - 45) / (99 - 45);
+            layupAttempted = 0.003 + 0.28 * (layupStat - 45) / (99 - 45);
             if (layupAttempted < 0) layupAttempted = 0;
             layupAttempted *= passerContribution;
             attemptedProbablities.Add(layupAttempted);
 
-            // work out dunk attempted probabilities, (45-99) to (0.003-0.32)
+            // work out dunk attempted probabilities, (45-99) to (0.003-0.27)
             double dunkStat = playerWithBall.playerStats.Dunk;
-            dunkAttempted = 0.003 + 0.32 * (dunkStat - 45) / (99 - 45);
+            dunkAttempted = 0.003 + 0.30 * (dunkStat - 45) / (99 - 45);
             if (dunkAttempted < 0) dunkAttempted = 0;
-            dunkAttempted *= passerContribution;
+            dunkAttempted *= passerContribution * 1.15;
             attemptedProbablities.Add(dunkAttempted);
 
-            // convert overall (60 - 99) to (-0.16 to 0)
+            // convert overall (60 - 99) to (-0.10 to 0)
             double overallVariable = 0;
             if (playerWithBall.playerStats.Passing < 74)
             {
-                overallVariable = -0.16 + (0.16) * (playerWithBall.playerStats.Overall - 60) / (99 - 60);
+                overallVariable = -0.10 + (0.10) * (playerWithBall.playerStats.Overall - 60) / (99 - 60);
                 overallVariable *= -1;
             }
             // work out pass attempted probablilites
-            // passStat from (45-99) to (0-0.44), result is (0.14-0.56)
+            // passStat from (45-99) to (0-0.36), result is (0.14-0.72)
             double passStat = playerWithBall.playerStats.Passing;
-            passAttempted = 0.14 + 0.44 * (passStat - 45) / (99 - 45);
-            if (playerWithBall.FieldGoalMade > 4 && playerWithBall.GameValue > 14) passAttempted -= 0.034 + 0.006 * (playerWithBall.FieldGoalMade - 4);
-            if (passAttempted < 0) passAttempted = 0.14;
+            passAttempted = 0.14 + 0.58 * (passStat - 45) / (99 - 45);
+            if (playerWithBall.FieldGoalMade > 4 && playerWithBall.GameValue > 19 && playerWithBall.playerStats.SecondaryPlaystyle != "Playmaker") passAttempted -= 0.024 + 0.003 * (playerWithBall.FieldGoalMade - 4);
+            if (passAttempted < 0.10) passAttempted = 0.14;
             passAttempted += overallVariable;
-            passAttempted /= Math.Pow(passerContribution, 1.4);
+            passAttempted /= Math.Pow(passerContribution, 1.6);
             attemptedProbablities.Add(passAttempted);
 
             // use this to normalise the probabilites
@@ -1496,7 +1569,7 @@ namespace LeagueSimulation
 
         public void GenerateMinutesToPlay(bool playoffs)
         {
-
+            Dictionary<int, double> gameValues = GetTeamGameValues(playoffs);
             // now we calculate the minutes for each position in team1
             {
                 // we calculate the minutes to play for each position in team1
@@ -1518,6 +1591,8 @@ namespace LeagueSimulation
 
                 // minutes calculated for PGs
                 {
+                    if (team1PGs.Count == 0) { };
+                    team1PGs.OrderByDescending(x => x.playerStats.Overall).ToList();
                     PlayerInGame team1PG1 = team1PGs[0];
                     PlayerInGame team1PG2 = team1PGs[1];
                     PlayerInGame team1PG3 = team1PGs[2];
@@ -1525,24 +1600,24 @@ namespace LeagueSimulation
                     team1PG2.MinutesToPlay = 16;
                     team1PG3.MinutesToPlay = 16;
 
-                    // convert pg1's overall from (60-99) to (-15 to +15)
-                    double overall1Variable = -15 + (15 + 15) * (team1PG1.playerStats.Overall - 60) / (99 - 60);
-                    // convert pg1's averageGameValue from (-5 to 52) to (-7 to 15)
-                    double gameValue1Variable = -7 + (7 + 15) * (GetPlayerGameValue(team1PG1, playoffs) + 5) / (5 + 52);
+                    // convert pg1's overall from (60-99) to (-16 to +16)
+                    double overall1Variable = -20 + (20 + 20) * (team1PG1.playerStats.Overall - 60) / (99 - 60);
+                    // convert pg1's averageGameValue from (-5 to 60) to (-7 to 13)
+                    double gameValue1Variable = -7 + (7 + 13) * (gameValues[team1PG1.playerStats.PlayerId] + 5) / (5 + 60);
                     team1PG1.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
                     if (team1PG1.MinutesToPlay < 0) team1PG1.MinutesToPlay = 0;
 
-                    // convert pg2's overall from (60-99) to (-15 to +15)
-                    double overall2Variable = -15 + (15 + 15) * (team1PG2.playerStats.Overall - 60) / (99 - 60);
-                    // convert pg2's averageGameValue from (-5 to 52) to (-7 to 15)
-                    double gameValue2Variable = -7 + (7 + 15) * (GetPlayerGameValue(team1PG2, playoffs) + 5) / (5 + 52);
+                    // convert pg2's overall from (60-99) to (-16 to +16)
+                    double overall2Variable = -20 + (20 + 20) * (team1PG2.playerStats.Overall - 60) / (99 - 60);
+                    // convert pg2's averageGameValue from (-5 to 60) to (-7 to 13)
+                    double gameValue2Variable = -7 + (7 + 13) * (gameValues[team1PG2.playerStats.PlayerId] + 5) / (5 + 60);
                     team1PG2.MinutesToPlay += (int)(overall2Variable + gameValue2Variable);
                     if (team1PG2.MinutesToPlay < 0) team1PG2.MinutesToPlay = 0;
 
-                    // convert pg3's overall from (60-99) to (-15 to +15)
-                    double overall3Variable = -15 + (15 + 15) * (team1PG3.playerStats.Overall - 60) / (99 - 60);
-                    // convert pg3's averageGameValue from (-5 to 52) to (-7 to 15)
-                    double gameValue3Variable = -7 + (7 + 15) * (GetPlayerGameValue(team1PG3, playoffs) + 5) / (5 + 52);
+                    // convert pg3's overall from (60-99) to (-16 to +16)
+                    double overall3Variable = -20 + (20 + 20) * (team1PG3.playerStats.Overall - 60) / (99 - 60);
+                    // convert pg3's averageGameValue from (-5 to 60) to (-7 to 13)
+                    double gameValue3Variable = -7 + (7 + 13) * (gameValues[team1PG3.playerStats.PlayerId] + 5) / (5 + 60);
                     team1PG3.MinutesToPlay += (int)(overall3Variable + gameValue3Variable);
                     if (team1PG3.MinutesToPlay < 0) team1PG3.MinutesToPlay = 0;
 
@@ -1569,24 +1644,24 @@ namespace LeagueSimulation
                     team1SG2.MinutesToPlay = 16;
                     team1SG3.MinutesToPlay = 16;
 
-                    // convert sg1's overall from (60-99) to (-15 to +15)
-                    double overall1Variable = -15 + (15 + 15) * (team1SG1.playerStats.Overall - 60) / (99 - 60);
-                    // convert sg1's averageGameValue from (-5 to 52) to (-7 to 15)
-                    double gameValue1Variable = -7 + (7 + 15) * (GetPlayerGameValue(team1SG1, playoffs) + 5) / (5 + 52);
+                    // convert sg1's overall from (60-99) to (-16 to +16)
+                    double overall1Variable = -20 + (20 + 20) * (team1SG1.playerStats.Overall - 60) / (99 - 60);
+                    // convert sg1's averageGameValue from (-5 to 60) to (-7 to 13)
+                    double gameValue1Variable = -7 + (7 + 13) * (gameValues[team1SG1.playerStats.PlayerId] + 5) / (5 + 60);
                     team1SG1.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
                     if (team1SG1.MinutesToPlay < 0) team1SG1.MinutesToPlay = 0;
 
-                    // convert sg2's overall from (60-99) to (-15 to +15)
-                    double overall2Variable = -15 + (15 + 15) * (team1SG2.playerStats.Overall - 60) / (99 - 60);
-                    // convert sg2's averageGameValue from (-5 to 52) to (-7 to 15)
-                    double gameValue2Variable = -7 + (7 + 15) * (GetPlayerGameValue(team1SG2, playoffs) + 5) / (5 + 52);
+                    // convert sg2's overall from (60-99) to (-16 to +16)
+                    double overall2Variable = -20 + (20 + 20) * (team1SG2.playerStats.Overall - 60) / (99 - 60);
+                    // convert sg2's averageGameValue from (-5 to 60) to (-7 to 13)
+                    double gameValue2Variable = -7 + (7 + 13) * (gameValues[team1SG2.playerStats.PlayerId] + 5) / (5 + 60);
                     team1SG2.MinutesToPlay += (int)(overall2Variable + gameValue2Variable);
                     if (team1SG2.MinutesToPlay < 0) team1SG2.MinutesToPlay = 0;
 
-                    // convert sg3's overall from (60-99) to (-15 to +15)
-                    double overall3Variable = -15 + (15 + 15) * (team1SG3.playerStats.Overall - 60) / (99 - 60);
-                    // convert sg3's averageGameValue from (-5 to 52) to (-7 to 15)
-                    double gameValue3Variable = -7 + (7 + 15) * (GetPlayerGameValue(team1SG3, playoffs) + 5) / (5 + 52);
+                    // convert sg3's overall from (60-99) to (-16 to +16)
+                    double overall3Variable = -20 + (20 + 20) * (team1SG3.playerStats.Overall - 60) / (99 - 60);
+                    // convert sg3's averageGameValue from (-5 to 60) to (-7 to 13)
+                    double gameValue3Variable = -7 + (7 + 13) * (gameValues[team1SG3.playerStats.PlayerId] + 5) / (5 + 60);
                     team1SG3.MinutesToPlay += (int)(overall3Variable + gameValue3Variable);
                     if (team1SG3.MinutesToPlay < 0) team1SG3.MinutesToPlay = 0;
 
@@ -1613,24 +1688,24 @@ namespace LeagueSimulation
                     team1SF2.MinutesToPlay = 16;
                     team1SF3.MinutesToPlay = 16;
 
-                    // convert sf1's overall from (60-99) to (-15 to +15)
-                    double overall1Variable = -15 + (15 + 15) * (team1SF1.playerStats.Overall - 60) / (99 - 60);
-                    // convert sf1's averageGameValue from (-5 to 52) to (-7 to 15)
-                    double gameValue1Variable = -7 + (7 + 15) * (GetPlayerGameValue(team1SF1, playoffs) + 5) / (5 + 52);
+                    // convert sf1's overall from (60-99) to (-16 to +16)
+                    double overall1Variable = -20 + (20 + 20) * (team1SF1.playerStats.Overall - 60) / (99 - 60);
+                    // convert sf1's averageGameValue from (-5 to 60) to (-7 to 13)
+                    double gameValue1Variable = -7 + (7 + 13) * (gameValues[team1SF1.playerStats.PlayerId] + 5) / (5 + 60);
                     team1SF1.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
                     if (team1SF1.MinutesToPlay < 0) team1SF1.MinutesToPlay = 0;
 
-                    // convert sf2's overall from (60-99) to (-15 to +15)
-                    double overall2Variable = -15 + (15 + 15) * (team1SF2.playerStats.Overall - 60) / (99 - 60);
-                    // convert sf2's averageGameValue from (-5 to 52) to (-7 to 15)
-                    double gameValue2Variable = -7 + (7 + 15) * (GetPlayerGameValue(team1SF2, playoffs) + 5) / (5 + 52);
+                    // convert sf2's overall from (60-99) to (-16 to +16)
+                    double overall2Variable = -20 + (20 + 20) * (team1SF2.playerStats.Overall - 60) / (99 - 60);
+                    // convert sf2's averageGameValue from (-5 to 60) to (-7 to 13)
+                    double gameValue2Variable = -7 + (7 + 13) * (gameValues[team1SF2.playerStats.PlayerId] + 5) / (5 + 60);
                     team1SF2.MinutesToPlay += (int)(overall2Variable + gameValue2Variable);
                     if (team1SF2.MinutesToPlay < 0) team1SF2.MinutesToPlay = 0;
 
-                    // convert sf3's overall from (60-99) to (-15 to +15)
-                    double overall3Variable = -15 + (15 + 15) * (team1SF3.playerStats.Overall - 60) / (99 - 60);
-                    // convert sf3's averageGameValue from (-5 to 52) to (-7 to 15)
-                    double gameValue3Variable = -7 + (7 + 15) * (GetPlayerGameValue(team1SF3, playoffs) + 5) / (5 + 52);
+                    // convert sf3's overall from (60-99) to (-16 to +16)
+                    double overall3Variable = -20 + (20 + 20) * (team1SF3.playerStats.Overall - 60) / (99 - 60);
+                    // convert sf3's averageGameValue from (-5 to 60) to (-7 to 13)
+                    double gameValue3Variable = -7 + (7 + 13) * (gameValues[team1SF3.playerStats.PlayerId] + 5) / (5 + 60);
                     team1SF3.MinutesToPlay += (int)(overall3Variable + gameValue3Variable);
                     if (team1SF3.MinutesToPlay < 0) team1SF3.MinutesToPlay = 0;
 
@@ -1657,24 +1732,24 @@ namespace LeagueSimulation
                     team1PF2.MinutesToPlay = 16;
                     team1PF3.MinutesToPlay = 16;
 
-                    // convert pf1's overall from (60-99) to (-15 to +15)
-                    double overall1Variable = -15 + (15 + 15) * (team1PF1.playerStats.Overall - 60) / (99 - 60);
-                    // convert pf1's averageGameValue from (-5 to 52) to (-7 to 15)
-                    double gameValue1Variable = -7 + (7 + 15) * (GetPlayerGameValue(team1PF1, playoffs) + 5) / (5 + 52);
+                    // convert pf1's overall from (60-99) to (-16 to +16)
+                    double overall1Variable = -20 + (20 + 20) * (team1PF1.playerStats.Overall - 60) / (99 - 60);
+                    // convert pf1's averageGameValue from (-5 to 60) to (-7 to 13)
+                    double gameValue1Variable = -7 + (7 + 13) * (gameValues[team1PF1.playerStats.PlayerId] + 5) / (5 + 60);
                     team1PF1.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
                     if (team1PF1.MinutesToPlay < 0) team1PF1.MinutesToPlay = 0;
 
-                    // convert pf2's overall from (60-99) to (-15 to +15)
-                    double overall2Variable = -15 + (15 + 15) * (team1PF2.playerStats.Overall - 60) / (99 - 60);
-                    // convert pf2's averageGameValue from (-5 to 52) to (-7 to 15)
-                    double gameValue2Variable = -7 + (7 + 15) * (GetPlayerGameValue(team1PF2, playoffs) + 5) / (5 + 52);
+                    // convert pf2's overall from (60-99) to (-16 to +16)
+                    double overall2Variable = -20 + (20 + 20) * (team1PF2.playerStats.Overall - 60) / (99 - 60);
+                    // convert pf2's averageGameValue from (-5 to 60) to (-7 to 13)
+                    double gameValue2Variable = -7 + (7 + 13) * (gameValues[team1PF2.playerStats.PlayerId] + 5) / (5 + 60);
                     team1PF2.MinutesToPlay += (int)(overall2Variable + gameValue2Variable);
                     if (team1PF2.MinutesToPlay < 0) team1PF2.MinutesToPlay = 0;
 
-                    // convert pf3's overall from (60-99) to (-15 to +15)
-                    double overall3Variable = -15 + (15 + 15) * (team1PF3.playerStats.Overall - 60) / (99 - 60);
-                    // convert pf3's averageGameValue from (-5 to 52) to (-7 to 15)
-                    double gameValue3Variable = -7 + (7 + 15) * (GetPlayerGameValue(team1PF3, playoffs) + 5) / (5 + 52);
+                    // convert pf3's overall from (60-99) to (-16 to +16)
+                    double overall3Variable = -20 + (20 + 20) * (team1PF3.playerStats.Overall - 60) / (99 - 60);
+                    // convert pf3's averageGameValue from (-5 to 60) to (-7 to 13)
+                    double gameValue3Variable = -7 + (7 + 13) * (gameValues[team1PF3.playerStats.PlayerId] + 5) / (5 + 60);
                     team1PF3.MinutesToPlay += (int)(overall3Variable + gameValue3Variable);
                     if (team1PF3.MinutesToPlay < 0) team1PF3.MinutesToPlay = 0;
 
@@ -1701,24 +1776,24 @@ namespace LeagueSimulation
                     team1C2.MinutesToPlay = 16;
                     team1C3.MinutesToPlay = 16;
 
-                    // convert c1's overall from (60-99) to (-15 to +15)
-                    double overall1Variable = -15 + (15 + 15) * (team1C1.playerStats.Overall - 60) / (99 - 60);
-                    // convert c1's averageGameValue from (-5 to 52) to (-7 to 15)
-                    double gameValue1Variable = -7 + (7 + 15) * (GetPlayerGameValue(team1C1, playoffs) + 5) / (5 + 52);
+                    // convert c1's overall from (60-99) to (-16 to +16)
+                    double overall1Variable = -20 + (20 + 20) * (team1C1.playerStats.Overall - 60) / (99 - 60);
+                    // convert c1's averageGameValue from (-5 to 60) to (-7 to 13)
+                    double gameValue1Variable = -7 + (7 + 13) * (gameValues[team1C1.playerStats.PlayerId] + 5) / (5 + 60);
                     team1C1.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
                     if (team1C1.MinutesToPlay < 0) team1C1.MinutesToPlay = 0;
 
-                    // convert c2's overall from (60-99) to (-15 to +15)
-                    double overall2Variable = -15 + (15 + 15) * (team1C2.playerStats.Overall - 60) / (99 - 60);
-                    // convert c2's averageGameValue from (-5 to 52) to (-7 to 15)
-                    double gameValue2Variable = -7 + (7 + 15) * (GetPlayerGameValue(team1C2, playoffs) + 5) / (5 + 52);
+                    // convert c2's overall from (60-99) to (-16 to +16)
+                    double overall2Variable = -20 + (20 + 20) * (team1C2.playerStats.Overall - 60) / (99 - 60);
+                    // convert c2's averageGameValue from (-5 to 60) to (-7 to 13)
+                    double gameValue2Variable = -7 + (7 + 13) * (gameValues[team1C2.playerStats.PlayerId] + 5) / (5 + 60);
                     team1C2.MinutesToPlay += (int)(overall2Variable + gameValue2Variable);
                     if (team1C2.MinutesToPlay < 0) team1C2.MinutesToPlay = 0;
 
-                    // convert c3's overall from (60-99) to (-15 to +15)
-                    double overall3Variable = -15 + (15 + 15) * (team1C3.playerStats.Overall - 60) / (99 - 60);
-                    // convert c3's averageGameValue from (-5 to 52) to (-7 to 15)
-                    double gameValue3Variable = -7 + (7 + 15) * (GetPlayerGameValue(team1C3, playoffs) + 5) / (5 + 52);
+                    // convert c3's overall from (60-99) to (-16 to +16)
+                    double overall3Variable = -20 + (20 + 20) * (team1C3.playerStats.Overall - 60) / (99 - 60);
+                    // convert c3's averageGameValue from (-5 to 60) to (-7 to 13)
+                    double gameValue3Variable = -7 + (7 + 13) * (gameValues[team1C3.playerStats.PlayerId] + 5) / (5 + 60);
                     team1C3.MinutesToPlay += (int)(overall3Variable + gameValue3Variable);
                     if (team1C3.MinutesToPlay < 0) team1C3.MinutesToPlay = 0;
 
@@ -1766,24 +1841,24 @@ namespace LeagueSimulation
                     team2PG2.MinutesToPlay = 16;
                     team2PG3.MinutesToPlay = 16;
 
-                    // convert pg1's overall from (60-99) to (-15 to +15)
-                    double overall1Variable = -15 + (15 + 15) * (team2PG1.playerStats.Overall - 60) / (99 - 60);
-                    // convert pg1's averageGameValue from (-5 to 52) to (-7 to 15)
-                    double gameValue1Variable = -7 + (7 + 15) * (GetPlayerGameValue(team2PG1, playoffs) + 5) / (5 + 52);
+                    // convert pg1's overall from (60-99) to (-16 to +16)
+                    double overall1Variable = -20 + (20 + 20) * (team2PG1.playerStats.Overall - 60) / (99 - 60);
+                    // convert pg1's averageGameValue from (-5 to 60) to (-7 to 13)
+                    double gameValue1Variable = -7 + (7 + 13) * (gameValues[team2PG1.playerStats.PlayerId] + 5) / (5 + 60);
                     team2PG1.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
                     if (team2PG1.MinutesToPlay < 0) team2PG1.MinutesToPlay = 0;
 
-                    // convert pg2's overall from (60-99) to (-15 to +15)
-                    double overall2Variable = -15 + (15 + 15) * (team2PG2.playerStats.Overall - 60) / (99 - 60);
-                    // convert pg2's averageGameValue from (-5 to 52) to (-7 to 15)
-                    double gameValue2Variable = -7 + (7 + 15) * (GetPlayerGameValue(team2PG2, playoffs) + 5) / (5 + 52);
+                    // convert pg2's overall from (60-99) to (-16 to +16)
+                    double overall2Variable = -20 + (20 + 20) * (team2PG2.playerStats.Overall - 60) / (99 - 60);
+                    // convert pg2's averageGameValue from (-5 to 60) to (-7 to 13)
+                    double gameValue2Variable = -7 + (7 + 13) * (gameValues[team2PG2.playerStats.PlayerId] + 5) / (5 + 60);
                     team2PG2.MinutesToPlay += (int)(overall2Variable + gameValue2Variable);
                     if (team2PG2.MinutesToPlay < 0) team2PG2.MinutesToPlay = 0;
 
-                    // convert pg3's overall from (60-99) to (-15 to +15)
-                    double overall3Variable = -15 + (15 + 15) * (team2PG3.playerStats.Overall - 60) / (99 - 60);
-                    // convert pg3's averageGameValue from (-5 to 52) to (-7 to 15)
-                    double gameValue3Variable = -7 + (7 + 15) * (GetPlayerGameValue(team2PG3, playoffs) + 5) / (5 + 52);
+                    // convert pg3's overall from (60-99) to (-16 to +16)
+                    double overall3Variable = -20 + (20 + 20) * (team2PG3.playerStats.Overall - 60) / (99 - 60);
+                    // convert pg3's averageGameValue from (-5 to 60) to (-7 to 13)
+                    double gameValue3Variable = -7 + (7 + 13) * (gameValues[team2PG3.playerStats.PlayerId] + 5) / (5 + 60);
                     team2PG3.MinutesToPlay += (int)(overall3Variable + gameValue3Variable);
                     if (team2PG3.MinutesToPlay < 0) team2PG3.MinutesToPlay = 0;
 
@@ -1810,24 +1885,24 @@ namespace LeagueSimulation
                     team2SG2.MinutesToPlay = 16;
                     team2SG3.MinutesToPlay = 16;
 
-                    // convert sg1's overall from (60-99) to (-15 to +15)
-                    double overall1Variable = -15 + (15 + 15) * (team2SG1.playerStats.Overall - 60) / (99 - 60);
-                    // convert sg1's averageGameValue from (-5 to 52) to (-7 to 15)
-                    double gameValue1Variable = -7 + (7 + 15) * (GetPlayerGameValue(team2SG1, playoffs) + 5) / (5 + 52);
+                    // convert sg1's overall from (60-99) to (-16 to +16)
+                    double overall1Variable = -20 + (20 + 20) * (team2SG1.playerStats.Overall - 60) / (99 - 60);
+                    // convert sg1's averageGameValue from (-5 to 60) to (-7 to 13)
+                    double gameValue1Variable = -7 + (7 + 13) * (gameValues[team2SG1.playerStats.PlayerId] + 5) / (5 + 60);
                     team2SG1.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
                     if (team2SG1.MinutesToPlay < 0) team2SG1.MinutesToPlay = 0;
 
-                    // convert sg2's overall from (60-99) to (-15 to +15)
-                    double overall2Variable = -15 + (15 + 15) * (team2SG2.playerStats.Overall - 60) / (99 - 60);
-                    // convert sg2's averageGameValue from (-5 to 52) to (-7 to 15)
-                    double gameValue2Variable = -7 + (7 + 15) * (GetPlayerGameValue(team2SG2, playoffs) + 5) / (5 + 52);
+                    // convert sg2's overall from (60-99) to (-16 to +16)
+                    double overall2Variable = -20 + (20 + 20) * (team2SG2.playerStats.Overall - 60) / (99 - 60);
+                    // convert sg2's averageGameValue from (-5 to 60) to (-7 to 13)
+                    double gameValue2Variable = -7 + (7 + 13) * (gameValues[team2SG2.playerStats.PlayerId] + 5) / (5 + 60);
                     team2SG2.MinutesToPlay += (int)(overall2Variable + gameValue2Variable);
                     if (team2SG2.MinutesToPlay < 0) team2SG2.MinutesToPlay = 0;
 
-                    // convert sg3's overall from (60-99) to (-15 to +15)
-                    double overall3Variable = -15 + (15 + 15) * (team2SG3.playerStats.Overall - 60) / (99 - 60);
-                    // convert sg3's averageGameValue from (-5 to 52) to (-7 to 15)
-                    double gameValue3Variable = -7 + (7 + 15) * (GetPlayerGameValue(team2SG3, playoffs) + 5) / (5 + 52);
+                    // convert sg3's overall from (60-99) to (-16 to +16)
+                    double overall3Variable = -20 + (20 + 20) * (team2SG3.playerStats.Overall - 60) / (99 - 60);
+                    // convert sg3's averageGameValue from (-5 to 60) to (-7 to 13)
+                    double gameValue3Variable = -7 + (7 + 13) * (gameValues[team2SG3.playerStats.PlayerId] + 5) / (5 + 60);
                     team2SG3.MinutesToPlay += (int)(overall3Variable + gameValue3Variable);
                     if (team2SG3.MinutesToPlay < 0) team2SG3.MinutesToPlay = 0;
 
@@ -1854,24 +1929,24 @@ namespace LeagueSimulation
                     team2SF2.MinutesToPlay = 16;
                     team2SF3.MinutesToPlay = 16;
 
-                    // convert sf1's overall from (60-99) to (-15 to +15)
-                    double overall1Variable = -15 + (15 + 15) * (team2SF1.playerStats.Overall - 60) / (99 - 60);
-                    // convert sf1's averageGameValue from (-5 to 52) to (-7 to 15)
-                    double gameValue1Variable = -7 + (7 + 15) * (GetPlayerGameValue(team2SF1, playoffs) + 5) / (5 + 52);
+                    // convert sf1's overall from (60-99) to (-16 to +16)
+                    double overall1Variable = -20 + (20 + 20) * (team2SF1.playerStats.Overall - 60) / (99 - 60);
+                    // convert sf1's averageGameValue from (-5 to 60) to (-7 to 13)
+                    double gameValue1Variable = -7 + (7 + 13) * (gameValues[team2SF1.playerStats.PlayerId] + 5) / (5 + 60);
                     team2SF1.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
                     if (team2SF1.MinutesToPlay < 0) team2SF1.MinutesToPlay = 0;
 
-                    // convert sf2's overall from (60-99) to (-15 to +15)
-                    double overall2Variable = -15 + (15 + 15) * (team2SF2.playerStats.Overall - 60) / (99 - 60);
-                    // convert sf2's averageGameValue from (-5 to 52) to (-7 to 15)
-                    double gameValue2Variable = -7 + (7 + 15) * (GetPlayerGameValue(team2SF2, playoffs) + 5) / (5 + 52);
+                    // convert sf2's overall from (60-99) to (-16 to +16)
+                    double overall2Variable = -20 + (20 + 20) * (team2SF2.playerStats.Overall - 60) / (99 - 60);
+                    // convert sf2's averageGameValue from (-5 to 60) to (-7 to 13)
+                    double gameValue2Variable = -7 + (7 + 13) * (gameValues[team2SF2.playerStats.PlayerId] + 5) / (5 + 60);
                     team2SF2.MinutesToPlay += (int)(overall2Variable + gameValue2Variable);
                     if (team2SF2.MinutesToPlay < 0) team2SF2.MinutesToPlay = 0;
 
-                    // convert sf3's overall from (60-99) to (-15 to +15)
-                    double overall3Variable = -15 + (15 + 15) * (team2SF3.playerStats.Overall - 60) / (99 - 60);
-                    // convert sf3's averageGameValue from (-5 to 52) to (-7 to 15)
-                    double gameValue3Variable = -7 + (7 + 15) * (GetPlayerGameValue(team2SF3, playoffs) + 5) / (5 + 52);
+                    // convert sf3's overall from (60-99) to (-16 to +16)
+                    double overall3Variable = -20 + (20 + 20) * (team2SF3.playerStats.Overall - 60) / (99 - 60);
+                    // convert sf3's averageGameValue from (-5 to 60) to (-7 to 13)
+                    double gameValue3Variable = -7 + (7 + 13) * (gameValues[team2SF3.playerStats.PlayerId] + 5) / (5 + 60);
                     team2SF3.MinutesToPlay += (int)(overall3Variable + gameValue3Variable);
                     if (team2SF3.MinutesToPlay < 0) team2SF3.MinutesToPlay = 0;
 
@@ -1898,24 +1973,24 @@ namespace LeagueSimulation
                     team2PF2.MinutesToPlay = 16;
                     team2PF3.MinutesToPlay = 16;
 
-                    // convert pf1's overall from (60-99) to (-15 to +15)
-                    double overall1Variable = -15 + (15 + 15) * (team2PF1.playerStats.Overall - 60) / (99 - 60);
-                    // convert pf1's averageGameValue from (-5 to 52) to (-7 to 15)
-                    double gameValue1Variable = -7 + (7 + 15) * (GetPlayerGameValue(team2PF1, playoffs) + 5) / (5 + 52);
+                    // convert pf1's overall from (60-99) to (-16 to +16)
+                    double overall1Variable = -20 + (20 + 20) * (team2PF1.playerStats.Overall - 60) / (99 - 60);
+                    // convert pf1's averageGameValue from (-5 to 60) to (-7 to 13)
+                    double gameValue1Variable = -7 + (7 + 13) * (gameValues[team2PF1.playerStats.PlayerId] + 5) / (5 + 60);
                     team2PF1.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
                     if (team2PF1.MinutesToPlay < 0) team2PF1.MinutesToPlay = 0;
 
-                    // convert pf2's overall from (60-99) to (-15 to +15)
-                    double overall2Variable = -15 + (15 + 15) * (team2PF2.playerStats.Overall - 60) / (99 - 60);
-                    // convert pf2's averageGameValue from (-5 to 52) to (-7 to 15)
-                    double gameValue2Variable = -7 + (7 + 15) * (GetPlayerGameValue(team2PF2, playoffs) + 5) / (5 + 52);
+                    // convert pf2's overall from (60-99) to (-16 to +16)
+                    double overall2Variable = -20 + (20 + 20) * (team2PF2.playerStats.Overall - 60) / (99 - 60);
+                    // convert pf2's averageGameValue from (-5 to 60) to (-7 to 13)
+                    double gameValue2Variable = -7 + (7 + 13) * (gameValues[team2PF2.playerStats.PlayerId] + 5) / (5 + 60);
                     team2PF2.MinutesToPlay += (int)(overall2Variable + gameValue2Variable);
                     if (team2PF2.MinutesToPlay < 0) team2PF2.MinutesToPlay = 0;
 
-                    // convert pf3's overall from (60-99) to (-15 to +15)
-                    double overall3Variable = -15 + (15 + 15) * (team2PF3.playerStats.Overall - 60) / (99 - 60);
-                    // convert pf3's averageGameValue from (-5 to 52) to (-7 to 15)
-                    double gameValue3Variable = -7 + (7 + 15) * (GetPlayerGameValue(team2PF3, playoffs) + 5) / (5 + 52);
+                    // convert pf3's overall from (60-99) to (-16 to +16)
+                    double overall3Variable = -20 + (20 + 20) * (team2PF3.playerStats.Overall - 60) / (99 - 60);
+                    // convert pf3's averageGameValue from (-5 to 60) to (-7 to 13)
+                    double gameValue3Variable = -7 + (7 + 13) * (gameValues[team2PF3.playerStats.PlayerId] + 5) / (5 + 60);
                     team2PF3.MinutesToPlay += (int)(overall3Variable + gameValue3Variable);
                     if (team2PF3.MinutesToPlay < 0) team2PF3.MinutesToPlay = 0;
 
@@ -1942,24 +2017,24 @@ namespace LeagueSimulation
                     team2C2.MinutesToPlay = 16;
                     team2C3.MinutesToPlay = 16;
 
-                    // convert c1's overall from (60-99) to (-15 to +15)
-                    double overall1Variable = -15 + (15 + 15) * (team2C1.playerStats.Overall - 60) / (99 - 60);
-                    // convert c1's averageGameValue from (-5 to 52) to (-7 to 15)
-                    double gameValue1Variable = -7 + (7 + 15) * (GetPlayerGameValue(team2C1, playoffs) + 5) / (5 + 52);
+                    // convert c1's overall from (60-99) to (-16 to +16)
+                    double overall1Variable = -20 + (20 + 20) * (team2C1.playerStats.Overall - 60) / (99 - 60);
+                    // convert c1's averageGameValue from (-5 to 60) to (-7 to 13)
+                    double gameValue1Variable = -7 + (7 + 13) * (gameValues[team2C1.playerStats.PlayerId] + 5) / (5 + 60);
                     team2C1.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
                     if (team2C1.MinutesToPlay < 0) team2C1.MinutesToPlay = 0;
 
-                    // convert c2's overall from (60-99) to (-15 to +15)
-                    double overall2Variable = -15 + (15 + 15) * (team2C2.playerStats.Overall - 60) / (99 - 60);
-                    // convert c2's averageGameValue from (-5 to 52) to (-7 to 15)
-                    double gameValue2Variable = -7 + (7 + 15) * (GetPlayerGameValue(team2C2, playoffs) + 5) / (5 + 52);
+                    // convert c2's overall from (60-99) to (-16 to +16)
+                    double overall2Variable = -20 + (20 + 20) * (team2C2.playerStats.Overall - 60) / (99 - 60);
+                    // convert c2's averageGameValue from (-5 to 60) to (-7 to 13)
+                    double gameValue2Variable = -7 + (7 + 13) * (gameValues[team2C2.playerStats.PlayerId] + 5) / (5 + 60);
                     team2C2.MinutesToPlay += (int)(overall2Variable + gameValue2Variable);
                     if (team2C2.MinutesToPlay < 0) team2C2.MinutesToPlay = 0;
 
-                    // convert c3's overall from (60-99) to (-15 to +15)
-                    double overall3Variable = -15 + (15 + 15) * (team2C3.playerStats.Overall - 60) / (99 - 60);
-                    // convert c3's averageGameValue from (-5 to 52) to (-7 to 15)
-                    double gameValue3Variable = -7 + (7 + 15) * (GetPlayerGameValue(team2C3, playoffs) + 5) / (5 + 52);
+                    // convert c3's overall from (60-99) to (-16 to +16)
+                    double overall3Variable = -20 + (20 + 20) * (team2C3.playerStats.Overall - 60) / (99 - 60);
+                    // convert c3's averageGameValue from (-5 to 60) to (-7 to 13)
+                    double gameValue3Variable = -7 + (7 + 13) * (gameValues[team2C3.playerStats.PlayerId] + 5) / (5 + 60);
                     team2C3.MinutesToPlay += (int)(overall3Variable + gameValue3Variable);
                     if (team2C3.MinutesToPlay < 0) team2C3.MinutesToPlay = 0;
 
@@ -2144,20 +2219,58 @@ namespace LeagueSimulation
             using (var connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
-                string getGameValueQuery = $"SELECT AVG(gameValue) FROM playerGameStats WHERE playerId = {player.playerStats.PlayerId} AND isPlayoffs = {playoffs};";
+                string getGameValueQuery = $"SELECT AVG(gameValue) FROM playerGameStats WHERE playerId = {player.playerStats.PlayerId} AND isPlayoffs = {playoffs} AND seasonId = {CurrentLeague.CurrentSeason};";
                 using (var command = new SQLiteCommand(getGameValueQuery, connection))
                 {
                     using (var reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            if (reader.IsDBNull(0)) return 10;
+                            if (reader.IsDBNull(0)) return 6;
                             return (double)reader.GetDecimal(0);
                         }
                     }
                 }
             }
             return 0;
+        }
+
+        public Dictionary<int, double> GetTeamGameValues(bool playoffs)
+        {
+            Dictionary<int, double> gameValues = new Dictionary<int, double>();
+            using (var connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+                string getGameValueQuery = $@"
+                SELECT 
+                pot.playerId, 
+                COALESCE(AVG(pgs.gameValue), 0) as gameValue
+                FROM playerOnTeam pot
+                LEFT JOIN playerGameStats pgs
+                ON pgs.isPlayoffs = {playoffs}
+                AND pgs.seasonId = {CurrentLeague.CurrentSeason}
+                AND pot.playerId = pgs.playerId
+                WHERE 
+	                pot.teamId IN ({team1.TeamId}, {team2.TeamId})
+                    AND pot.dayJoined <= {CurrentLeague.CurrentDay}
+                    AND pot.yearJoined <= {CurrentLeague.CurrentSeason} + 2023
+                    AND pot.dayLeft >= {CurrentLeague.CurrentDay}
+                    AND pot.yearLeft >= {CurrentLeague.CurrentSeason} + 2023
+                GROUP BY 
+                    pot.playerId;
+                ";
+                using (var command = new SQLiteCommand(getGameValueQuery, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            gameValues.Add(reader.GetInt32(0), reader.GetDouble(1));
+                        }
+                    }
+                }
+            }
+            return gameValues;
         }
 
         public (int, int) CalculateScore() => (team1Stats.Sum(x => x.Points), team2Stats.Sum(x => x.Points));

@@ -52,6 +52,7 @@
             toolStripMenuItem20 = new ToolStripMenuItem();
             displayPanel = new FlowLayoutPanel();
             label1 = new Label();
+            seasonSummaryToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             panel1.SuspendLayout();
             menuStrip2.SuspendLayout();
@@ -129,7 +130,7 @@
             // 
             // toolStripMenuItem3
             // 
-            toolStripMenuItem3.DropDownItems.AddRange(new ToolStripItem[] { leagueStandingsMenuItem, toolStripMenuItem5 });
+            toolStripMenuItem3.DropDownItems.AddRange(new ToolStripItem[] { leagueStandingsMenuItem, toolStripMenuItem5, seasonSummaryToolStripMenuItem });
             toolStripMenuItem3.Name = "toolStripMenuItem3";
             toolStripMenuItem3.Size = new Size(180, 28);
             toolStripMenuItem3.Text = "League";
@@ -137,14 +138,14 @@
             // leagueStandingsMenuItem
             // 
             leagueStandingsMenuItem.Name = "leagueStandingsMenuItem";
-            leagueStandingsMenuItem.Size = new Size(154, 28);
+            leagueStandingsMenuItem.Size = new Size(211, 28);
             leagueStandingsMenuItem.Text = "Standings";
             leagueStandingsMenuItem.Click += leagueStandingsMenuItem_Click;
             // 
             // toolStripMenuItem5
             // 
             toolStripMenuItem5.Name = "toolStripMenuItem5";
-            toolStripMenuItem5.Size = new Size(154, 28);
+            toolStripMenuItem5.Size = new Size(211, 28);
             toolStripMenuItem5.Text = "Playoffs";
             toolStripMenuItem5.Click += toolStripMenuItem5_Click;
             // 
@@ -158,14 +159,14 @@
             // rosterMenuItem
             // 
             rosterMenuItem.Name = "rosterMenuItem";
-            rosterMenuItem.Size = new Size(149, 28);
+            rosterMenuItem.Size = new Size(180, 28);
             rosterMenuItem.Text = "Roster";
             rosterMenuItem.Click += rosterMenuItem_Click;
             // 
             // toolStripMenuItem10
             // 
             toolStripMenuItem10.Name = "toolStripMenuItem10";
-            toolStripMenuItem10.Size = new Size(149, 28);
+            toolStripMenuItem10.Size = new Size(180, 28);
             toolStripMenuItem10.Text = "Schedule";
             // 
             // fullScheduleMenuItem
@@ -232,6 +233,13 @@
             label1.TabIndex = 4;
             label1.Text = "User Team: ";
             // 
+            // seasonSummaryToolStripMenuItem
+            // 
+            seasonSummaryToolStripMenuItem.Name = "seasonSummaryToolStripMenuItem";
+            seasonSummaryToolStripMenuItem.Size = new Size(211, 28);
+            seasonSummaryToolStripMenuItem.Text = "Season Summary";
+            seasonSummaryToolStripMenuItem.Click += seasonSummaryToolStripMenuItem_Click;
+            // 
             // Form2
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -282,5 +290,6 @@
         private FlowLayoutPanel displayPanel;
         private ToolStripMenuItem leagueLeadersToolStripMenuItem;
         private Label label1;
+        private ToolStripMenuItem seasonSummaryToolStripMenuItem;
     }
 }

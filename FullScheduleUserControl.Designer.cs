@@ -123,10 +123,11 @@
             currentDayLabel = new Label();
             currentDayShownNum = new NumericUpDown();
             topPanel = new Panel();
-            simToEndButton = new Button();
+            simToButton = new Button();
             simMonthButton = new Button();
             simDayButton = new Button();
             scheduleDisplayPanel = new FlowLayoutPanel();
+            simToValue = new NumericUpDown();
             gamesListPanel.SuspendLayout();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
@@ -144,6 +145,7 @@
             ((System.ComponentModel.ISupportInitialize)currentDayShownNum).BeginInit();
             topPanel.SuspendLayout();
             scheduleDisplayPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)simToValue).BeginInit();
             SuspendLayout();
             // 
             // gamesListPanel
@@ -1162,7 +1164,8 @@
             // 
             // topPanel
             // 
-            topPanel.Controls.Add(simToEndButton);
+            topPanel.Controls.Add(simToValue);
+            topPanel.Controls.Add(simToButton);
             topPanel.Controls.Add(simMonthButton);
             topPanel.Controls.Add(simDayButton);
             topPanel.Controls.Add(fullScheduleTitleMenu);
@@ -1173,16 +1176,16 @@
             topPanel.Size = new Size(629, 84);
             topPanel.TabIndex = 4;
             // 
-            // simToEndButton
+            // simToButton
             // 
-            simToEndButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            simToEndButton.Location = new Point(267, 44);
-            simToEndButton.Name = "simToEndButton";
-            simToEndButton.Size = new Size(135, 40);
-            simToEndButton.TabIndex = 6;
-            simToEndButton.Text = "Sim to End";
-            simToEndButton.UseVisualStyleBackColor = true;
-            simToEndButton.Click += simToEndButton_Click;
+            simToButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            simToButton.Location = new Point(241, 44);
+            simToButton.Name = "simToButton";
+            simToButton.Size = new Size(123, 34);
+            simToButton.TabIndex = 6;
+            simToButton.Text = "Sim Days ->";
+            simToButton.UseVisualStyleBackColor = true;
+            simToButton.Click += simToEndButton_Click;
             // 
             // simMonthButton
             // 
@@ -1216,6 +1219,15 @@
             scheduleDisplayPanel.Name = "scheduleDisplayPanel";
             scheduleDisplayPanel.Size = new Size(641, 2184);
             scheduleDisplayPanel.TabIndex = 5;
+            // 
+            // simToValue
+            // 
+            simToValue.Location = new Point(370, 49);
+            simToValue.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            simToValue.Name = "simToValue";
+            simToValue.Size = new Size(66, 23);
+            simToValue.TabIndex = 7;
+            simToValue.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // FullScheduleUserControl
             // 
@@ -1255,6 +1267,7 @@
             topPanel.ResumeLayout(false);
             topPanel.PerformLayout();
             scheduleDisplayPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)simToValue).EndInit();
             ResumeLayout(false);
         }
 
@@ -1358,6 +1371,7 @@
         private Button simDayButton;
         private Button simMonthButton;
         private FlowLayoutPanel scheduleDisplayPanel;
-        private Button simToEndButton;
+        private Button simToButton;
+        private NumericUpDown simToValue;
     }
 }

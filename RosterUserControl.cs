@@ -35,8 +35,8 @@ namespace LeagueSimulation
                         WITH currentPlayers AS (
                         SELECT playerId, teamId
                         FROM playerOnTeam
-                        WHERE dayJoined <= 1 AND yearJoined <= 2024
-                        AND dayLeft >= 1 AND yearLeft >= 2024
+                        WHERE dayJoined <= {league.CurrentDay} AND yearJoined <= {league.CurrentSeason + 2023}
+                        AND dayLeft >= {league.CurrentDay} AND yearLeft >= {league.CurrentSeason + 2023}
                     )
                     SELECT 
                         p.playerForename,
@@ -56,6 +56,7 @@ namespace LeagueSimulation
                         players p ON p.playerId = cp.playerId
                     LEFT JOIN 
                         playerGameStats pgs ON p.playerId = pgs.playerId
+                        AND pgs.seasonId = {league.CurrentSeason}
                     JOIN 
                         teams t ON cp.teamId = t.teamId
                         AND t.teamName = '{currentTeamRoster.Text}'

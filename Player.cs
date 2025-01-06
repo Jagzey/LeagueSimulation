@@ -104,7 +104,7 @@ namespace LeagueSimulation
             else if (position == "SG")
             {
                 mean = 77;
-                stdev = 1.7;
+                stdev = 1.4;
                 doubleHeight = GenerateRandomNormalDistribution(mean, stdev);
                 while (!(doubleHeight > 75.5 && doubleHeight < 81))
                 {
@@ -605,89 +605,89 @@ namespace LeagueSimulation
 
                         // calculate layup
                         statsMean = 32;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
 
                         // calculate dunk
                         statsMean = 27;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
 
                         // calculate midRange
-                        statsMean = 68;
-                        statsStdev = 1.9;
+                        statsMean = 64;
+                        statsStdev = 1.3;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
-                        statsMean = 74;
-                        statsStdev = 2;
+                        statsMean = 68;
+                        statsStdev = 1.4;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
                         statsMean = 76;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
                         statsMean = 63;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
 
                         // calculate ballHandle
                         statsMean = 67;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         ballHandle += multipler;
 
                         // calculate defense
                         statsMean = 33;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         defense = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         defense += multipler;
 
                         // calculate steal
                         statsMean = 39;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         steal = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         steal += multipler;
 
                         // calculate block
                         statsMean = 25;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         block = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         block += multipler;
 
                         // calculate rebound
                         statsMean = 33;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         rebound = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         rebound += multipler;
 
                         // calculate speed
                         statsMean = 62;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         speed = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         speed += multipler;
                         if (speed > 99) speed = 99;
 
                         // calculate strength
                         statsMean = 32;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         strength = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         strength += multipler;
 
                         // calculate stamina
                         statsMean = 64;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         stamina = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         stamina += multipler;
                         if (stamina > 99) stamina = 99;
@@ -704,91 +704,91 @@ namespace LeagueSimulation
 
                         // calculate layup
                         statsMean = 35;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
 
                         // calculate dunk
                         statsMean = 31;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
 
                         // calculate midRange
                         statsMean = 51;
-                        statsStdev = 1.9;
+                        statsStdev = 1.3;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
                         statsMean = 59;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
                         statsMean = 66;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
-                        statsMean = 75;
-                        statsStdev = 2.7;
+                        statsMean = 73;
+                        statsStdev = 1.4;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
                         if (passing > 99) passing = 99;
 
                         // calculate ballHandle
-                        statsMean = 76;
-                        statsStdev = 2.7;
+                        statsMean = 75;
+                        statsStdev = 1.4;
                         ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         ballHandle += multipler;
                         if (ballHandle > 99) ballHandle = 99;
 
                         // calculate defense
                         statsMean = 38;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         defense = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         defense += multipler;
 
                         // calculate steal
                         statsMean = 36;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         steal = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         steal += multipler;
 
                         // calculate block
                         statsMean = 25;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         block = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         block += multipler;
 
                         // calculate rebound
                         statsMean = 33;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         rebound = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         rebound += multipler;
 
                         // calculate speed
                         statsMean = 66;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         speed = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         speed += multipler;
                         if (speed > 99) speed = 99;
 
                         // calculate strength
                         statsMean = 30;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         strength = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         strength += multipler;
 
                         // calculate stamina
                         statsMean = 64;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         stamina = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         stamina += multipler;
                         if (stamina > 99) stamina = 99;
@@ -799,97 +799,97 @@ namespace LeagueSimulation
                     {
                         // calculate closeShot
                         statsMean = 56;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         closeShot = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         closeShot += multipler;
 
                         // calculate layup
-                        statsMean = 71;
-                        statsStdev = 2;
+                        statsMean = 64;
+                        statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
                         if (layup > 99) layup = 99;
 
                         // calculate dunk
-                        statsMean = 64;
-                        statsStdev = 2;
+                        statsMean = 62;
+                        statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
 
                         // calculate midRange
                         statsMean = 47;
-                        statsStdev = 1.9;
+                        statsStdev = 1.3;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
                         statsMean = 55;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
                         statsMean = 62;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
                         statsMean = 60;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
 
                         // calculate ballHandle
                         statsMean = 68;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         ballHandle += multipler;
                         if (ballHandle > 99) ballHandle = 99;
 
                         // calculate defense
                         statsMean = 43;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         defense = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         defense += multipler;
 
                         // calculate steal
                         statsMean = 39;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         steal = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         steal += multipler;
 
                         // calculate block
                         statsMean = 33;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         block = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         block += multipler;
 
                         // calculate rebound
                         statsMean = 33;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         rebound = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         rebound += multipler;
 
                         // calculate speed
                         statsMean = 70;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         speed = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         speed += multipler;
                         if (speed > 99) speed = 99;
 
                         // calculate strength
                         statsMean = 44;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         strength = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         strength += multipler;
 
                         // calculate stamina
                         statsMean = 66;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         stamina = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         stamina += multipler;
                         if (stamina > 99) stamina = 99;
@@ -903,74 +903,74 @@ namespace LeagueSimulation
                     {
                         // calculate closeShot
                         statsMean = 28;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         closeShot = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         closeShot += multipler;
 
                         // calculate layup
                         statsMean = 35;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
                         if (dunk > 99) dunk = 99;
 
                         // calculate dunk
                         statsMean = 29;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
 
                         // calculate midRange
                         statsMean = 36;
-                        statsStdev = 1.9;
+                        statsStdev = 1.3;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
                         statsMean = 42;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
                         statsMean = 62;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
                         statsMean = 56;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
 
                         // calculate ballHandle
                         statsMean = 53;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         ballHandle += multipler;
                         if (ballHandle > 99) ballHandle = 99;
 
                         // calculate defense
                         statsMean = 74;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         defense = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         defense += multipler;
                         if (defense > 99) defense = 99;
 
                         // calculate steal
                         statsMean = 69;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         steal = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         steal += multipler;
                         if (steal > 99) steal = 99;
 
                         // calculate block
                         statsMean = 39;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         block = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         block += multipler;
 
@@ -982,20 +982,20 @@ namespace LeagueSimulation
 
                         // calculate speed
                         statsMean = 71;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         speed = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         speed += multipler;
                         if (speed > 99) speed = 99;
 
                         // calculate strength
                         statsMean = 51;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         strength = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         strength += multipler;
 
                         // calculate stamina
                         statsMean = 69;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         stamina = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         stamina += multipler;
                         if (stamina > 99) stamina = 99;
@@ -1005,67 +1005,67 @@ namespace LeagueSimulation
                     {
                         // calculate closeShot
                         statsMean = 31;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         closeShot = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         closeShot += multipler;
 
                         // calculate layup
                         statsMean = 37;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
                         if (dunk > 99) dunk = 99;
 
                         // calculate dunk
                         statsMean = 28;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
 
                         // calculate midRange
                         statsMean = 34;
-                        statsStdev = 1.9;
+                        statsStdev = 1.3;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
                         statsMean = 42;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
                         statsMean = 52;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
                         statsMean = 54;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
 
                         // calculate ballHandle
                         statsMean = 55;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         ballHandle += multipler;
                         if (ballHandle > 99) ballHandle = 99;
 
                         // calculate defense
                         statsMean = 67;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         defense = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         defense += multipler;
                         if (defense > 99) defense = 99;
 
                         // calculate steal
                         statsMean = 74;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         steal = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         steal += multipler;
                         if (steal > 99) steal = 99;
@@ -1073,7 +1073,7 @@ namespace LeagueSimulation
 
                         // calculate block
                         statsMean = 34;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         block = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         block += multipler;
 
@@ -1085,20 +1085,20 @@ namespace LeagueSimulation
 
                         // calculate speed
                         statsMean = 74;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         speed = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         speed += multipler;
                         if (speed > 99) speed = 99;
 
                         // calculate strength
                         statsMean = 42;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         strength = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         strength += multipler;
 
                         // calculate stamina
                         statsMean = 68;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         stamina = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         stamina += multipler;
                         if (stamina > 99) stamina = 99;
@@ -1109,73 +1109,73 @@ namespace LeagueSimulation
                 {
                     // calculate closeShot
                     statsMean = 40;
-                    statsStdev = 2;
+                    statsStdev = 1.4;
                     closeShot = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     closeShot += multipler;
 
                     // calculate layup
                     statsMean = 51;
-                    statsStdev = 2;
+                    statsStdev = 1.4;
                     layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     layup += multipler;
                     if (dunk > 99) dunk = 99;
 
                     // calculate dunk
                     statsMean = 47;
-                    statsStdev = 2;
+                    statsStdev = 1.4;
                     dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     dunk += multipler;
 
                     // calculate midRange
                     statsMean = 42;
-                    statsStdev = 1.9;
+                    statsStdev = 1.3;
                     midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     midRange += multipler;
                     if (midRange > 99) midRange = 99;
 
                     // calculate 3
                     statsMean = 52;
-                    statsStdev = 2;
+                    statsStdev = 1.4;
                     threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     threePoint += multipler;
                     if (threePoint > 99) threePoint = 99;
 
                     // calculate freeThrow
                     statsMean = 63;
-                    statsStdev = 2.7;
+                    statsStdev = 1.4;
                     freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     freeThrow += multipler;
                     if (freeThrow > 99) freeThrow = 99;
 
                     // calculate passing
                     statsMean = 66;
-                    statsStdev = 2.7;
+                    statsStdev = 1.4;
                     passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     passing += multipler;
 
                     // calculate ballHandle
                     statsMean = 63;
-                    statsStdev = 2.7;
+                    statsStdev = 1.4;
                     ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     ballHandle += multipler;
                     if (ballHandle > 99) ballHandle = 99;
 
                     // calculate defense
                     statsMean = 57;
-                    statsStdev = 2.7;
+                    statsStdev = 1.4;
                     defense = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     defense += multipler;
                     if (defense > 99) defense = 99;
 
                     // calculate steal
                     statsMean = 51;
-                    statsStdev = 2.7;
+                    statsStdev = 1.4;
                     steal = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     steal += multipler;
 
                     // calculate block
                     statsMean = 30;
-                    statsStdev = 2;
+                    statsStdev = 1.4;
                     block = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     block += multipler;
 
@@ -1187,20 +1187,20 @@ namespace LeagueSimulation
 
                     // calculate speed
                     statsMean = 60;
-                    statsStdev = 2.7;
+                    statsStdev = 1.4;
                     speed = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     speed += multipler;
                     if (speed > 99) speed = 99;
 
                     // calculate strength
                     statsMean = 45;
-                    statsStdev = 2.7;
+                    statsStdev = 1.4;
                     strength = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     strength += multipler;
 
                     // calculate stamina
                     statsMean = 57;
-                    statsStdev = 2.7;
+                    statsStdev = 1.4;
                     stamina = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     stamina += multipler;
                     if (stamina > 99) stamina = 99;
@@ -1216,98 +1216,98 @@ namespace LeagueSimulation
                     {
                         // calculate closeShot
                         statsMean = 34;
-                        statsStdev = 1.9;
+                        statsStdev = 1.3;
                         closeShot = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         closeShot += multipler;
                         if (closeShot > 99) closeShot = 99;
 
                         // calculate layup
                         statsMean = 35;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
 
                         // calculate dunk
                         statsMean = 38;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
                         if (dunk > 99) dunk = 99;
 
                         // calculate midRange
-                        statsMean = 72;
-                        statsStdev = 1.9;
+                        statsMean = 68;
+                        statsStdev = 1.3;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
-                        statsMean = 70;
-                        statsStdev = 2;
+                        statsMean = 64;
+                        statsStdev = 1.4;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
                         statsMean = 72;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
                         statsMean = 55;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
 
                         // calculate ballHandle
                         statsMean = 54;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         ballHandle += multipler;
 
                         // calculate defense
                         statsMean = 57;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         defense = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         defense += multipler;
 
                         // calculate steal
                         statsMean = 37;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         steal = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         steal += multipler;
 
                         // calculate block
                         statsMean = 34;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         block = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         block += multipler;
 
                         // calculate rebound
                         statsMean = 50;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         rebound = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         rebound += multipler;
 
                         // calculate speed
                         statsMean = 56;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         speed = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         speed += multipler;
                         if (speed > 99) speed = 99;
 
                         // calculate strength
                         statsMean = 50;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         strength = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         strength += multipler;
                         if (strength > 99) strength = 99;
 
                         // calculate stamina
                         statsMean = 60;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         stamina = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         stamina += multipler;
                         if (stamina > 99) stamina = 99;
@@ -1318,100 +1318,100 @@ namespace LeagueSimulation
                     {
                         // calculate closeShot
                         statsMean = 36;
-                        statsStdev = 1.9;
+                        statsStdev = 1.3;
                         closeShot = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         closeShot += multipler;
                         if (closeShot > 99) closeShot = 99;
 
                         // calculate layup
                         statsMean = 34;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
                         if (layup > 99) layup = 99;
 
                         // calculate dunk
                         statsMean = 40;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
 
                         // calculate midRange
                         statsMean = 47;
-                        statsStdev = 1.9;
+                        statsStdev = 1.3;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
                         statsMean = 49;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
                         statsMean = 57;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
                         statsMean = 74;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
                         if (passing > 99) passing = 99;
 
                         // calculate ballHandle
                         statsMean = 68;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         ballHandle += multipler;
                         if (ballHandle > 99) ballHandle = 99;
 
                         // calculate defense
                         statsMean = 49;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         defense = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         defense += multipler;
 
                         // calculate steal
                         statsMean = 29;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         steal = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         steal += multipler;
 
                         // calculate block
                         statsMean = 30;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         block = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         block += multipler;
 
                         // calculate rebound
                         statsMean = 33;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         rebound = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         rebound += multipler;
 
                         // calculate speed
                         statsMean = 50;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         speed = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         speed += multipler;
                         if (speed > 99) speed = 99;
 
                         // calculate strength
                         statsMean = 41;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         strength = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         strength += multipler;
                         if (strength > 99) strength = 99;
 
                         // calculate stamina
                         statsMean = 58;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         stamina = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         stamina += multipler;
                         if (stamina > 99) stamina = 99;
@@ -1422,28 +1422,28 @@ namespace LeagueSimulation
                     {
                         // calculate closeShot
                         statsMean = 64;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         closeShot = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         closeShot += multipler;
                         if (closeShot > 99) closeShot = 99;
 
                         // calculate layup
-                        statsMean = 68;
-                        statsStdev = 2;
+                        statsMean = 65;
+                        statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
                         if (layup > 99) layup = 99;
 
                         // calculate dunk
-                        statsMean = 73;
-                        statsStdev = 2;
+                        statsMean = 67;
+                        statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
                         if (dunk > 99) dunk = 99;
 
                         // calculate midRange
                         statsMean = 37;
-                        statsStdev = 1.9;
+                        statsStdev = 1.3;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
@@ -1457,65 +1457,65 @@ namespace LeagueSimulation
 
                         // calculate freeThrow
                         statsMean = 49;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
                         statsMean = 55;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
 
                         // calculate ballHandle
                         statsMean = 58;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         ballHandle += multipler;
                         if (ballHandle > 99) ballHandle = 99;
 
                         // calculate defense
                         statsMean = 49;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         defense = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         defense += multipler;
 
                         // calculate steal
                         statsMean = 34;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         steal = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         steal += multipler;
 
                         // calculate block
                         statsMean = 38;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         block = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         block += multipler;
 
                         // calculate rebound
                         statsMean = 42;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         rebound = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         rebound += multipler;
 
                         // calculate speed
                         statsMean = 65;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         speed = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         speed += multipler;
                         if (speed > 99) speed = 99;
 
                         // calculate strength
                         statsMean = 46;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         strength = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         strength += multipler;
                         if (strength > 99) strength = 99;
 
                         // calculate stamina
                         statsMean = 62;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         stamina = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         stamina += multipler;
                         if (stamina > 99) stamina = 99;
@@ -1529,74 +1529,74 @@ namespace LeagueSimulation
                     {
                         // calculate closeShot
                         statsMean = 27;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         closeShot = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         closeShot += multipler;
 
                         // calculate layup
                         statsMean = 42;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
                         if (dunk > 99) dunk = 99;
 
                         // calculate dunk
                         statsMean = 28;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
 
                         // calculate midRange
                         statsMean = 32;
-                        statsStdev = 1.9;
+                        statsStdev = 1.3;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
                         statsMean = 42;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
                         statsMean = 62;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
                         statsMean = 36;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
 
                         // calculate ballHandle
                         statsMean = 42;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         ballHandle += multipler;
                         if (ballHandle > 99) ballHandle = 99;
 
                         // calculate defense
                         statsMean = 72;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         defense = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         defense += multipler;
                         if (defense > 99) defense = 99;
 
                         // calculate steal
                         statsMean = 70;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         steal = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         steal += multipler;
                         if (steal > 99) steal = 99;
 
                         // calculate block
                         statsMean = 41;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         block = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         block += multipler;
 
@@ -1608,20 +1608,20 @@ namespace LeagueSimulation
 
                         // calculate speed
                         statsMean = 70;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         speed = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         speed += multipler;
                         if (speed > 99) speed = 99;
 
                         // calculate strength
                         statsMean = 62;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         strength = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         strength += multipler;
 
                         // calculate stamina
                         statsMean = 71;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         stamina = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         stamina += multipler;
                         if (stamina > 99) stamina = 99;
@@ -1631,67 +1631,67 @@ namespace LeagueSimulation
                     {
                         // calculate closeShot
                         statsMean = 34;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         closeShot = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         closeShot += multipler;
 
                         // calculate layup
                         statsMean = 42;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
                         if (dunk > 99) dunk = 99;
 
                         // calculate dunk
                         statsMean = 29;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
 
                         // calculate midRange
                         statsMean = 34;
-                        statsStdev = 1.9;
+                        statsStdev = 1.3;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
                         statsMean = 42;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
                         statsMean = 60;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
                         statsMean = 39;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
 
                         // calculate ballHandle
                         statsMean = 44;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         ballHandle += multipler;
                         if (ballHandle > 99) ballHandle = 99;
 
                         // calculate defense
                         statsMean = 65;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         defense = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         defense += multipler;
                         if (defense > 99) defense = 99;
 
                         // calculate steal
                         statsMean = 72;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         steal = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         steal += multipler;
                         if (steal > 99) steal = 99;
@@ -1699,7 +1699,7 @@ namespace LeagueSimulation
 
                         // calculate block
                         statsMean = 37;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         block = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         block += multipler;
 
@@ -1711,20 +1711,20 @@ namespace LeagueSimulation
 
                         // calculate speed
                         statsMean = 70;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         speed = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         speed += multipler;
                         if (speed > 99) speed = 99;
 
                         // calculate strength
                         statsMean = 51;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         strength = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         strength += multipler;
 
                         // calculate stamina
                         statsMean = 66;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         stamina = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         stamina += multipler;
                         if (stamina > 99) stamina = 99;
@@ -1735,73 +1735,73 @@ namespace LeagueSimulation
                 {
                     // calculate closeShot
                     statsMean = 45;
-                    statsStdev = 2;
+                    statsStdev = 1.4;
                     closeShot = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     closeShot += multipler;
 
                     // calculate layup
                     statsMean = 56;
-                    statsStdev = 2;
+                    statsStdev = 1.4;
                     layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     layup += multipler;
                     if (dunk > 99) dunk = 99;
 
                     // calculate dunk
                     statsMean = 47;
-                    statsStdev = 2;
+                    statsStdev = 1.4;
                     dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     dunk += multipler;
 
                     // calculate midRange
                     statsMean = 42;
-                    statsStdev = 1.9;
+                    statsStdev = 1.3;
                     midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     midRange += multipler;
                     if (midRange > 99) midRange = 99;
 
                     // calculate 3
                     statsMean = 52;
-                    statsStdev = 2;
+                    statsStdev = 1.4;
                     threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     threePoint += multipler;
                     if (threePoint > 99) threePoint = 99;
 
                     // calculate freeThrow
                     statsMean = 66;
-                    statsStdev = 2.7;
+                    statsStdev = 1.4;
                     freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     freeThrow += multipler;
                     if (freeThrow > 99) freeThrow = 99;
 
                     // calculate passing
                     statsMean = 53;
-                    statsStdev = 2.7;
+                    statsStdev = 1.4;
                     passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     passing += multipler;
 
                     // calculate ballHandle
                     statsMean = 59;
-                    statsStdev = 2.7;
+                    statsStdev = 1.4;
                     ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     ballHandle += multipler;
                     if (ballHandle > 99) ballHandle = 99;
 
                     // calculate defense
                     statsMean = 61;
-                    statsStdev = 2.7;
+                    statsStdev = 1.4;
                     defense = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     defense += multipler;
                     if (defense > 99) defense = 99;
 
                     // calculate steal
                     statsMean = 51;
-                    statsStdev = 2.7;
+                    statsStdev = 1.4;
                     steal = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     steal += multipler;
 
                     // calculate block
                     statsMean = 40;
-                    statsStdev = 2;
+                    statsStdev = 1.4;
                     block = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     block += multipler;
 
@@ -1813,20 +1813,20 @@ namespace LeagueSimulation
 
                     // calculate speed
                     statsMean = 60;
-                    statsStdev = 2.7;
+                    statsStdev = 1.4;
                     speed = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     speed += multipler;
                     if (speed > 99) speed = 99;
 
                     // calculate strength
                     statsMean = 45;
-                    statsStdev = 2.7;
+                    statsStdev = 1.4;
                     strength = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     strength += multipler;
 
                     // calculate stamina
                     statsMean = 57;
-                    statsStdev = 2.7;
+                    statsStdev = 1.4;
                     stamina = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     stamina += multipler;
                     if (stamina > 99) stamina = 99;
@@ -1841,98 +1841,98 @@ namespace LeagueSimulation
                     {
                         // calculate closeShot
                         statsMean = 37;
-                        statsStdev = 1.9;
+                        statsStdev = 1.3;
                         closeShot = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         closeShot += multipler;
                         if (closeShot > 99) closeShot = 99;
 
                         // calculate layup
                         statsMean = 35;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
 
                         // calculate dunk
                         statsMean = 44;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
                         if (dunk > 99) dunk = 99;
 
                         // calculate midRange
-                        statsMean = 75;
-                        statsStdev = 1.9;
+                        statsMean = 68;
+                        statsStdev = 1.3;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
-                        statsMean = 69;
-                        statsStdev = 2;
+                        statsMean = 63;
+                        statsStdev = 1.4;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
                         statsMean = 75;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
                         statsMean = 42;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
 
                         // calculate ballHandle
                         statsMean = 42;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         ballHandle += multipler;
 
                         // calculate defense
                         statsMean = 57;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         defense = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         defense += multipler;
 
                         // calculate steal
                         statsMean = 41;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         steal = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         steal += multipler;
 
                         // calculate block
                         statsMean = 54;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         block = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         block += multipler;
 
                         // calculate rebound
                         statsMean = 56;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         rebound = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         rebound += multipler;
 
                         // calculate speed
                         statsMean = 50;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         speed = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         speed += multipler;
                         if (speed > 99) speed = 99;
 
                         // calculate strength
                         statsMean = 68;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         strength = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         strength += multipler;
                         if (strength > 99) strength = 99;
 
                         // calculate stamina
                         statsMean = 61;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         stamina = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         stamina += multipler;
                         if (stamina > 99) stamina = 99;
@@ -1943,98 +1943,98 @@ namespace LeagueSimulation
                     {
                         // calculate closeShot
                         statsMean = 52;
-                        statsStdev = 1.9;
+                        statsStdev = 1.3;
                         closeShot = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         closeShot += multipler;
                         if (closeShot > 99) closeShot = 99;
 
                         // calculate layup
                         statsMean = 39;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
 
                         // calculate dunk
                         statsMean = 54;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
 
                         // calculate midRange
                         statsMean = 36;
-                        statsStdev = 1.9;
+                        statsStdev = 1.3;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
                         statsMean = 54;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
                         statsMean = 40;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
                         statsMean = 72;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
                         if (passing > 99) passing = 99;
 
                         // calculate ballHandle
                         statsMean = 62;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         ballHandle += multipler;
 
                         // calculate defense
                         statsMean = 51;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         defense = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         defense += multipler;
 
                         // calculate steal
                         statsMean = 36;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         steal = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         steal += multipler;
 
                         // calculate block
                         statsMean = 49;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         block = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         block += multipler;
 
                         // calculate rebound
                         statsMean = 51;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         rebound = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         rebound += multipler;
 
                         // calculate speed
                         statsMean = 45;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         speed = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         speed += multipler;
                         if (speed > 99) speed = 99;
 
                         // calculate strength
                         statsMean = 64;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         strength = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         strength += multipler;
                         if (strength > 99) strength = 99;
 
                         // calculate stamina
                         statsMean = 60;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         stamina = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         stamina += multipler;
                         if (stamina > 99) stamina = 99;
@@ -2045,28 +2045,28 @@ namespace LeagueSimulation
                     {
                         // calculate closeShot
                         statsMean = 70;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         closeShot = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         closeShot += multipler;
                         if (closeShot > 99) closeShot = 99;
 
                         // calculate layup
-                        statsMean = 70;
-                        statsStdev = 2;
+                        statsMean = 67;
+                        statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
                         if (layup > 99) layup = 99;
 
                         // calculate dunk
-                        statsMean = 75;
-                        statsStdev = 2;
+                        statsMean = 71;
+                        statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
                         if (dunk > 99) dunk = 99;
 
                         // calculate midRange
                         statsMean = 35;
-                        statsStdev = 1.9;
+                        statsStdev = 1.3;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
@@ -2080,65 +2080,65 @@ namespace LeagueSimulation
 
                         // calculate freeThrow
                         statsMean = 48;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
                         statsMean = 44;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
 
                         // calculate ballHandle
                         statsMean = 46;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         ballHandle += multipler;
                         if (ballHandle > 99) ballHandle = 99;
 
                         // calculate defense
                         statsMean = 48;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         defense = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         defense += multipler;
 
                         // calculate steal
                         statsMean = 36;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         steal = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         steal += multipler;
 
                         // calculate block
                         statsMean = 52;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         block = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         block += multipler;
 
                         // calculate rebound
                         statsMean = 55;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         rebound = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         rebound += multipler;
 
                         // calculate speed
                         statsMean = 57;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         speed = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         speed += multipler;
                         if (speed > 99) speed = 99;
 
                         // calculate strength
                         statsMean = 65;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         strength = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         strength += multipler;
                         if (strength > 99) strength = 99;
 
                         // calculate stamina
                         statsMean = 64;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         stamina = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         stamina += multipler;
                         if (stamina > 99) stamina = 99;
@@ -2152,27 +2152,27 @@ namespace LeagueSimulation
                     {
                         // calculate closeShot
                         statsMean = 34;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         closeShot = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         closeShot += multipler;
                         if (closeShot > 99) closeShot = 99;
 
                         // calculate layup
                         statsMean = 38;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
                         if (layup > 99) layup = 99;
 
                         // calculate dunk
                         statsMean = 47;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
 
                         // calculate midRange
                         statsMean = 35;
-                        statsStdev = 1.9;
+                        statsStdev = 1.3;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
@@ -2186,69 +2186,69 @@ namespace LeagueSimulation
 
                         // calculate freeThrow
                         statsMean = 45;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
                         statsMean = 44;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
 
                         // calculate ballHandle
                         statsMean = 32;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         ballHandle += multipler;
                         if (ballHandle > 99) ballHandle = 99;
 
                         // calculate defense
                         statsMean = 75;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         defense = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         defense += multipler;
                         if (defense > 99) defense = 99;
 
                         // calculate steal
                         statsMean = 66;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         steal = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         steal += multipler;
                         if (steal > 99) steal = 99;
 
                         // calculate block
                         statsMean = 67;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         block = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         block += multipler;
                         if (block > 99) block = 99;
 
                         // calculate rebound
                         statsMean = 66;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         rebound = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         rebound += multipler;
                         if (rebound > 99) rebound = 99;
 
                         // calculate speed
                         statsMean = 59;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         speed = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         speed += multipler;
                         if (speed > 99) speed = 99;
 
                         // calculate strength
                         statsMean = 69;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         strength = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         strength += multipler;
                         if (strength > 99) strength = 99;
 
                         // calculate stamina
                         statsMean = 63;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         stamina = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         stamina += multipler;
                         if (stamina > 99) stamina = 99;
@@ -2258,67 +2258,67 @@ namespace LeagueSimulation
                     {
                         // calculate closeShot
                         statsMean = 37;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         closeShot = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         closeShot += multipler;
 
                         // calculate layup
                         statsMean = 35;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
                         if (dunk > 99) dunk = 99;
 
                         // calculate dunk
                         statsMean = 44;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
 
                         // calculate midRange
                         statsMean = 36;
-                        statsStdev = 1.9;
+                        statsStdev = 1.3;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
                         statsMean = 37;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
                         statsMean = 58;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
                         statsMean = 44;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
 
                         // calculate ballHandle
                         statsMean = 35;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         ballHandle += multipler;
                         if (ballHandle > 99) ballHandle = 99;
 
                         // calculate defense
                         statsMean = 70;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         defense = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         defense += multipler;
                         if (defense > 99) defense = 99;
 
                         // calculate steal
                         statsMean = 60;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         steal = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         steal += multipler;
                         if (steal > 99) steal = 99;
@@ -2326,7 +2326,7 @@ namespace LeagueSimulation
 
                         // calculate block
                         statsMean = 76;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         block = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         block += multipler;
                         if (block > 99) block = 99;
@@ -2340,21 +2340,21 @@ namespace LeagueSimulation
 
                         // calculate speed
                         statsMean = 48;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         speed = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         speed += multipler;
                         if (speed > 99) speed = 99;
 
                         // calculate strength
                         statsMean = 68;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         strength = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         strength += multipler;
                         if (strength > 99) strength = 99;
 
                         // calculate stamina
                         statsMean = 68;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         stamina = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         stamina += multipler;
                         if (stamina > 99) stamina = 99;
@@ -2365,73 +2365,73 @@ namespace LeagueSimulation
                 {
                     // calculate closeShot
                     statsMean = 52;
-                    statsStdev = 2;
+                    statsStdev = 1.4;
                     closeShot = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     closeShot += multipler;
 
                     // calculate layup
                     statsMean = 35;
-                    statsStdev = 2;
+                    statsStdev = 1.4;
                     layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     layup += multipler;
                     if (dunk > 99) dunk = 99;
 
                     // calculate dunk
                     statsMean = 55;
-                    statsStdev = 2;
+                    statsStdev = 1.4;
                     dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     dunk += multipler;
 
                     // calculate midRange
                     statsMean = 41;
-                    statsStdev = 1.9;
+                    statsStdev = 1.3;
                     midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     midRange += multipler;
                     if (midRange > 99) midRange = 99;
 
                     // calculate 3
                     statsMean = 47;
-                    statsStdev = 2;
+                    statsStdev = 1.4;
                     threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     threePoint += multipler;
                     if (threePoint > 99) threePoint = 99;
 
                     // calculate freeThrow
                     statsMean = 53;
-                    statsStdev = 2.7;
+                    statsStdev = 1.4;
                     freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     freeThrow += multipler;
                     if (freeThrow > 99) freeThrow = 99;
 
                     // calculate passing
                     statsMean = 46;
-                    statsStdev = 2.7;
+                    statsStdev = 1.4;
                     passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     passing += multipler;
 
                     // calculate ballHandle
                     statsMean = 44;
-                    statsStdev = 2.7;
+                    statsStdev = 1.4;
                     ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     ballHandle += multipler;
                     if (ballHandle > 99) ballHandle = 99;
 
                     // calculate defense
                     statsMean = 55;
-                    statsStdev = 2.7;
+                    statsStdev = 1.4;
                     defense = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     defense += multipler;
                     if (defense > 99) defense = 99;
 
                     // calculate steal
                     statsMean = 54;
-                    statsStdev = 2.7;
+                    statsStdev = 1.4;
                     steal = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     steal += multipler;
 
                     // calculate block
                     statsMean = 60;
-                    statsStdev = 2;
+                    statsStdev = 1.4;
                     block = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     block += multipler;
 
@@ -2444,7 +2444,7 @@ namespace LeagueSimulation
 
                     // calculate speed
                     statsMean = 49;
-                    statsStdev = 2.7;
+                    statsStdev = 1.4;
                     speed = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     speed += multipler;
                     if (speed > 99) speed = 99;
@@ -2458,7 +2458,7 @@ namespace LeagueSimulation
 
                     // calculate stamina
                     statsMean = 59;
-                    statsStdev = 2.7;
+                    statsStdev = 1.4;
                     stamina = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     stamina += multipler;
                     if (stamina > 99) stamina = 99;
@@ -2473,97 +2473,97 @@ namespace LeagueSimulation
                     {
                         // calculate closeShot
                         statsMean = 62;
-                        statsStdev = 1.9;
+                        statsStdev = 1.3;
                         closeShot = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         closeShot += multipler;
                         if (closeShot > 99) closeShot = 99;
 
                         // calculate layup
                         statsMean = 30;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
 
                         // calculate dunk
                         statsMean = 41;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
 
                         // calculate midRange
-                        statsMean = 69;
-                        statsStdev = 1.9;
+                        statsMean = 67;
+                        statsStdev = 1.3;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
                         statsMean = 65;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
                         statsMean = 76;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
                         statsMean = 42;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
 
                         // calculate ballHandle
                         statsMean = 42;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         ballHandle += multipler;
 
                         // calculate defense
                         statsMean = 54;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         defense = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         defense += multipler;
 
                         // calculate steal
                         statsMean = 39;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         steal = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         steal += multipler;
 
                         // calculate block
                         statsMean = 57;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         block = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         block += multipler;
 
                         // calculate rebound
                         statsMean = 62;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         rebound = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         rebound += multipler;
                         if (rebound > 99) rebound = 99;
 
                         // calculate speed
                         statsMean = 46;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         speed = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         speed += multipler;
                         if (speed > 99) speed = 99;
 
                         // calculate strength
                         statsMean = 68;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         strength = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         strength += multipler;
 
                         // calculate stamina
                         statsMean = 61;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         stamina = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         stamina += multipler;
                         if (stamina > 99) stamina = 99;
@@ -2574,97 +2574,97 @@ namespace LeagueSimulation
                     {
                         // calculate closeShot
                         statsMean = 52;
-                        statsStdev = 1.9;
+                        statsStdev = 1.3;
                         closeShot = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         closeShot += multipler;
                         if (closeShot > 99) closeShot = 99;
 
                         // calculate layup
                         statsMean = 45;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
 
                         // calculate dunk
-                        statsMean = 60;
-                        statsStdev = 2.7;
+                        statsMean = 55;
+                        statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
 
                         // calculate midRange
                         statsMean = 36;
-                        statsStdev = 1.9;
+                        statsStdev = 1.3;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
                         statsMean = 39;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
                         statsMean = 39;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
-                        statsMean = 73;
-                        statsStdev = 2.7;
+                        statsMean = 71;
+                        statsStdev = 1.4;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
                         if (passing > 99) passing = 99;
 
                         // calculate ballHandle
                         statsMean = 62;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         ballHandle += multipler;
 
                         // calculate defense
                         statsMean = 42;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         defense = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         defense += multipler;
 
                         // calculate steal
                         statsMean = 29;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         steal = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         steal += multipler;
 
                         // calculate block
                         statsMean = 57;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         block = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         block += multipler;
 
                         // calculate rebound
                         statsMean = 63;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         rebound = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         rebound += multipler;
 
                         // calculate speed
                         statsMean = 54;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         speed = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         speed += multipler;
                         if (speed > 99) speed = 99;
 
                         // calculate strength
                         statsMean = 67;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         strength = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         strength += multipler;
 
                         // calculate stamina
                         statsMean = 60;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         stamina = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         stamina += multipler;
                         if (stamina > 99) stamina = 99;
@@ -2675,28 +2675,28 @@ namespace LeagueSimulation
                     {
                         // calculate closeShot
                         statsMean = 70;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         closeShot = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         closeShot += multipler;
                         if (closeShot > 99) closeShot = 99;
 
                         // calculate layup
-                        statsMean = 71;
-                        statsStdev = 2;
+                        statsMean = 67;
+                        statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
                         if (layup > 99) layup = 99;
 
                         // calculate dunk
-                        statsMean = 74;
-                        statsStdev = 2;
+                        statsMean = 68;
+                        statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
                         if (dunk > 99) dunk = 99;
 
                         // calculate midRange
                         statsMean = 31;
-                        statsStdev = 1.9;
+                        statsStdev = 1.3;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
@@ -2710,64 +2710,64 @@ namespace LeagueSimulation
 
                         // calculate freeThrow
                         statsMean = 45;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
                         statsMean = 49;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
 
                         // calculate ballHandle
                         statsMean = 52;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         ballHandle += multipler;
                         if (ballHandle > 99) ballHandle = 99;
 
                         // calculate defense
                         statsMean = 45;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         defense = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         defense += multipler;
 
                         // calculate steal
                         statsMean = 36;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         steal = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         steal += multipler;
 
                         // calculate block
                         statsMean = 59;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         block = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         block += multipler;
 
                         // calculate rebound
                         statsMean = 66;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         rebound = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         rebound += multipler;
 
                         // calculate speed
                         statsMean = 68;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         speed = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         speed += multipler;
                         if (speed > 99) speed = 99;
 
                         // calculate strength
                         statsMean = 64;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         strength = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         strength += multipler;
 
                         // calculate stamina
                         statsMean = 67;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         stamina = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         stamina += multipler;
                         if (stamina > 99) stamina = 99;
@@ -2781,27 +2781,27 @@ namespace LeagueSimulation
                     {
                         // calculate closeShot
                         statsMean = 31;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         closeShot = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         closeShot += multipler;
                         if (closeShot > 99) closeShot = 99;
 
                         // calculate layup
                         statsMean = 28;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
                         if (layup > 99) layup = 99;
 
                         // calculate dunk
                         statsMean = 35;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
 
                         // calculate midRange
                         statsMean = 32;
-                        statsStdev = 1.9;
+                        statsStdev = 1.3;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
@@ -2815,69 +2815,69 @@ namespace LeagueSimulation
 
                         // calculate freeThrow
                         statsMean = 46;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
                         statsMean = 40;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
 
                         // calculate ballHandle
                         statsMean = 34;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         ballHandle += multipler;
                         if (ballHandle > 99) ballHandle = 99;
 
                         // calculate defense
                         statsMean = 71;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         defense = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         defense += multipler;
                         if (defense > 99) defense = 99;
 
                         // calculate steal
                         statsMean = 63;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         steal = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         steal += multipler;
                         if (steal > 99) steal = 99;
 
                         // calculate block
                         statsMean = 71;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         block = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         block += multipler;
                         if (block > 99) block = 99;
 
                         // calculate rebound
                         statsMean = 70;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         rebound = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         rebound += multipler;
                         if (rebound > 99) rebound = 99;
 
                         // calculate speed
                         statsMean = 59;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         speed = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         speed += multipler;
                         if (speed > 99) speed = 99;
 
                         // calculate strength
                         statsMean = 65;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         strength = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         strength += multipler;
                         if (strength > 99) strength = 99;
 
                         // calculate stamina
                         statsMean = 62;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         stamina = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         stamina += multipler;
                         if (stamina > 99) stamina = 99;
@@ -2887,67 +2887,67 @@ namespace LeagueSimulation
                     {
                         // calculate closeShot
                         statsMean = 37;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         closeShot = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         closeShot += multipler;
 
                         // calculate layup
                         statsMean = 33;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
                         if (dunk > 99) dunk = 99;
 
                         // calculate dunk
                         statsMean = 34;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
 
                         // calculate midRange
                         statsMean = 26;
-                        statsStdev = 1.9;
+                        statsStdev = 1.3;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
                         statsMean = 32;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
                         statsMean = 38;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
                         statsMean = 42;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
 
                         // calculate ballHandle
                         statsMean = 29;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         ballHandle += multipler;
                         if (ballHandle > 99) ballHandle = 99;
 
                         // calculate defense
                         statsMean = 67;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         defense = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         defense += multipler;
                         if (defense > 99) defense = 99;
 
                         // calculate steal
                         statsMean = 62;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         steal = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         steal += multipler;
                         if (steal > 99) steal = 99;
@@ -2955,7 +2955,7 @@ namespace LeagueSimulation
 
                         // calculate block
                         statsMean = 75;
-                        statsStdev = 2;
+                        statsStdev = 1.4;
                         block = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         block += multipler;
                         if (block > 99) block = 99;
@@ -2969,21 +2969,21 @@ namespace LeagueSimulation
 
                         // calculate speed
                         statsMean = 47;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         speed = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         speed += multipler;
                         if (speed > 99) speed = 99;
 
                         // calculate strength
                         statsMean = 67;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         strength = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         strength += multipler;
                         if (strength > 99) strength = 99;
 
                         // calculate stamina
                         statsMean = 58;
-                        statsStdev = 2.7;
+                        statsStdev = 1.4;
                         stamina = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         stamina += multipler;
                         if (stamina > 99) stamina = 99;
@@ -2994,73 +2994,73 @@ namespace LeagueSimulation
                 {
                     // calculate closeShot
                     statsMean = 57;
-                    statsStdev = 2;
+                    statsStdev = 1.4;
                     closeShot = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     closeShot += multipler;
 
                     // calculate layup
                     statsMean = 40;
-                    statsStdev = 2;
+                    statsStdev = 1.4;
                     layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     layup += multipler;
                     if (dunk > 99) dunk = 99;
 
                     // calculate dunk
                     statsMean = 54;
-                    statsStdev = 2;
+                    statsStdev = 1.4;
                     dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     dunk += multipler;
 
                     // calculate midRange
                     statsMean = 42;
-                    statsStdev = 1.9;
+                    statsStdev = 1.3;
                     midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     midRange += multipler;
                     if (midRange > 99) midRange = 99;
 
                     // calculate 3
                     statsMean = 49;
-                    statsStdev = 2;
+                    statsStdev = 1.4;
                     threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     threePoint += multipler;
                     if (threePoint > 99) threePoint = 99;
 
                     // calculate freeThrow
                     statsMean = 56;
-                    statsStdev = 2.7;
+                    statsStdev = 1.4;
                     freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     freeThrow += multipler;
                     if (freeThrow > 99) freeThrow = 99;
 
                     // calculate passing
                     statsMean = 53;
-                    statsStdev = 2.7;
+                    statsStdev = 1.4;
                     passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     passing += multipler;
 
                     // calculate ballHandle
                     statsMean = 38;
-                    statsStdev = 2.7;
+                    statsStdev = 1.4;
                     ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     ballHandle += multipler;
                     if (ballHandle > 99) ballHandle = 99;
 
                     // calculate defense
                     statsMean = 57;
-                    statsStdev = 2.7;
+                    statsStdev = 1.4;
                     defense = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     defense += multipler;
                     if (defense > 99) defense = 99;
 
                     // calculate steal
                     statsMean = 56;
-                    statsStdev = 2.7;
+                    statsStdev = 1.4;
                     steal = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     steal += multipler;
 
                     // calculate block
                     statsMean = 62;
-                    statsStdev = 2;
+                    statsStdev = 1.4;
                     block = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     block += multipler;
 
@@ -3073,7 +3073,7 @@ namespace LeagueSimulation
 
                     // calculate speed
                     statsMean = 51;
-                    statsStdev = 2.7;
+                    statsStdev = 1.4;
                     speed = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     speed += multipler;
                     if (speed > 99) speed = 99;
@@ -3087,7 +3087,7 @@ namespace LeagueSimulation
 
                     // calculate stamina
                     statsMean = 59;
-                    statsStdev = 2.7;
+                    statsStdev = 1.4;
                     stamina = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     stamina += multipler;
                     if (stamina > 99) stamina = 99;
@@ -3122,8 +3122,8 @@ namespace LeagueSimulation
         public void GenerateAgeOvrAndPotential(double overallMean, bool isRookie)
         {
             // we generate the age of the current player
-            double ageMean = 25;
-            double ageStDev = 3;
+            double ageMean = 26.5;
+            double ageStDev = 4.5;
             if (isRookie)
             {
                 ageMean = 20;
@@ -3131,28 +3131,29 @@ namespace LeagueSimulation
             }
             int age = (int)GenerateRandomNormalDistribution(ageMean, ageStDev);
             if (age < 18) age = 18;
+            if (age > 40) age = 40;
             this.Age = age;
 
-            // we make sure players that are older than 31 and younger than 23, are not very good
+            // we make sure players that are older than 33 and younger than 21, are not very good
             // compared to the rest of the league
-            if (age < 23)
+            if (age < 22)
             {
-                overallMean -= 5 + (23 - age);
+                overallMean -= 5 + (22 - age);
             }
-            else if (age > 31)
+            else if (age > 33)
             {
-                overallMean -= 5 + (age - 31);
+                overallMean -= 5 + (age - 33);
             }
 
             // now we generate the overall of the player
-            double overallStDev = 9;
+            double overallStDev = 4.7;
             int overall = (int)GenerateRandomNormalDistribution(overallMean, overallStDev);
             if (overall < 60) overall = 60;
             else if (overall > 99) overall = 99;
             this.Overall = overall;
 
             // we calculate the potential of the player
-            if (age < 27)
+            if (age < 28)
             {
                 // this gets the age difference, and an additional overallDifference is added
                 // this makes sure players with really low overall, can have really high potential

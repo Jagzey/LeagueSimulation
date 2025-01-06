@@ -39,6 +39,7 @@ namespace LeagueSimulation
                             teams t ON t.teamId = pot.teamId
                         JOIN
                             playerGameStats pgs on pgs.playerId = p.playerId
+                            AND pgs.seasonId = {league.CurrentSeason}
                         GROUP BY p.playerId
                         ORDER BY PTS DESC
                         LIMIT 15
@@ -75,6 +76,7 @@ namespace LeagueSimulation
                             teams t ON t.teamId = pot.teamId
                         JOIN
                             playerGameStats pgs on pgs.playerId = p.playerId
+                            AND pgs.seasonId = {league.CurrentSeason}
                         GROUP BY p.playerId
                         ORDER BY REB DESC
                         LIMIT 15
@@ -111,6 +113,7 @@ namespace LeagueSimulation
                             teams t ON t.teamId = pot.teamId
                         JOIN
                             playerGameStats pgs on pgs.playerId = p.playerId
+                            AND pgs.seasonId = {league.CurrentSeason}
                         GROUP BY p.playerId
                         ORDER BY AST DESC
                         LIMIT 15
@@ -147,6 +150,7 @@ namespace LeagueSimulation
                             teams t ON t.teamId = pot.teamId
                         JOIN
                             playerGameStats pgs on pgs.playerId = p.playerId
+                            AND pgs.seasonId = {league.CurrentSeason}
                         GROUP BY p.playerId
                         ORDER BY STL DESC
                         LIMIT 15
@@ -183,6 +187,7 @@ namespace LeagueSimulation
                             teams t ON t.teamId = pot.teamId
                         JOIN
                             playerGameStats pgs on pgs.playerId = p.playerId
+                            AND pgs.seasonId = {league.CurrentSeason}
                         GROUP BY p.playerId
                         ORDER BY TOV DESC
                         LIMIT 15
@@ -219,6 +224,7 @@ namespace LeagueSimulation
                             teams t ON t.teamId = pot.teamId
                         JOIN
                             playerGameStats pgs on pgs.playerId = p.playerId
+                            AND pgs.seasonId = {league.CurrentSeason}
                         GROUP BY p.playerId
                         ORDER BY BLK DESC
                         LIMIT 15
@@ -255,6 +261,7 @@ namespace LeagueSimulation
                             teams t ON t.teamId = pot.teamId
                         JOIN
                             playerGameStats pgs on pgs.playerId = p.playerId
+                            AND pgs.seasonId = {league.CurrentSeason}
                         GROUP BY p.playerId
                         ORDER BY gameValue DESC
                         LIMIT 15
@@ -291,6 +298,7 @@ namespace LeagueSimulation
 
                         FROM players p, league l
                         JOIN playerGameStats pgs ON pgs.playerId = p.playerId AND pgs.isPlayoffs = 0
+                        AND pgs.seasonId = {league.CurrentSeason}
                         JOIN playerOnTeam pot ON dayJoined <= {league.CurrentDay} AND yearJoined <= {league.CurrentSeason + 2023}
                         AND dayLeft >= {league.CurrentDay} AND yearLeft >= {league.CurrentSeason + 2023}
                         AND pot.playerId = p.playerId
