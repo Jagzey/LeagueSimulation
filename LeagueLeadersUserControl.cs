@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.SQLite;
 using static System.ComponentModel.Design.ObjectSelectorEditor;
 using System.Windows.Forms;
+using LeagueSimulation.Models;
 
 namespace LeagueSimulation
 {

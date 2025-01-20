@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.ComponentModel.Design.ObjectSelectorEditor;
 using System.Xml.Linq;
+using LeagueSimulation.Models;
 
 namespace LeagueSimulation
 {

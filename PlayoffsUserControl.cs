@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Data;
+using LeagueSimulation.Models;
 
 namespace LeagueSimulation
 {
@@ -152,7 +145,39 @@ namespace LeagueSimulation
                 team1Finals.Text = $"{CurrentLeague.GetCityNameFromId(team1Id.ToString())} ({eastTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team1Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordByGivenRound(team1Id.ToString(), team2Id.ToString(), round).Split("-")[0]}";
                 team2Finals.Text = $"{CurrentLeague.GetCityNameFromId(team2Id.ToString())} ({westTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team2Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordByGivenRound(team2Id.ToString(), team1Id.ToString(), round).Split("-")[0]}";
             }
-        }
 
+            foreach (Control control in bottomPanel.Controls)
+            {
+
+                if (control is Panel)
+                {
+                    foreach (Control control2 in control.Controls)
+                    {
+                        if (control2 is Label)
+                        {
+                            if (control2.Text.Contains(Team.GetCityFromTeamName(CurrentLeague.UserTeamName)) && !control2.Font.Style.HasFlag(FontStyle.Bold))
+                            {
+                                control2.Font = new Font(control2.Font.FontFamily, control2.Font.Size - 1, FontStyle.Bold);
+                            }
+                            else if (!control2.Text.Contains(Team.GetCityFromTeamName(CurrentLeague.UserTeamName)) && control2.Font.Style.HasFlag(FontStyle.Bold) && !control2.Text.Contains(":"))
+                            {
+                                control2.Font = new Font(control2.Font.FontFamily, control2.Font.Size + 1);
+                            }
+                        }
+                    }
+                }
+                if (control is Label)
+                {
+                    if (control.Text.Contains(Team.GetCityFromTeamName(CurrentLeague.UserTeamName)) && !control.Font.Style.HasFlag(FontStyle.Bold))
+                    {
+                        control.Font = new Font(control.Font.FontFamily, control.Font.Size - 1, FontStyle.Bold);
+                    }
+                    else if (!control.Text.Contains(Team.GetCityFromTeamName(CurrentLeague.UserTeamName)) && control.Font.Style.HasFlag(FontStyle.Bold) && !control.Text.Contains(":"))
+                    {
+                        control.Font = new Font(control.Font.FontFamily, control.Font.Size + 1);
+                    }
+                }
+            }
+        }
     }
 }

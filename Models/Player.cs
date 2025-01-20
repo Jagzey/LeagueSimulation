@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SQLite;
 
-namespace LeagueSimulation
+namespace LeagueSimulation.Models
 {
     public class Player
     {
@@ -18,7 +18,7 @@ namespace LeagueSimulation
         public string playerForename = "";
         public string playerSurname = "";
         private int rosterSpot = 0;
-        
+
 
         // team information
         private int teamId = 0;
@@ -144,7 +144,7 @@ namespace LeagueSimulation
 
             int height = (int)doubleHeight;
             string realHeight = $"{height / 12}'{height % 12}";
-            this.Height = height;
+            Height = height;
         }
 
         public void RandomWeight(string position, int height)
@@ -155,7 +155,7 @@ namespace LeagueSimulation
 
             if (position == "PG")
             {
-                double multipler = ((height - 75.5) / 75.5) * 200;
+                double multipler = (height - 75.5) / 75.5 * 200;
                 mean = 191 + multipler;
                 stdev = 12;
                 doubleWeight = GenerateRandomNormalDistribution(mean, stdev);
@@ -166,7 +166,7 @@ namespace LeagueSimulation
             }
             else if (position == "SG")
             {
-                double multipler = ((height - 77.5) / 77.5) * 210;
+                double multipler = (height - 77.5) / 77.5 * 210;
                 mean = 195 + multipler;
                 stdev = 14.8;
                 doubleWeight = GenerateRandomNormalDistribution(mean, stdev);
@@ -177,7 +177,7 @@ namespace LeagueSimulation
             }
             else if (position == "SF")
             {
-                double multipler = ((height - 79.5) / 79.5) * 180;
+                double multipler = (height - 79.5) / 79.5 * 180;
                 mean = 230 + multipler;
                 stdev = 14;
                 doubleWeight = GenerateRandomNormalDistribution(mean, stdev);
@@ -188,7 +188,7 @@ namespace LeagueSimulation
             }
             else if (position == "PF")
             {
-                double multipler = ((height - 81.2) / 81.2) * 200;
+                double multipler = (height - 81.2) / 81.2 * 200;
                 mean = 252 + multipler;
                 stdev = 20;
                 doubleWeight = GenerateRandomNormalDistribution(mean, stdev);
@@ -199,7 +199,7 @@ namespace LeagueSimulation
             }
             else if (position == "C")
             {
-                double multipler = ((height - 84) / 84) * 216;
+                double multipler = (height - 84) / 84 * 216;
                 mean = 250 + multipler;
                 stdev = 26;
                 doubleWeight = GenerateRandomNormalDistribution(mean, stdev);
@@ -210,7 +210,7 @@ namespace LeagueSimulation
             }
 
             int weight = (int)doubleWeight;
-            this.Weight = weight;
+            Weight = weight;
 
         }
 
@@ -220,10 +220,10 @@ namespace LeagueSimulation
             Random random = new Random();
             List<string> playstyles = new List<string>() { "Offensive", "Defensive", "2-Way" };
             int value = random.Next(1, 100);
-            if (value < 45) primaryPlaystyle = playstyles[0];
-            else if (value < 89) primaryPlaystyle = playstyles[1];
+            if (value < 53) primaryPlaystyle = playstyles[0];
+            else if (value < 83) primaryPlaystyle = playstyles[1];
             else primaryPlaystyle = playstyles[2];
-            this.PrimaryPlaystyle = primaryPlaystyle;
+            PrimaryPlaystyle = primaryPlaystyle;
         }
 
         public void GenerateSecondaryPlaystyle(int height, string primaryPlaystyle, string secondaryPlaystyle)
@@ -245,14 +245,14 @@ namespace LeagueSimulation
                 if (primaryPlaystyle == "Offensive")
                 {
                     playstyles = new List<string> { "Shooter", "Playmaker", "Finisher" };
-                    if ((height - 75.5) < -2)
+                    if (height - 75.5 < -2)
                     {
                         value = random.Next(0, 100);
                         if (value < 30) secondaryPlaystyle = playstyles[0];
                         else if (value < 95) secondaryPlaystyle = playstyles[1];
                         else if (value <= 100) secondaryPlaystyle = playstyles[2];
                     }
-                    else if ((height - 75.5) < 1)
+                    else if (height - 75.5 < 1)
                     {
                         value = random.Next(0, 100);
                         if (value < 29) secondaryPlaystyle = playstyles[0];
@@ -272,13 +272,13 @@ namespace LeagueSimulation
                 if (primaryPlaystyle == "Defensive")
                 {
                     playstyles = new List<string> { "Lockdown", "Ripper" };
-                    if ((height - 75.5) < -2)
+                    if (height - 75.5 < -2)
                     {
                         value = random.Next(0, 100);
                         if (value < 38) secondaryPlaystyle = playstyles[0];
                         else if (value <= 100) secondaryPlaystyle = playstyles[1];
                     }
-                    else if ((height - 75.5) < 1)
+                    else if (height - 75.5 < 1)
                     {
                         value = random.Next(0, 100);
                         if (value < 50) secondaryPlaystyle = playstyles[0];
@@ -296,14 +296,14 @@ namespace LeagueSimulation
                 {
                     string fullPlaystyle = "";
                     // find offensive counterpart
-                    if ((height - 75.5) < -2)
+                    if (height - 75.5 < -2)
                     {
                         value = random.Next(0, 100);
                         if (value < 36) fullPlaystyle += $"{playstyles[0]} ";
                         else if (value < 77) fullPlaystyle += $"{playstyles[1]} ";
                         else if (value <= 100) fullPlaystyle += $"{playstyles[3]} ";
                     }
-                    else if ((height - 75.5) < 1)
+                    else if (height - 75.5 < 1)
                     {
                         value = random.Next(0, 100);
                         if (value < 36) fullPlaystyle += $"{playstyles[0]} ";
@@ -319,13 +319,13 @@ namespace LeagueSimulation
                     }
 
                     // find defensive counterpart
-                    if ((height - 75.5) < -2)
+                    if (height - 75.5 < -2)
                     {
                         value = random.Next(0, 100);
                         if (value < 38) fullPlaystyle += $"{playstyles[5]} ";
                         else if (value <= 100) fullPlaystyle += $"{playstyles[6]} ";
                     }
-                    else if ((height - 75.5) < 1)
+                    else if (height - 75.5 < 1)
                     {
                         value = random.Next(0, 100);
                         if (value < 50) fullPlaystyle += $"{playstyles[5]} ";
@@ -349,14 +349,14 @@ namespace LeagueSimulation
                 if (primaryPlaystyle == "Offensive")
                 {
                     playstyles = new List<string> { "Shooter", "Playmaker", "Inside-Scorer", "Finisher" };
-                    if ((height - 79) < -2)
+                    if (height - 79 < -2)
                     {
                         value = random.Next(0, 100);
                         if (value < 47) secondaryPlaystyle = playstyles[0];
                         else if (value < 77) secondaryPlaystyle = playstyles[1];
                         else if (value <= 100) secondaryPlaystyle = playstyles[3];
                     }
-                    else if ((height - 79) < 1)
+                    else if (height - 79 < 1)
                     {
                         value = random.Next(0, 100);
                         if (value < 45) secondaryPlaystyle = playstyles[0];
@@ -376,13 +376,13 @@ namespace LeagueSimulation
                 if (primaryPlaystyle == "Defensive")
                 {
                     playstyles = new List<string> { "Rim Protector", "Lockdown", "Ripper" };
-                    if ((height - 79) < -2)
+                    if (height - 79 < -2)
                     {
                         value = random.Next(0, 100);
                         if (value < 51) secondaryPlaystyle = playstyles[1];
                         else if (value <= 100) secondaryPlaystyle = playstyles[2];
                     }
-                    else if ((height - 79) < 1)
+                    else if (height - 79 < 1)
                     {
                         value = random.Next(0, 100);
                         if (value < 60) secondaryPlaystyle = playstyles[1];
@@ -400,14 +400,14 @@ namespace LeagueSimulation
                 {
                     string fullPlaystyle = "";
                     // find offensive counterpart
-                    if ((height - 79) < -2)
+                    if (height - 79 < -2)
                     {
                         value = random.Next(0, 100);
                         if (value < 36) fullPlaystyle += $"{playstyles[0]} ";
                         else if (value < 77) fullPlaystyle += $"{playstyles[1]} ";
                         else if (value <= 100) fullPlaystyle += $"{playstyles[3]} ";
                     }
-                    else if ((height - 79) < 1)
+                    else if (height - 79 < 1)
                     {
                         value = random.Next(0, 100);
                         if (value < 36) fullPlaystyle += $"{playstyles[0]} ";
@@ -423,13 +423,13 @@ namespace LeagueSimulation
                     }
 
                     // find defensive counterpart
-                    if ((height - 79) < -2)
+                    if (height - 79 < -2)
                     {
                         value = random.Next(0, 100);
                         if (value < 38) fullPlaystyle += $"{playstyles[5]} ";
                         else if (value <= 100) fullPlaystyle += $"{playstyles[6]} ";
                     }
-                    else if ((height - 79) < 1)
+                    else if (height - 79 < 1)
                     {
                         value = random.Next(0, 100);
                         if (value < 50) fullPlaystyle += $"{playstyles[5]} ";
@@ -450,25 +450,25 @@ namespace LeagueSimulation
                 if (primaryPlaystyle == "Offensive")
                 {
                     playstyles = new List<string> { "Shooter", "Playmaker", "Finisher" };
-                    if ((height - 83) < -2)
+                    if (height - 83 < -2)
                     {
                         value = random.Next(0, 100);
-                        if (value < 38) secondaryPlaystyle = playstyles[0];
-                        else if (value < 60) secondaryPlaystyle = playstyles[1];
+                        if (value < 37) secondaryPlaystyle = playstyles[0];
+                        else if (value < 54) secondaryPlaystyle = playstyles[1];
                         else if (value <= 100) secondaryPlaystyle = playstyles[2];
                     }
-                    else if ((height - 83) < 1)
+                    else if (height - 83 < 1)
                     {
                         value = random.Next(0, 100);
-                        if (value < 32) secondaryPlaystyle = playstyles[0];
-                        else if (value < 47) secondaryPlaystyle = playstyles[1];
+                        if (value < 31) secondaryPlaystyle = playstyles[0];
+                        else if (value < 45) secondaryPlaystyle = playstyles[1];
                         else if (value <= 100) secondaryPlaystyle = playstyles[2];
                     }
                     else
                     {
                         value = random.Next(0, 100);
                         if (value < 18) secondaryPlaystyle = playstyles[0];
-                        else if (value < 29) secondaryPlaystyle = playstyles[1];
+                        else if (value < 25) secondaryPlaystyle = playstyles[1];
                         else if (value <= 100) secondaryPlaystyle = playstyles[2];
                     }
 
@@ -476,14 +476,14 @@ namespace LeagueSimulation
 
                 if (primaryPlaystyle == "Defensive")
                 {
-                    playstyles = new List<string> { "Rim Protector", "Lockdown"};
-                    if ((height - 83) < -2)
+                    playstyles = new List<string> { "Rim Protector", "Lockdown" };
+                    if (height - 83 < -2)
                     {
                         value = random.Next(0, 100);
                         if (value < 42) secondaryPlaystyle = playstyles[0];
                         else if (value <= 100) secondaryPlaystyle = playstyles[1];
                     }
-                    else if ((height - 83) < 1)
+                    else if (height - 83 < 1)
                     {
                         value = random.Next(0, 100);
                         if (value < 54) secondaryPlaystyle = playstyles[0];
@@ -504,14 +504,14 @@ namespace LeagueSimulation
                 {
                     string fullPlaystyle = "";
                     // find offensive counterpart
-                    if ((height - 83) < -2)
+                    if (height - 83 < -2)
                     {
                         value = random.Next(0, 100);
                         if (value < 36) fullPlaystyle += $"{playstyles[0]} ";
                         else if (value < 77) fullPlaystyle += $"{playstyles[1]} ";
                         else if (value <= 100) fullPlaystyle += $"{playstyles[3]} ";
                     }
-                    else if ((height - 83) < 1)
+                    else if (height - 83 < 1)
                     {
                         value = random.Next(0, 100);
                         if (value < 36) fullPlaystyle += $"{playstyles[0]} ";
@@ -527,13 +527,13 @@ namespace LeagueSimulation
                     }
 
                     // find defensive counterpart
-                    if ((height - 83) < -2)
+                    if (height - 83 < -2)
                     {
                         value = random.Next(0, 100);
                         if (value < 38) fullPlaystyle += $"{playstyles[5]} ";
                         else if (value <= 100) fullPlaystyle += $"{playstyles[6]} ";
                     }
-                    else if ((height - 83) < 1)
+                    else if (height - 83 < 1)
                     {
                         value = random.Next(0, 100);
                         if (value < 50) fullPlaystyle += $"{playstyles[5]} ";
@@ -551,7 +551,7 @@ namespace LeagueSimulation
 
             }
             if (secondaryPlaystyle == "") { }
-            this.SecondaryPlaystyle = secondaryPlaystyle;
+            SecondaryPlaystyle = secondaryPlaystyle;
         }
 
         public void GenerateStats(string position, string primaryPlaystyle, string secondaryPlaystyle)
@@ -572,7 +572,7 @@ namespace LeagueSimulation
             int speed = 0;
             int strength = 0;
             int stamina = 0;
-            int overall = this.Overall;
+            int overall = Overall;
             List<string> playstyles = new List<string>()
             {
                 "Shooter",
@@ -3100,22 +3100,22 @@ namespace LeagueSimulation
             if (strength > 99) strength = 99;
 
             if (closeShot == 0) { }
-            this.CloseShot = closeShot;
-            this.Layup = layup;
-            if (this.CloseShot > this.Layup) this.Layup = this.CloseShot;
-            this.Dunk = dunk;
-            this.MidRange = midRange;
-            this.ThreePoint = threePoint;
-            this.FreeThrow = freeThrow;
-            this.Passing = passing;
-            this.BallHandle = ballHandle;
-            this.Defense = defense;
-            this.Steal = steal;
-            this.Block = block;
-            this.Rebound = rebound;
-            this.Speed = speed;
-            this.Strength = strength;
-            this.Stamina = stamina;
+            CloseShot = closeShot;
+            Layup = layup;
+            if (CloseShot > Layup) Layup = CloseShot;
+            Dunk = dunk;
+            MidRange = midRange;
+            ThreePoint = threePoint;
+            FreeThrow = freeThrow;
+            Passing = passing;
+            BallHandle = ballHandle;
+            Defense = defense;
+            Steal = steal;
+            Block = block;
+            Rebound = rebound;
+            Speed = speed;
+            Strength = strength;
+            Stamina = stamina;
         }
 
 
@@ -3132,7 +3132,7 @@ namespace LeagueSimulation
             int age = (int)GenerateRandomNormalDistribution(ageMean, ageStDev);
             if (age < 18) age = 18;
             if (age > 40) age = 40;
-            this.Age = age;
+            Age = age;
 
             // we make sure players that are older than 33 and younger than 21, are not very good
             // compared to the rest of the league
@@ -3150,7 +3150,7 @@ namespace LeagueSimulation
             int overall = (int)GenerateRandomNormalDistribution(overallMean, overallStDev);
             if (overall < 60) overall = 60;
             else if (overall > 99) overall = 99;
-            this.Overall = overall;
+            Overall = overall;
 
             // we calculate the potential of the player
             if (age < 28)
@@ -3161,17 +3161,17 @@ namespace LeagueSimulation
                 int potentialMean = (int)(3 + ageDifference);
                 int potentialStDev = 2;
                 int potential = (int)GenerateRandomNormalDistribution(potentialMean, potentialStDev);
-                this.Potential = potential + overall;
-                
+                Potential = potential + overall;
+
             }
-            else this.Potential = age;
-            if (this.Potential < overall) this.Potential = overall;
+            else Potential = age;
+            if (Potential < overall) Potential = overall;
         }
 
         public void GeneratePlayer(string pos, int teamId, string teamName, string forename, string surname, int meanOverall)
         {
             // add team information to player
-            this.TeamId = teamId;
+            TeamId = teamId;
             this.teamName = teamName;
 
             // add name to player
@@ -3180,22 +3180,22 @@ namespace LeagueSimulation
             // height and weight of player
             position = pos;
             // generates height and weight for the player
-            RandomHeight(this.position);
-            RandomWeight(this.position, this.Height);
+            RandomHeight(position);
+            RandomWeight(position, Height);
 
             // generate the playstyles of the player
             GeneratePrimaryPlaystyle();
-            GenerateSecondaryPlaystyle(this.Height, this.PrimaryPlaystyle, this.SecondaryPlaystyle);
+            GenerateSecondaryPlaystyle(Height, PrimaryPlaystyle, SecondaryPlaystyle);
 
             // generate stats, age, overall and the position of the player
             GenerateAgeOvrAndPotential(meanOverall, false);
-            GenerateStats(this.position, this.PrimaryPlaystyle, this.SecondaryPlaystyle);
+            GenerateStats(position, PrimaryPlaystyle, SecondaryPlaystyle);
         }
 
         public void GenerateRookie(string pos, int teamId, string teamName, string forename, string surname, int meanOverall)
         {
             // add team information to player
-            this.TeamId = teamId;
+            TeamId = teamId;
             this.teamName = teamName;
 
             // add name to player
@@ -3204,16 +3204,16 @@ namespace LeagueSimulation
             // height and weight of player
             position = pos;
             // generates height and weight for the player
-            RandomHeight(this.position);
-            RandomWeight(this.position, this.Height);
+            RandomHeight(position);
+            RandomWeight(position, Height);
 
             // generate the playstyles of the player
             GeneratePrimaryPlaystyle();
-            GenerateSecondaryPlaystyle(this.Height, this.PrimaryPlaystyle, this.SecondaryPlaystyle);
+            GenerateSecondaryPlaystyle(Height, PrimaryPlaystyle, SecondaryPlaystyle);
 
             // generate stats, age, overall and the position of the player
             GenerateAgeOvrAndPotential(meanOverall, true);
-            GenerateStats(this.position, this.PrimaryPlaystyle, this.SecondaryPlaystyle);
+            GenerateStats(position, PrimaryPlaystyle, SecondaryPlaystyle);
         }
 
     }

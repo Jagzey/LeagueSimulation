@@ -1,3 +1,5 @@
+using LeagueSimulation.Models;
+
 namespace LeagueSimulation
 {
     public partial class Main : Form
@@ -8,7 +10,7 @@ namespace LeagueSimulation
         public League CurrentLeague { get; set; }
         public Main()
         {
-            string currentUser = "FiercePC";
+            string currentUser = "nzuobm";
             this.CurrentUser = currentUser;
             InitializeComponent();
         }

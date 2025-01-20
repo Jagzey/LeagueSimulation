@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LeagueSimulation
+namespace LeagueSimulation.Models
 {
     public class Team
     {
@@ -13,26 +13,22 @@ namespace LeagueSimulation
         public string city = "";
         private int position = 0;
         private string conference = "";
-        private int w = 0;
-        private int l = 0;
-        private double winPct = 0;
         private int teamId = 0;
+        private string currentUser = "";
         //public int revenue = 200000000;
         public int Position { get; set; }
-        public string? Conference { get; set; } 
+        public string? Conference { get; set; }
         public int TeamId { get { return teamId; } }
+        public string CurrentUser { get; set; }
 
         //public int Revenue { get; set; }
 
-        public static string GetCityFromTeamName(string unorganisedName)
-        {
-            return GetFullNameAndCityName(unorganisedName).Item1;
-        }
+        public static string GetCityFromTeamName(string unorganisedName) => GetFullNameAndCityName(unorganisedName).Item1;
 
         public string GetConference()
         {
             string conference = "";
-            string teamNamesFilePath = $@"C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Names Files\basketball_team_names_list.txt";
+            string teamNamesFilePath = $@"C:\Users\{CurrentUser}\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Names Files\basketball_team_names_list.txt";
             string[] teamNames = File.ReadAllLines(teamNamesFilePath);
             for (int i = 0; i < teamNames.Length; i++)
             {
@@ -45,29 +41,29 @@ namespace LeagueSimulation
             return conference;
         }
 
-        public static (string, string) GetFullNameAndCityName(string unorganisedName)
+        public static (string, string) GetFullNameAndCityName(string teamName)
         {
             // work out number of capital letters in team name
             int numCapitals = 0;
-            foreach (char c in unorganisedName) if (Char.IsUpper(c)) numCapitals++;
+            foreach (char c in teamName) if (char.IsUpper(c)) numCapitals++;
             int currentCapital = 0;
             string firstPart = "";
             string secondPart = "";
-            for (int i = 0; i < unorganisedName.Length; i++)
+            for (int i = 0; i < teamName.Length; i++)
             {
-                char c = unorganisedName[i];
-                if (Char.IsUpper(c)) currentCapital++;
+                char c = teamName[i];
+                if (char.IsUpper(c)) currentCapital++;
                 if (i == 0)
                 {
                     firstPart += c;
                 }
                 else if (c == ' ') continue;
-                else if (Char.IsUpper(c) && (currentCapital < numCapitals))
+                else if (char.IsUpper(c) && currentCapital < numCapitals)
                 {
                     firstPart += ' ';
                     firstPart += c;
                 }
-                else if (Char.IsUpper(c) && (currentCapital == numCapitals))
+                else if (char.IsUpper(c) && currentCapital == numCapitals)
                 {
                     secondPart += c;
                 }
@@ -86,17 +82,19 @@ namespace LeagueSimulation
             return (firstPart, secondPart);
         }
 
-        public Team(string unorganisedName, int teamId)
+        public Team(string teamName, int teamId, string currentUser)
         {
-            if (unorganisedName != null)
+            if (teamName != null)
             {
-                (string, string) twoPartName = GetFullNameAndCityName(unorganisedName);
+                (string, string) twoPartName = GetFullNameAndCityName(teamName);
                 city = twoPartName.Item1;
-                teamName = $"{twoPartName.Item1} {twoPartName.Item2}";
+                this.teamName = teamName;
                 this.teamId = teamId;
-                position = teamId;
-                Conference = GetConference();
+                if (teamId < 16) Conference = "East";
+                else Conference = "West";
             }
+
+            CurrentUser = currentUser;
         }
 
     }

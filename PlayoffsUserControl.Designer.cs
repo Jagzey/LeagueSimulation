@@ -30,6 +30,11 @@
         {
             playoffsFlowLayoutPanel = new FlowLayoutPanel();
             topPanel = new Panel();
+            label5 = new Label();
+            label4 = new Label();
+            label3 = new Label();
+            label2 = new Label();
+            firstRoundLabel = new Label();
             label1 = new Label();
             bottomPanel = new Panel();
             label33 = new Label();
@@ -81,11 +86,6 @@
             game1EastFirstRound = new Panel();
             team2game1EastFirstRound = new Label();
             team1game1EastFirstRound = new Label();
-            firstRoundLabel = new Label();
-            label2 = new Label();
-            label3 = new Label();
-            label4 = new Label();
-            label5 = new Label();
             playoffsFlowLayoutPanel.SuspendLayout();
             topPanel.SuspendLayout();
             bottomPanel.SuspendLayout();
@@ -128,6 +128,51 @@
             topPanel.Name = "topPanel";
             topPanel.Size = new Size(623, 41);
             topPanel.TabIndex = 0;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(275, 21);
+            label5.Name = "label5";
+            label5.Size = new Size(101, 15);
+            label5.TabIndex = 5;
+            label5.Text = "Conference Finals";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(418, 16);
+            label4.Name = "label4";
+            label4.Size = new Size(84, 15);
+            label4.TabIndex = 4;
+            label4.Text = "Second Round";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(146, 16);
+            label3.Name = "label3";
+            label3.Size = new Size(84, 15);
+            label3.TabIndex = 3;
+            label3.Text = "Second Round";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(524, 16);
+            label2.Name = "label2";
+            label2.Size = new Size(96, 15);
+            label2.TabIndex = 2;
+            label2.Text = "West First Round";
+            // 
+            // firstRoundLabel
+            // 
+            firstRoundLabel.AutoSize = true;
+            firstRoundLabel.Location = new Point(21, 16);
+            firstRoundLabel.Name = "firstRoundLabel";
+            firstRoundLabel.Size = new Size(94, 15);
+            firstRoundLabel.TabIndex = 1;
+            firstRoundLabel.Text = " East First Round";
             // 
             // label1
             // 
@@ -590,51 +635,6 @@
             team1game1EastFirstRound.TabIndex = 0;
             team1game1EastFirstRound.Text = "New York  (1) 3";
             team1game1EastFirstRound.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // firstRoundLabel
-            // 
-            firstRoundLabel.AutoSize = true;
-            firstRoundLabel.Location = new Point(21, 16);
-            firstRoundLabel.Name = "firstRoundLabel";
-            firstRoundLabel.Size = new Size(94, 15);
-            firstRoundLabel.TabIndex = 1;
-            firstRoundLabel.Text = " East First Round";
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(524, 16);
-            label2.Name = "label2";
-            label2.Size = new Size(96, 15);
-            label2.TabIndex = 2;
-            label2.Text = "West First Round";
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(146, 16);
-            label3.Name = "label3";
-            label3.Size = new Size(84, 15);
-            label3.TabIndex = 3;
-            label3.Text = "Second Round";
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Location = new Point(418, 16);
-            label4.Name = "label4";
-            label4.Size = new Size(84, 15);
-            label4.TabIndex = 4;
-            label4.Text = "Second Round";
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Location = new Point(275, 21);
-            label5.Name = "label5";
-            label5.Size = new Size(101, 15);
-            label5.TabIndex = 5;
-            label5.Text = "Conference Finals";
             // 
             // PlayoffsUserControl
             // 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SQLite;
+using LeagueSimulation.Models;
 
 namespace LeagueSimulation
 {
@@ -20,7 +21,7 @@ namespace LeagueSimulation
         public void FillLabels()
         {
             if (!league.Playoffs) playoffsLabel.Hide();
-            else { string round = league.PlayoffsRound;  playoffsLabel.Text += $"\n {round.ToUpper()}"; }
+            else { string round = league.PlayoffsRound; playoffsLabel.Text += $"\n {round.ToUpper()}"; }
             // we work out the conference standings in the dashboard
             {
                 List<string> userConferenceTeams = league.GetConferenceTeams(league.GetUserConferenceId());
@@ -744,5 +745,10 @@ namespace LeagueSimulation
         private Label seasonYearLabel;
         private Label playoffsLabel;
         private Label? dashboardPanel;
+
+        private void assistsLabel_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

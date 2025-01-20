@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using LeagueSimulation.Models;
 
 namespace LeagueSimulation
 {
@@ -68,8 +69,8 @@ namespace LeagueSimulation
                 team2Record = league.GetTeamRecord(team2Name);
                 if (league.Playoffs)
                 {
-                    team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(team1Name).ToString(), league.GetIdFromTeamName(team2Name).ToString(), league.GetConferenceIdFromTeamId(team1Name));
-                    team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(team2Name).ToString(), league.GetIdFromTeamName(team1Name).ToString(), league.GetConferenceIdFromTeamId(team1Name));
+                    team1Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(team1Name).ToString(), league.GetIdFromTeamName(team2Name).ToString());
+                    team2Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(team2Name).ToString(), league.GetIdFromTeamName(team1Name).ToString());
                 }
                 gameResultLabel.Text = $"{team1Name} ({team1Record}) {gameScore} {team2Name} ({team2Record})";
             }

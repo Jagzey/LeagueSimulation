@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LeagueSimulation
+namespace LeagueSimulation.Models
 {
     public class PlayerInGame
     {
@@ -27,13 +27,14 @@ namespace LeagueSimulation
         private int personalFouls = 0;
         private double gameValue = 0;
         private int minutesToPlay = 0;
+        private int touches = 0;
         private List<int> slotsPlaying = new List<int>();
 
         public int FieldGoalMade { get; set; }
         public int FieldGoalAttempted { get; set; }
         public int ThreePointMade { get; set; }
         public int ThreePointAttempted { get; set; }
-        public int FreeThrowMade { get ; set; }
+        public int FreeThrowMade { get; set; }
         public int FreeThrowAttempted { get; set; }
         public int Points { get; set; }
         public int Rebounds { get; set; }
@@ -45,11 +46,12 @@ namespace LeagueSimulation
         public double GameValue { get; set; }
         public int MinutesToPlay { get; set; }
         public List<int> SlotsPlaying { get; set; }
+        public int Touches { get; set; }
 
         public PlayerInGame(Player player)
         {
-            this.playerStats = player;
-            this.SlotsPlaying = new List<int>();
+            playerStats = player;
+            SlotsPlaying = new List<int>();
         }
     }
 }

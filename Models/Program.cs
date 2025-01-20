@@ -1,4 +1,4 @@
-namespace LeagueSimulation
+namespace LeagueSimulation.Models
 {
     internal static class Program
     {

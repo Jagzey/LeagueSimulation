@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using LeagueSimulation.Models;
 
 namespace LeagueSimulation
 {
@@ -25,6 +26,7 @@ namespace LeagueSimulation
 
         public void FillLabels()
         {
+            seasonSummaryDataPanel.Hide();
             int currentSeason = (int)seasonSummaryYear.Value - 2023;
             // fill the nonTeam Awards and team records
             string getBestTeams = $@"
@@ -438,6 +440,7 @@ namespace LeagueSimulation
                     label.Font = new Font(label.Font.FontFamily, label.Font.Size + 1);
                 }
             }
+            seasonSummaryDataPanel.Show();
         }
 
 

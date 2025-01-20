@@ -1,6 +1,7 @@
 ﻿using System.Data.Entity.Core.Mapping;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Forms;
+using LeagueSimulation.Models;
 
 namespace LeagueSimulation
 {
@@ -50,8 +51,8 @@ namespace LeagueSimulation
                     team2Record = league.GetTeamRecord(teamsPlaying[1]);
                     if (league.Playoffs)
                     {
-                        team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
-                        team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                        team1Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString());
+                        team2Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString());
                     }
                     game1TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
                     currentGameCounter++;
@@ -65,8 +66,8 @@ namespace LeagueSimulation
                     team2Record = league.GetTeamRecord(teamsPlaying[1]);
                     if (league.Playoffs)
                     {
-                        team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
-                        team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                        team1Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString());
+                        team2Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString());
                     }
                     game2TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
                     currentGameCounter++;
@@ -80,8 +81,8 @@ namespace LeagueSimulation
                     team2Record = league.GetTeamRecord(teamsPlaying[1]);
                     if (league.Playoffs)
                     {
-                        team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
-                        team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                        team1Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString());
+                        team2Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString());
                     }
                     game3TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
                     currentGameCounter++;
@@ -95,8 +96,8 @@ namespace LeagueSimulation
                     team2Record = league.GetTeamRecord(teamsPlaying[1]);
                     if (league.Playoffs)
                     {
-                        team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
-                        team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                        team1Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString());
+                        team2Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString());
                     }
                     game4TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
                     currentGameCounter++;
@@ -110,8 +111,8 @@ namespace LeagueSimulation
                     team2Record = league.GetTeamRecord(teamsPlaying[1]);
                     if (league.Playoffs)
                     {
-                        team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
-                        team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                        team1Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString());
+                        team2Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString());
                     }
                     game5TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
                     currentGameCounter++;
@@ -125,8 +126,8 @@ namespace LeagueSimulation
                     team2Record = league.GetTeamRecord(teamsPlaying[1]);
                     if (league.Playoffs)
                     {
-                        team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
-                        team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                        team1Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString());
+                        team2Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString());
                     }
                     game6TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
                     currentGameCounter++;
@@ -140,8 +141,8 @@ namespace LeagueSimulation
                     team2Record = league.GetTeamRecord(teamsPlaying[1]);
                     if (league.Playoffs)
                     {
-                        team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
-                        team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                        team1Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString());
+                        team2Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString());
                     }
                     game7TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
                     currentGameCounter++;
@@ -155,8 +156,8 @@ namespace LeagueSimulation
                     team2Record = league.GetTeamRecord(teamsPlaying[1]);
                     if (league.Playoffs)
                     {
-                        team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
-                        team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                        team1Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString());
+                        team2Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString());
                     }
                     game8TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
                     currentGameCounter++;
@@ -170,8 +171,8 @@ namespace LeagueSimulation
                     team2Record = league.GetTeamRecord(teamsPlaying[1]);
                     if (league.Playoffs)
                     {
-                        team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
-                        team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                        team1Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString());
+                        team2Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString());
                     }
                     game9TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
                     currentGameCounter++;
@@ -185,8 +186,8 @@ namespace LeagueSimulation
                     team2Record = league.GetTeamRecord(teamsPlaying[1]);
                     if (league.Playoffs)
                     {
-                        team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
-                        team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                        team1Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString());
+                        team2Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString());
                     }
                     game10TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
                     currentGameCounter++;
@@ -200,8 +201,8 @@ namespace LeagueSimulation
                     team2Record = league.GetTeamRecord(teamsPlaying[1]);
                     if (league.Playoffs)
                     {
-                        team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
-                        team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                        team1Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString());
+                        team2Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString());
                     }
                     game11TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
                     currentGameCounter++;
@@ -215,8 +216,8 @@ namespace LeagueSimulation
                     team2Record = league.GetTeamRecord(teamsPlaying[1]);
                     if (league.Playoffs)
                     {
-                        team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
-                        team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                        team1Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString());
+                        team2Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString());
                     }
                     game12TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
                     currentGameCounter++;
@@ -230,8 +231,8 @@ namespace LeagueSimulation
                     team2Record = league.GetTeamRecord(teamsPlaying[1]);
                     if (league.Playoffs)
                     {
-                        team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
-                        team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
+                        team1Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString());
+                        team2Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString());
                     }
                     game13TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
                     currentGameCounter++;
@@ -600,8 +601,8 @@ namespace LeagueSimulation
             string team2Record = league.GetTeamRecord(teamsPlaying[1]);
             if (league.Playoffs)
             {
-                team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
-                team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[1]));
+                team1Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString());
+                team2Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString());
             }
             game1TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
             game1TeamsLabel.Refresh();
@@ -633,8 +634,8 @@ namespace LeagueSimulation
             string team2Record = league.GetTeamRecord(teamsPlaying[1]);
             if (league.Playoffs)
             {
-                team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
-                team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[1]));
+                team1Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString());
+                team2Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString());
             }
             game2TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
             game2TeamsLabel.Refresh();
@@ -666,8 +667,8 @@ namespace LeagueSimulation
             string team2Record = league.GetTeamRecord(teamsPlaying[1]);
             if (league.Playoffs)
             {
-                team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
-                team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[1]));
+                team1Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString());
+                team2Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString());
             }
             game3TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
             game3TeamsLabel.Refresh();
@@ -699,8 +700,8 @@ namespace LeagueSimulation
             string team2Record = league.GetTeamRecord(teamsPlaying[1]);
             if (league.Playoffs)
             {
-                team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
-                team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[1]));
+                team1Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString());
+                team2Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString());
             }
             game4TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
             game4TeamsLabel.Refresh();
@@ -732,8 +733,8 @@ namespace LeagueSimulation
             string team2Record = league.GetTeamRecord(teamsPlaying[1]);
             if (league.Playoffs)
             {
-                team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
-                team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[1]));
+                team1Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString());
+                team2Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString());
             }
             game5TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
             game5TeamsLabel.Refresh();
@@ -765,8 +766,8 @@ namespace LeagueSimulation
             string team2Record = league.GetTeamRecord(teamsPlaying[1]);
             if (league.Playoffs)
             {
-                team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
-                team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[1]));
+                team1Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString());
+                team2Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString());
             }
             game6TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
             game6TeamsLabel.Refresh();
@@ -798,8 +799,8 @@ namespace LeagueSimulation
             string team2Record = league.GetTeamRecord(teamsPlaying[1]);
             if (league.Playoffs)
             {
-                team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
-                team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[1]));
+                team1Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString());
+                team2Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString());
             }
             game7TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
             game7TeamsLabel.Refresh();
@@ -832,8 +833,8 @@ namespace LeagueSimulation
             string team2Record = league.GetTeamRecord(teamsPlaying[1]);
             if (league.Playoffs)
             {
-                team1Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[0]));
-                team2Record = league.GetSeriesRecordByRound(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetConferenceIdFromTeamId(teamsPlaying[1]));
+                team1Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString());
+                team2Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString());
             }
             game8TeamsLabel.Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
             game8TeamsLabel.Refresh();
