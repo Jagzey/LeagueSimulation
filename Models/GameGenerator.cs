@@ -1,4 +1,6 @@
 ﻿using System.Data.SQLite;
+using System.Runtime.Intrinsics.X86;
+using System.Security.Permissions;
 
 namespace LeagueSimulation.Models
 {
@@ -12,6 +14,7 @@ namespace LeagueSimulation.Models
         public string connectionString; // string to connect to database
         public List<string> CommentatorPhrases = new List<string>();
         public List<string> ScoreAfterEachPhrase = new List<string>();
+        public List<string> GameTimestamps = new List<string>();
         private PlayerInGame playerWithBall; // which player has the ball
         private PlayerInGame playerWhoPassed; // player who passed to player with the ball
         private PlayerInGame playerWithBallMatchup; // matchup with player with the ball
@@ -26,6 +29,7 @@ namespace LeagueSimulation.Models
         private List<Player> team2Starters = new List<Player>();
         public List<PlayerInGame> team2Stats = new List<PlayerInGame>();
         public List<PlayerInGame> team2StarterStats = new List<PlayerInGame>(); // used for probabilities in possesions
+        public GameClock gameClock;
 
 
         public int GameId { get; set; }
@@ -381,7 +385,6 @@ namespace LeagueSimulation.Models
             int possessionCounter = -1;
             int rotationSlot = 1;
             int numPasses = 0;
-            GameClock gameClock = new GameClock();
             int endOfGameTime = 48;
 
             // we write a nice message to the player about which teams are playing
@@ -398,6 +401,7 @@ namespace LeagueSimulation.Models
                 }
                 else CommentatorPhrases.Add($"Welcome player! Today, we are watching the {team1.teamName} ({team1Record}) vs. {team2.teamName} ({team2Record}) live. Enjoy!");
                 ScoreAfterEachPhrase.Add($"0-0");
+                GameTimestamps.Add(gameClock.PrintTime());
             }
 
             // we continue calculating possessions until the number of possessions in a game is reached
@@ -434,6 +438,8 @@ namespace LeagueSimulation.Models
                         (int, int) score = CalculateScore();
                         ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
                         ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+                        GameTimestamps.Add(gameClock.PrintTime());
+                        GameTimestamps.Add(gameClock.PrintTime());
 
                         possessionsComplete = false;
                         numPossessions += 40;
@@ -449,6 +455,7 @@ namespace LeagueSimulation.Models
                         CommentatorPhrases.Add($"The game {team1.teamName} vs. {team2.teamName} has come to an end as the clock runs out.");
                         (int, int) score = CalculateScore();
                         ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+                        GameTimestamps.Add(gameClock.PrintTime());
 
                         // Now we work out the name of the winner of the game, then display it
                         string nameOfWinner = "";
@@ -456,7 +463,7 @@ namespace LeagueSimulation.Models
                         else nameOfWinner = team2.teamName;
                         CommentatorPhrases.Add($"The game score finished as {score.Item1}-{score.Item2}, as the win goes to the {nameOfWinner}. ");
                         ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
-
+                        GameTimestamps.Add(gameClock.PrintTime());
                     }
                 }
                 // when the game has not finished, we continue simulating possessions
@@ -492,10 +499,10 @@ namespace LeagueSimulation.Models
                         // the higher the player's ball handle, the higher chance they start with the ball
                         offenseStarterStats = offenseStarterStats.OrderByDescending(x => x.playerStats.BallHandle + 2 * x.playerStats.Passing + 3 * x.Assists).ToList();
                         double randomStarterProbability = random.NextDouble();
-                        if (randomStarterProbability < 0.26) playerWithBall = offenseStarterStats[0];
-                        else if (randomStarterProbability < 0.48) playerWithBall = offenseStarterStats[1];
-                        else if (randomStarterProbability < 0.68) playerWithBall = offenseStarterStats[2];
-                        else if (randomStarterProbability < 0.85) playerWithBall = offenseStarterStats[3];
+                        if (randomStarterProbability < 0.46) playerWithBall = offenseStarterStats[0];
+                        else if (randomStarterProbability < 0.76) playerWithBall = offenseStarterStats[1];
+                        else if (randomStarterProbability < 0.90) playerWithBall = offenseStarterStats[2];
+                        else if (randomStarterProbability < 0.95) playerWithBall = offenseStarterStats[3];
                         else playerWithBall = offenseStarterStats[4];
                         // now we set the matchup for playerWithBall
                         foreach (PlayerInGame playerInGame2 in defenseStarterStats)
@@ -515,6 +522,7 @@ namespace LeagueSimulation.Models
                     dPlayerTeamName = $"{playerWithBallMatchup.playerStats.teamName}";
 
                     // list of probabilities of events during a single offensive possession for an offensive player
+                    bool foulOccurred = false;
 
                     double prob3PAttempted = 0;
                     // events after a 3 point is attempted
@@ -542,20 +550,26 @@ namespace LeagueSimulation.Models
 
                     double probPassAttempted = 0;
                     //events after a pass is attempted
-                    double probPassMade = 0.904;
-                    double probPassStolen = 0.096;
+                    double probPassMade = 0.938;
+                    double probPassStolen = 0.062;
 
                     double passerContribution = 1;
+                    // this checks if we aren't at a starting possesion, and the player who passed, isn't the player with the ball
+                    // or on a different team
                     if (playerWhoPassed != null && playerWhoPassed != playerWithBall && playerWhoPassed.playerStats.TeamId == playerWithBall.playerStats.TeamId)
                     {
-                        // convert pass from (45 - 99) to (0 - 0.23)
-                        passerContribution += 0.23 * (playerWhoPassed.playerStats.Passing - 45) / (99 - 45);
-                        passerContribution += playerWhoPassed.Assists * 0.002 / 1.196;
+                        // convert pass from (45 - 99) to (0 - 0.27)
+                        passerContribution += 0.30 * (playerWhoPassed.playerStats.Passing - 45) / (99 - 45);
+                        passerContribution += playerWhoPassed.Assists * 0.002 / 1.176;
                     }
                     if (passerContribution > 1.18) { }
 
+                    // convert d overallDifference from (-40 to 40) to (-0.05 to 0.05)
+                    int overallDifference = playerWithBallMatchup.playerStats.Overall - playerWithBall.playerStats.Overall;
                     double probFoulAfterShot = 0;
-                    //double probTurnover = 0;
+                    probFoulAfterShot = -0.05 + 0.10 * (overallDifference + 40) / 80;
+                    //probFoulAfterShot = -100;
+
                     if (playerWithBall.playerStats.Overall > 96) { };
                     List<double> attemptedEventProbabilites = new List<double>();
                     attemptedEventProbabilites = CalculateEventProbabilities(prob3PAttempted, prob2PAttempted, probLayupAttempted, probDunkAttempted, probPassAttempted, passerContribution);
@@ -584,7 +598,7 @@ namespace LeagueSimulation.Models
                             double dDefenseStat = playerWithBallMatchup.playerStats.Defense;
 
                             // convert 3 point stat (40-99) to (-0.12 - 0.12)
-                            oThreePointStat = -0.07 + (0.07 + 0.07) * (oThreePointStat - 40) / (99 - 40);
+                            oThreePointStat = -0.11 + (0.11 + 0.11) * (oThreePointStat - 40) / (99 - 40);
                             if (playerWithBall.ThreePointMade > 3 && playerWithBall.GameValue > 14 && playerWithBall.playerStats.SecondaryPlaystyle != "Playmaker" && playerWithBall.playerStats.PrimaryPlaystyle == "Offensive") oThreePointStat += 0.020 + 0.002 * (playerWithBall.ThreePointMade - 2);
                             if (playerWithBall.ThreePointMade > 10) oThreePointStat -= 0.0007 * (playerWithBall.FieldGoalMade - 10);
                             // convert height difference (-8 - 8) to (-0.07 to 0.07)
@@ -599,79 +613,260 @@ namespace LeagueSimulation.Models
                             prob3PMade += oThreePointStat + heightDifference + dDefenseStat;
                             prob3PMade *= passerContribution;
                             prob3PBlocked += dBlockStat;
-                            probFoulAfterShot = 0.01;
+                            probFoulAfterShot += 0.02;
+                            if (probFoulAfterShot < 0) probFoulAfterShot = 0;
                             prob3PMissed = 1 - (prob3PMade + prob3PBlocked);
 
-                            // this occurs if a 3 point shot is made
+
+                            
                             double randomThreePointProbability = random.NextDouble();
-                            if (randomThreePointProbability < prob3PMade)
+                            // this occurs if the player is fouled on their three
+                            if (randomThreePointProbability < probFoulAfterShot)
                             {
-                                CommentatorPhrases.Add($"{oPlayerName} made a three for the {oPlayerTeamName}.");
+                                playerWithBallMatchup.PersonalFouls++;
+                                prob3PMade *= 0.085;
+                                prob3PBlocked = 0;
+                                foulOccurred = true;
 
-
-                                playerWithBall.FieldGoalAttempted++;
-                                playerWithBall.FieldGoalMade++;
-                                playerWithBall.ThreePointAttempted++;
-                                playerWithBall.ThreePointMade++;
-                                playerWithBall.Points += 3;
-                                (int, int) score = CalculateScore();
-                                ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
-                                // this validates if the player who passed, exists and is on the same team as player who scored
-                                if (playerWhoPassed == null)
+                                // this occurs if a 3 point and-1 occurs
+                                if (random.NextDouble() < prob3PMade)
                                 {
-                                    // now we change possession
-                                    //if (possession == 1) possession = 2;
-                                    //else possession = 1;
-                                    //continue;
-                                }
-                                else if (playerWhoPassed != playerWithBall && playerWhoPassed.playerStats.TeamId == playerWithBall.playerStats.TeamId)
-                                {
-                                    int assistEvent = CalculateAssistProbability();
-                                    // this is if an assist event
-                                    if (assistEvent == 1)
+                                    playerWithBall.FieldGoalAttempted++;
+                                    playerWithBall.FieldGoalMade++;
+                                    playerWithBall.ThreePointAttempted++;
+                                    playerWithBall.ThreePointMade++;
+                                    playerWithBall.Points += 3;
+                                    string currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                                    // set the assist
+                                    if (playerWhoPassed != null)
                                     {
-                                        CommentatorPhrases.Add($"Assisted by {playerWhoPassed.playerStats.playerForename} {playerWhoPassed.playerStats.playerSurname}");
+                                        if (playerWhoPassed != playerWithBall && playerWhoPassed.playerStats.TeamId == playerWithBall.playerStats.TeamId)
+                                        {
+                                            int assistEvent = CalculateAssistProbability();
+                                            // this is if an assist event
+                                            if (assistEvent == 1)
+                                            {
+                                                CommentatorPhrases.Add($"Assisted by {playerWhoPassed.playerStats.playerForename} {playerWhoPassed.playerStats.playerSurname}");
+                                                ScoreAfterEachPhrase.Add(currentScore);
+                                                GameTimestamps.Add(gameClock.PrintTime());
+                                            }
+                                        }
+                                    }
 
-                                        ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+                                    CommentatorPhrases.Add($"{oPlayerName} made a three after the foul for a four point play for the {oPlayerTeamName}!");
+                                    ScoreAfterEachPhrase.Add(currentScore);
+                                    GameTimestamps.Add(gameClock.PrintTime());
+                                    // now we have a live free throw for the player fouled
+                                    {
+                                        double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01;
+                                        // if the free throw is made
+                                        if (random.NextDouble() < randomFreeThrowProbability)
+                                        {
+                                            playerWithBall.FreeThrowAttempted++;
+                                            playerWithBall.FreeThrowMade++;
+                                            playerWithBall.Points++;
+                                            CommentatorPhrases.Add($"{oPlayerName} made a free throw for the {oPlayerTeamName}.");
+                                            currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                                            ScoreAfterEachPhrase.Add(currentScore);
+                                            GameTimestamps.Add(gameClock.PrintTime());
+                                            startingPossession = true;
+                                        }
+                                        // if the free throw is missed
+                                        else
+                                        {
+                                            CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} missed a free throw.");
+                                            playerWithBall.FreeThrowAttempted++;
+
+                                            currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                                            ScoreAfterEachPhrase.Add(currentScore);
+                                            GameTimestamps.Add(gameClock.PrintTime());
+
+                                            int reboundEvent = CalculateReboundProbability();
+                                            reboundOccurred = true;
+                                            // this is if the ball goes out of bounds or a defensive rebound
+                                            if (reboundEvent == -1 || reboundEvent == 0)
+                                            {
+                                                if (possession == 1) possession = 2;
+                                                else possession = 1;
+                                            }
+                                            // this is if an offensive rebound occurred
+                                            else
+                                            {
+                                                // possession remains with the offensive team
+                                                startingPossession = false;
+                                                continue;
+                                            }
+                                        }
                                     }
                                 }
-                            }
-                            // this occurs if a three point is blocked
-                            else if (randomThreePointProbability < prob3PMade + prob3PBlocked)
-                            {
-                                CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} was blocked by {dPlayerName} of the {dPlayerTeamName} on his three point shot!");
-
-                                playerWithBall.FieldGoalAttempted++;
-                                playerWithBall.ThreePointAttempted++;
-                                playerWithBallMatchup.Blocks++;
-                                (int, int) score = CalculateScore();
-                                ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
-                            }
-                            // this now occurs if a three point shot is missed
-                            else
-                            {
-                                CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} missed a three.");
-
-                                playerWithBall.FieldGoalAttempted++;
-                                playerWithBall.ThreePointAttempted++;
-
-                                (int, int) score = CalculateScore();
-                                ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
-                                int reboundEvent = CalculateReboundProbability();
-                                reboundOccurred = true;
-                                // this is if the ball goes out of bounds or a defensive rebound
-                                if (reboundEvent == -1 || reboundEvent == 0)
-                                {
-                                    if (possession == 1) possession = 2;
-                                    else possession = 1;
-                                }
-                                // this is if an offensive rebound occurred
+                                // here we have 2 free throws we need to simulate
                                 else
                                 {
-                                    // possession remains with the offensive team
-                                    startingPossession = false;
-                                    continue;
+                                    double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01;
+                                    string currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+
+                                    CommentatorPhrases.Add($"{oPlayerName} was fouled on his three for the {oPlayerTeamName} by {dPlayerName} of the {dPlayerTeamName}");
+                                    ScoreAfterEachPhrase.Add(currentScore);
+                                    GameTimestamps.Add(gameClock.PrintTime());
+                                    // here we simulate the first non-live free throw
+                                    {
+                                        // if the free throw is made
+                                        if (random.NextDouble() < randomFreeThrowProbability)
+                                        {
+                                            playerWithBall.FreeThrowAttempted++;
+                                            playerWithBall.FreeThrowMade++;
+                                            playerWithBall.Points++;
+                                            CommentatorPhrases.Add($"{oPlayerName} made a free throw for the {oPlayerTeamName}.");
+                                            currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                                            ScoreAfterEachPhrase.Add(currentScore);
+                                            GameTimestamps.Add(gameClock.PrintTime());
+                                        }
+                                        // if the free throw is missed
+                                        else
+                                        {
+                                            CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} missed a free throw.");
+                                            playerWithBall.FreeThrowAttempted++;
+
+                                            currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                                            ScoreAfterEachPhrase.Add(currentScore);
+                                            GameTimestamps.Add(gameClock.PrintTime());
+                                        }
+                                    }
+                                    // here we simulate the second non-live free throw
+                                    {
+                                        // if the free throw is made
+                                        if (random.NextDouble() < randomFreeThrowProbability)
+                                        {
+                                            playerWithBall.FreeThrowAttempted++;
+                                            playerWithBall.FreeThrowMade++;
+                                            playerWithBall.Points++;
+                                            CommentatorPhrases.Add($"{oPlayerName} made a free throw for the {oPlayerTeamName}.");
+                                            currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                                            ScoreAfterEachPhrase.Add(currentScore);
+                                            GameTimestamps.Add(gameClock.PrintTime());
+                                        }
+                                        // if the free throw is missed
+                                        else
+                                        {
+                                            CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} missed a free throw.");
+                                            playerWithBall.FreeThrowAttempted++;
+
+                                            currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                                            ScoreAfterEachPhrase.Add(currentScore);
+                                            GameTimestamps.Add(gameClock.PrintTime());
+                                        }
+                                    }
+                                    // now we simulate the live free throw
+                                    {
+                                        // if the free throw is made
+                                        if (random.NextDouble() < randomFreeThrowProbability)
+                                        {
+                                            playerWithBall.FreeThrowAttempted++;
+                                            playerWithBall.FreeThrowMade++;
+                                            playerWithBall.Points++;
+                                            CommentatorPhrases.Add($"{oPlayerName} made a free throw for the {oPlayerTeamName}.");
+                                            currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                                            ScoreAfterEachPhrase.Add(currentScore);
+                                            GameTimestamps.Add(gameClock.PrintTime());
+                                        }
+                                        // if the free throw is missed
+                                        else
+                                        {
+                                            CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} missed a free throw.");
+                                            playerWithBall.FreeThrowAttempted++;
+
+                                            currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                                            ScoreAfterEachPhrase.Add(currentScore);
+                                            GameTimestamps.Add(gameClock.PrintTime());
+
+                                            int reboundEvent = CalculateReboundProbability();
+                                            reboundOccurred = true;
+                                            // this is if the ball goes out of bounds or a defensive rebound
+                                            if (reboundEvent == -1 || reboundEvent == 0)
+                                            {
+                                                if (possession == 1) possession = 2;
+                                                else possession = 1;
+                                            }
+                                            // this is if an offensive rebound occurred
+                                            else
+                                            {
+                                                // possession remains with the offensive team
+                                                startingPossession = false;
+                                                continue;
+                                            }
+                                        }
+                                    }
                                 }
+                                startingPossession = true;
+                            }
+                            // if no foul is on the shot, we simulate as normal
+                            else
+                            {
+                                // this occurs if a 3 point shot is made
+                                if (randomThreePointProbability < prob3PMade)
+                                {
+                                    CommentatorPhrases.Add($"{oPlayerName} made a three for the {oPlayerTeamName}.");
+
+
+                                    playerWithBall.FieldGoalAttempted++;
+                                    playerWithBall.FieldGoalMade++;
+                                    playerWithBall.ThreePointAttempted++;
+                                    playerWithBall.ThreePointMade++;
+                                    playerWithBall.Points += 3;
+                                    (int, int) score = CalculateScore();
+                                    ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+                                    if (playerWhoPassed != null)
+                                    {
+                                        if (playerWhoPassed != playerWithBall && playerWhoPassed.playerStats.TeamId == playerWithBall.playerStats.TeamId)
+                                        {
+                                            int assistEvent = CalculateAssistProbability();
+                                            // this is if an assist event
+                                            if (assistEvent == 1)
+                                            {
+                                                CommentatorPhrases.Add($"Assisted by {playerWhoPassed.playerStats.playerForename} {playerWhoPassed.playerStats.playerSurname}");
+
+                                                ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+                                            }
+                                        }
+                                    }
+                                }
+                                // this occurs if a three point is blocked
+                                else if (randomThreePointProbability < prob3PMade + prob3PBlocked)
+                                {
+                                    CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} was blocked by {dPlayerName} of the {dPlayerTeamName} on his three point shot!");
+
+                                    playerWithBall.FieldGoalAttempted++;
+                                    playerWithBall.ThreePointAttempted++;
+                                    playerWithBallMatchup.Blocks++;
+                                    (int, int) score = CalculateScore();
+                                    ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+                                }
+                                // this now occurs if a three point shot is missed
+                                else
+                                {
+                                    CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} missed a three.");
+                                    playerWithBall.FieldGoalAttempted++;
+                                    playerWithBall.ThreePointAttempted++;
+
+                                    (int, int) score = CalculateScore();
+                                    ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+                                    int reboundEvent = CalculateReboundProbability();
+                                    reboundOccurred = true;
+                                    // this is if the ball goes out of bounds or a defensive rebound
+                                    if (reboundEvent == -1 || reboundEvent == 0)
+                                    {
+                                        if (possession == 1) possession = 2;
+                                        else possession = 1;
+                                    }
+                                    // this is if an offensive rebound occurred
+                                    else
+                                    {
+                                        // possession remains with the offensive team
+                                        startingPossession = false;
+                                        continue;
+                                    }
+                                }
+                               
                             }
                             // work out who has possession if no rebound occurred
                             if (possession == 1 && !reboundOccurred) possession = 2;
@@ -688,7 +883,7 @@ namespace LeagueSimulation.Models
                             double dDefenseStat = playerWithBallMatchup.playerStats.Defense;
 
                             // convert 2 point stat (40-99) to (-0.10 - 0.10)
-                            oTwoPointStat = -0.08 + (0.08 + 0.08) * (oTwoPointStat - 40) / (99 - 40);
+                            oTwoPointStat = -0.13 + (0.13 + 0.13) * (oTwoPointStat - 40) / (99 - 40);
                             if (playerWithBall.FieldGoalMade > 4 && playerWithBall.GameValue > 13 && playerWithBall.playerStats.SecondaryPlaystyle != "Playmaker" && playerWithBall.playerStats.PrimaryPlaystyle == "Offensive") oTwoPointStat += 0.024 + 0.0006 * (playerWithBall.FieldGoalMade - 4);
                             if (playerWithBall.FieldGoalMade > 20) oTwoPointStat -= 0.0007 * (playerWithBall.FieldGoalMade - 20);
                             // convert height difference (-8 - 8) to (-0.05 to 0.05)
@@ -703,77 +898,239 @@ namespace LeagueSimulation.Models
                             prob2PMade += oTwoPointStat + heightDifference + dDefenseStat;
                             prob2PMade *= passerContribution * 0.98;
                             prob2PBlocked += dBlockStat;
+                            probFoulAfterShot += 0.05;
+                            if (probFoulAfterShot < 0) probFoulAfterShot = 0;
                             prob2PMissed = 1 - (prob2PMade + prob2PBlocked);
 
-                            // this occurs if a 2 point shot is made
                             double randomProbability = random.NextDouble();
-                            if (randomProbability < prob2PMade)
+                            // this occurs if the player is fouled
+                            if (randomProbability < probFoulAfterShot)
                             {
-                                if (possessionCounter == 0) { }
-                                CommentatorPhrases.Add($"{oPlayerName} made a mid range shot for the {oPlayerTeamName}.");
+                                playerWithBallMatchup.PersonalFouls++;
+                                prob2PMade *= 0.165;
+                                prob2PBlocked = 0;
+                                foulOccurred = true;
 
-
-                                playerWithBall.FieldGoalAttempted++;
-                                playerWithBall.FieldGoalMade++;
-                                playerWithBall.Points += 2;
-                                (int, int) score = CalculateScore();
-                                ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
-                                // this validates if the player who passed, exists and is on the same team as player who scored
-                                if (playerWhoPassed == null)
+                                // this occurs if a 2 point and-1 occurs
+                                if (random.NextDouble() < prob2PMade)
                                 {
-                                    // now we change possession
-                                    if (possession == 1) possession = 2;
-                                    else possession = 1;
-                                    continue;
-                                }
-                                else if (playerWhoPassed != playerWithBall && playerWhoPassed.playerStats.TeamId == playerWithBall.playerStats.TeamId)
-                                {
-                                    int assistEvent = CalculateAssistProbability();
-                                    // this is if an assist event
-                                    if (assistEvent == 1)
+                                    playerWithBall.FieldGoalAttempted++;
+                                    playerWithBall.FieldGoalMade++;
+                                    playerWithBall.Points += 2;
+                                    string currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                                    // set the assist
+                                    if (playerWhoPassed != null)
                                     {
-                                        CommentatorPhrases.Add($"Assisted by {playerWhoPassed.playerStats.playerForename} {playerWhoPassed.playerStats.playerSurname}");
-                                        score = CalculateScore();
-                                        ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+                                        if (playerWhoPassed != playerWithBall && playerWhoPassed.playerStats.TeamId == playerWithBall.playerStats.TeamId)
+                                        {
+                                            int assistEvent = CalculateAssistProbability();
+                                            // this is if an assist event
+                                            if (assistEvent == 1)
+                                            {
+                                                CommentatorPhrases.Add($"Assisted by {playerWhoPassed.playerStats.playerForename} {playerWhoPassed.playerStats.playerSurname}");
+                                                ScoreAfterEachPhrase.Add(currentScore);
+                                                GameTimestamps.Add(gameClock.PrintTime());
+                                            }
+                                        }
+                                    }
+                                    
+                                    CommentatorPhrases.Add($"{oPlayerName} made a mid range after the foul for a three point play for the {oPlayerTeamName}!");
+                                    ScoreAfterEachPhrase.Add(currentScore);
+                                    GameTimestamps.Add(gameClock.PrintTime());
+                                    // now we have a live free throw for the player fouled
+                                    {
+                                        double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01;
+                                        // if the free throw is made
+                                        if (random.NextDouble() < randomFreeThrowProbability)
+                                        {
+                                            playerWithBall.FreeThrowAttempted++;
+                                            playerWithBall.FreeThrowMade++;
+                                            playerWithBall.Points++;
+                                            CommentatorPhrases.Add($"{oPlayerName} made a free throw for the {oPlayerTeamName}.");
+                                            currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                                            ScoreAfterEachPhrase.Add(currentScore);
+                                            GameTimestamps.Add(gameClock.PrintTime());
+                                            startingPossession = true;
+                                        }
+                                        // if the free throw is missed
+                                        else
+                                        {
+                                            CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} missed a free throw.");
+                                            playerWithBall.FreeThrowAttempted++;
 
+                                            currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                                            ScoreAfterEachPhrase.Add(currentScore);
+                                            GameTimestamps.Add(gameClock.PrintTime());
+
+                                            int reboundEvent = CalculateReboundProbability();
+                                            reboundOccurred = true;
+                                            // this is if the ball goes out of bounds or a defensive rebound
+                                            if (reboundEvent == -1 || reboundEvent == 0)
+                                            {
+                                                if (possession == 1) possession = 2;
+                                                else possession = 1;
+                                            }
+                                            // this is if an offensive rebound occurred
+                                            else
+                                            {
+                                                // possession remains with the offensive team
+                                                startingPossession = false;
+                                                continue;
+                                            }
+                                        }
+                                    }
+                                }
+                                // here we have 2 free throws we need to simulate
+                                else
+                                {
+                                    double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01;
+                                    string currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+
+                                    CommentatorPhrases.Add($"{oPlayerName} was fouled on his mid range for the {oPlayerTeamName} by {dPlayerName} of the {dPlayerTeamName}");
+                                    ScoreAfterEachPhrase.Add(currentScore);
+                                    GameTimestamps.Add(gameClock.PrintTime());
+                                    // here we simulate the first non-live free throw
+                                    {
+                                        // if the free throw is made
+                                        if (random.NextDouble() < randomFreeThrowProbability)
+                                        {
+                                            playerWithBall.FreeThrowAttempted++;
+                                            playerWithBall.FreeThrowMade++;
+                                            playerWithBall.Points++;
+                                            CommentatorPhrases.Add($"{oPlayerName} made a free throw for the {oPlayerTeamName}.");
+                                            currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                                            ScoreAfterEachPhrase.Add(currentScore);
+                                            GameTimestamps.Add(gameClock.PrintTime());
+                                        }
+                                        // if the free throw is missed
+                                        else
+                                        {
+                                            CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} missed a free throw.");
+                                            playerWithBall.FreeThrowAttempted++;
+
+                                            currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                                            ScoreAfterEachPhrase.Add(currentScore);
+                                            GameTimestamps.Add(gameClock.PrintTime());
+                                        }
+                                    }
+                                    // now we simulate the live free throw
+                                    {
+                                        // if the free throw is made
+                                        if (random.NextDouble() < randomFreeThrowProbability)
+                                        {
+                                            playerWithBall.FreeThrowAttempted++;
+                                            playerWithBall.FreeThrowMade++;
+                                            playerWithBall.Points++;
+                                            CommentatorPhrases.Add($"{oPlayerName} made a free throw for the {oPlayerTeamName}.");
+                                            currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                                            ScoreAfterEachPhrase.Add(currentScore);
+                                            GameTimestamps.Add(gameClock.PrintTime());
+                                        }
+                                        // if the free throw is missed
+                                        else
+                                        {
+                                            CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} missed a free throw.");
+                                            playerWithBall.FreeThrowAttempted++;
+
+                                            currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                                            ScoreAfterEachPhrase.Add(currentScore);
+                                            GameTimestamps.Add(gameClock.PrintTime());
+
+                                            int reboundEvent = CalculateReboundProbability();
+                                            reboundOccurred = true;
+                                            // this is if the ball goes out of bounds or a defensive rebound
+                                            if (reboundEvent == -1 || reboundEvent == 0)
+                                            {
+                                                if (possession == 1) possession = 2;
+                                                else possession = 1;
+                                            }
+                                            // this is if an offensive rebound occurred
+                                            else
+                                            {
+                                                // possession remains with the offensive team
+                                                startingPossession = false;
+                                                continue;
+                                            }
+                                        }
+                                    }
+                                    
+                                }
+                                startingPossession = true;
+                            }
+
+                            // if no foul, simulate shot as normal
+                            else
+                            {
+                                // this occurs if a 2 point shot is made
+                                if (randomProbability < prob2PMade)
+                                {
+                                    if (possessionCounter == 0) { }
+                                    CommentatorPhrases.Add($"{oPlayerName} made a mid range shot for the {oPlayerTeamName}.");
+
+
+                                    playerWithBall.FieldGoalAttempted++;
+                                    playerWithBall.FieldGoalMade++;
+                                    playerWithBall.Points += 2;
+                                    (int, int) score = CalculateScore();
+                                    ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+                                    // this validates if the player who passed, exists and is on the same team as player who scored
+                                    if (playerWhoPassed == null)
+                                    {
+                                        // now we change possession
+                                        if (possession == 1) possession = 2;
+                                        else possession = 1;
+                                        continue;
+                                    }
+                                    else if (playerWhoPassed != playerWithBall && playerWhoPassed.playerStats.TeamId == playerWithBall.playerStats.TeamId)
+                                    {
+                                        int assistEvent = CalculateAssistProbability();
+                                        // this is if an assist event
+                                        if (assistEvent == 1)
+                                        {
+                                            CommentatorPhrases.Add($"Assisted by {playerWhoPassed.playerStats.playerForename} {playerWhoPassed.playerStats.playerSurname}");
+                                            score = CalculateScore();
+                                            ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+
+                                        }
+                                    }
+                                }
+                                // this occurs if a 2 point is blocked
+                                else if (randomProbability < prob2PMade + prob2PBlocked)
+                                {
+                                    CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} was blocked by {dPlayerName} of the {dPlayerTeamName} on his mid range shot");
+                                    (int, int) score = CalculateScore();
+                                    ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+
+                                    playerWithBall.FieldGoalAttempted++;
+                                    playerWithBallMatchup.Blocks++;
+                                }
+                                // this now occurs if a 2 shot is missed
+                                else
+                                {
+                                    CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} missed a mid range shot.");
+                                    (int, int) score = CalculateScore();
+                                    ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+
+                                    playerWithBall.FieldGoalAttempted++;
+                                    int reboundEvent = CalculateReboundProbability();
+                                    reboundOccurred = true;
+
+                                    // this is if the ball goes out of bounds or defensive rebound
+                                    if (reboundEvent == -1 || reboundEvent == 0)
+                                    {
+                                        if (possession == 1) possession = 2;
+                                        else possession = 1;
+                                    }
+                                    // this is if an offensive rebound occurred
+                                    else
+                                    {
+                                        // possession remains with the offensive team
+                                        startingPossession = false;
+                                        continue;
                                     }
                                 }
                             }
-                            // this occurs if a 2 point is blocked
-                            else if (randomProbability < prob2PMade + prob2PBlocked)
-                            {
-                                CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} was blocked by {dPlayerName} of the {dPlayerTeamName} on his mid range shot");
-                                (int, int) score = CalculateScore();
-                                ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
 
-                                playerWithBall.FieldGoalAttempted++;
-                                playerWithBallMatchup.Blocks++;
-                            }
-                            // this now occurs if a 2 shot is missed
-                            else
-                            {
-                                CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} missed a mid range shot.");
-                                (int, int) score = CalculateScore();
-                                ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
-
-                                playerWithBall.FieldGoalAttempted++;
-                                int reboundEvent = CalculateReboundProbability();
-                                reboundOccurred = true;
-
-                                // this is if the ball goes out of bounds or defensive rebound
-                                if (reboundEvent == -1 || reboundEvent == 0)
-                                {
-                                    if (possession == 1) possession = 2;
-                                    else possession = 1;
-                                }
-                                // this is if an offensive rebound occurred
-                                else
-                                {
-                                    // possession remains with the offensive team
-                                    startingPossession = false;
-                                    continue;
-                                }
-                            }
                             if (possession == 1 && !reboundOccurred) possession = 2;
                             else if (!reboundOccurred) possession = 1;
                             startingPossession = true;
@@ -789,7 +1146,7 @@ namespace LeagueSimulation.Models
                             double dDefenseStat = playerWithBallMatchup.playerStats.Defense;
 
                             // convert 2 point stat (40-99) to (-0.11 - 0.11)
-                            oLayupStat = -0.09 + (0.09 + 0.09) * (oLayupStat - 40) / (99 - 40);
+                            oLayupStat = -0.12 + (0.12 + 0.12) * (oLayupStat - 40) / (99 - 40);
                             if (playerWithBall.FieldGoalMade > 4 && playerWithBall.GameValue > 13 && playerWithBall.playerStats.SecondaryPlaystyle != "Playmaker" && playerWithBall.playerStats.PrimaryPlaystyle == "Offensive") oLayupStat += 0.022 + 0.0008 * playerWithBall.FieldGoalMade;
                             if (playerWithBall.FieldGoalMade > 20) oLayupStat -= 0.0007 * (playerWithBall.FieldGoalMade - 20);
                             // convert height difference (-8 - 8) to (-0.11 to 0.11)
@@ -803,76 +1160,237 @@ namespace LeagueSimulation.Models
                             // this sets the probabilities of the forthcoming events
                             probLayupMade += oLayupStat + heightDifference + dDefenseStat;
                             probLayupMade *= passerContribution * 0.99;
+                            probFoulAfterShot += 0.14;
+                            if (probFoulAfterShot < 0) probFoulAfterShot = 0;
                             probLayupBlocked += dBlockStat + heightDifference * -0.7;
                             probLayupMissed = 1 - (probLayupMade + probLayupBlocked);
 
                             // this occurs if a layup is made
                             double randomProbability = random.NextDouble();
-                            if (randomProbability < probLayupMade)
+                            // this occurs if the player is fouled
+                            if (randomProbability < probFoulAfterShot)
                             {
-                                if (possessionCounter == 0) { }
-                                CommentatorPhrases.Add($"{oPlayerName} made a layup for the {oPlayerTeamName}.");
+                                playerWithBallMatchup.PersonalFouls++;
+                                probLayupMade *= 0.310;
+                                probLayupBlocked = 0;
+                                foulOccurred = true;
 
-                                playerWithBall.FieldGoalAttempted++;
-                                playerWithBall.FieldGoalMade++;
-                                playerWithBall.Points += 2;
-                                (int, int) score = CalculateScore();
-                                ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
-                                // this validates if the player who passed, exists and is on the same team as player who scored
-                                if (playerWhoPassed == null)
+                                // this occurs if a 2 point and-1 occurs
+                                if (random.NextDouble() < probLayupMade)
                                 {
-                                    // now we change possession
-                                    if (possession == 1) possession = 2;
-                                    else possession = 1;
-                                    continue;
-                                }
-                                else if (playerWhoPassed != playerWithBall && playerWhoPassed.playerStats.TeamId == playerWithBall.playerStats.TeamId)
-                                {
-                                    int assistEvent = CalculateAssistProbability();
-                                    // this is if an assist event
-                                    if (assistEvent == 1)
+                                    playerWithBall.FieldGoalAttempted++;
+                                    playerWithBall.FieldGoalMade++;
+                                    playerWithBall.Points += 2;
+                                    string currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                                    // set the assist
+                                    if (playerWhoPassed != null)
                                     {
-                                        CommentatorPhrases.Add($"Assisted by {playerWhoPassed.playerStats.playerForename} {playerWhoPassed.playerStats.playerSurname}");
-                                        score = CalculateScore();
-                                        ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+                                        if (playerWhoPassed != playerWithBall && playerWhoPassed.playerStats.TeamId == playerWithBall.playerStats.TeamId)
+                                        {
+                                            int assistEvent = CalculateAssistProbability();
+                                            // this is if an assist event
+                                            if (assistEvent == 1)
+                                            {
+                                                CommentatorPhrases.Add($"Assisted by {playerWhoPassed.playerStats.playerForename} {playerWhoPassed.playerStats.playerSurname}");
+                                                ScoreAfterEachPhrase.Add(currentScore);
+                                                GameTimestamps.Add(gameClock.PrintTime());
+                                            }
+                                        }
+                                    }
 
+                                    CommentatorPhrases.Add($"{oPlayerName} made a layup after the foul for a three point play for the {oPlayerTeamName}!");
+                                    ScoreAfterEachPhrase.Add(currentScore);
+                                    GameTimestamps.Add(gameClock.PrintTime());
+                                    // now we have a live free throw for the player fouled
+                                    {
+                                        double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01;
+                                        // if the free throw is made
+                                        if (random.NextDouble() < randomFreeThrowProbability)
+                                        {
+                                            playerWithBall.FreeThrowAttempted++;
+                                            playerWithBall.FreeThrowMade++;
+                                            playerWithBall.Points++;
+                                            CommentatorPhrases.Add($"{oPlayerName} made a free throw for the {oPlayerTeamName}.");
+                                            currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                                            ScoreAfterEachPhrase.Add(currentScore);
+                                            GameTimestamps.Add(gameClock.PrintTime());
+                                            startingPossession = true;
+                                        }
+                                        // if the free throw is missed
+                                        else
+                                        {
+                                            CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} missed a free throw.");
+                                            playerWithBall.FreeThrowAttempted++;
+
+                                            currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                                            ScoreAfterEachPhrase.Add(currentScore);
+                                            GameTimestamps.Add(gameClock.PrintTime());
+
+                                            int reboundEvent = CalculateReboundProbability();
+                                            reboundOccurred = true;
+                                            // this is if the ball goes out of bounds or a defensive rebound
+                                            if (reboundEvent == -1 || reboundEvent == 0)
+                                            {
+                                                if (possession == 1) possession = 2;
+                                                else possession = 1;
+                                            }
+                                            // this is if an offensive rebound occurred
+                                            else
+                                            {
+                                                // possession remains with the offensive team
+                                                startingPossession = false;
+                                                continue;
+                                            }
+                                        }
+                                    }
+                                }
+                                // here we have 2 free throws we need to simulate
+                                else
+                                {
+                                    double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01;
+                                    string currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+
+                                    CommentatorPhrases.Add($"{oPlayerName} was fouled on his layup for the {oPlayerTeamName} by {dPlayerName} of the {dPlayerTeamName}");
+                                    ScoreAfterEachPhrase.Add(currentScore);
+                                    GameTimestamps.Add(gameClock.PrintTime());
+                                    // here we simulate the first non-live free throw
+                                    {
+                                        // if the free throw is made
+                                        if (random.NextDouble() < randomFreeThrowProbability)
+                                        {
+                                            playerWithBall.FreeThrowAttempted++;
+                                            playerWithBall.FreeThrowMade++;
+                                            playerWithBall.Points++;
+                                            CommentatorPhrases.Add($"{oPlayerName} made a free throw for the {oPlayerTeamName}.");
+                                            currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                                            ScoreAfterEachPhrase.Add(currentScore);
+                                            GameTimestamps.Add(gameClock.PrintTime());
+                                        }
+                                        // if the free throw is missed
+                                        else
+                                        {
+                                            CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} missed a free throw.");
+                                            playerWithBall.FreeThrowAttempted++;
+
+                                            currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                                            ScoreAfterEachPhrase.Add(currentScore);
+                                            GameTimestamps.Add(gameClock.PrintTime());
+                                        }
+                                    }
+                                    // now we simulate the live free throw
+                                    {
+                                        // if the free throw is made
+                                        if (random.NextDouble() < randomFreeThrowProbability)
+                                        {
+                                            playerWithBall.FreeThrowAttempted++;
+                                            playerWithBall.FreeThrowMade++;
+                                            playerWithBall.Points++;
+                                            CommentatorPhrases.Add($"{oPlayerName} made a free throw for the {oPlayerTeamName}.");
+                                            currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                                            ScoreAfterEachPhrase.Add(currentScore);
+                                            GameTimestamps.Add(gameClock.PrintTime());
+                                        }
+                                        // if the free throw is missed
+                                        else
+                                        {
+                                            CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} missed a free throw.");
+                                            playerWithBall.FreeThrowAttempted++;
+
+                                            currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                                            ScoreAfterEachPhrase.Add(currentScore);
+                                            GameTimestamps.Add(gameClock.PrintTime());
+
+                                            int reboundEvent = CalculateReboundProbability();
+                                            reboundOccurred = true;
+                                            // this is if the ball goes out of bounds or a defensive rebound
+                                            if (reboundEvent == -1 || reboundEvent == 0)
+                                            {
+                                                if (possession == 1) possession = 2;
+                                                else possession = 1;
+                                            }
+                                            // this is if an offensive rebound occurred
+                                            else
+                                            {
+                                                // possession remains with the offensive team
+                                                startingPossession = false;
+                                                continue;
+                                            }
+                                        }
+                                    }
+                                    
+                                }
+                                startingPossession = true;
+                            }
+                            // if no foul, we simulate as normal
+                            else
+                            {
+                                if (randomProbability < probLayupMade)
+                                {
+                                    if (possessionCounter == 0) { }
+                                    CommentatorPhrases.Add($"{oPlayerName} made a layup for the {oPlayerTeamName}.");
+
+                                    playerWithBall.FieldGoalAttempted++;
+                                    playerWithBall.FieldGoalMade++;
+                                    playerWithBall.Points += 2;
+                                    (int, int) score = CalculateScore();
+                                    ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+                                    // this validates if the player who passed, exists and is on the same team as player who scored
+                                    if (playerWhoPassed == null)
+                                    {
+                                        // now we change possession
+                                        if (possession == 1) possession = 2;
+                                        else possession = 1;
+                                        continue;
+                                    }
+                                    else if (playerWhoPassed != playerWithBall && playerWhoPassed.playerStats.TeamId == playerWithBall.playerStats.TeamId)
+                                    {
+                                        int assistEvent = CalculateAssistProbability();
+                                        // this is if an assist event
+                                        if (assistEvent == 1)
+                                        {
+                                            CommentatorPhrases.Add($"Assisted by {playerWhoPassed.playerStats.playerForename} {playerWhoPassed.playerStats.playerSurname}");
+                                            score = CalculateScore();
+                                            ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+
+                                        }
+                                    }
+                                }
+                                // this occurs if a layup is blocked
+                                else if (randomProbability < probLayupMade + probLayupBlocked)
+                                {
+                                    CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} was blocked by {dPlayerName} of the {dPlayerTeamName} on his layup.");
+                                    (int, int) score = CalculateScore();
+                                    ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+
+                                    playerWithBall.FieldGoalAttempted++;
+                                    playerWithBallMatchup.Blocks++;
+                                }
+                                // this now occurs if a layup is missed
+                                else
+                                {
+                                    CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} missed a layup.");
+                                    (int, int) score = CalculateScore();
+                                    ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+
+                                    playerWithBall.FieldGoalAttempted++;
+                                    int reboundEvent = CalculateReboundProbability();
+                                    reboundOccurred = true;
+                                    // this is if the ball goes out of bounds or defensive rebound
+                                    if (reboundEvent == -1 || reboundEvent == 0)
+                                    {
+                                        if (possession == 1) possession = 2;
+                                        else possession = 1;
+                                    }
+                                    // this is if an offensive rebound occurred
+                                    else
+                                    {
+                                        // possession remains with the offensive team
+                                        startingPossession = false;
+                                        continue;
                                     }
                                 }
                             }
-                            // this occurs if a layup is blocked
-                            else if (randomProbability < probLayupMade + probLayupBlocked)
-                            {
-                                CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} was blocked by {dPlayerName} of the {dPlayerTeamName} on his layup.");
-                                (int, int) score = CalculateScore();
-                                ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
-
-                                playerWithBall.FieldGoalAttempted++;
-                                playerWithBallMatchup.Blocks++;
-                            }
-                            // this now occurs if a layup is missed
-                            else
-                            {
-                                CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} missed a layup.");
-                                (int, int) score = CalculateScore();
-                                ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
-
-                                playerWithBall.FieldGoalAttempted++;
-                                int reboundEvent = CalculateReboundProbability();
-                                reboundOccurred = true;
-                                // this is if the ball goes out of bounds or defensive rebound
-                                if (reboundEvent == -1 || reboundEvent == 0)
-                                {
-                                    if (possession == 1) possession = 2;
-                                    else possession = 1;
-                                }
-                                // this is if an offensive rebound occurred
-                                else
-                                {
-                                    // possession remains with the offensive team
-                                    startingPossession = false;
-                                    continue;
-                                }
-                            }
+                            
                             if (possession == 1 && !reboundOccurred) possession = 2;
                             else if (!reboundOccurred) possession = 1;
                             startingPossession = true;
@@ -887,7 +1405,7 @@ namespace LeagueSimulation.Models
                             double dDefenseStat = playerWithBallMatchup.playerStats.Defense;
 
                             // convert 2 point stat (40-99) to (-0.11 - 0.11)
-                            oDunkStat = -0.07 + (0.07 + 0.07) * (oDunkStat - 40) / (99 - 40);
+                            oDunkStat = -0.12 + (0.12 + 0.12) * (oDunkStat - 40) / (99 - 40);
                             if (playerWithBall.FieldGoalMade > 4 && playerWithBall.GameValue > 13 && playerWithBall.playerStats.SecondaryPlaystyle != "Playmaker" && playerWithBall.playerStats.PrimaryPlaystyle == "Offensive") oDunkStat += 0.023 + 0.0010 * playerWithBall.FieldGoalMade;
                             if (playerWithBall.FieldGoalMade > 20) oDunkStat -= 0.0007 * (playerWithBall.FieldGoalMade - 20);
                             // convert height difference (-8 - 8) to (-0.12 to 0.12)
@@ -900,79 +1418,240 @@ namespace LeagueSimulation.Models
 
                             // this sets the probabilities of the forthcoming events
                             probDunkMade += oDunkStat + heightDifference + dDefenseStat;
-                            probDunkMade *= passerContribution * 0.92;
+                            probDunkMade *= passerContribution * 0.97;
                             probDunkBlocked += dBlockStat + heightDifference * -0.7;
+                            probFoulAfterShot += 0.22;
+                            if (probFoulAfterShot < 0) probFoulAfterShot = 0;
                             probDunkMissed = 1 - (probDunkMade + probDunkBlocked);
 
                             // this occurs if a dunk is made
                             double randomProbability = random.NextDouble();
-                            if (randomProbability < probDunkMade)
+                            // this occurs if the player is fouled
+                            if (randomProbability < probFoulAfterShot)
                             {
-                                if (possessionCounter == 0) { }
-                                CommentatorPhrases.Add($"{oPlayerName} made a dunk for the {oPlayerTeamName}.");
+                                playerWithBallMatchup.PersonalFouls++;
+                                probDunkMade *= 0.380;
+                                probDunkBlocked = 0;
+                                foulOccurred = true;
 
-                                playerWithBall.FieldGoalAttempted++;
-                                playerWithBall.FieldGoalMade++;
-                                playerWithBall.Points += 2;
-                                (int, int) score = CalculateScore();
-                                ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
-                                // this validates if the player who passed, exists and is on the same team as player who scored
-                                if (playerWhoPassed == null)
+                                // this occurs if a 2 point and-1 occurs
+                                if (random.NextDouble() < probDunkMade)
                                 {
+                                    playerWithBall.FieldGoalAttempted++;
+                                    playerWithBall.FieldGoalMade++;
+                                    playerWithBall.Points += 2;
+                                    string currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                                    CommentatorPhrases.Add($"{oPlayerName} made a dunk after the foul for a three point play for the {oPlayerTeamName}!");
+                                    ScoreAfterEachPhrase.Add(currentScore);
+                                    GameTimestamps.Add(gameClock.PrintTime());
 
-                                    // now we change possession
-                                    if (possession == 1) possession = 2;
-                                    else possession = 1;
-                                    continue;
-                                }
-                                else if (playerWhoPassed != playerWithBall && playerWhoPassed.playerStats.TeamId == playerWithBall.playerStats.TeamId)
-                                {
-                                    int assistEvent = CalculateAssistProbability();
-                                    // this is if an assist event
-                                    if (assistEvent == 1)
+                                    // set the assist
+                                    if (playerWhoPassed != null)
                                     {
-                                        CommentatorPhrases.Add($"Assisted by {playerWhoPassed.playerStats.playerForename} {playerWhoPassed.playerStats.playerSurname}");
-                                        score = CalculateScore();
-                                        ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+                                        if (playerWhoPassed != playerWithBall && playerWhoPassed.playerStats.TeamId == playerWithBall.playerStats.TeamId)
+                                        {
+                                            int assistEvent = CalculateAssistProbability();
+                                            // this is if an assist event
+                                            if (assistEvent == 1)
+                                            {
+                                                CommentatorPhrases.Add($"Assisted by {playerWhoPassed.playerStats.playerForename} {playerWhoPassed.playerStats.playerSurname}");
+                                                ScoreAfterEachPhrase.Add(currentScore);
+                                                GameTimestamps.Add(gameClock.PrintTime());
+                                            }
+                                        }
+                                    }
 
+                                    // now we have a live free throw for the player fouled
+                                    {
+                                        double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01;
+                                        // if the free throw is made
+                                        if (random.NextDouble() < randomFreeThrowProbability)
+                                        {
+                                            playerWithBall.FreeThrowAttempted++;
+                                            playerWithBall.FreeThrowMade++;
+                                            playerWithBall.Points++;
+                                            CommentatorPhrases.Add($"{oPlayerName} made a free throw for the {oPlayerTeamName}.");
+                                            currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                                            ScoreAfterEachPhrase.Add(currentScore);
+                                            GameTimestamps.Add(gameClock.PrintTime());
+                                            startingPossession = true;
+                                        }
+                                        // if the free throw is missed
+                                        else
+                                        {
+                                            CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} missed a free throw.");
+                                            playerWithBall.FreeThrowAttempted++;
+
+                                            currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                                            ScoreAfterEachPhrase.Add(currentScore);
+                                            GameTimestamps.Add(gameClock.PrintTime());
+
+                                            int reboundEvent = CalculateReboundProbability();
+                                            reboundOccurred = true;
+                                            // this is if the ball goes out of bounds or a defensive rebound
+                                            if (reboundEvent == -1 || reboundEvent == 0)
+                                            {
+                                                if (possession == 1) possession = 2;
+                                                else possession = 1;
+                                            }
+                                            // this is if an offensive rebound occurred
+                                            else
+                                            {
+                                                // possession remains with the offensive team
+                                                startingPossession = false;
+                                                continue;
+                                            }
+                                        }
+                                    }
+                                }
+                                // here we have 2 free throws we need to simulate
+                                else
+                                {
+                                    double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01;
+                                    string currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+
+                                    CommentatorPhrases.Add($"{oPlayerName} was fouled on his dunk for the {oPlayerTeamName} by {dPlayerName} of the {dPlayerTeamName}");
+                                    ScoreAfterEachPhrase.Add(currentScore);
+                                    GameTimestamps.Add(gameClock.PrintTime());
+                                    // here we simulate the first non-live free throw
+                                    {
+                                        // if the free throw is made
+                                        if (random.NextDouble() < randomFreeThrowProbability)
+                                        {
+                                            playerWithBall.FreeThrowAttempted++;
+                                            playerWithBall.FreeThrowMade++;
+                                            playerWithBall.Points++;
+                                            CommentatorPhrases.Add($"{oPlayerName} made a free throw for the {oPlayerTeamName}.");
+                                            currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                                            ScoreAfterEachPhrase.Add(currentScore);
+                                            GameTimestamps.Add(gameClock.PrintTime());
+                                        }
+                                        // if the free throw is missed
+                                        else
+                                        {
+                                            CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} missed a free throw.");
+                                            playerWithBall.FreeThrowAttempted++;
+
+                                            currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                                            ScoreAfterEachPhrase.Add(currentScore);
+                                            GameTimestamps.Add(gameClock.PrintTime());
+                                        }
+                                    }
+                                    // now we simulate the live free throw
+                                    {
+                                        // if the free throw is made
+                                        if (random.NextDouble() < randomFreeThrowProbability)
+                                        {
+                                            playerWithBall.FreeThrowAttempted++;
+                                            playerWithBall.FreeThrowMade++;
+                                            playerWithBall.Points++;
+                                            CommentatorPhrases.Add($"{oPlayerName} made a free throw for the {oPlayerTeamName}.");
+                                            currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                                            ScoreAfterEachPhrase.Add(currentScore);
+                                            GameTimestamps.Add(gameClock.PrintTime());
+                                        }
+                                        // if the free throw is missed
+                                        else
+                                        {
+                                            CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} missed a free throw.");
+                                            playerWithBall.FreeThrowAttempted++;
+
+                                            currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                                            ScoreAfterEachPhrase.Add(currentScore);
+                                            GameTimestamps.Add(gameClock.PrintTime());
+
+                                            int reboundEvent = CalculateReboundProbability();
+                                            reboundOccurred = true;
+                                            // this is if the ball goes out of bounds or a defensive rebound
+                                            if (reboundEvent == -1 || reboundEvent == 0)
+                                            {
+                                                if (possession == 1) possession = 2;
+                                                else possession = 1;
+                                            }
+                                            // this is if an offensive rebound occurred
+                                            else
+                                            {
+                                                // possession remains with the offensive team
+                                                startingPossession = false;
+                                                continue;
+                                            }
+                                        }
+                                    }
+
+                                }
+                                startingPossession = true;
+                            }
+                            // if no foul, we simulate as normal
+                            else
+                            {
+                                // if the dunk is made
+                                if (randomProbability < probDunkMade)
+                                {
+                                    if (possessionCounter == 0) { }
+                                    CommentatorPhrases.Add($"{oPlayerName} made a dunk for the {oPlayerTeamName}.");
+
+                                    playerWithBall.FieldGoalAttempted++;
+                                    playerWithBall.FieldGoalMade++;
+                                    playerWithBall.Points += 2;
+                                    (int, int) score = CalculateScore();
+                                    ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+                                    // this validates if the player who passed, exists and is on the same team as player who scored
+                                    if (playerWhoPassed == null)
+                                    {
+                                        // now we change possession
+                                        if (possession == 1) possession = 2;
+                                        else possession = 1;
+                                        continue;
+                                    }
+                                    else if (playerWhoPassed != playerWithBall && playerWhoPassed.playerStats.TeamId == playerWithBall.playerStats.TeamId)
+                                    {
+                                        int assistEvent = CalculateAssistProbability();
+                                        // this is if an assist event
+                                        if (assistEvent == 1)
+                                        {
+                                            CommentatorPhrases.Add($"Assisted by {playerWhoPassed.playerStats.playerForename} {playerWhoPassed.playerStats.playerSurname}");
+                                            score = CalculateScore();
+                                            ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+
+                                        }
+                                    }
+                                }
+                                // this occurs if a dunk is blocked
+                                else if (randomProbability < probDunkMade + probDunkBlocked)
+                                {
+                                    CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} was blocked by {dPlayerName} of the {dPlayerTeamName} on his dunk.");
+                                    (int, int) score = CalculateScore();
+                                    ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+
+                                    playerWithBall.FieldGoalAttempted++;
+                                    playerWithBallMatchup.Blocks++;
+                                }
+                                // this now occurs if a dunk is missed
+                                else
+                                {
+                                    CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} missed a dunk.");
+                                    (int, int) score = CalculateScore();
+                                    ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+
+                                    playerWithBall.FieldGoalAttempted++;
+                                    int reboundEvent = CalculateReboundProbability();
+                                    reboundOccurred = true;
+                                    // this is if the ball goes out of bounds or defensive rebound
+                                    if (reboundEvent == -1 || reboundEvent == 0)
+                                    {
+                                        if (possession == 1) possession = 2;
+                                        else possession = 1;
+                                    }
+                                    // this is if an offensive rebound occurred
+                                    else
+                                    {
+                                        // possession remains with the offensive team
+                                        startingPossession = false;
+                                        continue;
                                     }
                                 }
                             }
-                            // this occurs if a dunk is blocked
-                            else if (randomProbability < probLayupMade + probLayupBlocked)
-                            {
-                                CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} was blocked by {dPlayerName} of the {dPlayerTeamName} on his dunk.");
-                                (int, int) score = CalculateScore();
-                                ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
 
-                                playerWithBall.FieldGoalAttempted++;
-                                playerWithBallMatchup.Blocks++;
-                            }
-                            // this now occurs if a dunk is missed
-                            else
-                            {
-                                CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} missed a dunk.");
-                                (int, int) score = CalculateScore();
-                                ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
-
-                                playerWithBall.FieldGoalAttempted++;
-
-                                int reboundEvent = CalculateReboundProbability();
-                                reboundOccurred = true;
-                                // this is if the ball goes out of bounds or defensive rebound
-                                if (reboundEvent == -1 || reboundEvent == 0)
-                                {
-                                    if (possession == 1) possession = 2;
-                                    else possession = 1;
-                                }
-                                // this is if an offensive rebound occurred
-                                else
-                                {
-                                    startingPossession = false;
-                                    // possession remains with the offensive team
-                                    continue;
-                                }
-                            }
                             if (possession == 1 && !reboundOccurred) possession = 2;
                             else if (!reboundOccurred) possession = 1;
                             startingPossession = true;
@@ -1022,14 +1701,14 @@ namespace LeagueSimulation.Models
                                         playersToPass.Add(player);
                                     }
                                     // convert gameValue from range (-5 - 60) to (-3.6 - 3.9) to add to chance they get the ball
-                                    double gameValue1 = -3.6 + (3.9 + 3.6) * (playersToPass[0].GameValue + 5) / (5 + 60);
-                                    if (gameValue1 > 5.3) gameValue1 = 5.3;
-                                    double gameValue2 = -3.6 + (3.9 + 3.6) * (playersToPass[1].GameValue + 5) / (5 + 60);
-                                    if (gameValue2 > 5.3) gameValue1 = 5.3;
-                                    double gameValue3 = -3.6 + (3.9 + 3.6) * (playersToPass[2].GameValue + 5) / (5 + 60);
-                                    if (gameValue3 > 5.3) gameValue1 = 5.3;
-                                    double gameValue4 = -3.6 + (3.9 + 3.6) * (playersToPass[3].GameValue + 5) / (5 + 60);
-                                    if (gameValue4 > 5.3) gameValue1 = 3.9;
+                                    double gameValue1 = -4.6 + (4.9 + 4.6) * (playersToPass[0].GameValue + 5) / (5 + 60);
+                                    if (gameValue1 > 6.9) gameValue1 = 6.9;
+                                    double gameValue2 = -4.6 + (4.9 + 4.6) * (playersToPass[1].GameValue + 5) / (5 + 60);
+                                    if (gameValue2 > 6.9) gameValue2 = 6.9;
+                                    double gameValue3 = -4.6 + (4.9 + 4.6) * (playersToPass[2].GameValue + 5) / (5 + 60);
+                                    if (gameValue3 > 6.9) gameValue3 = 6.9;
+                                    double gameValue4 = -4.6 + (4.9 + 4.6) * (playersToPass[3].GameValue + 5) / (5 + 60);
+                                    if (gameValue4 > 6.9) gameValue4 = 6.9;
                                     playersToPass = playersToPass.OrderByDescending(x => x.playerStats.Overall).ToList();
                                     double playstyleVariable1 = 0;
                                     double playstyleVariable2 = 0;
@@ -1043,16 +1722,16 @@ namespace LeagueSimulation.Models
                                         {
                                             if (player.playerStats.SecondaryPlaystyle == "Shooter" || player.playerStats.SecondaryPlaystyle == "Finisher")
                                             {
-                                                currentPlaystyleVariable = 12;
+                                                currentPlaystyleVariable = 20;
                                             }
                                             else if (player.playerStats.SecondaryPlaystyle == "Playmaker")
                                             {
-                                                currentPlaystyleVariable = -4;
+                                                currentPlaystyleVariable = 1;
                                             }
                                         }
                                         else if (player.playerStats.PrimaryPlaystyle == "Defensive")
                                         {
-                                            currentPlaystyleVariable = -12;
+                                            currentPlaystyleVariable = -16;
                                         }
 
                                         if (i == 0) playstyleVariable1 = currentPlaystyleVariable;
@@ -1072,14 +1751,14 @@ namespace LeagueSimulation.Models
 
                                     // this section checks the overalls of the players who could be passed to
                                     double randomProb = random.NextDouble();
-                                    double overall1 = playersToPass[0].playerStats.Overall - 3 + gameValue1;
-                                    if (playersToPass[0].FieldGoalMade > 6) overall1 += 0.20 + playersToPass[0].FieldGoalMade * 0.028;
-                                    double overall2 = playersToPass[1].playerStats.Overall - 2 + gameValue2;
-                                    if (playersToPass[1].FieldGoalMade > 6) overall2 += 0.20 + playersToPass[0].FieldGoalMade * 0.028;
-                                    double overall3 = playersToPass[2].playerStats.Overall + 2 + gameValue3;
-                                    if (playersToPass[2].FieldGoalMade > 6) overall3 += 0.20 + playersToPass[0].FieldGoalMade * 0.028;
-                                    double overall4 = playersToPass[3].playerStats.Overall + 3 + gameValue4;
-                                    if (playersToPass[3].FieldGoalMade > 6) overall4 += 0.20 + playersToPass[0].FieldGoalMade * 0.028;
+                                    double overall1 = playersToPass[0].playerStats.Overall + gameValue1;
+                                    if (playersToPass[0].FieldGoalMade > 5) overall1 += 0.20 + playersToPass[0].FieldGoalMade * 0.023;
+                                    double overall2 = playersToPass[1].playerStats.Overall + gameValue2;
+                                    if (playersToPass[1].FieldGoalMade > 5) overall2 += 0.20 + playersToPass[0].FieldGoalMade * 0.023;
+                                    double overall3 = playersToPass[2].playerStats.Overall + gameValue3;
+                                    if (playersToPass[2].FieldGoalMade > 5) overall3 += 0.20 + playersToPass[0].FieldGoalMade * 0.023;
+                                    double overall4 = playersToPass[3].playerStats.Overall + gameValue4;
+                                    if (playersToPass[3].FieldGoalMade > 5) overall4 += 0.20 + playersToPass[0].FieldGoalMade * 0.023;
                                     PlayerInGame potentialPlayerWithBall;
                                     if (randomProb < overall1 / overallsSum)
                                     {
@@ -1101,6 +1780,7 @@ namespace LeagueSimulation.Models
                                     CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} made a pass to {potentialPlayerWithBall.playerStats.playerForename} {potentialPlayerWithBall.playerStats.playerSurname}");
                                     (int, int) score = CalculateScore();
                                     ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+                                    GameTimestamps.Add(gameClock.PrintTime());
 
                                     playerWhoPassed = playerWithBall;
                                     playerWithBall = potentialPlayerWithBall;
@@ -1146,8 +1826,8 @@ namespace LeagueSimulation.Models
 
         public int CalculatePossessionTime(int numPasses)
         {
-            double mean = 14.3 + numPasses * 0.4;
-            double stDev = 3.3;
+            double mean = 14.5 + numPasses * 0.48;
+            double stDev = 3.2;
             return (int)Player.GenerateRandomNormalDistribution(mean, stDev);
         }
 
@@ -1246,6 +1926,7 @@ namespace LeagueSimulation.Models
                     CommentatorPhrases.Add($"{pg.playerStats.playerForename} {pg.playerStats.playerSurname} got the offensive rebound for the {pg.playerStats.teamName}");
                     (int, int) score = CalculateScore();
                     ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+                    GameTimestamps.Add(gameClock.PrintTime());
 
                     pg.Rebounds++;
                     playerWithBall = pg;
@@ -1255,6 +1936,7 @@ namespace LeagueSimulation.Models
                     CommentatorPhrases.Add($"{sg.playerStats.playerForename} {sg.playerStats.playerSurname} got the offensive rebound for the {sg.playerStats.teamName}");
                     (int, int) score = CalculateScore();
                     ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+                    GameTimestamps.Add(gameClock.PrintTime());
 
                     sg.Rebounds++;
                     playerWithBall = sg;
@@ -1264,6 +1946,7 @@ namespace LeagueSimulation.Models
                     CommentatorPhrases.Add($"{sf.playerStats.playerForename} {sf.playerStats.playerSurname} got the offensive rebound for the {sf.playerStats.teamName}");
                     (int, int) score = CalculateScore();
                     ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+                    GameTimestamps.Add(gameClock.PrintTime());
 
                     sf.Rebounds++;
                     playerWithBall = sf;
@@ -1273,6 +1956,7 @@ namespace LeagueSimulation.Models
                     CommentatorPhrases.Add($"{pf.playerStats.playerForename} {pf.playerStats.playerSurname} got the offensive rebound for the {pf.playerStats.teamName}");
                     (int, int) score = CalculateScore();
                     ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+                    GameTimestamps.Add(gameClock.PrintTime());
 
                     pf.Rebounds++;
                     playerWithBall = pf;
@@ -1282,6 +1966,7 @@ namespace LeagueSimulation.Models
                     CommentatorPhrases.Add($"{c.playerStats.playerForename} {c.playerStats.playerSurname} got the offensive rebound for the {c.playerStats.teamName}");
                     (int, int) score = CalculateScore();
                     ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+                    GameTimestamps.Add(gameClock.PrintTime());
 
                     c.Rebounds++;
                     playerWithBall = c;
@@ -1329,6 +2014,7 @@ namespace LeagueSimulation.Models
                     CommentatorPhrases.Add($"{pg.playerStats.playerForename} {pg.playerStats.playerSurname} got the defensive rebound for the {pg.playerStats.teamName}");
                     (int, int) score = CalculateScore();
                     ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+                    GameTimestamps.Add(gameClock.PrintTime());
                     pg.Rebounds++;
                 }
                 else if (randomReboundProbability < sgRebound + pgRebound)
@@ -1336,6 +2022,7 @@ namespace LeagueSimulation.Models
                     CommentatorPhrases.Add($"{sg.playerStats.playerForename} {sg.playerStats.playerSurname} got the defensive rebound for the {sg.playerStats.teamName}");
                     (int, int) score = CalculateScore();
                     ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+                    GameTimestamps.Add(gameClock.PrintTime());
                     sg.Rebounds++;
                 }
                 else if (randomReboundProbability < sfRebound + sgRebound + pgRebound)
@@ -1343,6 +2030,7 @@ namespace LeagueSimulation.Models
                     CommentatorPhrases.Add($"{sf.playerStats.playerForename} {sf.playerStats.playerSurname} got the defensive rebound for the {sf.playerStats.teamName}");
                     (int, int) score = CalculateScore();
                     ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+                    GameTimestamps.Add(gameClock.PrintTime());
                     sf.Rebounds++;
                 }
                 else if (randomReboundProbability < pfRebound + sfRebound + sgRebound + pgRebound)
@@ -1350,6 +2038,7 @@ namespace LeagueSimulation.Models
                     CommentatorPhrases.Add($"{pf.playerStats.playerForename} {pf.playerStats.playerSurname} got the defensive rebound for the {pf.playerStats.teamName}");
                     (int, int) score = CalculateScore();
                     ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+                    GameTimestamps.Add(gameClock.PrintTime());
                     pf.Rebounds++;
                 }
                 else
@@ -1357,6 +2046,7 @@ namespace LeagueSimulation.Models
                     CommentatorPhrases.Add($"{c.playerStats.playerForename} {c.playerStats.playerSurname} got the defensive rebound for the {c.playerStats.teamName}");
                     (int, int) score = CalculateScore();
                     ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+                    GameTimestamps.Add(gameClock.PrintTime());
                     c.Rebounds++;
                 }
 
@@ -1387,9 +2077,9 @@ namespace LeagueSimulation.Models
         public int CalculateAssistProbability()
         {
             Random random = new Random();
-            double probAssist = 0.82;
-            // convert passing from range (45-99) to (-0.03 - 0.18)
-            probAssist += -0.03 + (0.03 + 0.18) * (playerWhoPassed.playerStats.Passing - 45) / (99 - 45);
+            double probAssist = 0.8398;
+            // convert passing from range (45-99) to (-0.03 - 0.16)
+            probAssist += 0.16 * (playerWhoPassed.playerStats.Passing - 45) / (99 - 45);
             // this returns 1 if an assist occurred
             if (random.NextDouble() < probAssist)
             {
@@ -1425,7 +2115,7 @@ namespace LeagueSimulation.Models
                 {
                     // add this team's stats from the game into the database
                     string fullTransactionQuery = $"BEGIN TRANSACTION; \n";
-                    fullTransactionQuery += "INSERT into playerGameStats(seasonId,gameId,playerId,gameValue,isPlayoffs,MP,FGM,FGA,TFGM,TFGA,PTS,REB,AST,STL,BLK,TOV,PF)\r\n VALUES";
+                    fullTransactionQuery += "INSERT into playerGameStats(seasonId,gameId,playerId,gameValue,isPlayoffs,MP,FGM,FGA,TFGM,TFGA,FTM,FTA,PTS,REB,AST,STL,BLK,TOV,PF)\r\n VALUES";
                     foreach (PlayerInGame player in team1)
                     {
                         if (player.MinutesToPlay < 0) player.MinutesToPlay = 0;
@@ -1440,6 +2130,8 @@ namespace LeagueSimulation.Models
                             {player.FieldGoalAttempted},
                             {player.ThreePointMade},
                             {player.ThreePointAttempted},
+                            {player.FreeThrowMade},
+                            {player.FreeThrowAttempted},
                             {player.Points},
                             {player.Rebounds},
                             {player.Assists},
@@ -1464,6 +2156,8 @@ namespace LeagueSimulation.Models
                             {player.FieldGoalAttempted},
                             {player.ThreePointMade},
                             {player.ThreePointAttempted},
+                            {player.FreeThrowMade},
+                            {player.FreeThrowAttempted},
                             {player.Points},
                             {player.Rebounds},
                             {player.Assists},
@@ -1510,34 +2204,35 @@ namespace LeagueSimulation.Models
 
         public List<double> CalculateEventProbabilities(double threePointAttempted, double twoPointAttempted, double layupAttempted, double dunkAttempted, double passAttempted, double passerContribution)
         {
+            if (passerContribution > 1.1) { };
             if (playerWithBall.playerStats.PrimaryPlaystyle == "Offensive") { };
-            if (playerWithBall.playerStats.playerForename == "Chang") { };
+            if (playerWithBall.playerStats.SecondaryPlaystyle == "Playmaker") { };
             List<double> attemptedProbablities = new List<double>();
             // work out 3 point attempted probabilities, (50-99) to (0-0.14)
             double threePointStat = playerWithBall.playerStats.ThreePoint;
-            threePointAttempted = 0.19 * (threePointStat - 50) / (99 - 50);
+            threePointAttempted = 0.30 * (threePointStat - 50) / (99 - 50);
             if (threePointAttempted < 0) threePointAttempted = 0;
             threePointAttempted *= Math.Pow(passerContribution, 2.6);
             attemptedProbablities.Add(threePointAttempted);
 
             // work out 2 point attempted probabilities, (50-99) to (0-0.09)
             double twoPointStat = playerWithBall.playerStats.MidRange;
-            twoPointAttempted = 0.08 * (twoPointStat - 50) / (99 - 50);
+            twoPointAttempted = 0.12 * (twoPointStat - 50) / (99 - 50);
             if (twoPointAttempted < 0) twoPointAttempted = 0;
-            twoPointAttempted *= Math.Pow(passerContribution, 2.6);
+            twoPointAttempted *= Math.Pow(passerContribution, 2.5);
             attemptedProbablities.Add(twoPointAttempted);
 
             // work out layup attempted probabilities, (45-99) to (0.003-0.10)
             double layupStat = playerWithBall.playerStats.Layup;
             if (playerWithBall.playerStats.CloseShot > layupStat) layupStat = playerWithBall.playerStats.CloseShot;
-            layupAttempted = 0.003 + 0.13 * (layupStat - 45) / (99 - 45);
+            layupAttempted = 0.003 + 0.16 * (layupStat - 45) / (99 - 45);
             if (layupAttempted < 0) layupAttempted = 0;
-            layupAttempted *= Math.Pow(passerContribution, 2.6);
+            layupAttempted *= Math.Pow(passerContribution, 2.5);
             attemptedProbablities.Add(layupAttempted);
 
             // work out dunk attempted probabilities, (45-99) to (0.003-0.10)
             double dunkStat = playerWithBall.playerStats.Dunk;
-            dunkAttempted = 0.003 + 0.14 * (dunkStat - 45) / (99 - 45);
+            dunkAttempted = 0.003 + 0.15 * (dunkStat - 45) / (99 - 45);
             if (dunkAttempted < 0) dunkAttempted = 0;
             dunkAttempted *= Math.Pow(passerContribution, 2.6);
             attemptedProbablities.Add(dunkAttempted);
@@ -1550,18 +2245,18 @@ namespace LeagueSimulation.Models
                 overallVariable *= -1;
             }
             // work out pass attempted probablilites
-            // passStat from (45-99) to (0-0.36), result is (0.40-0.76)
+            // passStat from (45-99) to (0-0.38), result is (0.40-0.78)
             double passStat = playerWithBall.playerStats.Passing;
-            passAttempted = 0.40 + 0.36 * (passStat - 45) / (99 - 45);
+            passAttempted = 0.40 + 0.38 * (passStat - 45) / (99 - 45);
             if (playerWithBall.FieldGoalMade > 4 && playerWithBall.GameValue > 19 && playerWithBall.playerStats.SecondaryPlaystyle != "Playmaker") passAttempted -= 0.024 + 0.003 * (playerWithBall.FieldGoalMade - 4);
-            if (passAttempted < 0.10) passAttempted = 0.14;
+            if (passAttempted < 0.14) passAttempted = 0.14;
             passAttempted += overallVariable;
-            passAttempted /= Math.Pow(passerContribution, 2.6);
+            passAttempted /= Math.Pow(passerContribution, 2.5);
             attemptedProbablities.Add(passAttempted);
 
             // use this to normalise the probabilites
             double sum = attemptedProbablities.Sum();
-            if (sum < 0.98 || sum > 1.02)
+            if (sum < 0.99 || sum > 1.01)
             {
                 attemptedProbablities[0] /= sum;
                 attemptedProbablities[1] /= sum;
@@ -1606,23 +2301,23 @@ namespace LeagueSimulation.Models
                     team1PG3.MinutesToPlay = 16;
 
                     // convert pg1's overall from (60-99) to (-17 to +17)
-                    double overall1Variable = -17.7 + (17.7 + 17.7) * (team1PG1.playerStats.Overall - 60) / (99 - 60);
+                    double overall1Variable = -17.5 + (17.5 + 17.5) * (team1PG1.playerStats.Overall - 60) / (99 - 60);
                     // convert pg1's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue1Variable = -2 + (2 + 8.5) * (gameValues[team1PG1.playerStats.PlayerId] + 5) / (5 + 60);
+                    double gameValue1Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1PG1.playerStats.PlayerId] + 5) / (5 + 60);
                     team1PG1.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
                     if (team1PG1.MinutesToPlay < 0) team1PG1.MinutesToPlay = 0;
 
                     // convert pg2's overall from (60-99) to (-17 to +17)
-                    double overall2Variable = -17.7 + (17.7 + 17.7) * (team1PG2.playerStats.Overall - 60) / (99 - 60);
+                    double overall2Variable = -17.5 + (17.5 + 17.5) * (team1PG2.playerStats.Overall - 60) / (99 - 60);
                     // convert pg2's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue2Variable = -2 + (2 + 8.5) * (gameValues[team1PG2.playerStats.PlayerId] + 5) / (5 + 60);
+                    double gameValue2Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1PG2.playerStats.PlayerId] + 5) / (5 + 60);
                     team1PG2.MinutesToPlay += (int)(overall2Variable + gameValue2Variable);
                     if (team1PG2.MinutesToPlay < 0) team1PG2.MinutesToPlay = 0;
 
                     // convert pg3's overall from (60-99) to (-17 to +17)
-                    double overall3Variable = -17.7 + (17.7 + 17.7) * (team1PG3.playerStats.Overall - 60) / (99 - 60);
+                    double overall3Variable = -17.5 + (17.5 + 17.5) * (team1PG3.playerStats.Overall - 60) / (99 - 60);
                     // convert pg3's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue3Variable = -2 + (2 + 8.5) * (gameValues[team1PG3.playerStats.PlayerId] + 5) / (5 + 60);
+                    double gameValue3Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1PG3.playerStats.PlayerId] + 5) / (5 + 60);
                     team1PG3.MinutesToPlay += (int)(overall3Variable + gameValue3Variable);
                     if (team1PG3.MinutesToPlay < 0) team1PG3.MinutesToPlay = 0;
 
@@ -1640,6 +2335,37 @@ namespace LeagueSimulation.Models
                     }
                 }
 
+                // minutes calculated for PGs
+                {
+
+                    if (team1PGs.Count == 0) { };
+                    team1PGs.OrderByDescending(x => x.playerStats.Overall).ToList();
+                    foreach (PlayerInGame team1PG in team1PGs)
+                    {
+                        team1PG.MinutesToPlay = 16;
+                        // convert pg1's overall from (60-99) to (-17 to +17)
+                        double overall1Variable = -17.5 + (17.5 + 17.5) * (team1PG.playerStats.Overall - 60) / (99 - 60);
+                        // convert pg1's averageGameValue from (-5 to 60) to (-2 to 9)
+                        double gameValue1Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1PG.playerStats.PlayerId] + 5) / (5 + 60);
+                        team1PG.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
+                        if (team1PG.MinutesToPlay < 0) team1PG.MinutesToPlay = 0;
+                    }
+
+                    // we use this numbers to normalise the times so that they add up to 48 minutes
+                    int currentOverallSum = team1PGs.Sum(x => x.MinutesToPlay);
+                    double currentOverallNormalisedSum = currentOverallSum / (double)48;
+                    foreach (PlayerInGame team1PG in team1PGs)
+                    {
+                        team1PG.MinutesToPlay = (int)Math.Round(team1PG.MinutesToPlay / currentOverallNormalisedSum);
+                    }
+
+                    currentOverallSum = team1PGs.Sum(x => x.MinutesToPlay);
+                    if (currentOverallSum > 48 || currentOverallSum < 48)
+                    {
+                        team1PGs[team1PGs.Count - 1].MinutesToPlay -= currentOverallSum - 48;
+                    }
+                }
+
                 // minutes calculated for SGs
                 {
                     PlayerInGame team1SG1 = team1SGs[0];
@@ -1650,23 +2376,23 @@ namespace LeagueSimulation.Models
                     team1SG3.MinutesToPlay = 16;
 
                     // convert sg1's overall from (60-99) to (-17 to +17)
-                    double overall1Variable = -17.7 + (17.7 + 17.7) * (team1SG1.playerStats.Overall - 60) / (99 - 60);
+                    double overall1Variable = -17.5 + (17.5 + 17.5) * (team1SG1.playerStats.Overall - 60) / (99 - 60);
                     // convert sg1's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue1Variable = -2 + (2 + 8.5) * (gameValues[team1SG1.playerStats.PlayerId] + 5) / (5 + 60);
+                    double gameValue1Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1SG1.playerStats.PlayerId] + 5) / (5 + 60);
                     team1SG1.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
                     if (team1SG1.MinutesToPlay < 0) team1SG1.MinutesToPlay = 0;
 
                     // convert sg2's overall from (60-99) to (-17 to +17)
-                    double overall2Variable = -17.7 + (17.7 + 17.7) * (team1SG2.playerStats.Overall - 60) / (99 - 60);
+                    double overall2Variable = -17.5 + (17.5 + 17.5) * (team1SG2.playerStats.Overall - 60) / (99 - 60);
                     // convert sg2's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue2Variable = -2 + (2 + 8.5) * (gameValues[team1SG2.playerStats.PlayerId] + 5) / (5 + 60);
+                    double gameValue2Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1SG2.playerStats.PlayerId] + 5) / (5 + 60);
                     team1SG2.MinutesToPlay += (int)(overall2Variable + gameValue2Variable);
                     if (team1SG2.MinutesToPlay < 0) team1SG2.MinutesToPlay = 0;
 
                     // convert sg3's overall from (60-99) to (-17 to +17)
-                    double overall3Variable = -17.7 + (17.7 + 17.7) * (team1SG3.playerStats.Overall - 60) / (99 - 60);
+                    double overall3Variable = -17.5 + (17.5 + 17.5) * (team1SG3.playerStats.Overall - 60) / (99 - 60);
                     // convert sg3's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue3Variable = -2 + (2 + 8.5) * (gameValues[team1SG3.playerStats.PlayerId] + 5) / (5 + 60);
+                    double gameValue3Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1SG3.playerStats.PlayerId] + 5) / (5 + 60);
                     team1SG3.MinutesToPlay += (int)(overall3Variable + gameValue3Variable);
                     if (team1SG3.MinutesToPlay < 0) team1SG3.MinutesToPlay = 0;
 
@@ -1684,6 +2410,37 @@ namespace LeagueSimulation.Models
                     }
                 }
 
+                // minutes calculated for SGs
+                {
+
+                    if (team1SGs.Count == 0) { };
+                    team1SGs.OrderByDescending(x => x.playerStats.Overall).ToList();
+                    foreach (PlayerInGame team1SG in team1SGs)
+                    {
+                        team1SG.MinutesToPlay = 16;
+                        // convert SG1's overall from (60-99) to (-17 to +17)
+                        double overall1Variable = -17.5 + (17.5 + 17.5) * (team1SG.playerStats.Overall - 60) / (99 - 60);
+                        // convert SG1's averageGameValue from (-5 to 60) to (-2 to 9)
+                        double gameValue1Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1SG.playerStats.PlayerId] + 5) / (5 + 60);
+                        team1SG.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
+                        if (team1SG.MinutesToPlay < 0) team1SG.MinutesToPlay = 0;
+                    }
+
+                    // we use this numbers to normalise the times so that they add up to 48 minutes
+                    int currentOverallSum = team1SGs.Sum(x => x.MinutesToPlay);
+                    double currentOverallNormalisedSum = currentOverallSum / (double)48;
+                    foreach (PlayerInGame team1SG in team1SGs)
+                    {
+                        team1SG.MinutesToPlay = (int)Math.Round(team1SG.MinutesToPlay / currentOverallNormalisedSum);
+                    }
+
+                    currentOverallSum = team1SGs.Sum(x => x.MinutesToPlay);
+                    if (currentOverallSum > 48 || currentOverallSum < 48)
+                    {
+                        team1SGs[team1SGs.Count - 1].MinutesToPlay -= currentOverallSum - 48;
+                    }
+                }
+
                 // minutes calculated for SFs
                 {
                     PlayerInGame team1SF1 = team1SFs[0];
@@ -1694,23 +2451,23 @@ namespace LeagueSimulation.Models
                     team1SF3.MinutesToPlay = 16;
 
                     // convert sf1's overall from (60-99) to (-17 to +17)
-                    double overall1Variable = -17.7 + (17.7 + 17.7) * (team1SF1.playerStats.Overall - 60) / (99 - 60);
+                    double overall1Variable = -17.5 + (17.5 + 17.5) * (team1SF1.playerStats.Overall - 60) / (99 - 60);
                     // convert sf1's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue1Variable = -2 + (2 + 8.5) * (gameValues[team1SF1.playerStats.PlayerId] + 5) / (5 + 60);
+                    double gameValue1Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1SF1.playerStats.PlayerId] + 5) / (5 + 60);
                     team1SF1.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
                     if (team1SF1.MinutesToPlay < 0) team1SF1.MinutesToPlay = 0;
 
                     // convert sf2's overall from (60-99) to (-17 to +17)
-                    double overall2Variable = -17.7 + (17.7 + 17.7) * (team1SF2.playerStats.Overall - 60) / (99 - 60);
+                    double overall2Variable = -17.5 + (17.5 + 17.5) * (team1SF2.playerStats.Overall - 60) / (99 - 60);
                     // convert sf2's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue2Variable = -2 + (2 + 8.5) * (gameValues[team1SF2.playerStats.PlayerId] + 5) / (5 + 60);
+                    double gameValue2Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1SF2.playerStats.PlayerId] + 5) / (5 + 60);
                     team1SF2.MinutesToPlay += (int)(overall2Variable + gameValue2Variable);
                     if (team1SF2.MinutesToPlay < 0) team1SF2.MinutesToPlay = 0;
 
                     // convert sf3's overall from (60-99) to (-17 to +17)
-                    double overall3Variable = -17.7 + (17.7 + 17.7) * (team1SF3.playerStats.Overall - 60) / (99 - 60);
+                    double overall3Variable = -17.5 + (17.5 + 17.5) * (team1SF3.playerStats.Overall - 60) / (99 - 60);
                     // convert sf3's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue3Variable = -2 + (2 + 8.5) * (gameValues[team1SF3.playerStats.PlayerId] + 5) / (5 + 60);
+                    double gameValue3Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1SF3.playerStats.PlayerId] + 5) / (5 + 60);
                     team1SF3.MinutesToPlay += (int)(overall3Variable + gameValue3Variable);
                     if (team1SF3.MinutesToPlay < 0) team1SF3.MinutesToPlay = 0;
 
@@ -1738,23 +2495,23 @@ namespace LeagueSimulation.Models
                     team1PF3.MinutesToPlay = 16;
 
                     // convert pf1's overall from (60-99) to (-17 to +17)
-                    double overall1Variable = -17.7 + (17.7 + 17.7) * (team1PF1.playerStats.Overall - 60) / (99 - 60);
+                    double overall1Variable = -17.5 + (17.5 + 17.5) * (team1PF1.playerStats.Overall - 60) / (99 - 60);
                     // convert pf1's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue1Variable = -2 + (2 + 8.5) * (gameValues[team1PF1.playerStats.PlayerId] + 5) / (5 + 60);
+                    double gameValue1Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1PF1.playerStats.PlayerId] + 5) / (5 + 60);
                     team1PF1.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
                     if (team1PF1.MinutesToPlay < 0) team1PF1.MinutesToPlay = 0;
 
                     // convert pf2's overall from (60-99) to (-17 to +17)
-                    double overall2Variable = -17.7 + (17.7 + 17.7) * (team1PF2.playerStats.Overall - 60) / (99 - 60);
+                    double overall2Variable = -17.5 + (17.5 + 17.5) * (team1PF2.playerStats.Overall - 60) / (99 - 60);
                     // convert pf2's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue2Variable = -2 + (2 + 8.5) * (gameValues[team1PF2.playerStats.PlayerId] + 5) / (5 + 60);
+                    double gameValue2Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1PF2.playerStats.PlayerId] + 5) / (5 + 60);
                     team1PF2.MinutesToPlay += (int)(overall2Variable + gameValue2Variable);
                     if (team1PF2.MinutesToPlay < 0) team1PF2.MinutesToPlay = 0;
 
                     // convert pf3's overall from (60-99) to (-17 to +17)
-                    double overall3Variable = -17.7 + (17.7 + 17.7) * (team1PF3.playerStats.Overall - 60) / (99 - 60);
+                    double overall3Variable = -17.5 + (17.5 + 17.5) * (team1PF3.playerStats.Overall - 60) / (99 - 60);
                     // convert pf3's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue3Variable = -2 + (2 + 8.5) * (gameValues[team1PF3.playerStats.PlayerId] + 5) / (5 + 60);
+                    double gameValue3Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1PF3.playerStats.PlayerId] + 5) / (5 + 60);
                     team1PF3.MinutesToPlay += (int)(overall3Variable + gameValue3Variable);
                     if (team1PF3.MinutesToPlay < 0) team1PF3.MinutesToPlay = 0;
 
@@ -1782,23 +2539,23 @@ namespace LeagueSimulation.Models
                     team1C3.MinutesToPlay = 16;
 
                     // convert c1's overall from (60-99) to (-17 to +17)
-                    double overall1Variable = -17.7 + (17.7 + 17.7) * (team1C1.playerStats.Overall - 60) / (99 - 60);
+                    double overall1Variable = -17.5 + (17.5 + 17.5) * (team1C1.playerStats.Overall - 60) / (99 - 60);
                     // convert c1's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue1Variable = -2 + (2 + 8.5) * (gameValues[team1C1.playerStats.PlayerId] + 5) / (5 + 60);
+                    double gameValue1Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1C1.playerStats.PlayerId] + 5) / (5 + 60);
                     team1C1.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
                     if (team1C1.MinutesToPlay < 0) team1C1.MinutesToPlay = 0;
 
                     // convert c2's overall from (60-99) to (-17 to +17)
-                    double overall2Variable = -17.7 + (17.7 + 17.7) * (team1C2.playerStats.Overall - 60) / (99 - 60);
+                    double overall2Variable = -17.5 + (17.5 + 17.5) * (team1C2.playerStats.Overall - 60) / (99 - 60);
                     // convert c2's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue2Variable = -2 + (2 + 8.5) * (gameValues[team1C2.playerStats.PlayerId] + 5) / (5 + 60);
+                    double gameValue2Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1C2.playerStats.PlayerId] + 5) / (5 + 60);
                     team1C2.MinutesToPlay += (int)(overall2Variable + gameValue2Variable);
                     if (team1C2.MinutesToPlay < 0) team1C2.MinutesToPlay = 0;
 
                     // convert c3's overall from (60-99) to (-17 to +17)
-                    double overall3Variable = -17.7 + (17.7 + 17.7) * (team1C3.playerStats.Overall - 60) / (99 - 60);
+                    double overall3Variable = -17.5 + (17.5 + 17.5) * (team1C3.playerStats.Overall - 60) / (99 - 60);
                     // convert c3's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue3Variable = -2 + (2 + 8.5) * (gameValues[team1C3.playerStats.PlayerId] + 5) / (5 + 60);
+                    double gameValue3Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1C3.playerStats.PlayerId] + 5) / (5 + 60);
                     team1C3.MinutesToPlay += (int)(overall3Variable + gameValue3Variable);
                     if (team1C3.MinutesToPlay < 0) team1C3.MinutesToPlay = 0;
 
@@ -1847,23 +2604,23 @@ namespace LeagueSimulation.Models
                     team2PG3.MinutesToPlay = 16;
 
                     // convert pg1's overall from (60-99) to (-17 to +17)
-                    double overall1Variable = -17.7 + (17.7 + 17.7) * (team2PG1.playerStats.Overall - 60) / (99 - 60);
+                    double overall1Variable = -17.5 + (17.5 + 17.5) * (team2PG1.playerStats.Overall - 60) / (99 - 60);
                     // convert pg1's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue1Variable = -2 + (2 + 8.5) * (gameValues[team2PG1.playerStats.PlayerId] + 5) / (5 + 60);
+                    double gameValue1Variable = -3.3 + (3.3 + 10.2) * (gameValues[team2PG1.playerStats.PlayerId] + 5) / (5 + 60);
                     team2PG1.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
                     if (team2PG1.MinutesToPlay < 0) team2PG1.MinutesToPlay = 0;
 
                     // convert pg2's overall from (60-99) to (-17 to +17)
-                    double overall2Variable = -17.7 + (17.7 + 17.7) * (team2PG2.playerStats.Overall - 60) / (99 - 60);
+                    double overall2Variable = -17.5 + (17.5 + 17.5) * (team2PG2.playerStats.Overall - 60) / (99 - 60);
                     // convert pg2's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue2Variable = -2 + (2 + 8.5) * (gameValues[team2PG2.playerStats.PlayerId] + 5) / (5 + 60);
+                    double gameValue2Variable = -3.3 + (3.3 + 10.2) * (gameValues[team2PG2.playerStats.PlayerId] + 5) / (5 + 60);
                     team2PG2.MinutesToPlay += (int)(overall2Variable + gameValue2Variable);
                     if (team2PG2.MinutesToPlay < 0) team2PG2.MinutesToPlay = 0;
 
                     // convert pg3's overall from (60-99) to (-17 to +17)
-                    double overall3Variable = -17.7 + (17.7 + 17.7) * (team2PG3.playerStats.Overall - 60) / (99 - 60);
+                    double overall3Variable = -17.5 + (17.5 + 17.5) * (team2PG3.playerStats.Overall - 60) / (99 - 60);
                     // convert pg3's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue3Variable = -2 + (2 + 8.5) * (gameValues[team2PG3.playerStats.PlayerId] + 5) / (5 + 60);
+                    double gameValue3Variable = -3.3 + (3.3 + 10.2) * (gameValues[team2PG3.playerStats.PlayerId] + 5) / (5 + 60);
                     team2PG3.MinutesToPlay += (int)(overall3Variable + gameValue3Variable);
                     if (team2PG3.MinutesToPlay < 0) team2PG3.MinutesToPlay = 0;
 
@@ -1891,23 +2648,23 @@ namespace LeagueSimulation.Models
                     team2SG3.MinutesToPlay = 16;
 
                     // convert sg1's overall from (60-99) to (-17 to +17)
-                    double overall1Variable = -17.7 + (17.7 + 17.7) * (team2SG1.playerStats.Overall - 60) / (99 - 60);
+                    double overall1Variable = -17.5 + (17.5 + 17.5) * (team2SG1.playerStats.Overall - 60) / (99 - 60);
                     // convert sg1's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue1Variable = -2 + (2 + 8.5) * (gameValues[team2SG1.playerStats.PlayerId] + 5) / (5 + 60);
+                    double gameValue1Variable = -3.3 + (3.3 + 10.2) * (gameValues[team2SG1.playerStats.PlayerId] + 5) / (5 + 60);
                     team2SG1.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
                     if (team2SG1.MinutesToPlay < 0) team2SG1.MinutesToPlay = 0;
 
                     // convert sg2's overall from (60-99) to (-17 to +17)
-                    double overall2Variable = -17.7 + (17.7 + 17.7) * (team2SG2.playerStats.Overall - 60) / (99 - 60);
+                    double overall2Variable = -17.5 + (17.5 + 17.5) * (team2SG2.playerStats.Overall - 60) / (99 - 60);
                     // convert sg2's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue2Variable = -2 + (2 + 8.5) * (gameValues[team2SG2.playerStats.PlayerId] + 5) / (5 + 60);
+                    double gameValue2Variable = -3.3 + (3.3 + 10.2) * (gameValues[team2SG2.playerStats.PlayerId] + 5) / (5 + 60);
                     team2SG2.MinutesToPlay += (int)(overall2Variable + gameValue2Variable);
                     if (team2SG2.MinutesToPlay < 0) team2SG2.MinutesToPlay = 0;
 
                     // convert sg3's overall from (60-99) to (-17 to +17)
-                    double overall3Variable = -17.7 + (17.7 + 17.7) * (team2SG3.playerStats.Overall - 60) / (99 - 60);
+                    double overall3Variable = -17.5 + (17.5 + 17.5) * (team2SG3.playerStats.Overall - 60) / (99 - 60);
                     // convert sg3's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue3Variable = -2 + (2 + 8.5) * (gameValues[team2SG3.playerStats.PlayerId] + 5) / (5 + 60);
+                    double gameValue3Variable = -3.3 + (3.3 + 10.2) * (gameValues[team2SG3.playerStats.PlayerId] + 5) / (5 + 60);
                     team2SG3.MinutesToPlay += (int)(overall3Variable + gameValue3Variable);
                     if (team2SG3.MinutesToPlay < 0) team2SG3.MinutesToPlay = 0;
 
@@ -1935,23 +2692,23 @@ namespace LeagueSimulation.Models
                     team2SF3.MinutesToPlay = 16;
 
                     // convert sf1's overall from (60-99) to (-17 to +17)
-                    double overall1Variable = -17.7 + (17.7 + 17.7) * (team2SF1.playerStats.Overall - 60) / (99 - 60);
+                    double overall1Variable = -17.5 + (17.5 + 17.5) * (team2SF1.playerStats.Overall - 60) / (99 - 60);
                     // convert sf1's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue1Variable = -2 + (2 + 8.5) * (gameValues[team2SF1.playerStats.PlayerId] + 5) / (5 + 60);
+                    double gameValue1Variable = -3.3 + (3.3 + 10.2) * (gameValues[team2SF1.playerStats.PlayerId] + 5) / (5 + 60);
                     team2SF1.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
                     if (team2SF1.MinutesToPlay < 0) team2SF1.MinutesToPlay = 0;
 
                     // convert sf2's overall from (60-99) to (-17 to +17)
-                    double overall2Variable = -17.7 + (17.7 + 17.7) * (team2SF2.playerStats.Overall - 60) / (99 - 60);
+                    double overall2Variable = -17.5 + (17.5 + 17.5) * (team2SF2.playerStats.Overall - 60) / (99 - 60);
                     // convert sf2's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue2Variable = -2 + (2 + 8.5) * (gameValues[team2SF2.playerStats.PlayerId] + 5) / (5 + 60);
+                    double gameValue2Variable = -3.3 + (3.3 + 10.2) * (gameValues[team2SF2.playerStats.PlayerId] + 5) / (5 + 60);
                     team2SF2.MinutesToPlay += (int)(overall2Variable + gameValue2Variable);
                     if (team2SF2.MinutesToPlay < 0) team2SF2.MinutesToPlay = 0;
 
                     // convert sf3's overall from (60-99) to (-17 to +17)
-                    double overall3Variable = -17.7 + (17.7 + 17.7) * (team2SF3.playerStats.Overall - 60) / (99 - 60);
+                    double overall3Variable = -17.5 + (17.5 + 17.5) * (team2SF3.playerStats.Overall - 60) / (99 - 60);
                     // convert sf3's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue3Variable = -2 + (2 + 8.5) * (gameValues[team2SF3.playerStats.PlayerId] + 5) / (5 + 60);
+                    double gameValue3Variable = -3.3 + (3.3 + 10.2) * (gameValues[team2SF3.playerStats.PlayerId] + 5) / (5 + 60);
                     team2SF3.MinutesToPlay += (int)(overall3Variable + gameValue3Variable);
                     if (team2SF3.MinutesToPlay < 0) team2SF3.MinutesToPlay = 0;
 
@@ -1979,23 +2736,23 @@ namespace LeagueSimulation.Models
                     team2PF3.MinutesToPlay = 16;
 
                     // convert pf1's overall from (60-99) to (-17 to +17)
-                    double overall1Variable = -17.7 + (17.7 + 17.7) * (team2PF1.playerStats.Overall - 60) / (99 - 60);
+                    double overall1Variable = -17.5 + (17.5 + 17.5) * (team2PF1.playerStats.Overall - 60) / (99 - 60);
                     // convert pf1's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue1Variable = -2 + (2 + 8.5) * (gameValues[team2PF1.playerStats.PlayerId] + 5) / (5 + 60);
+                    double gameValue1Variable = -3.3 + (3.3 + 10.2) * (gameValues[team2PF1.playerStats.PlayerId] + 5) / (5 + 60);
                     team2PF1.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
                     if (team2PF1.MinutesToPlay < 0) team2PF1.MinutesToPlay = 0;
 
                     // convert pf2's overall from (60-99) to (-17 to +17)
-                    double overall2Variable = -17.7 + (17.7 + 17.7) * (team2PF2.playerStats.Overall - 60) / (99 - 60);
+                    double overall2Variable = -17.5 + (17.5 + 17.5) * (team2PF2.playerStats.Overall - 60) / (99 - 60);
                     // convert pf2's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue2Variable = -2 + (2 + 8.5) * (gameValues[team2PF2.playerStats.PlayerId] + 5) / (5 + 60);
+                    double gameValue2Variable = -3.3 + (3.3 + 10.2) * (gameValues[team2PF2.playerStats.PlayerId] + 5) / (5 + 60);
                     team2PF2.MinutesToPlay += (int)(overall2Variable + gameValue2Variable);
                     if (team2PF2.MinutesToPlay < 0) team2PF2.MinutesToPlay = 0;
 
                     // convert pf3's overall from (60-99) to (-17 to +17)
-                    double overall3Variable = -17.7 + (17.7 + 17.7) * (team2PF3.playerStats.Overall - 60) / (99 - 60);
+                    double overall3Variable = -17.5 + (17.5 + 17.5) * (team2PF3.playerStats.Overall - 60) / (99 - 60);
                     // convert pf3's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue3Variable = -2 + (2 + 8.5) * (gameValues[team2PF3.playerStats.PlayerId] + 5) / (5 + 60);
+                    double gameValue3Variable = -3.3 + (3.3 + 10.2) * (gameValues[team2PF3.playerStats.PlayerId] + 5) / (5 + 60);
                     team2PF3.MinutesToPlay += (int)(overall3Variable + gameValue3Variable);
                     if (team2PF3.MinutesToPlay < 0) team2PF3.MinutesToPlay = 0;
 
@@ -2023,23 +2780,23 @@ namespace LeagueSimulation.Models
                     team2C3.MinutesToPlay = 16;
 
                     // convert c1's overall from (60-99) to (-17 to +17)
-                    double overall1Variable = -17.7 + (17.7 + 17.7) * (team2C1.playerStats.Overall - 60) / (99 - 60);
+                    double overall1Variable = -17.5 + (17.5 + 17.5) * (team2C1.playerStats.Overall - 60) / (99 - 60);
                     // convert c1's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue1Variable = -2 + (2 + 8.5) * (gameValues[team2C1.playerStats.PlayerId] + 5) / (5 + 60);
+                    double gameValue1Variable = -3.3 + (3.3 + 10.2) * (gameValues[team2C1.playerStats.PlayerId] + 5) / (5 + 60);
                     team2C1.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
                     if (team2C1.MinutesToPlay < 0) team2C1.MinutesToPlay = 0;
 
                     // convert c2's overall from (60-99) to (-17 to +17)
-                    double overall2Variable = -17.7 + (17.7 + 17.7) * (team2C2.playerStats.Overall - 60) / (99 - 60);
+                    double overall2Variable = -17.5 + (17.5 + 17.5) * (team2C2.playerStats.Overall - 60) / (99 - 60);
                     // convert c2's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue2Variable = -2 + (2 + 8.5) * (gameValues[team2C2.playerStats.PlayerId] + 5) / (5 + 60);
+                    double gameValue2Variable = -3.3 + (3.3 + 10.2) * (gameValues[team2C2.playerStats.PlayerId] + 5) / (5 + 60);
                     team2C2.MinutesToPlay += (int)(overall2Variable + gameValue2Variable);
                     if (team2C2.MinutesToPlay < 0) team2C2.MinutesToPlay = 0;
 
                     // convert c3's overall from (60-99) to (-17 to +17)
-                    double overall3Variable = -17.7 + (17.7 + 17.7) * (team2C3.playerStats.Overall - 60) / (99 - 60);
+                    double overall3Variable = -17.5 + (17.5 + 17.5) * (team2C3.playerStats.Overall - 60) / (99 - 60);
                     // convert c3's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue3Variable = -2 + (2 + 8.5) * (gameValues[team2C3.playerStats.PlayerId] + 5) / (5 + 60);
+                    double gameValue3Variable = -3.3 + (3.3 + 10.2) * (gameValues[team2C3.playerStats.PlayerId] + 5) / (5 + 60);
                     team2C3.MinutesToPlay += (int)(overall3Variable + gameValue3Variable);
                     if (team2C3.MinutesToPlay < 0) team2C3.MinutesToPlay = 0;
 
@@ -2285,10 +3042,12 @@ namespace LeagueSimulation.Models
             this.team1 = team1;
             this.team2 = team2;
             this.connectionString = connectionString;
+            this.gameClock = new GameClock();
             CurrentUser = currentUser;
             CurrentSaveState = currentSaveState;
             GameId = gameId;
             CurrentLeague = currentLeague;
+
 
             // possession set to team 1 or team 2
             possession = new Random().Next(1, 3);

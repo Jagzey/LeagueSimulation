@@ -57,7 +57,7 @@
             rosterFlowLayoutPanel.Controls.Add(rosterDataGridView);
             rosterFlowLayoutPanel.Location = new Point(3, 3);
             rosterFlowLayoutPanel.Name = "rosterFlowLayoutPanel";
-            rosterFlowLayoutPanel.Size = new Size(628, 394);
+            rosterFlowLayoutPanel.Size = new Size(668, 431);
             rosterFlowLayoutPanel.TabIndex = 0;
             // 
             // panel1
@@ -68,13 +68,13 @@
             panel1.Controls.Add(rosterLabel);
             panel1.Location = new Point(3, 3);
             panel1.Name = "panel1";
-            panel1.Size = new Size(609, 60);
+            panel1.Size = new Size(638, 60);
             panel1.TabIndex = 3;
             // 
             // teamRecordLabel
             // 
             teamRecordLabel.AutoSize = true;
-            teamRecordLabel.Location = new Point(402, 24);
+            teamRecordLabel.Location = new Point(493, 24);
             teamRecordLabel.Name = "teamRecordLabel";
             teamRecordLabel.Size = new Size(81, 15);
             teamRecordLabel.TabIndex = 10;
@@ -104,7 +104,7 @@
             // 
             rosterLabel.AutoSize = true;
             rosterLabel.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            rosterLabel.Location = new Point(257, 18);
+            rosterLabel.Location = new Point(280, 19);
             rosterLabel.Name = "rosterLabel";
             rosterLabel.Size = new Size(126, 25);
             rosterLabel.TabIndex = 0;
@@ -118,7 +118,7 @@
             rosterDataGridView.Location = new Point(3, 69);
             rosterDataGridView.Name = "rosterDataGridView";
             rosterDataGridView.ReadOnly = true;
-            rosterDataGridView.Size = new Size(625, 312);
+            rosterDataGridView.Size = new Size(638, 352);
             rosterDataGridView.TabIndex = 2;
             rosterDataGridView.CellClick += rosterDataGridView_CellClick;
             // 
@@ -216,7 +216,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(rosterFlowLayoutPanel);
             Name = "RosterUserControl";
-            Size = new Size(634, 400);
+            Size = new Size(674, 437);
             Load += RosterUserControl_Load;
             rosterFlowLayoutPanel.ResumeLayout(false);
             panel1.ResumeLayout(false);

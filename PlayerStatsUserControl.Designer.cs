@@ -54,6 +54,9 @@
             TFGM = new DataGridViewTextBoxColumn();
             TFGA = new DataGridViewTextBoxColumn();
             seasonTFGPCT = new DataGridViewTextBoxColumn();
+            FTM = new DataGridViewTextBoxColumn();
+            FTA = new DataGridViewTextBoxColumn();
+            FTPCT = new DataGridViewTextBoxColumn();
             seasonPTS = new DataGridViewTextBoxColumn();
             seasonREB = new DataGridViewTextBoxColumn();
             seasonAST = new DataGridViewTextBoxColumn();
@@ -107,7 +110,7 @@
             panel1.Controls.Add(titleLabel);
             panel1.Location = new Point(3, 3);
             panel1.Name = "panel1";
-            panel1.Size = new Size(887, 43);
+            panel1.Size = new Size(950, 43);
             panel1.TabIndex = 0;
             // 
             // label1
@@ -155,7 +158,7 @@
             panel2.Controls.Add(playerNameLabel);
             panel2.Location = new Point(3, 52);
             panel2.Name = "panel2";
-            panel2.Size = new Size(887, 671);
+            panel2.Size = new Size(950, 671);
             panel2.TabIndex = 1;
             // 
             // awardsLabel
@@ -180,7 +183,7 @@
             dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
             seasonDataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             seasonDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            seasonDataGridView.Columns.AddRange(new DataGridViewColumn[] { season, age, teamName, playerPosition, MP, gameValue, FGM, FGA, seasonFGPCT, TFGM, TFGA, seasonTFGPCT, seasonPTS, seasonREB, seasonAST, STL, BLK, TOV });
+            seasonDataGridView.Columns.AddRange(new DataGridViewColumn[] { season, age, teamName, playerPosition, MP, gameValue, FGM, FGA, seasonFGPCT, TFGM, TFGA, seasonTFGPCT, FTM, FTA, FTPCT, seasonPTS, seasonREB, seasonAST, STL, BLK, TOV });
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = SystemColors.Window;
             dataGridViewCellStyle2.Font = new Font("Segoe UI", 7F);
@@ -212,7 +215,7 @@
             seasonDataGridView.RowTemplate.DefaultCellStyle.ForeColor = SystemColors.WindowText;
             seasonDataGridView.RowTemplate.DefaultCellStyle.SelectionBackColor = SystemColors.Highlight;
             seasonDataGridView.RowTemplate.DefaultCellStyle.SelectionForeColor = SystemColors.HighlightText;
-            seasonDataGridView.Size = new Size(823, 222);
+            seasonDataGridView.Size = new Size(903, 222);
             seasonDataGridView.TabIndex = 10;
             // 
             // season
@@ -221,7 +224,7 @@
             season.HeaderText = "Season";
             season.Name = "season";
             season.ReadOnly = true;
-            season.Width = 80;
+            season.Width = 60;
             // 
             // age
             // 
@@ -311,6 +314,30 @@
             seasonTFGPCT.ReadOnly = true;
             seasonTFGPCT.Width = 40;
             // 
+            // FTM
+            // 
+            FTM.DataPropertyName = "FTM";
+            FTM.HeaderText = "FTM";
+            FTM.Name = "FTM";
+            FTM.ReadOnly = true;
+            FTM.Width = 30;
+            // 
+            // FTA
+            // 
+            FTA.DataPropertyName = "FTA";
+            FTA.HeaderText = "FTA";
+            FTA.Name = "FTA";
+            FTA.ReadOnly = true;
+            FTA.Width = 30;
+            // 
+            // FTPCT
+            // 
+            FTPCT.DataPropertyName = "FT%";
+            FTPCT.HeaderText = "FT%";
+            FTPCT.Name = "FTPCT";
+            FTPCT.ReadOnly = true;
+            FTPCT.Width = 40;
+            // 
             // seasonPTS
             // 
             seasonPTS.DataPropertyName = "PTS";
@@ -392,7 +419,7 @@
             dataGridViewCellStyle7.SelectionForeColor = SystemColors.HighlightText;
             dataGridViewCellStyle7.WrapMode = DataGridViewTriState.True;
             attributesGridView.RowHeadersDefaultCellStyle = dataGridViewCellStyle7;
-            attributesGridView.Size = new Size(823, 137);
+            attributesGridView.Size = new Size(903, 137);
             attributesGridView.TabIndex = 9;
             // 
             // ageAttributes
@@ -465,7 +492,7 @@
             Passing.HeaderText = "Passing";
             Passing.Name = "Passing";
             Passing.ReadOnly = true;
-            Passing.Width = 80;
+            Passing.Width = 55;
             // 
             // ballHandle
             // 
@@ -481,7 +508,7 @@
             defense.HeaderText = "Defense";
             defense.Name = "defense";
             defense.ReadOnly = true;
-            defense.Width = 80;
+            defense.Width = 55;
             // 
             // steal
             // 
@@ -505,7 +532,7 @@
             rebound.HeaderText = "Rebound";
             rebound.Name = "rebound";
             rebound.ReadOnly = true;
-            rebound.Width = 80;
+            rebound.Width = 60;
             // 
             // speed
             // 
@@ -513,7 +540,7 @@
             speed.HeaderText = "Speed";
             speed.Name = "speed";
             speed.ReadOnly = true;
-            speed.Width = 60;
+            speed.Width = 55;
             // 
             // stamina
             // 
@@ -521,7 +548,7 @@
             stamina.HeaderText = "Stamina";
             stamina.Name = "stamina";
             stamina.ReadOnly = true;
-            stamina.Width = 65;
+            stamina.Width = 60;
             // 
             // summaryGridView
             // 
@@ -670,7 +697,7 @@
             Controls.Add(panel2);
             Controls.Add(panel1);
             Name = "PlayerStatsUserControl";
-            Size = new Size(893, 728);
+            Size = new Size(959, 728);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)playerIdUpDown).EndInit();
@@ -719,6 +746,9 @@
         private DataGridViewTextBoxColumn TFGM;
         private DataGridViewTextBoxColumn TFGA;
         private DataGridViewTextBoxColumn seasonTFGPCT;
+        private DataGridViewTextBoxColumn FTM;
+        private DataGridViewTextBoxColumn FTA;
+        private DataGridViewTextBoxColumn FTPCT;
         private DataGridViewTextBoxColumn seasonPTS;
         private DataGridViewTextBoxColumn seasonREB;
         private DataGridViewTextBoxColumn seasonAST;

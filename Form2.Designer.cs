@@ -40,19 +40,19 @@
             toolStripMenuItem3 = new ToolStripMenuItem();
             leagueStandingsMenuItem = new ToolStripMenuItem();
             toolStripMenuItem5 = new ToolStripMenuItem();
+            seasonSummaryToolStripMenuItem = new ToolStripMenuItem();
             toolStripMenuItem8 = new ToolStripMenuItem();
             rosterMenuItem = new ToolStripMenuItem();
             toolStripMenuItem10 = new ToolStripMenuItem();
             fullScheduleMenuItem = new ToolStripMenuItem();
             toolStripMenuItem16 = new ToolStripMenuItem();
             toolStripMenuItem17 = new ToolStripMenuItem();
-            playerStatsMenuItem = new ToolStripMenuItem();
+            playerFinderMenuItem = new ToolStripMenuItem();
             toolStripMenuItem19 = new ToolStripMenuItem();
             leagueLeadersToolStripMenuItem = new ToolStripMenuItem();
             toolStripMenuItem20 = new ToolStripMenuItem();
             displayPanel = new FlowLayoutPanel();
             label1 = new Label();
-            seasonSummaryToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             panel1.SuspendLayout();
             menuStrip2.SuspendLayout();
@@ -72,7 +72,7 @@
             menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(800, 24);
+            menuStrip1.Size = new Size(1264, 24);
             menuStrip1.TabIndex = 1;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -101,7 +101,7 @@
             panel1.Controls.Add(menuStrip2);
             panel1.Location = new Point(0, 27);
             panel1.Name = "panel1";
-            panel1.Size = new Size(138, 411);
+            panel1.Size = new Size(138, 642);
             panel1.TabIndex = 2;
             // 
             // menuStrip2
@@ -149,6 +149,13 @@
             toolStripMenuItem5.Text = "Playoffs";
             toolStripMenuItem5.Click += toolStripMenuItem5_Click;
             // 
+            // seasonSummaryToolStripMenuItem
+            // 
+            seasonSummaryToolStripMenuItem.Name = "seasonSummaryToolStripMenuItem";
+            seasonSummaryToolStripMenuItem.Size = new Size(211, 28);
+            seasonSummaryToolStripMenuItem.Text = "Season Summary";
+            seasonSummaryToolStripMenuItem.Click += seasonSummaryToolStripMenuItem_Click;
+            // 
             // toolStripMenuItem8
             // 
             toolStripMenuItem8.DropDownItems.AddRange(new ToolStripItem[] { rosterMenuItem, toolStripMenuItem10 });
@@ -159,14 +166,14 @@
             // rosterMenuItem
             // 
             rosterMenuItem.Name = "rosterMenuItem";
-            rosterMenuItem.Size = new Size(180, 28);
+            rosterMenuItem.Size = new Size(149, 28);
             rosterMenuItem.Text = "Roster";
             rosterMenuItem.Click += rosterMenuItem_Click;
             // 
             // toolStripMenuItem10
             // 
             toolStripMenuItem10.Name = "toolStripMenuItem10";
-            toolStripMenuItem10.Size = new Size(180, 28);
+            toolStripMenuItem10.Size = new Size(149, 28);
             toolStripMenuItem10.Text = "Schedule";
             // 
             // fullScheduleMenuItem
@@ -184,17 +191,17 @@
             // 
             // toolStripMenuItem17
             // 
-            toolStripMenuItem17.DropDownItems.AddRange(new ToolStripItem[] { playerStatsMenuItem, toolStripMenuItem19, leagueLeadersToolStripMenuItem });
+            toolStripMenuItem17.DropDownItems.AddRange(new ToolStripItem[] { playerFinderMenuItem, toolStripMenuItem19, leagueLeadersToolStripMenuItem });
             toolStripMenuItem17.Name = "toolStripMenuItem17";
             toolStripMenuItem17.Size = new Size(180, 28);
             toolStripMenuItem17.Text = "Stats";
             // 
-            // playerStatsMenuItem
+            // playerFinderMenuItem
             // 
-            playerStatsMenuItem.Name = "playerStatsMenuItem";
-            playerStatsMenuItem.Size = new Size(198, 28);
-            playerStatsMenuItem.Text = "Player Stats";
-            playerStatsMenuItem.Click += playerStatsMenuItem_Click;
+            playerFinderMenuItem.Name = "playerFinderMenuItem";
+            playerFinderMenuItem.Size = new Size(198, 28);
+            playerFinderMenuItem.Text = "Player Finder";
+            playerFinderMenuItem.Click += playerStatsMenuItem_Click;
             // 
             // toolStripMenuItem19
             // 
@@ -220,7 +227,7 @@
             displayPanel.FlowDirection = FlowDirection.TopDown;
             displayPanel.Location = new Point(141, 27);
             displayPanel.Name = "displayPanel";
-            displayPanel.Size = new Size(647, 411);
+            displayPanel.Size = new Size(1111, 642);
             displayPanel.TabIndex = 3;
             displayPanel.WrapContents = false;
             // 
@@ -233,18 +240,11 @@
             label1.TabIndex = 4;
             label1.Text = "User Team: ";
             // 
-            // seasonSummaryToolStripMenuItem
-            // 
-            seasonSummaryToolStripMenuItem.Name = "seasonSummaryToolStripMenuItem";
-            seasonSummaryToolStripMenuItem.Size = new Size(211, 28);
-            seasonSummaryToolStripMenuItem.Text = "Season Summary";
-            seasonSummaryToolStripMenuItem.Click += seasonSummaryToolStripMenuItem_Click;
-            // 
             // Form2
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(1264, 681);
             Controls.Add(label1);
             Controls.Add(displayPanel);
             Controls.Add(panel1);
@@ -283,7 +283,7 @@
         private ToolStripMenuItem fullScheduleMenuItem;
         private ToolStripMenuItem toolStripMenuItem16;
         private ToolStripMenuItem toolStripMenuItem17;
-        private ToolStripMenuItem playerStatsMenuItem;
+        private ToolStripMenuItem playerFinderMenuItem;
         private ToolStripMenuItem toolStripMenuItem19;
         private ToolStripMenuItem toolStripMenuItem20;
         private ToolStripMenuItem backToStartMenuToolStripMenuItem;

@@ -81,17 +81,22 @@ namespace LeagueSimulation
         {
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Width = userControl.Width + 10;
-            menuForm.Width = userControl.Width + 40;
+            menuForm.menuFormLayoutPanel.Size = userControl.Size + new Size(10, 10);
+            menuForm.Size = userControl.Size + new Size(40, 40);
             menuForm.menuFormLayoutPanel.Controls.Add(userControl);
             this.Hide();
             menuForm.Show();
         }
 
-        public void LoadViewGameResults(ViewGameResultsUserControl viewGameResultsUserControl)
+        public void LoadPlayerFinder(PlayerFinderUserControl userControl)
         {
-            displayPanel.Controls.Clear();
-            displayPanel.Controls.Add(viewGameResultsUserControl);
+            MenuForm menuForm = new MenuForm();
+            menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
+            menuForm.menuFormLayoutPanel.Size = userControl.Size + new Size(10, 10);
+            menuForm.Size = userControl.Size + new Size(40, 40);
+            menuForm.menuFormLayoutPanel.Controls.Add(userControl);
+            this.Hide();
+            menuForm.Show();
         }
 
         public void LoadSeasonSummary(SeasonSummaryUserControl userControl)
@@ -159,9 +164,7 @@ namespace LeagueSimulation
 
         private void playerStatsMenuItem_Click(object sender, EventArgs e)
         {
-            Random random = new Random();
-            int playerId = random.Next(1, 450);
-            LoadPlayerStats(new PlayerStatsUserControl(CurrentLeague, playerId));
+            LoadPlayerFinder(new PlayerFinderUserControl(CurrentLeague));
         }
 
         private void seasonSummaryToolStripMenuItem_Click(object sender, EventArgs e)

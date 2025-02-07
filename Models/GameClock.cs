@@ -28,5 +28,15 @@ namespace LeagueSimulation.Models
                 Minutes++;
             }
         }
+
+        public string PrintTime()
+        {
+            string time = "";
+            if (Minutes < 10) time += "0";
+            time += $"{Minutes}:";
+            if (Seconds < 10) time += "0";
+            time += $"{Seconds}";
+            return time;
+        }
     }
 }

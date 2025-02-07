@@ -117,6 +117,7 @@ namespace LeagueSimulation
                     ROUND(AVG(pgs.AST), 1) as AST,
                     ROUND(SUM(pgs.FGM) * 100.0 / SUM(pgs.FGA), 1) as FGPCT,
                     COALESCE(ROUND(SUM(pgs.TFGM) * 100.0 / SUM(pgs.TFGA), 1), 0.0) as TFGPCT
+                    
 	
 	
                     FROM players p
@@ -152,6 +153,9 @@ namespace LeagueSimulation
                     ROUND(AVG(pgs.TFGM), 1) as '3PM',
                     ROUND(AVG(pgs.TFGA), 1) as '3PA',
                     COALESCE(ROUND(SUM(pgs.TFGM) * 100.0 / SUM(pgs.TFGA), 1), 0.0) as '3P%',
+                    ROUND(AVG(pgs.FTM), 1) as FTM,
+                    ROUND(AVG(pgs.FTA), 1) as FTA,
+                    COALESCE(ROUND(SUM(pgs.FTM) * 100.0 / SUM(pgs.FTA), 1), 0.0) as 'FT%',
                     ROUND(AVG(pgs.PTS), 1) as PTS,
                     ROUND(AVG(pgs.REB), 1) as REB,
                     ROUND(AVG(pgs.AST), 1) as AST,

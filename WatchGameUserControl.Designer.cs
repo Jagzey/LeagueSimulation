@@ -38,6 +38,7 @@
             seasonDayLabel = new Label();
             scoreLabel = new Label();
             panel2 = new Panel();
+            timeLabel = new Label();
             label3 = new Label();
             commentatorPhrasesLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)playbackSpeed).BeginInit();
@@ -47,7 +48,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(523, 0);
+            label1.Location = new Point(988, 0);
             label1.Name = "label1";
             label1.Size = new Size(109, 15);
             label1.TabIndex = 0;
@@ -88,7 +89,7 @@
             // simToEndButton
             // 
             simToEndButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            simToEndButton.Location = new Point(190, 59);
+            simToEndButton.Location = new Point(241, 59);
             simToEndButton.Name = "simToEndButton";
             simToEndButton.Size = new Size(170, 33);
             simToEndButton.TabIndex = 5;
@@ -99,7 +100,7 @@
             // teamsPlayingLabel
             // 
             teamsPlayingLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            teamsPlayingLabel.Location = new Point(247, 35);
+            teamsPlayingLabel.Location = new Point(419, 34);
             teamsPlayingLabel.Name = "teamsPlayingLabel";
             teamsPlayingLabel.Size = new Size(385, 21);
             teamsPlayingLabel.TabIndex = 6;
@@ -109,7 +110,7 @@
             // seasonDayLabel
             // 
             seasonDayLabel.AutoSize = true;
-            seasonDayLabel.Location = new Point(225, 0);
+            seasonDayLabel.Location = new Point(298, 0);
             seasonDayLabel.Name = "seasonDayLabel";
             seasonDayLabel.Size = new Size(73, 15);
             seasonDayLabel.TabIndex = 7;
@@ -118,7 +119,7 @@
             // scoreLabel
             // 
             scoreLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            scoreLabel.Location = new Point(375, 66);
+            scoreLabel.Location = new Point(558, 66);
             scoreLabel.Name = "scoreLabel";
             scoreLabel.Size = new Size(108, 21);
             scoreLabel.TabIndex = 8;
@@ -127,6 +128,7 @@
             // 
             // panel2
             // 
+            panel2.Controls.Add(timeLabel);
             panel2.Controls.Add(scoreLabel);
             panel2.Controls.Add(seasonDayLabel);
             panel2.Controls.Add(teamsPlayingLabel);
@@ -137,15 +139,25 @@
             panel2.Controls.Add(label1);
             panel2.Location = new Point(3, 3);
             panel2.Name = "panel2";
-            panel2.Size = new Size(635, 107);
+            panel2.Size = new Size(1094, 107);
             panel2.TabIndex = 1;
+            // 
+            // timeLabel
+            // 
+            timeLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            timeLabel.Location = new Point(860, 34);
+            timeLabel.Name = "timeLabel";
+            timeLabel.Size = new Size(108, 21);
+            timeLabel.TabIndex = 9;
+            timeLabel.Text = "08:27";
+            timeLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // label3
             // 
             label3.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label3.Location = new Point(66, 113);
+            label3.Location = new Point(3, 113);
             label3.Name = "label3";
-            label3.Size = new Size(534, 66);
+            label3.Size = new Size(1094, 66);
             label3.TabIndex = 3;
             label3.Text = "Play-by-Play Description";
             label3.TextAlign = ContentAlignment.MiddleCenter;
@@ -153,12 +165,14 @@
             // commentatorPhrasesLabel
             // 
             commentatorPhrasesLabel.AutoSize = true;
-            commentatorPhrasesLabel.Location = new Point(81, 188);
+            commentatorPhrasesLabel.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            commentatorPhrasesLabel.Location = new Point(301, 179);
             commentatorPhrasesLabel.MaximumSize = new Size(540, 0);
             commentatorPhrasesLabel.Name = "commentatorPhrasesLabel";
-            commentatorPhrasesLabel.Size = new Size(483, 45);
+            commentatorPhrasesLabel.Size = new Size(533, 125);
             commentatorPhrasesLabel.TabIndex = 4;
             commentatorPhrasesLabel.Text = resources.GetString("commentatorPhrasesLabel.Text");
+            commentatorPhrasesLabel.Click += commentatorPhrasesLabel_Click;
             // 
             // WatchGameUserControl
             // 
@@ -168,7 +182,8 @@
             Controls.Add(commentatorPhrasesLabel);
             Controls.Add(panel2);
             Name = "WatchGameUserControl";
-            Size = new Size(641, 40000);
+            Size = new Size(1100, 13000);
+            Load += WatchGameUserControl_Load;
             ((System.ComponentModel.ISupportInitialize)playbackSpeed).EndInit();
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
@@ -188,5 +203,6 @@
         public Panel panel2;
         public Label label3;
         public Label commentatorPhrasesLabel;
+        public Label timeLabel;
     }
 }

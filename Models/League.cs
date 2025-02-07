@@ -118,6 +118,8 @@ namespace LeagueSimulation.Models
                         FGA INTEGER NOT NULL,
                         TFGM INTEGER NOT NULL,
                         TFGA INTEGER NOT NULL,
+                        FTM INTEGER NOT NULL,
+                        FTA INTEGER NOT NULL,
                         PTS INTEGER NOT NULL,
                         REB INTEGER NOT NULL,
                         AST INTEGER NOT NULL,
@@ -851,70 +853,6 @@ namespace LeagueSimulation.Models
             using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
             {
                 connection.Open();
-                /*string getWinsLossesQuery = $@"
-                    WITH PlayerScores AS (
-                    SELECT
-                        pgs.gameId,
-                        pot.teamId,
-                        SUM(pgs.PTS) AS teamScore
-                    FROM
-                        playerGameStats pgs
-	                JOIN playerOnTeam pot ON dayJoined <= {CurrentDay} AND yearJoined <= {CurrentSeason + 2023}
-	                AND dayLeft >= {CurrentDay} AND yearLeft >= {CurrentSeason + 2023}
-	                AND pgs.playerId = pot.playerId
-                    JOIN
-                        players p ON p.playerId = pot.playerId
-                    WHERE
-                        pgs.isPlayoffs = 0
-                        AND pgs.seasonId = {CurrentSeason}
-                    GROUP BY
-                        pgs.gameId, pot.teamId
-                ),
-                TeamGameScores AS (
-                    SELECT
-                        sg.seasonId,
-                        sg.gameId,
-                        sg.homeTeamId AS homeTeamId,
-                        sg.awayTeamId AS awayTeamId,
-                        psc.teamId,
-                        psc.teamScore
-                    FROM
-                        seasonSchedule sg
-                    JOIN
-                        PlayerScores psc ON sg.gameId = psc.gameId
-                    WHERE
-                        sg.gameCompleted = 1
-                        AND sg.seasonId = {CurrentSeason} -- Filter early for seasonId
-                ),
-                Results AS (
-                    SELECT
-                        tgs.seasonId,
-                        tgs.teamId,
-                        SUM(CASE WHEN tgs.teamScore > opp.teamScore THEN 1 ELSE 0 END) AS wins,
-                        SUM(CASE WHEN tgs.teamScore < opp.teamScore THEN 1 ELSE 0 END) AS losses
-                    FROM
-                        TeamGameScores tgs
-                    JOIN
-                        TeamGameScores opp ON tgs.gameId = opp.gameId
-                            AND tgs.teamId != opp.teamId
-                    GROUP BY
-                        tgs.seasonId, tgs.teamId
-                )
-                SELECT 
-                    r.seasonId,
-                    r.teamId,
-                    t.teamName,
-                    r.wins,
-                    r.losses
-                FROM 
-                    Results r
-                JOIN
-                    teams t ON r.teamId = t.teamId
-                WHERE
-                    r.seasonId = {CurrentSeason} -- seasonId
-                    AND r.teamId = {GetIdFromTeamName(teamName)}; -- teamId
-
-                    ";*/
 
                 string getWinsLossesQuery = $@"
                 SELECT tr.wins, tr.losses 
@@ -4502,22 +4440,22 @@ namespace LeagueSimulation.Models
                     if (playerGameValue > 38) { };
                     if (player.PlayerId == 119) { };
                     double playerGameValueDiff = playerGameValue - avgGameValue;
-                    // convert range of gameValueDiff (-18 to 25) to (-1 to 1)
-                    playerGameValueDiff = -1 + (1 + 1) * (playerGameValueDiff + 18) / (25 + 18);
-                    if (playerGameValueDiff > 1) playerGameValueDiff = 1;
-                    else if (playerGameValueDiff < -1) playerGameValueDiff = -1;
-                    // convert range of age (18 to 35) to (-3.3 to 3.3)
-                    double ageVariable = 2.6 + (-3.0 - 2.6) * (player.Age - 18) / (35 - 18);
+                    // convert range of gameValueDiff (-20 to 35) to (-1 to 1)
+                    playerGameValueDiff = -1.1 + (1.1 + 1.1) * (playerGameValueDiff + 20) / (35 + 20);
+                    if (playerGameValueDiff > 1.1) playerGameValueDiff = 1.1;
+                    else if (playerGameValueDiff < -1.1) playerGameValueDiff = -1.1;
+                    // convert range of age (18 to 35) to (3.0 to -2.6)
+                    double ageVariable = - 2.6 + (3.0 + 2.6) * (player.Age - 18) / (35 - 18);
                     if (player.Age >= 33) ageVariable -= 2.65 + 0.2 * (player.Age - 33);
                     finalBoost += playerGameValueDiff + ageVariable;
                     if (player.Age > 36) { };
                     // slightly randomises the boost, so there could be a slight increase or decrease in performance
-                    double finalBoostMultiplier = Player.GenerateRandomNormalDistribution(0, 1.8);
+                    double finalBoostMultiplier = Player.GenerateRandomNormalDistribution(0, 1.5);
                     finalBoost += finalBoostMultiplier;
                     finalBoost += GetTeamPositionPlayerBoost(player.TeamId);
-                    if (finalBoost > 7) { finalBoost = 7 + Player.GenerateRandomNormalDistribution(-3, 0.75); }
-                    else if (finalBoost < -7) { finalBoost = -7 + Player.GenerateRandomNormalDistribution(2.8, 0.75); }
-                    if (player.Potential > player.Overall) finalBoost += (player.Potential - player.Overall) / 4.75;
+                    if (finalBoost > 7) { finalBoost = 7 + Player.GenerateRandomNormalDistribution(-4.5, 0.75); }
+                    else if (finalBoost < -7) { finalBoost = -7 + Player.GenerateRandomNormalDistribution(1.5, 0.75); }
+                    if (player.Potential > player.Overall) finalBoost += (player.Potential - player.Overall) / 6.35;
                     finalBoost = Math.Round(finalBoost);
                     if (player.Overall + finalBoost < 60 || player.Potential + finalBoost < 60) finalBoost = 0;
                     else if (player.Overall + finalBoost > 99) finalBoost = 99 - player.Overall;
@@ -5066,10 +5004,10 @@ namespace LeagueSimulation.Models
             }
         }
 
-        public (List<string>, List<string>) WatchGame(string game, int currentDayOfGame)
+        public (List<string>, List<string>, List<string>) WatchGame(string game, int currentDayOfGame)
         {
             // simulate game specified by user
-            (List<string>, List<string>) gameData = (new List<string>(), new List<string>());
+            (List<string>, List<string>, List<string>) gameData = (new List<string>(), new List<string>(), new List<string>());
             GamesPlayed++;
             string[] teamsPlaying = game.Split(",");
             bool gameComplete = false;
@@ -5083,31 +5021,13 @@ namespace LeagueSimulation.Models
                 if (Playoffs) gameId = GetPlayoffGameId(game, currentDayOfGame);
                 else gameId = GetGameId(game, currentDayOfGame);
                 GameGenerator simulatedGame = new GameGenerator(team1, team2, ConnectionString, CurrentUser, CurrentSaveState, gameId, Playoffs, this);
-                gameData = (simulatedGame.CommentatorPhrases, simulatedGame.ScoreAfterEachPhrase);
+                gameData = (simulatedGame.CommentatorPhrases, simulatedGame.ScoreAfterEachPhrase, simulatedGame.GameTimestamps);
                 if (Playoffs) SetPlayoffGameToComplete(currentDayOfGame, teamsPlaying[0], teamsPlaying[1]);
                 else SetGameToComplete(currentDayOfGame, teamsPlaying[0], teamsPlaying[1]);
             }
 
             // we check if all games are complete in the day, then increment currentDay if so
             bool allGamesComplete = CheckIfDayOfGameCompleted(currentDayOfGame);
-
-            /* we check everyday up to the current game being simulated, where i is the current day
-            // if all games are complete, then we increase the season currentDay
-            bool allGamesComplete = true;
-            List<List<string>> schedule = new List<List<string>>();
-            if (Playoffs) schedule = CurrentPlayoffsSchedule;
-            else schedule = CurrentSchedule;
-            foreach (string currentGame in schedule[currentDayOfGame - 1])
-            {
-                string[] currentTeamsPlaying = currentGame.Split(",");
-                gameComplete = false;
-                if (Playoffs) gameComplete = CheckIfPlayoffGameCompleted(currentDayOfGame, currentTeamsPlaying[0], currentTeamsPlaying[1]);
-                else gameComplete = CheckIfGameCompleted(currentDayOfGame, currentTeamsPlaying[0], currentTeamsPlaying[1]);
-                if (!gameComplete)
-                {
-                    allGamesComplete = false; break;
-                }
-            } */
 
             // here we check if we need to add any additional games
             bool seasonComplete = false;
@@ -5153,7 +5073,7 @@ namespace LeagueSimulation.Models
                 AdvanceToNextSeason();
             }
 
-            return (gameData.Item1, gameData.Item2);
+            return (gameData.Item1, gameData.Item2, gameData.Item3);
         }
 
         public string GetTeamNameFromCity(string city)

@@ -10,8 +10,7 @@ namespace LeagueSimulation
         public League CurrentLeague { get; set; }
         public Main()
         {
-            string currentUser = "nzuobm";
-            this.CurrentUser = currentUser;
+            this.CurrentUser = "nzuobm";
             InitializeComponent();
         }
 
@@ -60,21 +59,6 @@ namespace LeagueSimulation
                     form2.Show();
                 }
             }
-        }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void comboBox1_SelectedIndexChanged_1(object sender, EventArgs e)
-        {
-
         }
     }
 }

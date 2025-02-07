@@ -33,7 +33,6 @@
             currentStat = new ComboBox();
             label2 = new Label();
             label1 = new Label();
-            label3 = new Label();
             leagueLeaderDataGridView = new DataGridView();
             PlayerFirstname = new DataGridViewTextBoxColumn();
             PlayerSurname = new DataGridViewTextBoxColumn();
@@ -46,11 +45,10 @@
             // leagueLeadersFlowLayoutPanel
             // 
             leagueLeadersFlowLayoutPanel.Controls.Add(leagueLeadersTitlePanel);
-            leagueLeadersFlowLayoutPanel.Controls.Add(label3);
             leagueLeadersFlowLayoutPanel.Controls.Add(leagueLeaderDataGridView);
             leagueLeadersFlowLayoutPanel.Location = new Point(3, 3);
             leagueLeadersFlowLayoutPanel.Name = "leagueLeadersFlowLayoutPanel";
-            leagueLeadersFlowLayoutPanel.Size = new Size(626, 394);
+            leagueLeadersFlowLayoutPanel.Size = new Size(1094, 624);
             leagueLeadersFlowLayoutPanel.TabIndex = 0;
             // 
             // leagueLeadersTitlePanel
@@ -60,7 +58,7 @@
             leagueLeadersTitlePanel.Controls.Add(label1);
             leagueLeadersTitlePanel.Location = new Point(3, 3);
             leagueLeadersTitlePanel.Name = "leagueLeadersTitlePanel";
-            leagueLeadersTitlePanel.Size = new Size(623, 52);
+            leagueLeadersTitlePanel.Size = new Size(1091, 52);
             leagueLeadersTitlePanel.TabIndex = 0;
             // 
             // currentStat
@@ -86,29 +84,22 @@
             // label1
             // 
             label1.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(208, 2);
+            label1.Location = new Point(476, 2);
             label1.Name = "label1";
             label1.Size = new Size(251, 42);
             label1.TabIndex = 1;
             label1.Text = "League Leaders Menu";
             label1.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // label3
-            // 
-            label3.Location = new Point(3, 58);
-            label3.Name = "label3";
-            label3.Size = new Size(44, 23);
-            label3.TabIndex = 4;
-            // 
             // leagueLeaderDataGridView
             // 
             leagueLeaderDataGridView.AllowUserToAddRows = false;
             leagueLeaderDataGridView.AllowUserToDeleteRows = false;
             leagueLeaderDataGridView.Columns.AddRange(new DataGridViewColumn[] { PlayerFirstname, PlayerSurname, TeamName });
-            leagueLeaderDataGridView.Location = new Point(53, 61);
+            leagueLeaderDataGridView.Location = new Point(3, 61);
             leagueLeaderDataGridView.Name = "leagueLeaderDataGridView";
             leagueLeaderDataGridView.ReadOnly = true;
-            leagueLeaderDataGridView.Size = new Size(524, 312);
+            leagueLeaderDataGridView.Size = new Size(1072, 540);
             leagueLeaderDataGridView.TabIndex = 3;
             leagueLeaderDataGridView.CellClick += leagueLeaderDataGridView_CellClick;
             // 
@@ -142,7 +133,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(leagueLeadersFlowLayoutPanel);
             Name = "LeagueLeadersUserControl";
-            Size = new Size(632, 400);
+            Size = new Size(1100, 630);
             leagueLeadersFlowLayoutPanel.ResumeLayout(false);
             leagueLeadersTitlePanel.ResumeLayout(false);
             leagueLeadersTitlePanel.PerformLayout();
@@ -166,6 +157,5 @@
         private DataGridViewTextBoxColumn PlayerFirstname;
         private DataGridViewTextBoxColumn PlayerSurname;
         private DataGridViewTextBoxColumn TeamName;
-        private Label label3;
     }
 }

@@ -175,6 +175,15 @@ namespace LeagueSimulation
             dashboardPanel = new Label();
             confStandingsLabel = new Label();
             confStandingsPanel = new Panel();
+            panel2 = new Panel();
+            eighthPositionLabel = new Label();
+            seventhPositionLabel = new Label();
+            firstPositionLabel = new Label();
+            sixthPositionLabel = new Label();
+            secondPositionLabel = new Label();
+            fifthPositionLabel = new Label();
+            thirdPositionLabel = new Label();
+            fourthPositionLabel = new Label();
             nonPlayoffsPanel = new Panel();
             nonPlayoffsLabel = new Label();
             fifteenthPositionLabel = new Label();
@@ -191,8 +200,6 @@ namespace LeagueSimulation
             teamConfPositionLabel = new Label();
             teamNameLabel = new Label();
             teamRecordLabel = new Label();
-            panel4 = new Panel();
-            label2 = new Label();
             teamStatsPanel = new Panel();
             turnoversLabel = new Label();
             assistsLabel = new Label();
@@ -209,31 +216,21 @@ namespace LeagueSimulation
             upcomingGame2Label = new Label();
             upcomingGame1Label = new Label();
             upcomingGamesLabel = new Label();
-            firstPositionLabel = new Label();
-            secondPositionLabel = new Label();
-            thirdPositionLabel = new Label();
-            fourthPositionLabel = new Label();
-            fifthPositionLabel = new Label();
-            sixthPositionLabel = new Label();
-            seventhPositionLabel = new Label();
-            eighthPositionLabel = new Label();
-            panel2 = new Panel();
             confStandingsPanel.SuspendLayout();
+            panel2.SuspendLayout();
             nonPlayoffsPanel.SuspendLayout();
             dashboardPanel1.SuspendLayout();
-            panel4.SuspendLayout();
             teamStatsPanel.SuspendLayout();
             teamLeadersPanel.SuspendLayout();
             schedulePanel.SuspendLayout();
-            panel2.SuspendLayout();
             SuspendLayout();
             // 
             // dashboardPanel
             // 
             dashboardPanel.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            dashboardPanel.Location = new Point(3, 0);
+            dashboardPanel.Location = new Point(3, 1);
             dashboardPanel.Name = "dashboardPanel";
-            dashboardPanel.Size = new Size(229, 25);
+            dashboardPanel.Size = new Size(401, 25);
             dashboardPanel.TabIndex = 0;
             dashboardPanel.Text = "Dashboard Panel";
             dashboardPanel.TextAlign = ContentAlignment.TopCenter;
@@ -250,11 +247,100 @@ namespace LeagueSimulation
             // 
             // confStandingsPanel
             // 
+            confStandingsPanel.Controls.Add(panel2);
             confStandingsPanel.Controls.Add(nonPlayoffsPanel);
-            confStandingsPanel.Location = new Point(0, 3);
+            confStandingsPanel.Location = new Point(3, 3);
             confStandingsPanel.Name = "confStandingsPanel";
-            confStandingsPanel.Size = new Size(203, 408);
+            confStandingsPanel.Size = new Size(316, 634);
             confStandingsPanel.TabIndex = 3;
+            // 
+            // panel2
+            // 
+            panel2.Controls.Add(eighthPositionLabel);
+            panel2.Controls.Add(confStandingsLabel);
+            panel2.Controls.Add(seventhPositionLabel);
+            panel2.Controls.Add(firstPositionLabel);
+            panel2.Controls.Add(sixthPositionLabel);
+            panel2.Controls.Add(secondPositionLabel);
+            panel2.Controls.Add(fifthPositionLabel);
+            panel2.Controls.Add(thirdPositionLabel);
+            panel2.Controls.Add(fourthPositionLabel);
+            panel2.Location = new Point(3, 3);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(310, 216);
+            panel2.TabIndex = 9;
+            // 
+            // eighthPositionLabel
+            // 
+            eighthPositionLabel.Font = new Font("Segoe UI", 12F);
+            eighthPositionLabel.Location = new Point(3, 184);
+            eighthPositionLabel.Name = "eighthPositionLabel";
+            eighthPositionLabel.Size = new Size(194, 18);
+            eighthPositionLabel.TabIndex = 15;
+            eighthPositionLabel.Text = "8. ";
+            // 
+            // seventhPositionLabel
+            // 
+            seventhPositionLabel.Font = new Font("Segoe UI", 12F);
+            seventhPositionLabel.Location = new Point(3, 161);
+            seventhPositionLabel.Name = "seventhPositionLabel";
+            seventhPositionLabel.Size = new Size(194, 23);
+            seventhPositionLabel.TabIndex = 14;
+            seventhPositionLabel.Text = "7. ";
+            // 
+            // firstPositionLabel
+            // 
+            firstPositionLabel.Font = new Font("Segoe UI", 12F);
+            firstPositionLabel.Location = new Point(3, 25);
+            firstPositionLabel.Name = "firstPositionLabel";
+            firstPositionLabel.Size = new Size(194, 23);
+            firstPositionLabel.TabIndex = 8;
+            firstPositionLabel.Text = "1. New York vs Miami";
+            // 
+            // sixthPositionLabel
+            // 
+            sixthPositionLabel.Font = new Font("Segoe UI", 12F);
+            sixthPositionLabel.Location = new Point(3, 138);
+            sixthPositionLabel.Name = "sixthPositionLabel";
+            sixthPositionLabel.Size = new Size(194, 23);
+            sixthPositionLabel.TabIndex = 13;
+            sixthPositionLabel.Text = "6. ";
+            // 
+            // secondPositionLabel
+            // 
+            secondPositionLabel.Font = new Font("Segoe UI", 12F);
+            secondPositionLabel.Location = new Point(3, 46);
+            secondPositionLabel.Name = "secondPositionLabel";
+            secondPositionLabel.Size = new Size(194, 23);
+            secondPositionLabel.TabIndex = 9;
+            secondPositionLabel.Text = "2. ";
+            // 
+            // fifthPositionLabel
+            // 
+            fifthPositionLabel.Font = new Font("Segoe UI", 12F);
+            fifthPositionLabel.Location = new Point(3, 115);
+            fifthPositionLabel.Name = "fifthPositionLabel";
+            fifthPositionLabel.Size = new Size(194, 23);
+            fifthPositionLabel.TabIndex = 12;
+            fifthPositionLabel.Text = "5. ";
+            // 
+            // thirdPositionLabel
+            // 
+            thirdPositionLabel.Font = new Font("Segoe UI", 12F);
+            thirdPositionLabel.Location = new Point(3, 69);
+            thirdPositionLabel.Name = "thirdPositionLabel";
+            thirdPositionLabel.Size = new Size(194, 23);
+            thirdPositionLabel.TabIndex = 10;
+            thirdPositionLabel.Text = "3. ";
+            // 
+            // fourthPositionLabel
+            // 
+            fourthPositionLabel.Font = new Font("Segoe UI", 12F);
+            fourthPositionLabel.Location = new Point(3, 92);
+            fourthPositionLabel.Name = "fourthPositionLabel";
+            fourthPositionLabel.Size = new Size(194, 23);
+            fourthPositionLabel.TabIndex = 11;
+            fourthPositionLabel.Text = "4. ";
             // 
             // nonPlayoffsPanel
             // 
@@ -266,9 +352,9 @@ namespace LeagueSimulation
             nonPlayoffsPanel.Controls.Add(eleventhPositionLabel);
             nonPlayoffsPanel.Controls.Add(tenthPositionLabel);
             nonPlayoffsPanel.Controls.Add(ninthPositionLabel);
-            nonPlayoffsPanel.Location = new Point(3, 202);
+            nonPlayoffsPanel.Location = new Point(3, 225);
             nonPlayoffsPanel.Name = "nonPlayoffsPanel";
-            nonPlayoffsPanel.Size = new Size(197, 203);
+            nonPlayoffsPanel.Size = new Size(310, 210);
             nonPlayoffsPanel.TabIndex = 3;
             // 
             // nonPlayoffsLabel
@@ -351,17 +437,16 @@ namespace LeagueSimulation
             dashboardPanel1.Controls.Add(teamConfPositionLabel);
             dashboardPanel1.Controls.Add(teamNameLabel);
             dashboardPanel1.Controls.Add(teamRecordLabel);
-            dashboardPanel1.Controls.Add(panel4);
             dashboardPanel1.Controls.Add(dashboardPanel);
-            dashboardPanel1.Location = new Point(206, 3);
+            dashboardPanel1.Location = new Point(361, 7);
             dashboardPanel1.Name = "dashboardPanel1";
-            dashboardPanel1.Size = new Size(235, 287);
+            dashboardPanel1.Size = new Size(407, 490);
             dashboardPanel1.TabIndex = 4;
             // 
             // playoffsLabel
             // 
             playoffsLabel.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            playoffsLabel.Location = new Point(36, 191);
+            playoffsLabel.Location = new Point(123, 375);
             playoffsLabel.Name = "playoffsLabel";
             playoffsLabel.Size = new Size(170, 83);
             playoffsLabel.TabIndex = 12;
@@ -370,70 +455,53 @@ namespace LeagueSimulation
             // 
             // seasonYearLabel
             // 
-            seasonYearLabel.Font = new Font("Segoe UI", 14F);
-            seasonYearLabel.Location = new Point(36, 38);
+            seasonYearLabel.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            seasonYearLabel.Location = new Point(3, 38);
             seasonYearLabel.Name = "seasonYearLabel";
-            seasonYearLabel.Size = new Size(162, 25);
+            seasonYearLabel.Size = new Size(401, 43);
             seasonYearLabel.TabIndex = 11;
             seasonYearLabel.Text = "Season Year: ";
             seasonYearLabel.TextAlign = ContentAlignment.TopCenter;
             // 
             // seasonDayLabel
             // 
-            seasonDayLabel.Font = new Font("Segoe UI", 14F);
-            seasonDayLabel.Location = new Point(36, 66);
+            seasonDayLabel.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            seasonDayLabel.Location = new Point(3, 102);
             seasonDayLabel.Name = "seasonDayLabel";
-            seasonDayLabel.Size = new Size(162, 25);
+            seasonDayLabel.Size = new Size(401, 39);
             seasonDayLabel.TabIndex = 10;
             seasonDayLabel.Text = "Season Day: ";
             seasonDayLabel.TextAlign = ContentAlignment.TopCenter;
             // 
             // teamConfPositionLabel
             // 
-            teamConfPositionLabel.Font = new Font("Segoe UI", 14F);
-            teamConfPositionLabel.Location = new Point(36, 155);
+            teamConfPositionLabel.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            teamConfPositionLabel.Location = new Point(6, 306);
             teamConfPositionLabel.Name = "teamConfPositionLabel";
-            teamConfPositionLabel.Size = new Size(170, 25);
+            teamConfPositionLabel.Size = new Size(398, 49);
             teamConfPositionLabel.TabIndex = 10;
             teamConfPositionLabel.Text = "15th in conference";
+            teamConfPositionLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // teamNameLabel
             // 
-            teamNameLabel.AutoSize = true;
-            teamNameLabel.Font = new Font("Segoe UI", 14F);
-            teamNameLabel.Location = new Point(36, 98);
+            teamNameLabel.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            teamNameLabel.Location = new Point(6, 178);
             teamNameLabel.Name = "teamNameLabel";
-            teamNameLabel.Size = new Size(162, 25);
+            teamNameLabel.Size = new Size(398, 37);
             teamNameLabel.TabIndex = 9;
             teamNameLabel.Text = "New York Bankers";
+            teamNameLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // teamRecordLabel
             // 
-            teamRecordLabel.Font = new Font("Segoe UI", 16F);
-            teamRecordLabel.Location = new Point(69, 123);
+            teamRecordLabel.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            teamRecordLabel.Location = new Point(6, 245);
             teamRecordLabel.Name = "teamRecordLabel";
-            teamRecordLabel.Size = new Size(106, 35);
+            teamRecordLabel.Size = new Size(398, 35);
             teamRecordLabel.TabIndex = 8;
             teamRecordLabel.Text = "0-0";
             teamRecordLabel.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // panel4
-            // 
-            panel4.Controls.Add(label2);
-            panel4.Location = new Point(238, 253);
-            panel4.Name = "panel4";
-            panel4.Size = new Size(203, 127);
-            panel4.TabIndex = 7;
-            // 
-            // label2
-            // 
-            label2.Font = new Font("Segoe UI", 12F);
-            label2.Location = new Point(3, 0);
-            label2.Name = "label2";
-            label2.Size = new Size(197, 21);
-            label2.TabIndex = 1;
-            label2.Text = "Conference Standings";
-            label2.TextAlign = ContentAlignment.TopCenter;
             // 
             // teamStatsPanel
             // 
@@ -442,44 +510,44 @@ namespace LeagueSimulation
             teamStatsPanel.Controls.Add(reboundsLabel);
             teamStatsPanel.Controls.Add(pointsLabel);
             teamStatsPanel.Controls.Add(teamStatsLabel);
-            teamStatsPanel.Location = new Point(444, 3);
+            teamStatsPanel.Location = new Point(843, 6);
             teamStatsPanel.Name = "teamStatsPanel";
-            teamStatsPanel.Size = new Size(203, 114);
+            teamStatsPanel.Size = new Size(254, 197);
             teamStatsPanel.TabIndex = 5;
             // 
             // turnoversLabel
             // 
-            turnoversLabel.Font = new Font("Segoe UI", 12F);
-            turnoversLabel.Location = new Point(3, 84);
+            turnoversLabel.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            turnoversLabel.Location = new Point(3, 154);
             turnoversLabel.Name = "turnoversLabel";
-            turnoversLabel.Size = new Size(200, 21);
+            turnoversLabel.Size = new Size(200, 34);
             turnoversLabel.TabIndex = 5;
             turnoversLabel.Text = "Turnovers: ";
             // 
             // assistsLabel
             // 
-            assistsLabel.Font = new Font("Segoe UI", 12F);
-            assistsLabel.Location = new Point(3, 63);
+            assistsLabel.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            assistsLabel.Location = new Point(3, 109);
             assistsLabel.Name = "assistsLabel";
-            assistsLabel.Size = new Size(200, 21);
+            assistsLabel.Size = new Size(200, 35);
             assistsLabel.TabIndex = 4;
             assistsLabel.Text = "Assists: ";
             // 
             // reboundsLabel
             // 
-            reboundsLabel.Font = new Font("Segoe UI", 12F);
-            reboundsLabel.Location = new Point(3, 42);
+            reboundsLabel.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            reboundsLabel.Location = new Point(3, 69);
             reboundsLabel.Name = "reboundsLabel";
-            reboundsLabel.Size = new Size(200, 21);
+            reboundsLabel.Size = new Size(200, 36);
             reboundsLabel.TabIndex = 3;
             reboundsLabel.Text = "Rebounds: ";
             // 
             // pointsLabel
             // 
-            pointsLabel.Font = new Font("Segoe UI", 12F);
-            pointsLabel.Location = new Point(3, 21);
+            pointsLabel.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            pointsLabel.Location = new Point(3, 27);
             pointsLabel.Name = "pointsLabel";
-            pointsLabel.Size = new Size(200, 21);
+            pointsLabel.Size = new Size(200, 41);
             pointsLabel.TabIndex = 2;
             pointsLabel.Text = "Points: ";
             // 
@@ -499,42 +567,45 @@ namespace LeagueSimulation
             teamLeadersPanel.Controls.Add(rebLeaderLabel);
             teamLeadersPanel.Controls.Add(ptsLeaderLabel);
             teamLeadersPanel.Controls.Add(teamLeadersLabel);
-            teamLeadersPanel.Location = new Point(444, 120);
+            teamLeadersPanel.Location = new Point(843, 209);
             teamLeadersPanel.Name = "teamLeadersPanel";
-            teamLeadersPanel.Size = new Size(203, 127);
+            teamLeadersPanel.Size = new Size(254, 193);
             teamLeadersPanel.TabIndex = 6;
             // 
             // astLeaderLabel
             // 
-            astLeaderLabel.Font = new Font("Segoe UI", 9.75F);
-            astLeaderLabel.Location = new Point(3, 99);
+            astLeaderLabel.AutoSize = true;
+            astLeaderLabel.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            astLeaderLabel.Location = new Point(3, 150);
             astLeaderLabel.Name = "astLeaderLabel";
-            astLeaderLabel.Size = new Size(197, 21);
+            astLeaderLabel.Size = new Size(177, 25);
             astLeaderLabel.TabIndex = 8;
             astLeaderLabel.Text = "Bill Russell: 24.6 reb";
             // 
             // rebLeaderLabel
             // 
-            rebLeaderLabel.Font = new Font("Segoe UI", 9.75F);
-            rebLeaderLabel.Location = new Point(3, 64);
+            rebLeaderLabel.AutoSize = true;
+            rebLeaderLabel.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            rebLeaderLabel.Location = new Point(3, 89);
             rebLeaderLabel.Name = "rebLeaderLabel";
-            rebLeaderLabel.Size = new Size(197, 21);
+            rebLeaderLabel.Size = new Size(177, 25);
             rebLeaderLabel.TabIndex = 7;
             rebLeaderLabel.Text = "Trae Young: 11.2 ast";
             // 
             // ptsLeaderLabel
             // 
-            ptsLeaderLabel.Font = new Font("Segoe UI", 9.75F);
+            ptsLeaderLabel.AutoSize = true;
+            ptsLeaderLabel.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             ptsLeaderLabel.Location = new Point(3, 32);
             ptsLeaderLabel.Name = "ptsLeaderLabel";
-            ptsLeaderLabel.Size = new Size(197, 21);
+            ptsLeaderLabel.Size = new Size(214, 25);
             ptsLeaderLabel.TabIndex = 6;
             ptsLeaderLabel.Text = "Michael Jordan: 30.5 pts";
             // 
             // teamLeadersLabel
             // 
             teamLeadersLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            teamLeadersLabel.Location = new Point(3, 3);
+            teamLeadersLabel.Location = new Point(3, 1);
             teamLeadersLabel.Name = "teamLeadersLabel";
             teamLeadersLabel.Size = new Size(197, 21);
             teamLeadersLabel.TabIndex = 1;
@@ -547,35 +618,35 @@ namespace LeagueSimulation
             schedulePanel.Controls.Add(upcomingGame2Label);
             schedulePanel.Controls.Add(upcomingGame1Label);
             schedulePanel.Controls.Add(upcomingGamesLabel);
-            schedulePanel.Location = new Point(444, 250);
+            schedulePanel.Location = new Point(843, 408);
             schedulePanel.Name = "schedulePanel";
-            schedulePanel.Size = new Size(203, 161);
+            schedulePanel.Size = new Size(254, 229);
             schedulePanel.TabIndex = 8;
             // 
             // upcomingGame3Label
             // 
-            upcomingGame3Label.Font = new Font("Segoe UI", 10F);
-            upcomingGame3Label.Location = new Point(3, 112);
+            upcomingGame3Label.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            upcomingGame3Label.Location = new Point(3, 185);
             upcomingGame3Label.Name = "upcomingGame3Label";
-            upcomingGame3Label.Size = new Size(197, 21);
+            upcomingGame3Label.Size = new Size(254, 29);
             upcomingGame3Label.TabIndex = 9;
             upcomingGame3Label.Text = "New York @ Los Angeles";
             // 
             // upcomingGame2Label
             // 
-            upcomingGame2Label.Font = new Font("Segoe UI", 10F);
-            upcomingGame2Label.Location = new Point(3, 79);
+            upcomingGame2Label.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            upcomingGame2Label.Location = new Point(3, 111);
             upcomingGame2Label.Name = "upcomingGame2Label";
-            upcomingGame2Label.Size = new Size(194, 21);
+            upcomingGame2Label.Size = new Size(248, 32);
             upcomingGame2Label.TabIndex = 8;
             upcomingGame2Label.Text = "New York @ Salt Lake City";
             // 
             // upcomingGame1Label
             // 
-            upcomingGame1Label.Font = new Font("Segoe UI", 10F);
-            upcomingGame1Label.Location = new Point(3, 44);
+            upcomingGame1Label.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            upcomingGame1Label.Location = new Point(3, 43);
             upcomingGame1Label.Name = "upcomingGame1Label";
-            upcomingGame1Label.Size = new Size(197, 21);
+            upcomingGame1Label.Size = new Size(251, 32);
             upcomingGame1Label.TabIndex = 7;
             upcomingGame1Label.Text = "New York vs Miami";
             // 
@@ -589,113 +660,23 @@ namespace LeagueSimulation
             upcomingGamesLabel.Text = "Upcoming Games";
             upcomingGamesLabel.TextAlign = ContentAlignment.TopCenter;
             // 
-            // firstPositionLabel
-            // 
-            firstPositionLabel.Font = new Font("Segoe UI", 12F);
-            firstPositionLabel.Location = new Point(3, 25);
-            firstPositionLabel.Name = "firstPositionLabel";
-            firstPositionLabel.Size = new Size(194, 23);
-            firstPositionLabel.TabIndex = 8;
-            firstPositionLabel.Text = "1. New York vs Miami";
-            // 
-            // secondPositionLabel
-            // 
-            secondPositionLabel.Font = new Font("Segoe UI", 12F);
-            secondPositionLabel.Location = new Point(3, 46);
-            secondPositionLabel.Name = "secondPositionLabel";
-            secondPositionLabel.Size = new Size(194, 23);
-            secondPositionLabel.TabIndex = 9;
-            secondPositionLabel.Text = "2. ";
-            // 
-            // thirdPositionLabel
-            // 
-            thirdPositionLabel.Font = new Font("Segoe UI", 12F);
-            thirdPositionLabel.Location = new Point(3, 69);
-            thirdPositionLabel.Name = "thirdPositionLabel";
-            thirdPositionLabel.Size = new Size(194, 23);
-            thirdPositionLabel.TabIndex = 10;
-            thirdPositionLabel.Text = "3. ";
-            // 
-            // fourthPositionLabel
-            // 
-            fourthPositionLabel.Font = new Font("Segoe UI", 12F);
-            fourthPositionLabel.Location = new Point(3, 92);
-            fourthPositionLabel.Name = "fourthPositionLabel";
-            fourthPositionLabel.Size = new Size(194, 23);
-            fourthPositionLabel.TabIndex = 11;
-            fourthPositionLabel.Text = "4. ";
-            // 
-            // fifthPositionLabel
-            // 
-            fifthPositionLabel.Font = new Font("Segoe UI", 12F);
-            fifthPositionLabel.Location = new Point(3, 115);
-            fifthPositionLabel.Name = "fifthPositionLabel";
-            fifthPositionLabel.Size = new Size(194, 23);
-            fifthPositionLabel.TabIndex = 12;
-            fifthPositionLabel.Text = "5. ";
-            // 
-            // sixthPositionLabel
-            // 
-            sixthPositionLabel.Font = new Font("Segoe UI", 12F);
-            sixthPositionLabel.Location = new Point(3, 138);
-            sixthPositionLabel.Name = "sixthPositionLabel";
-            sixthPositionLabel.Size = new Size(194, 23);
-            sixthPositionLabel.TabIndex = 13;
-            sixthPositionLabel.Text = "6. ";
-            // 
-            // seventhPositionLabel
-            // 
-            seventhPositionLabel.Font = new Font("Segoe UI", 12F);
-            seventhPositionLabel.Location = new Point(3, 161);
-            seventhPositionLabel.Name = "seventhPositionLabel";
-            seventhPositionLabel.Size = new Size(194, 23);
-            seventhPositionLabel.TabIndex = 14;
-            seventhPositionLabel.Text = "7. ";
-            // 
-            // eighthPositionLabel
-            // 
-            eighthPositionLabel.Font = new Font("Segoe UI", 12F);
-            eighthPositionLabel.Location = new Point(3, 184);
-            eighthPositionLabel.Name = "eighthPositionLabel";
-            eighthPositionLabel.Size = new Size(194, 18);
-            eighthPositionLabel.TabIndex = 15;
-            eighthPositionLabel.Text = "8. ";
-            // 
-            // panel2
-            // 
-            panel2.Controls.Add(eighthPositionLabel);
-            panel2.Controls.Add(confStandingsLabel);
-            panel2.Controls.Add(seventhPositionLabel);
-            panel2.Controls.Add(firstPositionLabel);
-            panel2.Controls.Add(sixthPositionLabel);
-            panel2.Controls.Add(secondPositionLabel);
-            panel2.Controls.Add(fifthPositionLabel);
-            panel2.Controls.Add(thirdPositionLabel);
-            panel2.Controls.Add(fourthPositionLabel);
-            panel2.Location = new Point(3, 0);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(197, 205);
-            panel2.TabIndex = 9;
-            // 
             // DashboardUserControl
             // 
-            Controls.Add(panel2);
             Controls.Add(schedulePanel);
             Controls.Add(teamLeadersPanel);
             Controls.Add(teamStatsPanel);
             Controls.Add(dashboardPanel1);
             Controls.Add(confStandingsPanel);
             Name = "DashboardUserControl";
-            Size = new Size(647, 411);
+            Size = new Size(1100, 640);
             confStandingsPanel.ResumeLayout(false);
+            panel2.ResumeLayout(false);
             nonPlayoffsPanel.ResumeLayout(false);
             dashboardPanel1.ResumeLayout(false);
-            dashboardPanel1.PerformLayout();
-            panel4.ResumeLayout(false);
             teamStatsPanel.ResumeLayout(false);
             teamLeadersPanel.ResumeLayout(false);
+            teamLeadersPanel.PerformLayout();
             schedulePanel.ResumeLayout(false);
-            panel2.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -704,8 +685,6 @@ namespace LeagueSimulation
         private Panel dashboardPanel1;
         private Panel schedulePanel;
         private Label upcomingGamesLabel;
-        private Panel panel4;
-        private Label label2;
         private Panel teamStatsPanel;
         private Label teamStatsLabel;
         private Panel teamLeadersPanel;

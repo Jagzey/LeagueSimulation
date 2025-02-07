@@ -248,28 +248,28 @@ namespace LeagueSimulation.Models
                     if (height - 75.5 < -2)
                     {
                         value = random.Next(0, 100);
-                        if (value < 30) secondaryPlaystyle = playstyles[0];
-                        else if (value < 95) secondaryPlaystyle = playstyles[1];
+                        if (value < 27) secondaryPlaystyle = playstyles[0];
+                        else if (value < 93) secondaryPlaystyle = playstyles[1];
                         else if (value <= 100) secondaryPlaystyle = playstyles[2];
                     }
                     else if (height - 75.5 < 1)
                     {
                         value = random.Next(0, 100);
                         if (value < 29) secondaryPlaystyle = playstyles[0];
-                        else if (value < 89) secondaryPlaystyle = playstyles[1];
+                        else if (value < 90) secondaryPlaystyle = playstyles[1];
                         else if (value <= 100) secondaryPlaystyle = playstyles[2];
                     }
                     else
                     {
                         value = random.Next(0, 100);
-                        if (value < 27) secondaryPlaystyle = playstyles[0];
-                        else if (value < 82) secondaryPlaystyle = playstyles[1];
+                        if (value < 26) secondaryPlaystyle = playstyles[0];
+                        else if (value < 87) secondaryPlaystyle = playstyles[1];
                         else if (value <= 100) secondaryPlaystyle = playstyles[2];
                     }
 
                 }
 
-                if (primaryPlaystyle == "Defensive")
+                else if (primaryPlaystyle == "Defensive")
                 {
                     playstyles = new List<string> { "Lockdown", "Ripper" };
                     if (height - 75.5 < -2)
@@ -287,62 +287,12 @@ namespace LeagueSimulation.Models
                     else
                     {
                         value = random.Next(0, 100);
-                        if (value < 63) secondaryPlaystyle = playstyles[0];
+                        if (value < 60) secondaryPlaystyle = playstyles[0];
                         else if (value <= 100) secondaryPlaystyle = playstyles[1];
                     }
                 }
 
-                if (primaryPlaystyle == "2-Way")
-                {
-                    string fullPlaystyle = "";
-                    // find offensive counterpart
-                    if (height - 75.5 < -2)
-                    {
-                        value = random.Next(0, 100);
-                        if (value < 36) fullPlaystyle += $"{playstyles[0]} ";
-                        else if (value < 77) fullPlaystyle += $"{playstyles[1]} ";
-                        else if (value <= 100) fullPlaystyle += $"{playstyles[3]} ";
-                    }
-                    else if (height - 75.5 < 1)
-                    {
-                        value = random.Next(0, 100);
-                        if (value < 36) fullPlaystyle += $"{playstyles[0]} ";
-                        else if (value < 70) fullPlaystyle += $"{playstyles[1]} ";
-                        else if (value <= 100) fullPlaystyle += $"{playstyles[3]} ";
-                    }
-                    else
-                    {
-                        value = random.Next(0, 100);
-                        if (value < 37) fullPlaystyle += $"{playstyles[0]} ";
-                        else if (value < 65) fullPlaystyle += $"{playstyles[1]} ";
-                        else if (value <= 100) fullPlaystyle += $"{playstyles[3]} ";
-                    }
-
-                    // find defensive counterpart
-                    if (height - 75.5 < -2)
-                    {
-                        value = random.Next(0, 100);
-                        if (value < 38) fullPlaystyle += $"{playstyles[5]} ";
-                        else if (value <= 100) fullPlaystyle += $"{playstyles[6]} ";
-                    }
-                    else if (height - 75.5 < 1)
-                    {
-                        value = random.Next(0, 100);
-                        if (value < 50) fullPlaystyle += $"{playstyles[5]} ";
-                        else if (value <= 100) fullPlaystyle += $"{playstyles[6]} ";
-                    }
-                    else
-                    {
-                        value = random.Next(0, 100);
-                        if (value < 63) fullPlaystyle += $"{playstyles[5]} ";
-                        else if (value <= 100) fullPlaystyle += $"{playstyles[6]} ";
-                    }
-                    secondaryPlaystyle = fullPlaystyle;
-                    secondaryPlaystyle = "2-Way Player";
-                }
-
-
-
+                else if (primaryPlaystyle == "2-Way") secondaryPlaystyle = "2-Way Player";
             }
             if (position == "SG" || position == "SF")
             {
@@ -352,28 +302,28 @@ namespace LeagueSimulation.Models
                     if (height - 79 < -2)
                     {
                         value = random.Next(0, 100);
-                        if (value < 47) secondaryPlaystyle = playstyles[0];
-                        else if (value < 77) secondaryPlaystyle = playstyles[1];
+                        if (value < 45) secondaryPlaystyle = playstyles[0];
+                        else if (value < 73) secondaryPlaystyle = playstyles[1];
                         else if (value <= 100) secondaryPlaystyle = playstyles[3];
                     }
                     else if (height - 79 < 1)
                     {
                         value = random.Next(0, 100);
-                        if (value < 45) secondaryPlaystyle = playstyles[0];
-                        else if (value < 75) secondaryPlaystyle = playstyles[1];
+                        if (value < 48) secondaryPlaystyle = playstyles[0];
+                        else if (value < 71) secondaryPlaystyle = playstyles[1];
                         else if (value <= 100) secondaryPlaystyle = playstyles[3];
                     }
                     else
                     {
                         value = random.Next(0, 100);
                         if (value < 40) secondaryPlaystyle = playstyles[0];
-                        else if (value < 72) secondaryPlaystyle = playstyles[1];
+                        else if (value < 69) secondaryPlaystyle = playstyles[1];
                         else if (value <= 100) secondaryPlaystyle = playstyles[3];
                     }
 
                 }
 
-                if (primaryPlaystyle == "Defensive")
+                else if (primaryPlaystyle == "Defensive")
                 {
                     playstyles = new List<string> { "Rim Protector", "Lockdown", "Ripper" };
                     if (height - 79 < -2)
@@ -391,57 +341,13 @@ namespace LeagueSimulation.Models
                     else
                     {
                         value = random.Next(0, 100);
-                        if (value < 68) secondaryPlaystyle = playstyles[1];
+                        if (value < 71) secondaryPlaystyle = playstyles[1];
                         else if (value <= 100) secondaryPlaystyle = playstyles[2];
                     }
                 }
 
-                if (primaryPlaystyle == "2-Way")
+                else if (primaryPlaystyle == "2-Way")
                 {
-                    string fullPlaystyle = "";
-                    // find offensive counterpart
-                    if (height - 79 < -2)
-                    {
-                        value = random.Next(0, 100);
-                        if (value < 36) fullPlaystyle += $"{playstyles[0]} ";
-                        else if (value < 77) fullPlaystyle += $"{playstyles[1]} ";
-                        else if (value <= 100) fullPlaystyle += $"{playstyles[3]} ";
-                    }
-                    else if (height - 79 < 1)
-                    {
-                        value = random.Next(0, 100);
-                        if (value < 36) fullPlaystyle += $"{playstyles[0]} ";
-                        else if (value < 70) fullPlaystyle += $"{playstyles[1]} ";
-                        else if (value <= 100) fullPlaystyle += $"{playstyles[3]} ";
-                    }
-                    else
-                    {
-                        value = random.Next(0, 100);
-                        if (value < 37) fullPlaystyle += $"{playstyles[0]} ";
-                        else if (value < 65) fullPlaystyle += $"{playstyles[1]} ";
-                        else if (value <= 100) fullPlaystyle += $"{playstyles[3]} ";
-                    }
-
-                    // find defensive counterpart
-                    if (height - 79 < -2)
-                    {
-                        value = random.Next(0, 100);
-                        if (value < 38) fullPlaystyle += $"{playstyles[5]} ";
-                        else if (value <= 100) fullPlaystyle += $"{playstyles[6]} ";
-                    }
-                    else if (height - 79 < 1)
-                    {
-                        value = random.Next(0, 100);
-                        if (value < 50) fullPlaystyle += $"{playstyles[5]} ";
-                        else if (value <= 100) fullPlaystyle += $"{playstyles[6]} ";
-                    }
-                    else
-                    {
-                        value = random.Next(0, 100);
-                        if (value < 63) fullPlaystyle += $"{playstyles[5]} ";
-                        else if (value <= 100) fullPlaystyle += $"{playstyles[6]} ";
-                    }
-                    secondaryPlaystyle = fullPlaystyle;
                     secondaryPlaystyle = "2-Way Player";
                 }
             }
@@ -453,22 +359,22 @@ namespace LeagueSimulation.Models
                     if (height - 83 < -2)
                     {
                         value = random.Next(0, 100);
-                        if (value < 37) secondaryPlaystyle = playstyles[0];
-                        else if (value < 54) secondaryPlaystyle = playstyles[1];
+                        if (value < 35) secondaryPlaystyle = playstyles[0];
+                        else if (value < 48) secondaryPlaystyle = playstyles[1];
                         else if (value <= 100) secondaryPlaystyle = playstyles[2];
                     }
                     else if (height - 83 < 1)
                     {
                         value = random.Next(0, 100);
                         if (value < 31) secondaryPlaystyle = playstyles[0];
-                        else if (value < 45) secondaryPlaystyle = playstyles[1];
+                        else if (value < 40) secondaryPlaystyle = playstyles[1];
                         else if (value <= 100) secondaryPlaystyle = playstyles[2];
                     }
                     else
                     {
                         value = random.Next(0, 100);
-                        if (value < 18) secondaryPlaystyle = playstyles[0];
-                        else if (value < 25) secondaryPlaystyle = playstyles[1];
+                        if (value < 28) secondaryPlaystyle = playstyles[0];
+                        else if (value < 32) secondaryPlaystyle = playstyles[1];
                         else if (value <= 100) secondaryPlaystyle = playstyles[2];
                     }
 
@@ -502,50 +408,6 @@ namespace LeagueSimulation.Models
 
                 if (primaryPlaystyle == "2-Way")
                 {
-                    string fullPlaystyle = "";
-                    // find offensive counterpart
-                    if (height - 83 < -2)
-                    {
-                        value = random.Next(0, 100);
-                        if (value < 36) fullPlaystyle += $"{playstyles[0]} ";
-                        else if (value < 77) fullPlaystyle += $"{playstyles[1]} ";
-                        else if (value <= 100) fullPlaystyle += $"{playstyles[3]} ";
-                    }
-                    else if (height - 83 < 1)
-                    {
-                        value = random.Next(0, 100);
-                        if (value < 36) fullPlaystyle += $"{playstyles[0]} ";
-                        else if (value < 70) fullPlaystyle += $"{playstyles[1]} ";
-                        else if (value <= 100) fullPlaystyle += $"{playstyles[3]} ";
-                    }
-                    else
-                    {
-                        value = random.Next(0, 100);
-                        if (value < 37) fullPlaystyle += $"{playstyles[0]} ";
-                        else if (value < 65) fullPlaystyle += $"{playstyles[1]} ";
-                        else if (value <= 100) fullPlaystyle += $"{playstyles[3]} ";
-                    }
-
-                    // find defensive counterpart
-                    if (height - 83 < -2)
-                    {
-                        value = random.Next(0, 100);
-                        if (value < 38) fullPlaystyle += $"{playstyles[5]} ";
-                        else if (value <= 100) fullPlaystyle += $"{playstyles[6]} ";
-                    }
-                    else if (height - 83 < 1)
-                    {
-                        value = random.Next(0, 100);
-                        if (value < 50) fullPlaystyle += $"{playstyles[5]} ";
-                        else if (value <= 100) fullPlaystyle += $"{playstyles[6]} ";
-                    }
-                    else
-                    {
-                        value = random.Next(0, 100);
-                        if (value < 63) fullPlaystyle += $"{playstyles[5]} ";
-                        else if (value <= 100) fullPlaystyle += $"{playstyles[6]} ";
-                    }
-                    secondaryPlaystyle = fullPlaystyle;
                     secondaryPlaystyle = "2-Way Player";
                 }
 
@@ -604,7 +466,7 @@ namespace LeagueSimulation.Models
                         closeShot += multipler;
 
                         // calculate layup
-                        statsMean = 32;
+                        statsMean = 36;
                         statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
@@ -630,7 +492,7 @@ namespace LeagueSimulation.Models
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
-                        statsMean = 76;
+                        statsMean = 66;
                         statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
@@ -703,33 +565,33 @@ namespace LeagueSimulation.Models
                         closeShot += multipler;
 
                         // calculate layup
-                        statsMean = 35;
+                        statsMean = 43;
                         statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
 
                         // calculate dunk
-                        statsMean = 31;
+                        statsMean = 42;
                         statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
 
                         // calculate midRange
-                        statsMean = 51;
+                        statsMean = 54;
                         statsStdev = 1.3;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
-                        statsMean = 59;
+                        statsMean = 60;
                         statsStdev = 1.4;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
-                        statsMean = 66;
+                        statsMean = 65;
                         statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
@@ -804,7 +666,7 @@ namespace LeagueSimulation.Models
                         closeShot += multipler;
 
                         // calculate layup
-                        statsMean = 64;
+                        statsMean = 66;
                         statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
@@ -831,14 +693,14 @@ namespace LeagueSimulation.Models
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
-                        statsMean = 62;
+                        statsMean = 64;
                         statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
-                        statsMean = 60;
+                        statsMean = 62;
                         statsStdev = 1.4;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
@@ -851,7 +713,7 @@ namespace LeagueSimulation.Models
                         if (ballHandle > 99) ballHandle = 99;
 
                         // calculate defense
-                        statsMean = 43;
+                        statsMean = 53;
                         statsStdev = 1.4;
                         defense = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         defense += multipler;
@@ -863,7 +725,7 @@ namespace LeagueSimulation.Models
                         steal += multipler;
 
                         // calculate block
-                        statsMean = 33;
+                        statsMean = 30;
                         statsStdev = 1.4;
                         block = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         block += multipler;
@@ -908,14 +770,14 @@ namespace LeagueSimulation.Models
                         closeShot += multipler;
 
                         // calculate layup
-                        statsMean = 35;
+                        statsMean = 37;
                         statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
                         if (dunk > 99) dunk = 99;
 
                         // calculate dunk
-                        statsMean = 29;
+                        statsMean = 32;
                         statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
@@ -928,14 +790,14 @@ namespace LeagueSimulation.Models
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
-                        statsMean = 42;
+                        statsMean = 51;
                         statsStdev = 1.4;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
-                        statsMean = 62;
+                        statsMean = 65;
                         statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
@@ -962,20 +824,20 @@ namespace LeagueSimulation.Models
                         if (defense > 99) defense = 99;
 
                         // calculate steal
-                        statsMean = 69;
+                        statsMean = 70;
                         statsStdev = 1.4;
                         steal = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         steal += multipler;
                         if (steal > 99) steal = 99;
 
                         // calculate block
-                        statsMean = 39;
+                        statsMean = 44;
                         statsStdev = 1.4;
                         block = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         block += multipler;
 
                         // calculate rebound
-                        statsMean = 38;
+                        statsMean = 50;
                         statsStdev = 2.5;
                         rebound = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         rebound += multipler;
@@ -1010,34 +872,34 @@ namespace LeagueSimulation.Models
                         closeShot += multipler;
 
                         // calculate layup
-                        statsMean = 37;
+                        statsMean = 43;
                         statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
                         if (dunk > 99) dunk = 99;
 
                         // calculate dunk
-                        statsMean = 28;
+                        statsMean = 32;
                         statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
 
                         // calculate midRange
-                        statsMean = 34;
+                        statsMean = 38;
                         statsStdev = 1.3;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
-                        statsMean = 42;
+                        statsMean = 48;
                         statsStdev = 1.4;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
-                        statsMean = 52;
+                        statsMean = 61;
                         statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
@@ -1057,7 +919,7 @@ namespace LeagueSimulation.Models
                         if (ballHandle > 99) ballHandle = 99;
 
                         // calculate defense
-                        statsMean = 67;
+                        statsMean = 69;
                         statsStdev = 1.4;
                         defense = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         defense += multipler;
@@ -1072,13 +934,13 @@ namespace LeagueSimulation.Models
 
 
                         // calculate block
-                        statsMean = 34;
+                        statsMean = 41;
                         statsStdev = 1.4;
                         block = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         block += multipler;
 
                         // calculate rebound
-                        statsMean = 47;
+                        statsMean = 53;
                         statsStdev = 2.5;
                         rebound = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         rebound += multipler;
@@ -1114,27 +976,27 @@ namespace LeagueSimulation.Models
                     closeShot += multipler;
 
                     // calculate layup
-                    statsMean = 51;
+                    statsMean = 53;
                     statsStdev = 1.4;
                     layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     layup += multipler;
                     if (dunk > 99) dunk = 99;
 
                     // calculate dunk
-                    statsMean = 47;
+                    statsMean = 48;
                     statsStdev = 1.4;
                     dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     dunk += multipler;
 
                     // calculate midRange
-                    statsMean = 42;
+                    statsMean = 44;
                     statsStdev = 1.3;
                     midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     midRange += multipler;
                     if (midRange > 99) midRange = 99;
 
                     // calculate 3
-                    statsMean = 52;
+                    statsMean = 55;
                     statsStdev = 1.4;
                     threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     threePoint += multipler;
@@ -1180,7 +1042,7 @@ namespace LeagueSimulation.Models
                     block += multipler;
 
                     // calculate rebound
-                    statsMean = 34;
+                    statsMean = 39;
                     statsStdev = 2.5;
                     rebound = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     rebound += multipler;
@@ -1222,34 +1084,34 @@ namespace LeagueSimulation.Models
                         if (closeShot > 99) closeShot = 99;
 
                         // calculate layup
-                        statsMean = 35;
+                        statsMean = 45;
                         statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
 
                         // calculate dunk
-                        statsMean = 38;
+                        statsMean = 42;
                         statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
                         if (dunk > 99) dunk = 99;
 
                         // calculate midRange
-                        statsMean = 68;
+                        statsMean = 66;
                         statsStdev = 1.3;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
-                        statsMean = 64;
+                        statsMean = 66;
                         statsStdev = 1.4;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
-                        statsMean = 72;
+                        statsMean = 64;
                         statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
@@ -1268,25 +1130,25 @@ namespace LeagueSimulation.Models
                         ballHandle += multipler;
 
                         // calculate defense
-                        statsMean = 57;
+                        statsMean = 59;
                         statsStdev = 1.4;
                         defense = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         defense += multipler;
 
                         // calculate steal
-                        statsMean = 37;
+                        statsMean = 38;
                         statsStdev = 1.4;
                         steal = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         steal += multipler;
 
                         // calculate block
-                        statsMean = 34;
+                        statsMean = 39;
                         statsStdev = 1.4;
                         block = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         block += multipler;
 
                         // calculate rebound
-                        statsMean = 50;
+                        statsMean = 57;
                         statsStdev = 1.4;
                         rebound = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         rebound += multipler;
@@ -1324,34 +1186,34 @@ namespace LeagueSimulation.Models
                         if (closeShot > 99) closeShot = 99;
 
                         // calculate layup
-                        statsMean = 34;
+                        statsMean = 44;
                         statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
                         if (layup > 99) layup = 99;
 
                         // calculate dunk
-                        statsMean = 40;
+                        statsMean = 49;
                         statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
 
                         // calculate midRange
-                        statsMean = 47;
+                        statsMean = 55;
                         statsStdev = 1.3;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
-                        statsMean = 49;
+                        statsMean = 57;
                         statsStdev = 1.4;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
-                        statsMean = 57;
+                        statsMean = 65;
                         statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
@@ -1372,38 +1234,38 @@ namespace LeagueSimulation.Models
                         if (ballHandle > 99) ballHandle = 99;
 
                         // calculate defense
-                        statsMean = 49;
+                        statsMean = 54;
                         statsStdev = 1.4;
                         defense = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         defense += multipler;
 
                         // calculate steal
-                        statsMean = 29;
+                        statsMean = 33;
                         statsStdev = 1.4;
                         steal = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         steal += multipler;
 
                         // calculate block
-                        statsMean = 30;
+                        statsMean = 39;
                         statsStdev = 1.4;
                         block = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         block += multipler;
 
                         // calculate rebound
-                        statsMean = 33;
+                        statsMean = 43;
                         statsStdev = 1.4;
                         rebound = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         rebound += multipler;
 
                         // calculate speed
-                        statsMean = 50;
+                        statsMean = 54;
                         statsStdev = 1.4;
                         speed = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         speed += multipler;
                         if (speed > 99) speed = 99;
 
                         // calculate strength
-                        statsMean = 41;
+                        statsMean = 51;
                         statsStdev = 1.4;
                         strength = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         strength += multipler;
@@ -1442,21 +1304,21 @@ namespace LeagueSimulation.Models
                         if (dunk > 99) dunk = 99;
 
                         // calculate midRange
-                        statsMean = 37;
+                        statsMean = 43;
                         statsStdev = 1.3;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
-                        statsMean = 46;
+                        statsMean = 52;
                         statsStdev = 4;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
-                        statsMean = 49;
+                        statsMean = 63;
                         statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
@@ -1482,19 +1344,19 @@ namespace LeagueSimulation.Models
                         defense += multipler;
 
                         // calculate steal
-                        statsMean = 34;
+                        statsMean = 38;
                         statsStdev = 1.4;
                         steal = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         steal += multipler;
 
                         // calculate block
-                        statsMean = 38;
+                        statsMean = 41;
                         statsStdev = 1.4;
                         block = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         block += multipler;
 
                         // calculate rebound
-                        statsMean = 42;
+                        statsMean = 47;
                         statsStdev = 1.4;
                         rebound = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         rebound += multipler;
@@ -1561,7 +1423,7 @@ namespace LeagueSimulation.Models
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
-                        statsMean = 62;
+                        statsMean = 66;
                         statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
@@ -1636,41 +1498,41 @@ namespace LeagueSimulation.Models
                         closeShot += multipler;
 
                         // calculate layup
-                        statsMean = 42;
+                        statsMean = 47;
                         statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
                         if (dunk > 99) dunk = 99;
 
                         // calculate dunk
-                        statsMean = 29;
+                        statsMean = 34;
                         statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
 
                         // calculate midRange
-                        statsMean = 34;
+                        statsMean = 37;
                         statsStdev = 1.3;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
-                        statsMean = 42;
+                        statsMean = 47;
                         statsStdev = 1.4;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
-                        statsMean = 60;
+                        statsMean = 67;
                         statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
-                        statsMean = 39;
+                        statsMean = 42;
                         statsStdev = 1.4;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
@@ -1767,7 +1629,7 @@ namespace LeagueSimulation.Models
                     if (threePoint > 99) threePoint = 99;
 
                     // calculate freeThrow
-                    statsMean = 66;
+                    statsMean = 67;
                     statsStdev = 1.4;
                     freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     freeThrow += multipler;
@@ -1847,13 +1709,13 @@ namespace LeagueSimulation.Models
                         if (closeShot > 99) closeShot = 99;
 
                         // calculate layup
-                        statsMean = 35;
+                        statsMean = 39;
                         statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
 
                         // calculate dunk
-                        statsMean = 44;
+                        statsMean = 48;
                         statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
@@ -1874,7 +1736,7 @@ namespace LeagueSimulation.Models
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
-                        statsMean = 75;
+                        statsMean = 69;
                         statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
@@ -1949,33 +1811,33 @@ namespace LeagueSimulation.Models
                         if (closeShot > 99) closeShot = 99;
 
                         // calculate layup
-                        statsMean = 39;
+                        statsMean = 52;
                         statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
 
                         // calculate dunk
-                        statsMean = 54;
+                        statsMean = 58;
                         statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
 
                         // calculate midRange
-                        statsMean = 36;
+                        statsMean = 49;
                         statsStdev = 1.3;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
-                        statsMean = 54;
+                        statsMean = 56;
                         statsStdev = 1.4;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
-                        statsMean = 40;
+                        statsMean = 63;
                         statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
@@ -2058,28 +1920,28 @@ namespace LeagueSimulation.Models
                         if (layup > 99) layup = 99;
 
                         // calculate dunk
-                        statsMean = 71;
+                        statsMean = 69;
                         statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
                         if (dunk > 99) dunk = 99;
 
                         // calculate midRange
-                        statsMean = 35;
+                        statsMean = 39;
                         statsStdev = 1.3;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
-                        statsMean = 40;
+                        statsMean = 46;
                         statsStdev = 4;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
-                        statsMean = 48;
+                        statsMean = 65;
                         statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
@@ -2158,7 +2020,7 @@ namespace LeagueSimulation.Models
                         if (closeShot > 99) closeShot = 99;
 
                         // calculate layup
-                        statsMean = 38;
+                        statsMean = 42;
                         statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
@@ -2171,21 +2033,21 @@ namespace LeagueSimulation.Models
                         dunk += multipler;
 
                         // calculate midRange
-                        statsMean = 35;
+                        statsMean = 38;
                         statsStdev = 1.3;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
-                        statsMean = 41;
+                        statsMean = 46;
                         statsStdev = 4;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
-                        statsMean = 45;
+                        statsMean = 64;
                         statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
@@ -2263,47 +2125,47 @@ namespace LeagueSimulation.Models
                         closeShot += multipler;
 
                         // calculate layup
-                        statsMean = 35;
+                        statsMean = 42;
                         statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
                         if (dunk > 99) dunk = 99;
 
                         // calculate dunk
-                        statsMean = 44;
+                        statsMean = 45;
                         statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
 
                         // calculate midRange
-                        statsMean = 36;
+                        statsMean = 39;
                         statsStdev = 1.3;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
-                        statsMean = 37;
+                        statsMean = 40;
                         statsStdev = 1.4;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
-                        statsMean = 58;
+                        statsMean = 63;
                         statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
                         if (freeThrow > 99) freeThrow = 99;
 
                         // calculate passing
-                        statsMean = 44;
+                        statsMean = 46;
                         statsStdev = 1.4;
                         passing = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         passing += multipler;
 
                         // calculate ballHandle
-                        statsMean = 35;
+                        statsMean = 36;
                         statsStdev = 1.4;
                         ballHandle = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         ballHandle += multipler;
@@ -2325,7 +2187,7 @@ namespace LeagueSimulation.Models
 
 
                         // calculate block
-                        statsMean = 76;
+                        statsMean = 73;
                         statsStdev = 1.4;
                         block = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         block += multipler;
@@ -2397,7 +2259,7 @@ namespace LeagueSimulation.Models
                     if (threePoint > 99) threePoint = 99;
 
                     // calculate freeThrow
-                    statsMean = 53;
+                    statsMean = 68;
                     statsStdev = 1.4;
                     freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     freeThrow += multipler;
@@ -2479,13 +2341,13 @@ namespace LeagueSimulation.Models
                         if (closeShot > 99) closeShot = 99;
 
                         // calculate layup
-                        statsMean = 30;
+                        statsMean = 33;
                         statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
 
                         // calculate dunk
-                        statsMean = 41;
+                        statsMean = 44;
                         statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
@@ -2505,8 +2367,7 @@ namespace LeagueSimulation.Models
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
-                        statsMean = 76;
-                        statsStdev = 1.4;
+                        statsMean = 69;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
                         if (freeThrow > 99) freeThrow = 99;
@@ -2580,13 +2441,13 @@ namespace LeagueSimulation.Models
                         if (closeShot > 99) closeShot = 99;
 
                         // calculate layup
-                        statsMean = 45;
+                        statsMean = 48;
                         statsStdev = 1.4;
                         layup = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         layup += multipler;
 
                         // calculate dunk
-                        statsMean = 55;
+                        statsMean = 56;
                         statsStdev = 1.4;
                         dunk = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         dunk += multipler;
@@ -2599,14 +2460,14 @@ namespace LeagueSimulation.Models
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
-                        statsMean = 39;
+                        statsMean = 43;
                         statsStdev = 1.4;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
-                        statsMean = 39;
+                        statsMean = 41;
                         statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
@@ -2626,13 +2487,13 @@ namespace LeagueSimulation.Models
                         ballHandle += multipler;
 
                         // calculate defense
-                        statsMean = 42;
+                        statsMean = 46;
                         statsStdev = 1.4;
                         defense = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         defense += multipler;
 
                         // calculate steal
-                        statsMean = 29;
+                        statsMean = 31;
                         statsStdev = 1.4;
                         steal = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         steal += multipler;
@@ -2695,21 +2556,21 @@ namespace LeagueSimulation.Models
                         if (dunk > 99) dunk = 99;
 
                         // calculate midRange
-                        statsMean = 31;
+                        statsMean = 35;
                         statsStdev = 1.3;
                         midRange = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         midRange += multipler;
                         if (midRange > 99) midRange = 99;
 
                         // calculate 3
-                        statsMean = 36;
+                        statsMean = 43;
                         statsStdev = 4;
                         threePoint = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         threePoint += multipler;
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
-                        statsMean = 45;
+                        statsMean = 63;
                         statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
@@ -2814,7 +2675,7 @@ namespace LeagueSimulation.Models
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
-                        statsMean = 46;
+                        statsMean = 65;
                         statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
@@ -2919,7 +2780,7 @@ namespace LeagueSimulation.Models
                         if (threePoint > 99) threePoint = 99;
 
                         // calculate freeThrow
-                        statsMean = 38;
+                        statsMean = 63;
                         statsStdev = 1.4;
                         freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                         freeThrow += multipler;
@@ -3026,7 +2887,7 @@ namespace LeagueSimulation.Models
                     if (threePoint > 99) threePoint = 99;
 
                     // calculate freeThrow
-                    statsMean = 56;
+                    statsMean = 75;
                     statsStdev = 1.4;
                     freeThrow = (int)GenerateRandomNormalDistribution(statsMean, statsStdev);
                     freeThrow += multipler;
@@ -3146,10 +3007,11 @@ namespace LeagueSimulation.Models
             }
 
             // now we generate the overall of the player
-            double overallStDev = 4.7;
+            double overallStDev = 5.3;
             int overall = (int)GenerateRandomNormalDistribution(overallMean, overallStDev);
             if (overall < 60) overall = 60;
             else if (overall > 99) overall = 99;
+            else if (!isRookie && overall > 93) overall = 93;
             Overall = overall;
 
             // we calculate the potential of the player

@@ -11,6 +11,7 @@ namespace LeagueSimulation
         public bool addPhrases = false;
         public string? CommentatorPhrase;
         public string? ScoreAfterPhrase;
+        public string? CurrentTime;
         public FullScheduleUserControl(League? league)
         {
             this.league = league;
@@ -962,11 +963,11 @@ namespace LeagueSimulation
             if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
             else schedule = league.CurrentSchedule;
             string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][0].Split(',');
-            (List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][0], (int)currentDayShownNum.Value);
+            (List<string>, List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][0], (int)currentDayShownNum.Value);
             teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
             teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
             UpdateGame1Panel(teamsPlaying);
-            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
+            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, phrases.Item3, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
             if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
             else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
             simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
@@ -979,6 +980,8 @@ namespace LeagueSimulation
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
             menuForm.menuFormLayoutPanel.Width = userControl.Width + 10;
             menuForm.Width = userControl.Width + 40;
+            menuForm.menuFormLayoutPanel.Height += 140;
+            menuForm.Height += 140;
             menuForm.menuFormLayoutPanel.Controls.Add(userControl);
             this.Hide();
             menuForm.Show();
@@ -1000,7 +1003,7 @@ namespace LeagueSimulation
             scheduleDisplayPanel.Controls.Add(userControl.panel2);
             scheduleDisplayPanel.Controls.Add(userControl.label3);
             scheduleDisplayPanel.Controls.Add(userControl.commentatorPhrasesLabel);
-            scheduleDisplayPanel.Size = new Size(650, 40000);
+            scheduleDisplayPanel.Size = new Size(1100, 13000);
             userControl.panel2.Show();
             userControl.label3.Show();
             userControl.commentatorPhrasesLabel.Show();
@@ -1011,6 +1014,7 @@ namespace LeagueSimulation
             {
                 string commentatorPhrase = userControl.CommentatorPhrases[commentatorCounter];
                 string currentScore = userControl.ScoreAfterEachPhrase[commentatorCounter];
+                string currentTime = userControl.GameTimestamps[commentatorCounter];
                 if (commentatorPhrase.Contains("substituted"))
                 {
                     userControl.commentatorPhrasesLabel.Text = $"{commentatorPhrase}\n\n" + userControl.commentatorPhrasesLabel.Text;
@@ -1020,11 +1024,12 @@ namespace LeagueSimulation
                 }
                 else
                 {
-                    await WaitToPrintPhrase((int)userControl.playbackSpeed.Value, commentatorPhrase, currentScore);
+                    await WaitToPrintPhrase((int)userControl.playbackSpeed.Value, commentatorPhrase, currentScore, currentTime);
                     if (addPhrases)
                     {
                         userControl.commentatorPhrasesLabel.Text = $"{CommentatorPhrase}\n\n" + userControl.commentatorPhrasesLabel.Text;
                         userControl.scoreLabel.Text = ScoreAfterPhrase;
+                        userControl.timeLabel.Text = currentTime;
                         commentatorCounter++;
                         addPhrases = false;
                     }
@@ -1037,17 +1042,18 @@ namespace LeagueSimulation
 
         }
 
-        private async Task WaitToPrintPhrase(int playbackSpeed, string commentatorPhrase, string scoreAfterPhrase)
+        private async Task WaitToPrintPhrase(int playbackSpeed, string commentatorPhrase, string scoreAfterPhrase, string currentTime)
         {
             await Task.Delay((int)(5000 / playbackSpeed));
-            PrintCommentatorPhrases(commentatorPhrase, scoreAfterPhrase);
+            PrintCommentatorPhrases(commentatorPhrase, scoreAfterPhrase, currentTime);
         }
 
-        private void PrintCommentatorPhrases(string commentatorPhrase, string scoreAfterPhrase)
+        private void PrintCommentatorPhrases(string commentatorPhrase, string scoreAfterPhrase, string currentTime)
         {
             addPhrases = true;
             CommentatorPhrase = commentatorPhrase;
             ScoreAfterPhrase = scoreAfterPhrase;
+            CurrentTime = currentTime;
         }
 
         private void UpdateGame13Panel(string[] teamsPlaying)
@@ -1291,11 +1297,11 @@ namespace LeagueSimulation
             if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
             else schedule = league.CurrentSchedule;
             string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][1].Split(',');
-            (List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][1], (int)currentDayShownNum.Value);
+            (List<string>, List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][2], (int)currentDayShownNum.Value);
             teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
             teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
             UpdateGame2Panel(teamsPlaying);
-            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
+            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, phrases.Item3, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
             if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
             else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
             simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
@@ -1309,11 +1315,11 @@ namespace LeagueSimulation
             if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
             else schedule = league.CurrentSchedule;
             string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][2].Split(',');
-            (List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][2], (int)currentDayShownNum.Value);
+            (List<string>, List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][2], (int)currentDayShownNum.Value);
             teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
             teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
             UpdateGame3Panel(teamsPlaying);
-            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
+            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, phrases.Item3, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
             if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
             else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
             simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
@@ -1327,11 +1333,11 @@ namespace LeagueSimulation
             if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
             else schedule = league.CurrentSchedule;
             string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][3].Split(',');
-            (List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][3], (int)currentDayShownNum.Value);
+            (List<string>, List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][3], (int)currentDayShownNum.Value);
             teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
             teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
             UpdateGame4Panel(teamsPlaying);
-            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
+            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, phrases.Item3, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
             if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
             else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
             simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
@@ -1345,11 +1351,11 @@ namespace LeagueSimulation
             if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
             else schedule = league.CurrentSchedule;
             string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][4].Split(',');
-            (List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][4], (int)currentDayShownNum.Value);
+            (List<string>, List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][4], (int)currentDayShownNum.Value);
             teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
             teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
             UpdateGame5Panel(teamsPlaying);
-            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
+            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, phrases.Item3, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
             if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
             else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
             simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
@@ -1363,11 +1369,11 @@ namespace LeagueSimulation
             if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
             else schedule = league.CurrentSchedule;
             string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][5].Split(',');
-            (List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][5], (int)currentDayShownNum.Value);
+            (List<string>, List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][5], (int)currentDayShownNum.Value);
             teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
             teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
             UpdateGame6Panel(teamsPlaying);
-            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
+            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, phrases.Item3, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
             if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
             else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
             simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
@@ -1381,11 +1387,11 @@ namespace LeagueSimulation
             if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
             else schedule = league.CurrentSchedule;
             string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][6].Split(',');
-            (List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][6], (int)currentDayShownNum.Value);
+            (List<string>, List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][6], (int)currentDayShownNum.Value);
             teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
             teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
             UpdateGame7Panel(teamsPlaying);
-            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
+            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, phrases.Item3, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
             if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
             else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
             simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
@@ -1399,11 +1405,11 @@ namespace LeagueSimulation
             if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
             else schedule = league.CurrentSchedule;
             string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][7].Split(',');
-            (List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][7], (int)currentDayShownNum.Value);
+            (List<string>, List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][7], (int)currentDayShownNum.Value);
             teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
             teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
             UpdateGame8Panel(teamsPlaying);
-            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
+            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, phrases.Item3, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
             if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
             else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
             simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
@@ -1413,12 +1419,12 @@ namespace LeagueSimulation
         private void game9WatchGameButton_Click(object sender, EventArgs e)
         {
             int currentSeason = league.CurrentSeason;
-            (List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][8], (int)currentDayShownNum.Value);
+            (List<string>, List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][8], (int)currentDayShownNum.Value);
             string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][8].Split(',');
             teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
             teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
             UpdateGame9Panel(teamsPlaying);
-            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
+            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, phrases.Item3, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
             if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
             else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
             simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
@@ -1428,12 +1434,12 @@ namespace LeagueSimulation
         private void game10WatchGameButton_Click(object sender, EventArgs e)
         {
             int currentSeason = league.CurrentSeason;
-            (List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][9], (int)currentDayShownNum.Value);
+            (List<string>, List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][9], (int)currentDayShownNum.Value);
             string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][9].Split(',');
             teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
             teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
             UpdateGame10Panel(teamsPlaying);
-            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
+            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, phrases.Item3, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
             if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
             else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
             simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
@@ -1443,12 +1449,12 @@ namespace LeagueSimulation
         private void game11WatchGameButton_Click(object sender, EventArgs e)
         {
             int currentSeason = league.CurrentSeason;
-            (List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][10], (int)currentDayShownNum.Value);
+            (List<string>, List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][10], (int)currentDayShownNum.Value);
             string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][10].Split(',');
             teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
             teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
             UpdateGame11Panel(teamsPlaying);
-            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
+            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, phrases.Item3, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
             if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
             else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
             simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
@@ -1458,12 +1464,12 @@ namespace LeagueSimulation
         private void game12WatchGameButton_Click(object sender, EventArgs e)
         {
             int currentSeason = league.CurrentSeason;
-            (List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][11], (int)currentDayShownNum.Value);
+            (List<string>, List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][11], (int)currentDayShownNum.Value);
             string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][11].Split(',');
             teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
             teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
             UpdateGame12Panel(teamsPlaying);
-            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
+            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, phrases.Item3, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
             if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
             else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
             simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
@@ -1473,12 +1479,12 @@ namespace LeagueSimulation
         private void game13WatchGameButton_Click(object sender, EventArgs e)
         {
             int currentSeason = league.CurrentSeason;
-            (List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][12], (int)currentDayShownNum.Value);
+            (List<string>, List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][12], (int)currentDayShownNum.Value);
             string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][12].Split(',');
             teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
             teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
             UpdateGame13Panel(teamsPlaying);
-            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
+            LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, phrases.Item3, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
             if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
             else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
             simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;

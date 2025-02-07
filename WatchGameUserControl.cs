@@ -16,15 +16,17 @@ namespace LeagueSimulation
         public League league;
         public List<string> CommentatorPhrases;
         public List<string> ScoreAfterEachPhrase;
+        public List<string> GameTimestamps;
         public int CurrentDayOfGame;
         public string HomeTeam;
         public string AwayTeam;
-        public WatchGameUserControl(League league, List<string> commentatorPhrases, List<string> scoreAfterEachPhrase, int currentDayOfGame, string homeTeam, string awayTeam)
+        public WatchGameUserControl(League league, List<string> commentatorPhrases, List<string> scoreAfterEachPhrase, List<string> gameTimestamps, int currentDayOfGame, string homeTeam, string awayTeam)
         {
             InitializeComponent();
             this.league = league;
             this.CommentatorPhrases = commentatorPhrases;
             this.ScoreAfterEachPhrase = scoreAfterEachPhrase;
+            this.GameTimestamps = gameTimestamps;
             this.CurrentDayOfGame = currentDayOfGame;
             this.HomeTeam = homeTeam;
             this.AwayTeam = awayTeam;
@@ -53,6 +55,16 @@ namespace LeagueSimulation
         private void game1WatchGameButton_Click(object sender, EventArgs e)
         {
             playbackSpeed.Value = playbackSpeed.Minimum;
+        }
+
+        private void WatchGameUserControl_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void commentatorPhrasesLabel_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

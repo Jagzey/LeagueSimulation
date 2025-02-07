@@ -99,12 +99,15 @@ namespace LeagueSimulation
                         pgs.FGA,
                         pgs.TFGM as '3PM',
                         pgs.TFGA as '3PA',
+                        pgs.FTM,
+                        pgs.FTA,
                         pgs.PTS,
                         pgs.REB,
                         pgs.AST,
                         pgs.STL,
                         pgs.BLK,
-                        pgs.TOV
+                        pgs.TOV,
+                        pgs.PF
 
                         FROM currentPlayers cp, league l
                         JOIN playerGameStats pgs ON pgs.playerId = p.playerId
@@ -150,12 +153,15 @@ namespace LeagueSimulation
                         pgs.FGA,
                         pgs.TFGM as '3PM',
                         pgs.TFGA as '3PA',
+                        pgs.FTM,
+                        pgs.FTA,
                         pgs.PTS,
                         pgs.REB,
                         pgs.AST,
                         pgs.STL,
                         pgs.BLK,
-                        pgs.TOV
+                        pgs.TOV,
+                        pgs.PF
 
                         FROM currentPlayers cp, league l
                         JOIN playerGameStats pgs ON pgs.playerId = p.playerId

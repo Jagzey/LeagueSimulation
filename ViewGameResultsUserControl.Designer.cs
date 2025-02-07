@@ -48,12 +48,15 @@
             dataGridViewTextBoxColumn8 = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn9 = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn10 = new DataGridViewTextBoxColumn();
+            team2FTM = new DataGridViewTextBoxColumn();
+            team2FTA = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn11 = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn12 = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn13 = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn14 = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn15 = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn16 = new DataGridViewTextBoxColumn();
+            team2PF = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn4 = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn6 = new DataGridViewTextBoxColumn();
             team1DataGridView = new DataGridView();
@@ -65,12 +68,15 @@
             FGA = new DataGridViewTextBoxColumn();
             TFGM = new DataGridViewTextBoxColumn();
             TFGA = new DataGridViewTextBoxColumn();
+            FTM = new DataGridViewTextBoxColumn();
+            FTA = new DataGridViewTextBoxColumn();
             PTS = new DataGridViewTextBoxColumn();
             REB = new DataGridViewTextBoxColumn();
             AST = new DataGridViewTextBoxColumn();
             STL = new DataGridViewTextBoxColumn();
             BLK = new DataGridViewTextBoxColumn();
             TOV = new DataGridViewTextBoxColumn();
+            PF = new DataGridViewTextBoxColumn();
             playstyle = new DataGridViewTextBoxColumn();
             gameValue = new DataGridViewTextBoxColumn();
             team2NameDataLabel = new Label();
@@ -88,7 +94,7 @@
             flowLayoutPanel1.Controls.Add(gameDataPanel);
             flowLayoutPanel1.Location = new Point(3, 3);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(627, 1025);
+            flowLayoutPanel1.Size = new Size(874, 1025);
             flowLayoutPanel1.TabIndex = 0;
             // 
             // gameResultPanel
@@ -96,14 +102,14 @@
             gameResultPanel.Controls.Add(gameResultLabel);
             gameResultPanel.Location = new Point(3, 3);
             gameResultPanel.Name = "gameResultPanel";
-            gameResultPanel.Size = new Size(621, 79);
+            gameResultPanel.Size = new Size(871, 79);
             gameResultPanel.TabIndex = 1;
             // 
             // gameResultLabel
             // 
             gameResultLabel.AutoSize = true;
             gameResultLabel.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            gameResultLabel.Location = new Point(24, 30);
+            gameResultLabel.Location = new Point(164, 27);
             gameResultLabel.Name = "gameResultLabel";
             gameResultLabel.Size = new Size(521, 25);
             gameResultLabel.TabIndex = 0;
@@ -117,7 +123,7 @@
             gameDataPanel.Controls.Add(team1NameDataLabel);
             gameDataPanel.Location = new Point(3, 88);
             gameDataPanel.Name = "gameDataPanel";
-            gameDataPanel.Size = new Size(621, 932);
+            gameDataPanel.Size = new Size(871, 932);
             gameDataPanel.TabIndex = 2;
             // 
             // team2DataGridView
@@ -133,7 +139,7 @@
             dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
             team2DataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             team2DataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            team2DataGridView.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn1, dataGridViewTextBoxColumn2, dataGridViewTextBoxColumn3, dataGridViewTextBoxColumn5, dataGridViewTextBoxColumn7, dataGridViewTextBoxColumn8, dataGridViewTextBoxColumn9, dataGridViewTextBoxColumn10, dataGridViewTextBoxColumn11, dataGridViewTextBoxColumn12, dataGridViewTextBoxColumn13, dataGridViewTextBoxColumn14, dataGridViewTextBoxColumn15, dataGridViewTextBoxColumn16, dataGridViewTextBoxColumn4, dataGridViewTextBoxColumn6 });
+            team2DataGridView.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn1, dataGridViewTextBoxColumn2, dataGridViewTextBoxColumn3, dataGridViewTextBoxColumn5, dataGridViewTextBoxColumn7, dataGridViewTextBoxColumn8, dataGridViewTextBoxColumn9, dataGridViewTextBoxColumn10, team2FTM, team2FTA, dataGridViewTextBoxColumn11, dataGridViewTextBoxColumn12, dataGridViewTextBoxColumn13, dataGridViewTextBoxColumn14, dataGridViewTextBoxColumn15, dataGridViewTextBoxColumn16, team2PF, dataGridViewTextBoxColumn4, dataGridViewTextBoxColumn6 });
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = SystemColors.Window;
             dataGridViewCellStyle2.Font = new Font("Segoe UI", 7F);
@@ -153,7 +159,7 @@
             dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
             dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
             team2DataGridView.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            team2DataGridView.Size = new Size(534, 352);
+            team2DataGridView.Size = new Size(808, 352);
             team2DataGridView.TabIndex = 10;
             team2DataGridView.CellClick += team2DataGridView_CellClick;
             // 
@@ -220,6 +226,22 @@
             dataGridViewTextBoxColumn10.ReadOnly = true;
             dataGridViewTextBoxColumn10.Width = 30;
             // 
+            // team2FTM
+            // 
+            team2FTM.DataPropertyName = "FTM";
+            team2FTM.HeaderText = "FTM";
+            team2FTM.Name = "team2FTM";
+            team2FTM.ReadOnly = true;
+            team2FTM.Width = 30;
+            // 
+            // team2FTA
+            // 
+            team2FTA.DataPropertyName = "FTA";
+            team2FTA.HeaderText = "FTA";
+            team2FTA.Name = "team2FTA";
+            team2FTA.ReadOnly = true;
+            team2FTA.Width = 30;
+            // 
             // dataGridViewTextBoxColumn11
             // 
             dataGridViewTextBoxColumn11.DataPropertyName = "PTS";
@@ -268,6 +290,14 @@
             dataGridViewTextBoxColumn16.ReadOnly = true;
             dataGridViewTextBoxColumn16.Width = 30;
             // 
+            // team2PF
+            // 
+            team2PF.DataPropertyName = "PF";
+            team2PF.HeaderText = "PF";
+            team2PF.Name = "team2PF";
+            team2PF.ReadOnly = true;
+            team2PF.Width = 30;
+            // 
             // dataGridViewTextBoxColumn4
             // 
             dataGridViewTextBoxColumn4.DataPropertyName = "playstyle";
@@ -297,7 +327,7 @@
             dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
             team1DataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             team1DataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            team1DataGridView.Columns.AddRange(new DataGridViewColumn[] { playerName, age, playerPosition, MP, FGM, FGA, TFGM, TFGA, PTS, REB, AST, STL, BLK, TOV, playstyle, gameValue });
+            team1DataGridView.Columns.AddRange(new DataGridViewColumn[] { playerName, age, playerPosition, MP, FGM, FGA, TFGM, TFGA, FTM, FTA, PTS, REB, AST, STL, BLK, TOV, PF, playstyle, gameValue });
             dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle5.BackColor = SystemColors.Window;
             dataGridViewCellStyle5.Font = new Font("Segoe UI", 7F);
@@ -329,7 +359,7 @@
             team1DataGridView.RowTemplate.DefaultCellStyle.ForeColor = SystemColors.WindowText;
             team1DataGridView.RowTemplate.DefaultCellStyle.SelectionBackColor = SystemColors.Highlight;
             team1DataGridView.RowTemplate.DefaultCellStyle.SelectionForeColor = SystemColors.HighlightText;
-            team1DataGridView.Size = new Size(534, 371);
+            team1DataGridView.Size = new Size(808, 371);
             team1DataGridView.TabIndex = 9;
             team1DataGridView.CellClick += team1DataGridView_CellClick;
             // 
@@ -396,6 +426,22 @@
             TFGA.ReadOnly = true;
             TFGA.Width = 30;
             // 
+            // FTM
+            // 
+            FTM.DataPropertyName = "FTM";
+            FTM.HeaderText = "FTM";
+            FTM.Name = "FTM";
+            FTM.ReadOnly = true;
+            FTM.Width = 30;
+            // 
+            // FTA
+            // 
+            FTA.DataPropertyName = "FTA";
+            FTA.HeaderText = "FTA";
+            FTA.Name = "FTA";
+            FTA.ReadOnly = true;
+            FTA.Width = 30;
+            // 
             // PTS
             // 
             PTS.DataPropertyName = "PTS";
@@ -444,6 +490,14 @@
             TOV.ReadOnly = true;
             TOV.Width = 30;
             // 
+            // PF
+            // 
+            PF.DataPropertyName = "PF";
+            PF.HeaderText = "PF";
+            PF.Name = "PF";
+            PF.ReadOnly = true;
+            PF.Width = 30;
+            // 
             // playstyle
             // 
             playstyle.DataPropertyName = "playstyle";
@@ -486,7 +540,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(flowLayoutPanel1);
             Name = "ViewGameResultsUserControl";
-            Size = new Size(630, 1080);
+            Size = new Size(880, 1080);
             flowLayoutPanel1.ResumeLayout(false);
             gameResultPanel.ResumeLayout(false);
             gameResultPanel.PerformLayout();
@@ -515,12 +569,15 @@
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn8;
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn9;
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn10;
+        private DataGridViewTextBoxColumn team2FTM;
+        private DataGridViewTextBoxColumn team2FTA;
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn11;
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn12;
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn13;
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn14;
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn15;
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn16;
+        private DataGridViewTextBoxColumn team2PF;
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
         private DataGridViewTextBoxColumn playerName;
@@ -531,12 +588,15 @@
         private DataGridViewTextBoxColumn FGA;
         private DataGridViewTextBoxColumn TFGM;
         private DataGridViewTextBoxColumn TFGA;
+        private DataGridViewTextBoxColumn FTM;
+        private DataGridViewTextBoxColumn FTA;
         private DataGridViewTextBoxColumn PTS;
         private DataGridViewTextBoxColumn REB;
         private DataGridViewTextBoxColumn AST;
         private DataGridViewTextBoxColumn STL;
         private DataGridViewTextBoxColumn BLK;
         private DataGridViewTextBoxColumn TOV;
+        private DataGridViewTextBoxColumn PF;
         private DataGridViewTextBoxColumn playstyle;
         private DataGridViewTextBoxColumn gameValue;
     }

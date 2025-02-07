@@ -15,7 +15,7 @@ namespace LeagueSimulation
             InitializeComponent();
             this.league = league;
             this.currentStat.Text = "Points";
-            FillLabels();
+            //FillLabels();
         }
 
         public void FillLabels()
@@ -31,6 +31,10 @@ namespace LeagueSimulation
                         SELECT p.playerForename, 
                         p.playerSurname,
                         t.teamName,
+                        pos.positionShort as 'pos',
+                        printf('%d''%d', p.height / 12, p.height % 12) as height,
+                        p.weight,
+                        sp.playstyle,
                         ROUND(AVG(pgs.PTS), 1) as PTS
                         FROM players p
                         JOIN playerOnTeam pot ON dayJoined <= {league.CurrentDay} AND yearJoined <= {league.CurrentSeason + 2023}
@@ -41,6 +45,8 @@ namespace LeagueSimulation
                         JOIN
                             playerGameStats pgs on pgs.playerId = p.playerId
                             AND pgs.seasonId = {league.CurrentSeason}
+                        JOIN secondaryPlaystyle sp ON sp.secondaryPlaystyleId = p.secondaryPlaystyleId
+                        JOIN position pos ON pos.positionId = p.positionId
                         GROUP BY p.playerId
                         ORDER BY PTS DESC
                         LIMIT 15
@@ -48,10 +54,29 @@ namespace LeagueSimulation
                         SQLiteDataAdapter rosterData = new SQLiteDataAdapter(getPlayerDataQuery, connection);
                         DataTable dt = new DataTable();
                         rosterData.Fill(dt);
-                        if (leagueLeaderDataGridView.ColumnCount > 3) leagueLeaderDataGridView.Columns.RemoveAt(3);
+                        if (leagueLeaderDataGridView.ColumnCount > 3)
+                        {
+                            leagueLeaderDataGridView.Columns.RemoveAt(7);
+                            leagueLeaderDataGridView.Columns.RemoveAt(6);
+                            leagueLeaderDataGridView.Columns.RemoveAt(5);
+                            leagueLeaderDataGridView.Columns.RemoveAt(4);
+                            leagueLeaderDataGridView.Columns.RemoveAt(3);
+                        }
+                        leagueLeaderDataGridView.Columns.Add("Position", "pos");
+                        leagueLeaderDataGridView.Columns[3].DataPropertyName = "pos";
+                        leagueLeaderDataGridView.Columns[3].Width = 40;
+                        leagueLeaderDataGridView.Columns.Add("Height", "Height");
+                        leagueLeaderDataGridView.Columns[4].DataPropertyName = "height";
+                        leagueLeaderDataGridView.Columns[4].Width = 60;
+                        leagueLeaderDataGridView.Columns.Add("Weight", "Weight");
+                        leagueLeaderDataGridView.Columns[5].DataPropertyName = "weight";
+                        leagueLeaderDataGridView.Columns[5].Width = 60;
+                        leagueLeaderDataGridView.Columns.Add("Playstyle", "Playstyle");
+                        leagueLeaderDataGridView.Columns[6].DataPropertyName = "playstyle";
+                        leagueLeaderDataGridView.Columns[6].Width = 100;
                         leagueLeaderDataGridView.Columns.Add("Points", "PTS");
-                        leagueLeaderDataGridView.Columns[3].DataPropertyName = "PTS";
-                        leagueLeaderDataGridView.Columns[3].Width = 50;
+                        leagueLeaderDataGridView.Columns[7].DataPropertyName = "PTS";
+                        leagueLeaderDataGridView.Columns[7].Width = 60;
                         leagueLeaderDataGridView.AutoGenerateColumns = false;
                         leagueLeaderDataGridView.DataSource = dt;
                     }
@@ -68,6 +93,10 @@ namespace LeagueSimulation
                         SELECT p.playerForename, 
                         p.playerSurname,
                         t.teamName,
+                        pos.positionShort as 'pos',
+                        printf('%d''%d', p.height / 12, p.height % 12) as height,
+                        p.weight,
+                        sp.playstyle,
                         ROUND(AVG(pgs.REB), 1) as REB
                         FROM players p
                         JOIN playerOnTeam pot ON dayJoined <= {league.CurrentDay} AND yearJoined <= {league.CurrentSeason + 2023}
@@ -78,6 +107,8 @@ namespace LeagueSimulation
                         JOIN
                             playerGameStats pgs on pgs.playerId = p.playerId
                             AND pgs.seasonId = {league.CurrentSeason}
+                        JOIN secondaryPlaystyle sp ON sp.secondaryPlaystyleId = p.secondaryPlaystyleId
+                        JOIN position pos ON pos.positionId = p.positionId
                         GROUP BY p.playerId
                         ORDER BY REB DESC
                         LIMIT 15
@@ -85,10 +116,29 @@ namespace LeagueSimulation
                         SQLiteDataAdapter rosterData = new SQLiteDataAdapter(getPlayerDataQuery, connection);
                         DataTable dt = new DataTable();
                         rosterData.Fill(dt);
-                        if (leagueLeaderDataGridView.ColumnCount > 3) leagueLeaderDataGridView.Columns.RemoveAt(3);
+                        if (leagueLeaderDataGridView.ColumnCount > 3)
+                        {
+                            leagueLeaderDataGridView.Columns.RemoveAt(7);
+                            leagueLeaderDataGridView.Columns.RemoveAt(6);
+                            leagueLeaderDataGridView.Columns.RemoveAt(5);
+                            leagueLeaderDataGridView.Columns.RemoveAt(4);
+                            leagueLeaderDataGridView.Columns.RemoveAt(3);
+                        }
+                        leagueLeaderDataGridView.Columns.Add("Position", "pos");
+                        leagueLeaderDataGridView.Columns[3].DataPropertyName = "pos";
+                        leagueLeaderDataGridView.Columns[3].Width = 40;
+                        leagueLeaderDataGridView.Columns.Add("Height", "Height");
+                        leagueLeaderDataGridView.Columns[4].DataPropertyName = "height";
+                        leagueLeaderDataGridView.Columns[4].Width = 60;
+                        leagueLeaderDataGridView.Columns.Add("Weight", "Weight");
+                        leagueLeaderDataGridView.Columns[5].DataPropertyName = "weight";
+                        leagueLeaderDataGridView.Columns[5].Width = 60;
+                        leagueLeaderDataGridView.Columns.Add("Playstyle", "Playstyle");
+                        leagueLeaderDataGridView.Columns[6].DataPropertyName = "playstyle";
+                        leagueLeaderDataGridView.Columns[6].Width = 100;
                         leagueLeaderDataGridView.Columns.Add("Rebounds", "REB");
-                        leagueLeaderDataGridView.Columns[3].DataPropertyName = "REB";
-                        leagueLeaderDataGridView.Columns[3].Width = 50;
+                        leagueLeaderDataGridView.Columns[7].DataPropertyName = "REB";
+                        leagueLeaderDataGridView.Columns[7].Width = 50;
                         leagueLeaderDataGridView.AutoGenerateColumns = false;
                         leagueLeaderDataGridView.DataSource = dt;
                     }
@@ -105,6 +155,10 @@ namespace LeagueSimulation
                         SELECT p.playerForename, 
                         p.playerSurname,
                         t.teamName,
+                        pos.positionShort as 'pos',
+                        printf('%d''%d', p.height / 12, p.height % 12) as height,
+                        p.weight,
+                        sp.playstyle,
                         ROUND(AVG(pgs.AST), 1) as AST
                         FROM players p
                         JOIN playerOnTeam pot ON dayJoined <= {league.CurrentDay} AND yearJoined <= {league.CurrentSeason + 2023}
@@ -115,6 +169,8 @@ namespace LeagueSimulation
                         JOIN
                             playerGameStats pgs on pgs.playerId = p.playerId
                             AND pgs.seasonId = {league.CurrentSeason}
+                        JOIN secondaryPlaystyle sp ON sp.secondaryPlaystyleId = p.secondaryPlaystyleId
+                        JOIN position pos ON pos.positionId = p.positionId
                         GROUP BY p.playerId
                         ORDER BY AST DESC
                         LIMIT 15
@@ -122,10 +178,29 @@ namespace LeagueSimulation
                         SQLiteDataAdapter rosterData = new SQLiteDataAdapter(getPlayerDataQuery, connection);
                         DataTable dt = new DataTable();
                         rosterData.Fill(dt);
-                        if (leagueLeaderDataGridView.ColumnCount > 3) leagueLeaderDataGridView.Columns.RemoveAt(3);
+                        if (leagueLeaderDataGridView.ColumnCount > 3)
+                        {
+                            leagueLeaderDataGridView.Columns.RemoveAt(7);
+                            leagueLeaderDataGridView.Columns.RemoveAt(6);
+                            leagueLeaderDataGridView.Columns.RemoveAt(5);
+                            leagueLeaderDataGridView.Columns.RemoveAt(4);
+                            leagueLeaderDataGridView.Columns.RemoveAt(3);
+                        }
+                        leagueLeaderDataGridView.Columns.Add("Position", "pos");
+                        leagueLeaderDataGridView.Columns[3].DataPropertyName = "pos";
+                        leagueLeaderDataGridView.Columns[3].Width = 40;
+                        leagueLeaderDataGridView.Columns.Add("Height", "Height");
+                        leagueLeaderDataGridView.Columns[4].DataPropertyName = "height";
+                        leagueLeaderDataGridView.Columns[4].Width = 60;
+                        leagueLeaderDataGridView.Columns.Add("Weight", "Weight");
+                        leagueLeaderDataGridView.Columns[5].DataPropertyName = "weight";
+                        leagueLeaderDataGridView.Columns[5].Width = 60;
+                        leagueLeaderDataGridView.Columns.Add("Playstyle", "Playstyle");
+                        leagueLeaderDataGridView.Columns[6].DataPropertyName = "playstyle";
+                        leagueLeaderDataGridView.Columns[6].Width = 100;
                         leagueLeaderDataGridView.Columns.Add("Assists", "AST");
-                        leagueLeaderDataGridView.Columns[3].DataPropertyName = "AST";
-                        leagueLeaderDataGridView.Columns[3].Width = 50;
+                        leagueLeaderDataGridView.Columns[7].DataPropertyName = "AST";
+                        leagueLeaderDataGridView.Columns[7].Width = 50;
                         leagueLeaderDataGridView.AutoGenerateColumns = false;
                         leagueLeaderDataGridView.DataSource = dt;
                     }
@@ -142,6 +217,10 @@ namespace LeagueSimulation
                         SELECT p.playerForename, 
                         p.playerSurname,
                         t.teamName,
+                        pos.positionShort as 'pos',
+                        printf('%d''%d', p.height / 12, p.height % 12) as height,
+                        p.weight,
+                        sp.playstyle,
                         ROUND(AVG(pgs.STL), 1) as STL
                         FROM players p
                         JOIN playerOnTeam pot ON dayJoined <= {league.CurrentDay} AND yearJoined <= {league.CurrentSeason + 2023}
@@ -152,6 +231,8 @@ namespace LeagueSimulation
                         JOIN
                             playerGameStats pgs on pgs.playerId = p.playerId
                             AND pgs.seasonId = {league.CurrentSeason}
+                        JOIN secondaryPlaystyle sp ON sp.secondaryPlaystyleId = p.secondaryPlaystyleId
+                        JOIN position pos ON pos.positionId = p.positionId
                         GROUP BY p.playerId
                         ORDER BY STL DESC
                         LIMIT 15
@@ -159,10 +240,29 @@ namespace LeagueSimulation
                         SQLiteDataAdapter rosterData = new SQLiteDataAdapter(getPlayerDataQuery, connection);
                         DataTable dt = new DataTable();
                         rosterData.Fill(dt);
-                        if (leagueLeaderDataGridView.ColumnCount > 3) leagueLeaderDataGridView.Columns.RemoveAt(3);
+                        if (leagueLeaderDataGridView.ColumnCount > 3)
+                        {
+                            leagueLeaderDataGridView.Columns.RemoveAt(7);
+                            leagueLeaderDataGridView.Columns.RemoveAt(6);
+                            leagueLeaderDataGridView.Columns.RemoveAt(5);
+                            leagueLeaderDataGridView.Columns.RemoveAt(4);
+                            leagueLeaderDataGridView.Columns.RemoveAt(3);
+                        }
+                        leagueLeaderDataGridView.Columns.Add("Position", "pos");
+                        leagueLeaderDataGridView.Columns[3].DataPropertyName = "pos";
+                        leagueLeaderDataGridView.Columns[3].Width = 40;
+                        leagueLeaderDataGridView.Columns.Add("Height", "Height");
+                        leagueLeaderDataGridView.Columns[4].DataPropertyName = "height";
+                        leagueLeaderDataGridView.Columns[4].Width = 60;
+                        leagueLeaderDataGridView.Columns.Add("Weight", "Weight");
+                        leagueLeaderDataGridView.Columns[5].DataPropertyName = "weight";
+                        leagueLeaderDataGridView.Columns[5].Width = 60;
+                        leagueLeaderDataGridView.Columns.Add("Playstyle", "Playstyle");
+                        leagueLeaderDataGridView.Columns[6].DataPropertyName = "playstyle";
+                        leagueLeaderDataGridView.Columns[6].Width = 100;
                         leagueLeaderDataGridView.Columns.Add("Steals", "STL");
-                        leagueLeaderDataGridView.Columns[3].DataPropertyName = "STL";
-                        leagueLeaderDataGridView.Columns[3].Width = 50;
+                        leagueLeaderDataGridView.Columns[7].DataPropertyName = "STL";
+                        leagueLeaderDataGridView.Columns[7].Width = 50;
                         leagueLeaderDataGridView.AutoGenerateColumns = false;
                         leagueLeaderDataGridView.DataSource = dt;
                     }
@@ -179,6 +279,10 @@ namespace LeagueSimulation
                         SELECT p.playerForename, 
                         p.playerSurname,
                         t.teamName,
+                        pos.positionShort as 'pos',
+                        printf('%d''%d', p.height / 12, p.height % 12) as height,
+                        p.weight,
+                        sp.playstyle,
                         ROUND(AVG(pgs.TOV), 1) as TOV
                         FROM players p
                         JOIN playerOnTeam pot ON dayJoined <= {league.CurrentDay} AND yearJoined <= {league.CurrentSeason + 2023}
@@ -189,6 +293,8 @@ namespace LeagueSimulation
                         JOIN
                             playerGameStats pgs on pgs.playerId = p.playerId
                             AND pgs.seasonId = {league.CurrentSeason}
+                        JOIN secondaryPlaystyle sp ON sp.secondaryPlaystyleId = p.secondaryPlaystyleId
+                        JOIN position pos ON pos.positionId = p.positionId
                         GROUP BY p.playerId
                         ORDER BY TOV DESC
                         LIMIT 15
@@ -196,10 +302,29 @@ namespace LeagueSimulation
                         SQLiteDataAdapter rosterData = new SQLiteDataAdapter(getPlayerDataQuery, connection);
                         DataTable dt = new DataTable();
                         rosterData.Fill(dt);
-                        if (leagueLeaderDataGridView.ColumnCount > 3) leagueLeaderDataGridView.Columns.RemoveAt(3);
+                        if (leagueLeaderDataGridView.ColumnCount > 3)
+                        {
+                            leagueLeaderDataGridView.Columns.RemoveAt(7);
+                            leagueLeaderDataGridView.Columns.RemoveAt(6);
+                            leagueLeaderDataGridView.Columns.RemoveAt(5);
+                            leagueLeaderDataGridView.Columns.RemoveAt(4);
+                            leagueLeaderDataGridView.Columns.RemoveAt(3);
+                        }
+                        leagueLeaderDataGridView.Columns.Add("Position", "pos");
+                        leagueLeaderDataGridView.Columns[3].DataPropertyName = "pos";
+                        leagueLeaderDataGridView.Columns[3].Width = 40;
+                        leagueLeaderDataGridView.Columns.Add("Height", "Height");
+                        leagueLeaderDataGridView.Columns[4].DataPropertyName = "height";
+                        leagueLeaderDataGridView.Columns[4].Width = 60;
+                        leagueLeaderDataGridView.Columns.Add("Weight", "Weight");
+                        leagueLeaderDataGridView.Columns[5].DataPropertyName = "weight";
+                        leagueLeaderDataGridView.Columns[5].Width = 60;
+                        leagueLeaderDataGridView.Columns.Add("Playstyle", "Playstyle");
+                        leagueLeaderDataGridView.Columns[6].DataPropertyName = "playstyle";
+                        leagueLeaderDataGridView.Columns[6].Width = 100;
                         leagueLeaderDataGridView.Columns.Add("Turnovers", "TOV");
-                        leagueLeaderDataGridView.Columns[3].DataPropertyName = "TOV";
-                        leagueLeaderDataGridView.Columns[3].Width = 50;
+                        leagueLeaderDataGridView.Columns[7].DataPropertyName = "TOV";
+                        leagueLeaderDataGridView.Columns[7].Width = 50;
                         leagueLeaderDataGridView.AutoGenerateColumns = false;
                         leagueLeaderDataGridView.DataSource = dt;
                     }
@@ -216,6 +341,10 @@ namespace LeagueSimulation
                         SELECT p.playerForename, 
                         p.playerSurname,
                         t.teamName,
+                        pos.positionShort as 'pos',
+                        printf('%d''%d', p.height / 12, p.height % 12) as height,
+                        p.weight,
+                        sp.playstyle,
                         ROUND(AVG(pgs.BLK), 1) as BLK
                         FROM players p
                         JOIN playerOnTeam pot ON dayJoined <= {league.CurrentDay} AND yearJoined <= {league.CurrentSeason + 2023}
@@ -226,6 +355,8 @@ namespace LeagueSimulation
                         JOIN
                             playerGameStats pgs on pgs.playerId = p.playerId
                             AND pgs.seasonId = {league.CurrentSeason}
+                        JOIN secondaryPlaystyle sp ON sp.secondaryPlaystyleId = p.secondaryPlaystyleId
+                        JOIN position pos ON pos.positionId = p.positionId
                         GROUP BY p.playerId
                         ORDER BY BLK DESC
                         LIMIT 15
@@ -233,10 +364,29 @@ namespace LeagueSimulation
                         SQLiteDataAdapter rosterData = new SQLiteDataAdapter(getPlayerDataQuery, connection);
                         DataTable dt = new DataTable();
                         rosterData.Fill(dt);
-                        if (leagueLeaderDataGridView.ColumnCount > 3) leagueLeaderDataGridView.Columns.RemoveAt(3);
+                        if (leagueLeaderDataGridView.ColumnCount > 3)
+                        {
+                            leagueLeaderDataGridView.Columns.RemoveAt(7);
+                            leagueLeaderDataGridView.Columns.RemoveAt(6);
+                            leagueLeaderDataGridView.Columns.RemoveAt(5);
+                            leagueLeaderDataGridView.Columns.RemoveAt(4);
+                            leagueLeaderDataGridView.Columns.RemoveAt(3);
+                        }
+                        leagueLeaderDataGridView.Columns.Add("Position", "pos");
+                        leagueLeaderDataGridView.Columns[3].DataPropertyName = "pos";
+                        leagueLeaderDataGridView.Columns[3].Width = 40;
+                        leagueLeaderDataGridView.Columns.Add("Height", "Height");
+                        leagueLeaderDataGridView.Columns[4].DataPropertyName = "height";
+                        leagueLeaderDataGridView.Columns[4].Width = 60;
+                        leagueLeaderDataGridView.Columns.Add("Weight", "Weight");
+                        leagueLeaderDataGridView.Columns[5].DataPropertyName = "weight";
+                        leagueLeaderDataGridView.Columns[5].Width = 60;
+                        leagueLeaderDataGridView.Columns.Add("Playstyle", "Playstyle");
+                        leagueLeaderDataGridView.Columns[6].DataPropertyName = "playstyle";
+                        leagueLeaderDataGridView.Columns[6].Width = 100;
                         leagueLeaderDataGridView.Columns.Add("Blocks", "BLK");
-                        leagueLeaderDataGridView.Columns[3].DataPropertyName = "BLK";
-                        leagueLeaderDataGridView.Columns[3].Width = 50;
+                        leagueLeaderDataGridView.Columns[7].DataPropertyName = "BLK";
+                        leagueLeaderDataGridView.Columns[7].Width = 50;
                         leagueLeaderDataGridView.AutoGenerateColumns = false;
                         leagueLeaderDataGridView.DataSource = dt;
                     }
@@ -253,6 +403,10 @@ namespace LeagueSimulation
                         SELECT p.playerForename, 
                         p.playerSurname,
                         t.teamName,
+                        pos.positionShort as 'pos',
+                        printf('%d''%d', p.height / 12, p.height % 12) as height,
+                        p.weight,
+                        sp.playstyle,
                         ROUND(AVG(pgs.gameValue), 1) as gameValue
                         FROM players p
                         JOIN playerOnTeam pot ON dayJoined <= {league.CurrentDay} AND yearJoined <= {league.CurrentSeason + 2023}
@@ -263,6 +417,8 @@ namespace LeagueSimulation
                         JOIN
                             playerGameStats pgs on pgs.playerId = p.playerId
                             AND pgs.seasonId = {league.CurrentSeason}
+                        JOIN secondaryPlaystyle sp ON sp.secondaryPlaystyleId = p.secondaryPlaystyleId
+                        JOIN position pos ON pos.positionId = p.positionId
                         GROUP BY p.playerId
                         ORDER BY gameValue DESC
                         LIMIT 15
@@ -270,9 +426,28 @@ namespace LeagueSimulation
                         SQLiteDataAdapter rosterData = new SQLiteDataAdapter(getPlayerDataQuery, connection);
                         DataTable dt = new DataTable();
                         rosterData.Fill(dt);
-                        if (leagueLeaderDataGridView.ColumnCount > 3) leagueLeaderDataGridView.Columns.RemoveAt(3);
+                        if (leagueLeaderDataGridView.ColumnCount > 3)
+                        {
+                            leagueLeaderDataGridView.Columns.RemoveAt(7);
+                            leagueLeaderDataGridView.Columns.RemoveAt(6);
+                            leagueLeaderDataGridView.Columns.RemoveAt(5);
+                            leagueLeaderDataGridView.Columns.RemoveAt(4);
+                            leagueLeaderDataGridView.Columns.RemoveAt(3);
+                        }
+                        leagueLeaderDataGridView.Columns.Add("Position", "pos");
+                        leagueLeaderDataGridView.Columns[3].DataPropertyName = "pos";
+                        leagueLeaderDataGridView.Columns[3].Width = 40;
+                        leagueLeaderDataGridView.Columns.Add("Height", "Height");
+                        leagueLeaderDataGridView.Columns[4].DataPropertyName = "height";
+                        leagueLeaderDataGridView.Columns[4].Width = 60;
+                        leagueLeaderDataGridView.Columns.Add("Weight", "Weight");
+                        leagueLeaderDataGridView.Columns[5].DataPropertyName = "weight";
+                        leagueLeaderDataGridView.Columns[5].Width = 60;
+                        leagueLeaderDataGridView.Columns.Add("Playstyle", "Playstyle");
+                        leagueLeaderDataGridView.Columns[6].DataPropertyName = "playstyle";
+                        leagueLeaderDataGridView.Columns[6].Width = 100;
                         leagueLeaderDataGridView.Columns.Add("gameValue", "Game Value");
-                        leagueLeaderDataGridView.Columns[3].DataPropertyName = "gameValue";
+                        leagueLeaderDataGridView.Columns[7].DataPropertyName = "gameValue";
                         leagueLeaderDataGridView.AutoGenerateColumns = false;
                         leagueLeaderDataGridView.DataSource = dt;
                     }
@@ -291,6 +466,10 @@ namespace LeagueSimulation
                         p.playerForename,
                         p.playerSurname,
                         t.teamName,
+                        pos.positionShort as 'pos',
+                        printf('%d''%d', p.height / 12, p.height % 12) as height,
+                        p.weight,
+                        sp.playstyle,
                         ROUND(AVG(pgs.gameValue), 1) as gameValue,
                         ROUND(AVG(pgs.REB), 1) as REB,
                         ROUND(AVG(pgs.STL), 1) as STL,
@@ -318,9 +497,28 @@ namespace LeagueSimulation
                         SQLiteDataAdapter rosterData = new SQLiteDataAdapter(getPlayerDataQuery, connection);
                         DataTable dt = new DataTable();
                         rosterData.Fill(dt);
-                        if (leagueLeaderDataGridView.ColumnCount > 3) leagueLeaderDataGridView.Columns.RemoveAt(3);
+                        if (leagueLeaderDataGridView.ColumnCount > 3)
+                        {
+                            leagueLeaderDataGridView.Columns.RemoveAt(7);
+                            leagueLeaderDataGridView.Columns.RemoveAt(6);
+                            leagueLeaderDataGridView.Columns.RemoveAt(5);
+                            leagueLeaderDataGridView.Columns.RemoveAt(4);
+                            leagueLeaderDataGridView.Columns.RemoveAt(3);
+                        }
+                        leagueLeaderDataGridView.Columns.Add("Position", "pos");
+                        leagueLeaderDataGridView.Columns[3].DataPropertyName = "pos";
+                        leagueLeaderDataGridView.Columns[3].Width = 40;
+                        leagueLeaderDataGridView.Columns.Add("Height", "Height");
+                        leagueLeaderDataGridView.Columns[4].DataPropertyName = "height";
+                        leagueLeaderDataGridView.Columns[4].Width = 60;
+                        leagueLeaderDataGridView.Columns.Add("Weight", "Weight");
+                        leagueLeaderDataGridView.Columns[5].DataPropertyName = "weight";
+                        leagueLeaderDataGridView.Columns[5].Width = 60;
+                        leagueLeaderDataGridView.Columns.Add("Playstyle", "Playstyle");
+                        leagueLeaderDataGridView.Columns[6].DataPropertyName = "playstyle";
+                        leagueLeaderDataGridView.Columns[6].Width = 100;
                         leagueLeaderDataGridView.Columns.Add("defenseValue", "Defense Value");
-                        leagueLeaderDataGridView.Columns[3].DataPropertyName = "defenseValue";
+                        leagueLeaderDataGridView.Columns[7].DataPropertyName = "defenseValue";
                         leagueLeaderDataGridView.AutoGenerateColumns = false;
                         leagueLeaderDataGridView.DataSource = dt;
                     }
