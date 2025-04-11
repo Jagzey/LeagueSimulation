@@ -181,7 +181,7 @@
             // game1ViewGameResults
             // 
             game1ViewGameResults.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game1ViewGameResults.Location = new Point(47, 68);
+            game1ViewGameResults.Location = new Point(619, 92);
             game1ViewGameResults.Name = "game1ViewGameResults";
             game1ViewGameResults.Size = new Size(196, 40);
             game1ViewGameResults.TabIndex = 3;
@@ -192,7 +192,7 @@
             // game1SimGameButton
             // 
             game1SimGameButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game1SimGameButton.Location = new Point(911, 86);
+            game1SimGameButton.Location = new Point(458, 92);
             game1SimGameButton.Name = "game1SimGameButton";
             game1SimGameButton.Size = new Size(135, 40);
             game1SimGameButton.TabIndex = 2;
@@ -203,7 +203,7 @@
             // game1WatchGameButton
             // 
             game1WatchGameButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game1WatchGameButton.Location = new Point(911, 16);
+            game1WatchGameButton.Location = new Point(282, 92);
             game1WatchGameButton.Name = "game1WatchGameButton";
             game1WatchGameButton.Size = new Size(135, 40);
             game1WatchGameButton.TabIndex = 1;
@@ -215,7 +215,7 @@
             // 
             game1TeamsLabel.AutoSize = true;
             game1TeamsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game1TeamsLabel.Location = new Point(320, 79);
+            game1TeamsLabel.Location = new Point(320, 54);
             game1TeamsLabel.Name = "game1TeamsLabel";
             game1TeamsLabel.Size = new Size(396, 21);
             game1TeamsLabel.TabIndex = 0;
@@ -246,7 +246,7 @@
             // game2ViewGameResults
             // 
             game2ViewGameResults.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game2ViewGameResults.Location = new Point(47, 76);
+            game2ViewGameResults.Location = new Point(619, 95);
             game2ViewGameResults.Name = "game2ViewGameResults";
             game2ViewGameResults.Size = new Size(196, 40);
             game2ViewGameResults.TabIndex = 7;
@@ -257,7 +257,7 @@
             // game2SimGameButton
             // 
             game2SimGameButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game2SimGameButton.Location = new Point(911, 87);
+            game2SimGameButton.Location = new Point(458, 95);
             game2SimGameButton.Name = "game2SimGameButton";
             game2SimGameButton.Size = new Size(135, 40);
             game2SimGameButton.TabIndex = 6;
@@ -268,7 +268,7 @@
             // game2WatchGameButton
             // 
             game2WatchGameButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game2WatchGameButton.Location = new Point(911, 17);
+            game2WatchGameButton.Location = new Point(282, 95);
             game2WatchGameButton.Name = "game2WatchGameButton";
             game2WatchGameButton.Size = new Size(135, 40);
             game2WatchGameButton.TabIndex = 5;
@@ -280,7 +280,7 @@
             // 
             game2TeamsLabel.AutoSize = true;
             game2TeamsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game2TeamsLabel.Location = new Point(320, 87);
+            game2TeamsLabel.Location = new Point(320, 61);
             game2TeamsLabel.Name = "game2TeamsLabel";
             game2TeamsLabel.Size = new Size(396, 21);
             game2TeamsLabel.TabIndex = 4;
@@ -311,7 +311,7 @@
             // game3ViewGameResults
             // 
             game3ViewGameResults.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game3ViewGameResults.Location = new Point(47, 75);
+            game3ViewGameResults.Location = new Point(619, 97);
             game3ViewGameResults.Name = "game3ViewGameResults";
             game3ViewGameResults.Size = new Size(196, 40);
             game3ViewGameResults.TabIndex = 7;
@@ -322,7 +322,7 @@
             // game3SimGameButton
             // 
             game3SimGameButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game3SimGameButton.Location = new Point(911, 87);
+            game3SimGameButton.Location = new Point(458, 97);
             game3SimGameButton.Name = "game3SimGameButton";
             game3SimGameButton.Size = new Size(135, 40);
             game3SimGameButton.TabIndex = 6;
@@ -333,7 +333,7 @@
             // game3WatchGameButton
             // 
             game3WatchGameButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game3WatchGameButton.Location = new Point(911, 17);
+            game3WatchGameButton.Location = new Point(282, 97);
             game3WatchGameButton.Name = "game3WatchGameButton";
             game3WatchGameButton.Size = new Size(135, 40);
             game3WatchGameButton.TabIndex = 5;
@@ -345,7 +345,7 @@
             // 
             game3TeamsLabel.AutoSize = true;
             game3TeamsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game3TeamsLabel.Location = new Point(320, 86);
+            game3TeamsLabel.Location = new Point(320, 60);
             game3TeamsLabel.Name = "game3TeamsLabel";
             game3TeamsLabel.Size = new Size(396, 21);
             game3TeamsLabel.TabIndex = 4;
@@ -376,7 +376,7 @@
             // game4ViewGameResults
             // 
             game4ViewGameResults.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game4ViewGameResults.Location = new Point(47, 68);
+            game4ViewGameResults.Location = new Point(619, 100);
             game4ViewGameResults.Name = "game4ViewGameResults";
             game4ViewGameResults.Size = new Size(196, 40);
             game4ViewGameResults.TabIndex = 7;
@@ -387,7 +387,7 @@
             // game4SimGameButton
             // 
             game4SimGameButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game4SimGameButton.Location = new Point(911, 87);
+            game4SimGameButton.Location = new Point(458, 100);
             game4SimGameButton.Name = "game4SimGameButton";
             game4SimGameButton.Size = new Size(135, 40);
             game4SimGameButton.TabIndex = 6;
@@ -398,7 +398,7 @@
             // game4WatchGameButton
             // 
             game4WatchGameButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game4WatchGameButton.Location = new Point(911, 17);
+            game4WatchGameButton.Location = new Point(282, 100);
             game4WatchGameButton.Name = "game4WatchGameButton";
             game4WatchGameButton.Size = new Size(135, 40);
             game4WatchGameButton.TabIndex = 5;
@@ -410,7 +410,7 @@
             // 
             game4TeamsLabel.AutoSize = true;
             game4TeamsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game4TeamsLabel.Location = new Point(320, 79);
+            game4TeamsLabel.Location = new Point(320, 59);
             game4TeamsLabel.Name = "game4TeamsLabel";
             game4TeamsLabel.Size = new Size(396, 21);
             game4TeamsLabel.TabIndex = 4;
@@ -441,7 +441,7 @@
             // game5ViewGameResults
             // 
             game5ViewGameResults.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game5ViewGameResults.Location = new Point(47, 70);
+            game5ViewGameResults.Location = new Point(619, 95);
             game5ViewGameResults.Name = "game5ViewGameResults";
             game5ViewGameResults.Size = new Size(196, 40);
             game5ViewGameResults.TabIndex = 7;
@@ -452,7 +452,7 @@
             // game5SimGameButton
             // 
             game5SimGameButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game5SimGameButton.Location = new Point(911, 95);
+            game5SimGameButton.Location = new Point(458, 95);
             game5SimGameButton.Name = "game5SimGameButton";
             game5SimGameButton.Size = new Size(135, 40);
             game5SimGameButton.TabIndex = 6;
@@ -463,7 +463,7 @@
             // game5WatchGameButton
             // 
             game5WatchGameButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game5WatchGameButton.Location = new Point(911, 25);
+            game5WatchGameButton.Location = new Point(282, 95);
             game5WatchGameButton.Name = "game5WatchGameButton";
             game5WatchGameButton.Size = new Size(135, 40);
             game5WatchGameButton.TabIndex = 5;
@@ -475,7 +475,7 @@
             // 
             game5TeamsLabel.AutoSize = true;
             game5TeamsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game5TeamsLabel.Location = new Point(320, 81);
+            game5TeamsLabel.Location = new Point(320, 59);
             game5TeamsLabel.Name = "game5TeamsLabel";
             game5TeamsLabel.Size = new Size(396, 21);
             game5TeamsLabel.TabIndex = 4;
@@ -506,7 +506,7 @@
             // game6ViewGameResults
             // 
             game6ViewGameResults.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game6ViewGameResults.Location = new Point(47, 49);
+            game6ViewGameResults.Location = new Point(619, 98);
             game6ViewGameResults.Name = "game6ViewGameResults";
             game6ViewGameResults.Size = new Size(196, 40);
             game6ViewGameResults.TabIndex = 7;
@@ -517,7 +517,7 @@
             // game6SimGameButton
             // 
             game6SimGameButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game6SimGameButton.Location = new Point(911, 87);
+            game6SimGameButton.Location = new Point(458, 98);
             game6SimGameButton.Name = "game6SimGameButton";
             game6SimGameButton.Size = new Size(135, 40);
             game6SimGameButton.TabIndex = 6;
@@ -528,7 +528,7 @@
             // game6WatchGameButton
             // 
             game6WatchGameButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game6WatchGameButton.Location = new Point(911, 17);
+            game6WatchGameButton.Location = new Point(282, 98);
             game6WatchGameButton.Name = "game6WatchGameButton";
             game6WatchGameButton.Size = new Size(135, 40);
             game6WatchGameButton.TabIndex = 5;
@@ -571,7 +571,7 @@
             // game7ViewGameResults
             // 
             game7ViewGameResults.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game7ViewGameResults.Location = new Point(47, 76);
+            game7ViewGameResults.Location = new Point(619, 95);
             game7ViewGameResults.Name = "game7ViewGameResults";
             game7ViewGameResults.Size = new Size(196, 40);
             game7ViewGameResults.TabIndex = 7;
@@ -582,7 +582,7 @@
             // game7SimGameButton
             // 
             game7SimGameButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game7SimGameButton.Location = new Point(911, 87);
+            game7SimGameButton.Location = new Point(458, 95);
             game7SimGameButton.Name = "game7SimGameButton";
             game7SimGameButton.Size = new Size(135, 40);
             game7SimGameButton.TabIndex = 6;
@@ -593,7 +593,7 @@
             // game7WatchGameButton
             // 
             game7WatchGameButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game7WatchGameButton.Location = new Point(911, 17);
+            game7WatchGameButton.Location = new Point(282, 95);
             game7WatchGameButton.Name = "game7WatchGameButton";
             game7WatchGameButton.Size = new Size(135, 40);
             game7WatchGameButton.TabIndex = 5;
@@ -605,7 +605,7 @@
             // 
             game7TeamsLabel.AutoSize = true;
             game7TeamsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game7TeamsLabel.Location = new Point(320, 87);
+            game7TeamsLabel.Location = new Point(320, 56);
             game7TeamsLabel.Name = "game7TeamsLabel";
             game7TeamsLabel.Size = new Size(396, 21);
             game7TeamsLabel.TabIndex = 4;
@@ -636,7 +636,7 @@
             // game8ViewGameResults
             // 
             game8ViewGameResults.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game8ViewGameResults.Location = new Point(47, 67);
+            game8ViewGameResults.Location = new Point(619, 101);
             game8ViewGameResults.Name = "game8ViewGameResults";
             game8ViewGameResults.Size = new Size(196, 40);
             game8ViewGameResults.TabIndex = 7;
@@ -647,7 +647,7 @@
             // game8SimGameButton
             // 
             game8SimGameButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game8SimGameButton.Location = new Point(911, 95);
+            game8SimGameButton.Location = new Point(458, 101);
             game8SimGameButton.Name = "game8SimGameButton";
             game8SimGameButton.Size = new Size(135, 40);
             game8SimGameButton.TabIndex = 6;
@@ -658,7 +658,7 @@
             // game8WatchGameButton
             // 
             game8WatchGameButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game8WatchGameButton.Location = new Point(911, 25);
+            game8WatchGameButton.Location = new Point(282, 101);
             game8WatchGameButton.Name = "game8WatchGameButton";
             game8WatchGameButton.Size = new Size(135, 40);
             game8WatchGameButton.TabIndex = 5;
@@ -670,7 +670,7 @@
             // 
             game8TeamsLabel.AutoSize = true;
             game8TeamsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game8TeamsLabel.Location = new Point(320, 78);
+            game8TeamsLabel.Location = new Point(320, 67);
             game8TeamsLabel.Name = "game8TeamsLabel";
             game8TeamsLabel.Size = new Size(396, 21);
             game8TeamsLabel.TabIndex = 4;
@@ -701,7 +701,7 @@
             // game9ViewGameResults
             // 
             game9ViewGameResults.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game9ViewGameResults.Location = new Point(47, 67);
+            game9ViewGameResults.Location = new Point(619, 102);
             game9ViewGameResults.Name = "game9ViewGameResults";
             game9ViewGameResults.Size = new Size(196, 40);
             game9ViewGameResults.TabIndex = 7;
@@ -712,7 +712,7 @@
             // game9SimGameButton
             // 
             game9SimGameButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game9SimGameButton.Location = new Point(911, 95);
+            game9SimGameButton.Location = new Point(458, 102);
             game9SimGameButton.Name = "game9SimGameButton";
             game9SimGameButton.Size = new Size(135, 40);
             game9SimGameButton.TabIndex = 6;
@@ -723,7 +723,7 @@
             // game9WatchGameButton
             // 
             game9WatchGameButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game9WatchGameButton.Location = new Point(911, 25);
+            game9WatchGameButton.Location = new Point(282, 102);
             game9WatchGameButton.Name = "game9WatchGameButton";
             game9WatchGameButton.Size = new Size(135, 40);
             game9WatchGameButton.TabIndex = 5;
@@ -735,7 +735,7 @@
             // 
             game9TeamsLabel.AutoSize = true;
             game9TeamsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game9TeamsLabel.Location = new Point(320, 78);
+            game9TeamsLabel.Location = new Point(320, 67);
             game9TeamsLabel.Name = "game9TeamsLabel";
             game9TeamsLabel.Size = new Size(396, 21);
             game9TeamsLabel.TabIndex = 4;
@@ -766,7 +766,7 @@
             // game10ViewGameResults
             // 
             game10ViewGameResults.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game10ViewGameResults.Location = new Point(47, 76);
+            game10ViewGameResults.Location = new Point(619, 100);
             game10ViewGameResults.Name = "game10ViewGameResults";
             game10ViewGameResults.Size = new Size(196, 40);
             game10ViewGameResults.TabIndex = 7;
@@ -777,7 +777,7 @@
             // game10SimGameButton
             // 
             game10SimGameButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game10SimGameButton.Location = new Point(911, 87);
+            game10SimGameButton.Location = new Point(458, 100);
             game10SimGameButton.Name = "game10SimGameButton";
             game10SimGameButton.Size = new Size(135, 40);
             game10SimGameButton.TabIndex = 6;
@@ -788,7 +788,7 @@
             // game10WatchGameButton
             // 
             game10WatchGameButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game10WatchGameButton.Location = new Point(911, 17);
+            game10WatchGameButton.Location = new Point(282, 100);
             game10WatchGameButton.Name = "game10WatchGameButton";
             game10WatchGameButton.Size = new Size(135, 40);
             game10WatchGameButton.TabIndex = 5;
@@ -800,7 +800,7 @@
             // 
             game10TeamsLabel.AutoSize = true;
             game10TeamsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game10TeamsLabel.Location = new Point(320, 87);
+            game10TeamsLabel.Location = new Point(320, 54);
             game10TeamsLabel.Name = "game10TeamsLabel";
             game10TeamsLabel.Size = new Size(396, 21);
             game10TeamsLabel.TabIndex = 4;
@@ -831,7 +831,7 @@
             // game11ViewGameResults
             // 
             game11ViewGameResults.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game11ViewGameResults.Location = new Point(47, 67);
+            game11ViewGameResults.Location = new Point(619, 99);
             game11ViewGameResults.Name = "game11ViewGameResults";
             game11ViewGameResults.Size = new Size(196, 40);
             game11ViewGameResults.TabIndex = 7;
@@ -842,7 +842,7 @@
             // game11SimGameButton
             // 
             game11SimGameButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game11SimGameButton.Location = new Point(911, 87);
+            game11SimGameButton.Location = new Point(458, 99);
             game11SimGameButton.Name = "game11SimGameButton";
             game11SimGameButton.Size = new Size(135, 40);
             game11SimGameButton.TabIndex = 6;
@@ -853,7 +853,7 @@
             // game11WatchGameButton
             // 
             game11WatchGameButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game11WatchGameButton.Location = new Point(911, 17);
+            game11WatchGameButton.Location = new Point(282, 99);
             game11WatchGameButton.Name = "game11WatchGameButton";
             game11WatchGameButton.Size = new Size(135, 40);
             game11WatchGameButton.TabIndex = 5;
@@ -865,7 +865,7 @@
             // 
             game11TeamsLabel.AutoSize = true;
             game11TeamsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game11TeamsLabel.Location = new Point(320, 78);
+            game11TeamsLabel.Location = new Point(320, 53);
             game11TeamsLabel.Name = "game11TeamsLabel";
             game11TeamsLabel.Size = new Size(396, 21);
             game11TeamsLabel.TabIndex = 4;
@@ -896,7 +896,7 @@
             // game12ViewGameResults
             // 
             game12ViewGameResults.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game12ViewGameResults.Location = new Point(47, 67);
+            game12ViewGameResults.Location = new Point(619, 94);
             game12ViewGameResults.Name = "game12ViewGameResults";
             game12ViewGameResults.Size = new Size(196, 40);
             game12ViewGameResults.TabIndex = 7;
@@ -907,7 +907,7 @@
             // game12SimGameButton
             // 
             game12SimGameButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game12SimGameButton.Location = new Point(911, 87);
+            game12SimGameButton.Location = new Point(458, 94);
             game12SimGameButton.Name = "game12SimGameButton";
             game12SimGameButton.Size = new Size(135, 40);
             game12SimGameButton.TabIndex = 6;
@@ -918,7 +918,7 @@
             // game12WatchGameButton
             // 
             game12WatchGameButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game12WatchGameButton.Location = new Point(911, 17);
+            game12WatchGameButton.Location = new Point(282, 94);
             game12WatchGameButton.Name = "game12WatchGameButton";
             game12WatchGameButton.Size = new Size(135, 40);
             game12WatchGameButton.TabIndex = 5;
@@ -930,7 +930,7 @@
             // 
             game12TeamsLabel.AutoSize = true;
             game12TeamsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game12TeamsLabel.Location = new Point(320, 78);
+            game12TeamsLabel.Location = new Point(320, 51);
             game12TeamsLabel.Name = "game12TeamsLabel";
             game12TeamsLabel.Size = new Size(396, 21);
             game12TeamsLabel.TabIndex = 4;
@@ -961,7 +961,7 @@
             // game13ViewGameResults
             // 
             game13ViewGameResults.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game13ViewGameResults.Location = new Point(47, 67);
+            game13ViewGameResults.Location = new Point(619, 102);
             game13ViewGameResults.Name = "game13ViewGameResults";
             game13ViewGameResults.Size = new Size(196, 40);
             game13ViewGameResults.TabIndex = 7;
@@ -972,7 +972,7 @@
             // game13SimGameButton
             // 
             game13SimGameButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game13SimGameButton.Location = new Point(911, 95);
+            game13SimGameButton.Location = new Point(458, 102);
             game13SimGameButton.Name = "game13SimGameButton";
             game13SimGameButton.Size = new Size(135, 40);
             game13SimGameButton.TabIndex = 6;
@@ -983,7 +983,7 @@
             // game13WatchGameButton
             // 
             game13WatchGameButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game13WatchGameButton.Location = new Point(911, 25);
+            game13WatchGameButton.Location = new Point(282, 102);
             game13WatchGameButton.Name = "game13WatchGameButton";
             game13WatchGameButton.Size = new Size(135, 40);
             game13WatchGameButton.TabIndex = 5;
@@ -995,7 +995,7 @@
             // 
             game13TeamsLabel.AutoSize = true;
             game13TeamsLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game13TeamsLabel.Location = new Point(320, 78);
+            game13TeamsLabel.Location = new Point(320, 67);
             game13TeamsLabel.Name = "game13TeamsLabel";
             game13TeamsLabel.Size = new Size(396, 21);
             game13TeamsLabel.TabIndex = 4;

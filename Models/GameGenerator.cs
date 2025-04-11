@@ -1,6 +1,4 @@
 ﻿using System.Data.SQLite;
-using System.Runtime.Intrinsics.X86;
-using System.Security.Permissions;
 
 namespace LeagueSimulation.Models
 {
@@ -50,8 +48,55 @@ namespace LeagueSimulation.Models
                     WITH currentPlayers AS (
 	                    SELECT playerId, teamId
 	                    FROM playerOnTeam
-	                    WHERE dayJoined <= {CurrentLeague.CurrentDay} AND yearJoined <= {CurrentLeague.CurrentSeason + 2023}
+	                    WHERE ((dayJoined <= {CurrentLeague.CurrentDay} AND yearJoined = {CurrentLeague.CurrentSeason + 2023}) OR (yearJoined < {CurrentLeague.CurrentSeason + 2023}))
 	                    AND dayLeft >= {CurrentLeague.CurrentDay} AND yearLeft >= {CurrentLeague.CurrentSeason + 2023}
+                    )
+                    SELECT 
+                    p.playerId,
+                    p.height,
+                    p.weight,
+                    p.playerForename,
+                    p.playerSurname,
+                    p.closeShot,
+                    p.layup,
+                    p.dunk,
+                    p.midRange,
+                    p.threePoint,
+                    p.freeThrow,
+                    p.passing,
+                    p.ballHandle,
+                    p.defense,
+                    p.steal,
+                    p.block,
+                    p.rebound,
+                    p.speed,
+                    p.strength,
+                    p.stamina,
+                    p.overall,
+                    cp.teamId,
+                    pos.positionShort AS positionShort,
+                    sp.playstyle AS secondaryPlaystyle,
+                    pp.playstyle AS primaryPlaystyle
+                    FROM
+                        currentPlayers cp
+                    JOIN
+                        players p ON p.playerId = cp.playerId
+                    LEFT JOIN
+                        position pos ON p.positionId = pos.positionId
+                    LEFT JOIN
+                        secondaryPlaystyle sp ON p.secondaryPlaystyleId = sp.secondaryPlaystyleId
+                    LEFT JOIN
+                        primaryPlaystyle pp ON sp.primaryPlaystyleId = pp.primaryPlaystyleId
+                    WHERE
+                        cp.teamId = {team1.TeamId}
+                        OR cp.teamId = {team2.TeamId};
+                ";
+                if (CurrentLeague.Playoffs) teamPlayersQuery = $@"
+                    WITH currentPlayers AS (
+	                    SELECT playerId, teamId
+	                    FROM playerOnTeam
+	                    WHERE ((dayJoined <= 150 AND yearJoined = {CurrentLeague.CurrentSeason + 2023}) OR (yearJoined < {CurrentLeague.CurrentSeason + 2023}))
+	                    AND (dayLeft >= 150 AND yearLeft >= {CurrentLeague.CurrentSeason + 2023})
                     )
                     SELECT 
                     p.playerId,
@@ -112,7 +157,6 @@ namespace LeagueSimulation.Models
                             player.playerForename = reader.GetString(reader.GetOrdinal("playerForename"));
                             player.playerSurname = reader.GetString(reader.GetOrdinal("playerSurname"));
                             player.TeamId = reader.GetInt32(reader.GetOrdinal("teamId"));
-                            player.teamName = team1.teamName;
                             player.CloseShot = reader.GetInt32(reader.GetOrdinal("closeShot"));
                             player.Layup = reader.GetInt32(reader.GetOrdinal("layup"));
                             player.Dunk = reader.GetInt32(reader.GetOrdinal("dunk"));
@@ -160,8 +204,90 @@ namespace LeagueSimulation.Models
                 FROM 
                     playerOnTeam pot
                 WHERE 
-                    dayJoined <= {CurrentLeague.CurrentDay} AND yearJoined <= {CurrentLeague.CurrentSeason + 2023}
+                    ((dayJoined <= {CurrentLeague.CurrentDay} AND yearJoined = {CurrentLeague.CurrentSeason + 2023}) OR (yearJoined < {CurrentLeague.CurrentSeason + 2023}))
                     AND dayLeft >= {CurrentLeague.CurrentDay} AND yearLeft >= {CurrentLeague.CurrentSeason + 2023}
+            ),
+            RankedByPosition AS (
+                SELECT
+                    p.playerId,
+                    p.teamId,
+                    p.positionId,
+                    p.overall,
+                    ROW_NUMBER() OVER (
+                        PARTITION BY p.positionId
+                        ORDER BY p.overall DESC
+                    ) AS positionRank
+                FROM
+                    currentPlayers cp
+                JOIN
+                    teams t ON cp.teamId = t.teamId
+                JOIN
+                    players p ON p.playerId = cp.playerId
+                WHERE
+                    cp.teamId = {teamId} -- Filter by the given team
+            ),
+            TopFive AS (
+                SELECT
+                    rbp.playerId,
+                    rbp.teamId,
+                    rbp.positionId,
+                    rbp.overall,
+                    rbp.positionRank,
+                    ROW_NUMBER() OVER (
+                        ORDER BY rbp.positionId, rbp.overall DESC
+                    ) AS rosterSpot
+                FROM
+                    RankedByPosition rbp
+                WHERE
+                    rbp.positionRank = 1 -- Only the top player in each position
+                LIMIT 5 -- Ensure exactly 5 players (one per position)
+            ),
+            RemainingPlayers AS (
+                SELECT
+                    rbp.playerId,
+                    rbp.teamId,
+                    rbp.positionId,
+                    rbp.overall,
+                    rbp.positionRank,
+                    ROW_NUMBER() OVER (
+                        ORDER BY rbp.positionId, rbp.overall DESC
+                    ) + 5 AS rosterSpot
+                FROM
+                    RankedByPosition rbp
+                JOIN
+                    players p ON p.playerId = rbp.playerId
+                JOIN
+                    teams t ON p.teamId = t.teamId
+                WHERE 
+                    rbp.positionRank > 1
+                --LIMIT 10 -- Only include the remaining 10 players
+            )
+            SELECT
+                playerId,
+                teamId,
+                positionId,
+                overall,
+                rosterSpot
+            FROM (
+                SELECT * FROM TopFive
+                UNION ALL
+                SELECT * FROM RemainingPlayers
+            ) rosteredPlayers
+            ORDER BY
+                rosterSpot;
+
+                ";
+            if (CurrentLeague.Playoffs) getRosterSpotQuery = $@"
+                WITH currentPlayers AS (
+                SELECT 
+                    playerId, 
+                    teamId
+                FROM 
+                    playerOnTeam pot
+                WHERE 
+                    ((dayJoined <= 150 AND yearJoined = {CurrentLeague.CurrentSeason + 2023}) OR (yearJoined < {CurrentLeague.CurrentSeason + 2023}))
+                    AND (dayLeft >= 150 AND yearLeft >= {CurrentLeague.CurrentSeason + 2023})
+                    AND pot.teamId = {teamId}
             ),
             RankedByPosition AS (
                 SELECT
@@ -176,11 +302,11 @@ namespace LeagueSimulation.Models
                 FROM
                     players p
                 JOIN
-                    teams t ON p.teamId = t.teamId
+                    teams t ON cp.teamId = t.teamId
                 JOIN
                     currentPlayers cp ON p.playerId = cp.playerId
                 WHERE
-                    p.teamId = {teamId} -- Filter by the given team
+                    cp.teamId = {teamId} -- Filter by the given team
             ),
             TopFive AS (
                 SELECT
@@ -278,21 +404,6 @@ namespace LeagueSimulation.Models
                 {
                     team2StarterStats.Add(player);
                 }
-            }
-        }
-
-        private void AddStartersIntoInGame()
-        {
-            foreach (Player player in team1Starters)
-            {
-                PlayerInGame playerInGame = new PlayerInGame(player);
-                team1StarterStats.Add(playerInGame);
-            }
-
-            foreach (Player player in team2Starters)
-            {
-                PlayerInGame playerInGame = new PlayerInGame(player);
-                team2StarterStats.Add(playerInGame);
             }
         }
 
@@ -513,6 +624,12 @@ namespace LeagueSimulation.Models
                                 break;
                             }
                         }
+
+                        // we say who starts the offense
+                        string currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                        CommentatorPhrases.Add($"{playerWithBall.playerStats.playerForename} {playerWithBall.playerStats.playerSurname} starts the offense for the {playerWithBall.playerStats.teamName}");
+                        ScoreAfterEachPhrase.Add(currentScore);
+                        GameTimestamps.Add(gameClock.PrintTime());
                     }
 
                     // we set the playerWithBall and his matchup's name, for the commentator phrases
@@ -526,32 +643,32 @@ namespace LeagueSimulation.Models
 
                     double prob3PAttempted = 0;
                     // events after a 3 point is attempted
-                    double prob3PMade = 0.37;
+                    double prob3PMade = 0.35;
                     double prob3PBlocked = 0.01;
                     double prob3PMissed = 0.65;
 
                     double prob2PAttempted = 0;
                     // events after a 2 point is attempted
-                    double prob2PMade = 0.41;
+                    double prob2PMade = 0.38;
                     double prob2PBlocked = 0.006;
                     double prob2PMissed = 0.586;
 
                     double probLayupAttempted = 0;
                     // events after a layup is attempted
-                    double probLayupMade = 0.55;
+                    double probLayupMade = 0.51;
                     double probLayupBlocked = 0.062;
                     double probLayupMissed = 0.418;
 
                     double probDunkAttempted = 0;
                     // events after a dunk is attempted
-                    double probDunkMade = 0.55;
+                    double probDunkMade = 0.51;
                     double probDunkBlocked = 0.05;
                     double probDunkMissed = 0.50;
 
                     double probPassAttempted = 0;
                     //events after a pass is attempted
-                    double probPassMade = 0.938;
-                    double probPassStolen = 0.062;
+                    double probPassMade = 0.900;
+                    double probPassStolen = 0.100;
 
                     double passerContribution = 1;
                     // this checks if we aren't at a starting possesion, and the player who passed, isn't the player with the ball
@@ -559,7 +676,7 @@ namespace LeagueSimulation.Models
                     if (playerWhoPassed != null && playerWhoPassed != playerWithBall && playerWhoPassed.playerStats.TeamId == playerWithBall.playerStats.TeamId)
                     {
                         // convert pass from (45 - 99) to (0 - 0.27)
-                        passerContribution += 0.30 * (playerWhoPassed.playerStats.Passing - 45) / (99 - 45);
+                        passerContribution += 0.28 * (playerWhoPassed.playerStats.Passing - 45) / (99 - 45);
                         passerContribution += playerWhoPassed.Assists * 0.002 / 1.176;
                     }
                     if (passerContribution > 1.18) { }
@@ -598,27 +715,26 @@ namespace LeagueSimulation.Models
                             double dDefenseStat = playerWithBallMatchup.playerStats.Defense;
 
                             // convert 3 point stat (40-99) to (-0.12 - 0.12)
-                            oThreePointStat = -0.11 + (0.11 + 0.11) * (oThreePointStat - 40) / (99 - 40);
-                            if (playerWithBall.ThreePointMade > 3 && playerWithBall.GameValue > 14 && playerWithBall.playerStats.SecondaryPlaystyle != "Playmaker" && playerWithBall.playerStats.PrimaryPlaystyle == "Offensive") oThreePointStat += 0.020 + 0.002 * (playerWithBall.ThreePointMade - 2);
+                            oThreePointStat = -0.09 + (0.09 + 0.09) * (oThreePointStat - 40) / (99 - 40);
                             if (playerWithBall.ThreePointMade > 10) oThreePointStat -= 0.0007 * (playerWithBall.FieldGoalMade - 10);
                             // convert height difference (-8 - 8) to (-0.07 to 0.07)
                             heightDifference = -0.07 + (0.07 + 0.07) * (heightDifference + 8) / (8 + 8);
                             // convert block stat (40-99) to (-0.009 - 0.045)
                             dBlockStat = -0.009 + (0.045 + 0.009) * (dBlockStat - 40) / (99 - 40);
                             // convert defense stat (40-99) to (-0.10 - 0.10)
-                            dDefenseStat = -0.10 + (0.10 + 0.10) * (dDefenseStat - 40) / (99 - 40);
+                            dDefenseStat = -0.09 + (0.09 + 0.09) * (dDefenseStat - 40) / (99 - 40);
                             dDefenseStat *= -1;
 
                             // this sets the probabilities of the forthcoming events
                             prob3PMade += oThreePointStat + heightDifference + dDefenseStat;
-                            prob3PMade *= passerContribution;
+                            prob3PMade *= passerContribution * 0.99;
                             prob3PBlocked += dBlockStat;
                             probFoulAfterShot += 0.02;
                             if (probFoulAfterShot < 0) probFoulAfterShot = 0;
                             prob3PMissed = 1 - (prob3PMade + prob3PBlocked);
 
 
-                            
+
                             double randomThreePointProbability = random.NextDouble();
                             // this occurs if the player is fouled on their three
                             if (randomThreePointProbability < probFoulAfterShot)
@@ -658,7 +774,7 @@ namespace LeagueSimulation.Models
                                     GameTimestamps.Add(gameClock.PrintTime());
                                     // now we have a live free throw for the player fouled
                                     {
-                                        double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01;
+                                        double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01 - 0.1;
                                         // if the free throw is made
                                         if (random.NextDouble() < randomFreeThrowProbability)
                                         {
@@ -699,10 +815,10 @@ namespace LeagueSimulation.Models
                                         }
                                     }
                                 }
-                                // here we have 2 free throws we need to simulate
+                                // here we have 3 free throws we need to simulate
                                 else
                                 {
-                                    double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01;
+                                    double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01 - 0.1;
                                     string currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
 
                                     CommentatorPhrases.Add($"{oPlayerName} was fouled on his three for the {oPlayerTeamName} by {dPlayerName} of the {dPlayerTeamName}");
@@ -866,7 +982,7 @@ namespace LeagueSimulation.Models
                                         continue;
                                     }
                                 }
-                               
+
                             }
                             // work out who has possession if no rebound occurred
                             if (possession == 1 && !reboundOccurred) possession = 2;
@@ -883,20 +999,19 @@ namespace LeagueSimulation.Models
                             double dDefenseStat = playerWithBallMatchup.playerStats.Defense;
 
                             // convert 2 point stat (40-99) to (-0.10 - 0.10)
-                            oTwoPointStat = -0.13 + (0.13 + 0.13) * (oTwoPointStat - 40) / (99 - 40);
-                            if (playerWithBall.FieldGoalMade > 4 && playerWithBall.GameValue > 13 && playerWithBall.playerStats.SecondaryPlaystyle != "Playmaker" && playerWithBall.playerStats.PrimaryPlaystyle == "Offensive") oTwoPointStat += 0.024 + 0.0006 * (playerWithBall.FieldGoalMade - 4);
+                            oTwoPointStat = -0.11 + (0.11 + 0.11) * (oTwoPointStat - 40) / (99 - 40);
                             if (playerWithBall.FieldGoalMade > 20) oTwoPointStat -= 0.0007 * (playerWithBall.FieldGoalMade - 20);
                             // convert height difference (-8 - 8) to (-0.05 to 0.05)
-                            heightDifference = -0.05 + (0.05 + 0.05) * (heightDifference + 8) / (8 + 8);
+                            heightDifference = -0.06 + (0.06 + 0.06) * (heightDifference + 8) / (8 + 8);
                             // convert block stat (40-99) to (-0.009 - 0.029)
                             dBlockStat = -0.009 + (0.029 + 0.009) * (dBlockStat - 40) / (99 - 40);
                             // convert defense stat (40-99) to (-0.13 - 0.13)
-                            dDefenseStat = -0.10 + (0.10 + 0.10) * (dDefenseStat - 40) / (99 - 40);
+                            dDefenseStat = -0.08 + (0.08 + 0.08) * (dDefenseStat - 40) / (99 - 40);
                             dDefenseStat *= -1;
 
                             // this sets the probabilities of the forthcoming events
                             prob2PMade += oTwoPointStat + heightDifference + dDefenseStat;
-                            prob2PMade *= passerContribution * 0.98;
+                            prob2PMade *= passerContribution;
                             prob2PBlocked += dBlockStat;
                             probFoulAfterShot += 0.05;
                             if (probFoulAfterShot < 0) probFoulAfterShot = 0;
@@ -933,13 +1048,13 @@ namespace LeagueSimulation.Models
                                             }
                                         }
                                     }
-                                    
+
                                     CommentatorPhrases.Add($"{oPlayerName} made a mid range after the foul for a three point play for the {oPlayerTeamName}!");
                                     ScoreAfterEachPhrase.Add(currentScore);
                                     GameTimestamps.Add(gameClock.PrintTime());
                                     // now we have a live free throw for the player fouled
                                     {
-                                        double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01;
+                                        double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01 - 0.1;
                                         // if the free throw is made
                                         if (random.NextDouble() < randomFreeThrowProbability)
                                         {
@@ -983,7 +1098,7 @@ namespace LeagueSimulation.Models
                                 // here we have 2 free throws we need to simulate
                                 else
                                 {
-                                    double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01;
+                                    double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01 - 0.1;
                                     string currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
 
                                     CommentatorPhrases.Add($"{oPlayerName} was fouled on his mid range for the {oPlayerTeamName} by {dPlayerName} of the {dPlayerTeamName}");
@@ -1053,7 +1168,7 @@ namespace LeagueSimulation.Models
                                             }
                                         }
                                     }
-                                    
+
                                 }
                                 startingPossession = true;
                             }
@@ -1160,7 +1275,7 @@ namespace LeagueSimulation.Models
                             // this sets the probabilities of the forthcoming events
                             probLayupMade += oLayupStat + heightDifference + dDefenseStat;
                             probLayupMade *= passerContribution * 0.99;
-                            probFoulAfterShot += 0.14;
+                            probFoulAfterShot += 0.13;
                             if (probFoulAfterShot < 0) probFoulAfterShot = 0;
                             probLayupBlocked += dBlockStat + heightDifference * -0.7;
                             probLayupMissed = 1 - (probLayupMade + probLayupBlocked);
@@ -1203,7 +1318,7 @@ namespace LeagueSimulation.Models
                                     GameTimestamps.Add(gameClock.PrintTime());
                                     // now we have a live free throw for the player fouled
                                     {
-                                        double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01;
+                                        double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01 - 0.1;
                                         // if the free throw is made
                                         if (random.NextDouble() < randomFreeThrowProbability)
                                         {
@@ -1247,7 +1362,7 @@ namespace LeagueSimulation.Models
                                 // here we have 2 free throws we need to simulate
                                 else
                                 {
-                                    double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01;
+                                    double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01 - 0.1;
                                     string currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
 
                                     CommentatorPhrases.Add($"{oPlayerName} was fouled on his layup for the {oPlayerTeamName} by {dPlayerName} of the {dPlayerTeamName}");
@@ -1317,7 +1432,7 @@ namespace LeagueSimulation.Models
                                             }
                                         }
                                     }
-                                    
+
                                 }
                                 startingPossession = true;
                             }
@@ -1390,7 +1505,7 @@ namespace LeagueSimulation.Models
                                     }
                                 }
                             }
-                            
+
                             if (possession == 1 && !reboundOccurred) possession = 2;
                             else if (!reboundOccurred) possession = 1;
                             startingPossession = true;
@@ -1406,7 +1521,6 @@ namespace LeagueSimulation.Models
 
                             // convert 2 point stat (40-99) to (-0.11 - 0.11)
                             oDunkStat = -0.12 + (0.12 + 0.12) * (oDunkStat - 40) / (99 - 40);
-                            if (playerWithBall.FieldGoalMade > 4 && playerWithBall.GameValue > 13 && playerWithBall.playerStats.SecondaryPlaystyle != "Playmaker" && playerWithBall.playerStats.PrimaryPlaystyle == "Offensive") oDunkStat += 0.023 + 0.0010 * playerWithBall.FieldGoalMade;
                             if (playerWithBall.FieldGoalMade > 20) oDunkStat -= 0.0007 * (playerWithBall.FieldGoalMade - 20);
                             // convert height difference (-8 - 8) to (-0.12 to 0.12)
                             heightDifference = -0.12 + (0.12 + 0.12) * (heightDifference + 8) / (8 + 8);
@@ -1420,7 +1534,7 @@ namespace LeagueSimulation.Models
                             probDunkMade += oDunkStat + heightDifference + dDefenseStat;
                             probDunkMade *= passerContribution * 0.97;
                             probDunkBlocked += dBlockStat + heightDifference * -0.7;
-                            probFoulAfterShot += 0.22;
+                            probFoulAfterShot += 0.23;
                             if (probFoulAfterShot < 0) probFoulAfterShot = 0;
                             probDunkMissed = 1 - (probDunkMade + probDunkBlocked);
 
@@ -1463,7 +1577,7 @@ namespace LeagueSimulation.Models
 
                                     // now we have a live free throw for the player fouled
                                     {
-                                        double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01;
+                                        double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01 - 0.1;
                                         // if the free throw is made
                                         if (random.NextDouble() < randomFreeThrowProbability)
                                         {
@@ -1507,7 +1621,7 @@ namespace LeagueSimulation.Models
                                 // here we have 2 free throws we need to simulate
                                 else
                                 {
-                                    double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01;
+                                    double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01 - 0.1;
                                     string currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
 
                                     CommentatorPhrases.Add($"{oPlayerName} was fouled on his dunk for the {oPlayerTeamName} by {dPlayerName} of the {dPlayerTeamName}");
@@ -1701,14 +1815,14 @@ namespace LeagueSimulation.Models
                                         playersToPass.Add(player);
                                     }
                                     // convert gameValue from range (-5 - 60) to (-3.6 - 3.9) to add to chance they get the ball
-                                    double gameValue1 = -4.6 + (4.9 + 4.6) * (playersToPass[0].GameValue + 5) / (5 + 60);
-                                    if (gameValue1 > 6.9) gameValue1 = 6.9;
-                                    double gameValue2 = -4.6 + (4.9 + 4.6) * (playersToPass[1].GameValue + 5) / (5 + 60);
-                                    if (gameValue2 > 6.9) gameValue2 = 6.9;
-                                    double gameValue3 = -4.6 + (4.9 + 4.6) * (playersToPass[2].GameValue + 5) / (5 + 60);
-                                    if (gameValue3 > 6.9) gameValue3 = 6.9;
-                                    double gameValue4 = -4.6 + (4.9 + 4.6) * (playersToPass[3].GameValue + 5) / (5 + 60);
-                                    if (gameValue4 > 6.9) gameValue4 = 6.9;
+                                    double gameValue1 = -5.4 + (5.9 + 5.4) * (playersToPass[0].GameValue + 5) / (5 + 44);
+                                    if (gameValue1 > 5.9) gameValue1 = 5.9;
+                                    double gameValue2 = -5.4 + (5.9 + 5.4) * (playersToPass[1].GameValue + 5) / (5 + 44);
+                                    if (gameValue2 > 5.9) gameValue2 = 5.9;
+                                    double gameValue3 = -5.4 + (5.9 + 5.4) * (playersToPass[2].GameValue + 5) / (5 + 44);
+                                    if (gameValue3 > 5.9) gameValue3 = 5.9;
+                                    double gameValue4 = -5.4 + (5.9 + 5.4) * (playersToPass[3].GameValue + 5) / (5 + 44);
+                                    if (gameValue4 > 5.9) gameValue4 = 5.9;
                                     playersToPass = playersToPass.OrderByDescending(x => x.playerStats.Overall).ToList();
                                     double playstyleVariable1 = 0;
                                     double playstyleVariable2 = 0;
@@ -1722,16 +1836,16 @@ namespace LeagueSimulation.Models
                                         {
                                             if (player.playerStats.SecondaryPlaystyle == "Shooter" || player.playerStats.SecondaryPlaystyle == "Finisher")
                                             {
-                                                currentPlaystyleVariable = 20;
+                                                currentPlaystyleVariable = 22;
                                             }
                                             else if (player.playerStats.SecondaryPlaystyle == "Playmaker")
                                             {
-                                                currentPlaystyleVariable = 1;
+                                                currentPlaystyleVariable = 14;
                                             }
                                         }
                                         else if (player.playerStats.PrimaryPlaystyle == "Defensive")
                                         {
-                                            currentPlaystyleVariable = -16;
+                                            currentPlaystyleVariable = -15;
                                         }
 
                                         if (i == 0) playstyleVariable1 = currentPlaystyleVariable;
@@ -1826,8 +1940,8 @@ namespace LeagueSimulation.Models
 
         public int CalculatePossessionTime(int numPasses)
         {
-            double mean = 14.5 + numPasses * 0.48;
-            double stDev = 3.2;
+            double mean = 14.7 + numPasses * 0.55;
+            double stDev = 3.4;
             return (int)Player.GenerateRandomNormalDistribution(mean, stDev);
         }
 
@@ -1847,13 +1961,10 @@ namespace LeagueSimulation.Models
                 offense = team2StarterStats;
             }
             if (offense.Count != 5 || defense.Count != 5) { }
-            bool pfPresent = false;
-            foreach (PlayerInGame player in defense) if (player.playerStats.position == "PF") pfPresent = true;
-            if (!pfPresent) { }
 
 
-            double probORebound = 0.27;
-            double probDRebound = 0.72;
+            double probORebound = 0.29;
+            double probDRebound = 0.70;
             double probOutOfBounds = 0.01;
             // we calculate if an offensive rebound occurs
             foreach (PlayerInGame player in offense)
@@ -1916,61 +2027,40 @@ namespace LeagueSimulation.Models
                 PlayerInGame sf = offense.Where(x => x.playerStats.position == "SF").ToList()[0];
                 PlayerInGame pf = offense.Where(x => x.playerStats.position == "PF").ToList()[0];
                 PlayerInGame c = offense.Where(x => x.playerStats.position == "C").ToList()[0];
+                PlayerInGame currentPlayer = new PlayerInGame(new Player());
                 double pgRebound = pg.playerStats.Rebound / (double)reboundSum - 0.05;
-                double sgRebound = sg.playerStats.Rebound / (double)reboundSum - 0.02;
-                double sfRebound = sf.playerStats.Rebound / (double)reboundSum + 0.01;
-                double pfRebound = pf.playerStats.Rebound / (double)reboundSum + 0.04;
-                double cRebound = c.playerStats.Rebound / (double)reboundSum + 0.07;
+                double sgRebound = sg.playerStats.Rebound / (double)reboundSum - 0.03;
+                double sfRebound = sf.playerStats.Rebound / (double)reboundSum + 0.00;
+                double pfRebound = pf.playerStats.Rebound / (double)reboundSum + 0.06;
+                double cRebound = c.playerStats.Rebound / (double)reboundSum + 0.09;
                 if (randomReboundProbability < pgRebound)
                 {
-                    CommentatorPhrases.Add($"{pg.playerStats.playerForename} {pg.playerStats.playerSurname} got the offensive rebound for the {pg.playerStats.teamName}");
-                    (int, int) score = CalculateScore();
-                    ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
-                    GameTimestamps.Add(gameClock.PrintTime());
-
-                    pg.Rebounds++;
-                    playerWithBall = pg;
+                    currentPlayer = pg;
                 }
                 else if (randomReboundProbability < pgRebound + sgRebound)
                 {
-                    CommentatorPhrases.Add($"{sg.playerStats.playerForename} {sg.playerStats.playerSurname} got the offensive rebound for the {sg.playerStats.teamName}");
-                    (int, int) score = CalculateScore();
-                    ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
-                    GameTimestamps.Add(gameClock.PrintTime());
-
-                    sg.Rebounds++;
-                    playerWithBall = sg;
+                    currentPlayer = sg;
                 }
                 else if (randomReboundProbability < pgRebound + sgRebound + sfRebound)
                 {
-                    CommentatorPhrases.Add($"{sf.playerStats.playerForename} {sf.playerStats.playerSurname} got the offensive rebound for the {sf.playerStats.teamName}");
-                    (int, int) score = CalculateScore();
-                    ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
-                    GameTimestamps.Add(gameClock.PrintTime());
-
-                    sf.Rebounds++;
-                    playerWithBall = sf;
+                    currentPlayer = sf;
                 }
                 else if (randomReboundProbability < pgRebound + sgRebound + sfRebound + pfRebound)
                 {
-                    CommentatorPhrases.Add($"{pf.playerStats.playerForename} {pf.playerStats.playerSurname} got the offensive rebound for the {pf.playerStats.teamName}");
-                    (int, int) score = CalculateScore();
-                    ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
-                    GameTimestamps.Add(gameClock.PrintTime());
-
-                    pf.Rebounds++;
-                    playerWithBall = pf;
+                    currentPlayer = pf;
                 }
                 else
                 {
-                    CommentatorPhrases.Add($"{c.playerStats.playerForename} {c.playerStats.playerSurname} got the offensive rebound for the {c.playerStats.teamName}");
-                    (int, int) score = CalculateScore();
-                    ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
-                    GameTimestamps.Add(gameClock.PrintTime());
-
-                    c.Rebounds++;
-                    playerWithBall = c;
+                    currentPlayer = c;
                 }
+                CommentatorPhrases.Add($"{currentPlayer.playerStats.playerForename} {currentPlayer.playerStats.playerSurname} got the offensive rebound for the {currentPlayer.playerStats.teamName}");
+                (int, int) score = CalculateScore();
+                ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+                GameTimestamps.Add(gameClock.PrintTime());
+
+                currentPlayer.Rebounds++;
+                playerWithBall = currentPlayer;
+
                 // now we set the matchup for playerWithBall
                 foreach (PlayerInGame playerInGame2 in defense)
                 {
@@ -2004,6 +2094,7 @@ namespace LeagueSimulation.Models
                 PlayerInGame sf = defense.Where(x => x.playerStats.position == "SF").ToList()[0];
                 PlayerInGame pf = defense.Where(x => x.playerStats.position == "PF").ToList()[0];
                 PlayerInGame c = defense.Where(x => x.playerStats.position == "C").ToList()[0];
+                PlayerInGame currentPlayer = new PlayerInGame(new Player());
                 double pgRebound = pg.playerStats.Rebound / (double)reboundSum - 0.10;
                 double sgRebound = sg.playerStats.Rebound / (double)reboundSum - 0.07;
                 double sfRebound = sf.playerStats.Rebound / (double)reboundSum + 0.01;
@@ -2011,44 +2102,31 @@ namespace LeagueSimulation.Models
                 double cRebound = c.playerStats.Rebound / (double)reboundSum + 0.11;
                 if (randomReboundProbability < pgRebound)
                 {
-                    CommentatorPhrases.Add($"{pg.playerStats.playerForename} {pg.playerStats.playerSurname} got the defensive rebound for the {pg.playerStats.teamName}");
-                    (int, int) score = CalculateScore();
-                    ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
-                    GameTimestamps.Add(gameClock.PrintTime());
-                    pg.Rebounds++;
+                    currentPlayer = pg;
                 }
-                else if (randomReboundProbability < sgRebound + pgRebound)
+                if (randomReboundProbability < sgRebound + pgRebound)
                 {
-                    CommentatorPhrases.Add($"{sg.playerStats.playerForename} {sg.playerStats.playerSurname} got the defensive rebound for the {sg.playerStats.teamName}");
-                    (int, int) score = CalculateScore();
-                    ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
-                    GameTimestamps.Add(gameClock.PrintTime());
-                    sg.Rebounds++;
+                    currentPlayer = sg;
                 }
                 else if (randomReboundProbability < sfRebound + sgRebound + pgRebound)
                 {
-                    CommentatorPhrases.Add($"{sf.playerStats.playerForename} {sf.playerStats.playerSurname} got the defensive rebound for the {sf.playerStats.teamName}");
-                    (int, int) score = CalculateScore();
-                    ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
-                    GameTimestamps.Add(gameClock.PrintTime());
-                    sf.Rebounds++;
+                    currentPlayer = sf;
                 }
                 else if (randomReboundProbability < pfRebound + sfRebound + sgRebound + pgRebound)
                 {
-                    CommentatorPhrases.Add($"{pf.playerStats.playerForename} {pf.playerStats.playerSurname} got the defensive rebound for the {pf.playerStats.teamName}");
-                    (int, int) score = CalculateScore();
-                    ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
-                    GameTimestamps.Add(gameClock.PrintTime());
-                    pf.Rebounds++;
+                    currentPlayer = pf;
                 }
                 else
                 {
-                    CommentatorPhrases.Add($"{c.playerStats.playerForename} {c.playerStats.playerSurname} got the defensive rebound for the {c.playerStats.teamName}");
-                    (int, int) score = CalculateScore();
-                    ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
-                    GameTimestamps.Add(gameClock.PrintTime());
-                    c.Rebounds++;
+                    currentPlayer = c;
                 }
+                CommentatorPhrases.Add($"{currentPlayer.playerStats.playerForename} {currentPlayer.playerStats.playerSurname} got the defensive rebound for the {currentPlayer.playerStats.teamName}");
+                (int, int) score = CalculateScore();
+                ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+                GameTimestamps.Add(gameClock.PrintTime());
+
+                currentPlayer.Rebounds++;
+                playerWithBall = currentPlayer;
 
                 // now we change possession
                 if (possession == 1)
@@ -2204,22 +2282,22 @@ namespace LeagueSimulation.Models
 
         public List<double> CalculateEventProbabilities(double threePointAttempted, double twoPointAttempted, double layupAttempted, double dunkAttempted, double passAttempted, double passerContribution)
         {
-            if (passerContribution > 1.1) { };
-            if (playerWithBall.playerStats.PrimaryPlaystyle == "Offensive") { };
-            if (playerWithBall.playerStats.SecondaryPlaystyle == "Playmaker") { };
+
             List<double> attemptedProbablities = new List<double>();
             // work out 3 point attempted probabilities, (50-99) to (0-0.14)
             double threePointStat = playerWithBall.playerStats.ThreePoint;
-            threePointAttempted = 0.30 * (threePointStat - 50) / (99 - 50);
+            threePointAttempted = 0.24 * (threePointStat - 50) / (99 - 50);
             if (threePointAttempted < 0) threePointAttempted = 0;
-            threePointAttempted *= Math.Pow(passerContribution, 2.6);
+            threePointAttempted *= Math.Pow(passerContribution, 2.9);
+            if (playerWithBall.playerStats.SecondaryPlaystyle == "Playmaker") threePointAttempted *= 0.65;
             attemptedProbablities.Add(threePointAttempted);
 
             // work out 2 point attempted probabilities, (50-99) to (0-0.09)
             double twoPointStat = playerWithBall.playerStats.MidRange;
-            twoPointAttempted = 0.12 * (twoPointStat - 50) / (99 - 50);
+            twoPointAttempted = 0.07 * (twoPointStat - 50) / (99 - 50);
             if (twoPointAttempted < 0) twoPointAttempted = 0;
-            twoPointAttempted *= Math.Pow(passerContribution, 2.5);
+            twoPointAttempted *= Math.Pow(passerContribution, 2.7);
+            if (playerWithBall.playerStats.SecondaryPlaystyle == "Playmaker") twoPointAttempted *= 0.65;
             attemptedProbablities.Add(twoPointAttempted);
 
             // work out layup attempted probabilities, (45-99) to (0.003-0.10)
@@ -2227,14 +2305,16 @@ namespace LeagueSimulation.Models
             if (playerWithBall.playerStats.CloseShot > layupStat) layupStat = playerWithBall.playerStats.CloseShot;
             layupAttempted = 0.003 + 0.16 * (layupStat - 45) / (99 - 45);
             if (layupAttempted < 0) layupAttempted = 0;
-            layupAttempted *= Math.Pow(passerContribution, 2.5);
+            layupAttempted *= Math.Pow(passerContribution, 2.9);
+            if (playerWithBall.playerStats.SecondaryPlaystyle == "Playmaker") layupAttempted *= 0.65;
             attemptedProbablities.Add(layupAttempted);
 
             // work out dunk attempted probabilities, (45-99) to (0.003-0.10)
             double dunkStat = playerWithBall.playerStats.Dunk;
             dunkAttempted = 0.003 + 0.15 * (dunkStat - 45) / (99 - 45);
             if (dunkAttempted < 0) dunkAttempted = 0;
-            dunkAttempted *= Math.Pow(passerContribution, 2.6);
+            dunkAttempted *= Math.Pow(passerContribution, 2.9);
+            if (playerWithBall.playerStats.SecondaryPlaystyle == "Playmaker") dunkAttempted *= 0.62;
             attemptedProbablities.Add(dunkAttempted);
 
             // convert overall (60 - 99) to (-0.10 to 0)
@@ -2251,7 +2331,7 @@ namespace LeagueSimulation.Models
             if (playerWithBall.FieldGoalMade > 4 && playerWithBall.GameValue > 19 && playerWithBall.playerStats.SecondaryPlaystyle != "Playmaker") passAttempted -= 0.024 + 0.003 * (playerWithBall.FieldGoalMade - 4);
             if (passAttempted < 0.14) passAttempted = 0.14;
             passAttempted += overallVariable;
-            passAttempted /= Math.Pow(passerContribution, 2.5);
+            passAttempted /= Math.Pow(passerContribution, 2.7);
             attemptedProbablities.Add(passAttempted);
 
             // use this to normalise the probabilites
@@ -2264,76 +2344,116 @@ namespace LeagueSimulation.Models
                 attemptedProbablities[3] /= sum;
                 attemptedProbablities[4] /= sum;
             }
+
             return attemptedProbablities;
+        }
+
+        public void LoadMinutesToPlay(int userTeam)
+        {
+            List<PlayerInGame> userPlayers = new List<PlayerInGame>();
+            List<(int, int)> userMinutes = new List<(int, int)>();
+            // select all the minutes stored in the database for the user's players
+            using (var connection = new SQLiteConnection(CurrentLeague.ConnectionString))
+            {
+                connection.Open();
+                string getMinutesQuery = "SELECT * FROM minutesSelection";
+                using (var command = new SQLiteCommand(getMinutesQuery, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int playerId = reader.GetInt32(0);
+                            int minutesToPlay = reader.GetInt32(1);
+                            
+                            userMinutes.Add((playerId, minutesToPlay));
+                            
+                        }
+                    }
+                }
+            }
+
+            if (userTeam == 1)
+            {
+                userPlayers = team1Stats;
+                foreach (PlayerInGame player in team1Stats)
+                {
+                    player.MinutesToPlay = userMinutes.Where(x => x.Item1 == player.playerStats.PlayerId).ToList()[0].Item2;
+                }
+            }
+            else
+            {
+                userPlayers = team2Stats;
+                foreach (PlayerInGame player in team2Stats)
+                {
+                    player.MinutesToPlay = userMinutes.Where(x => x.Item1 == player.playerStats.PlayerId).ToList()[0].Item2;
+                }
+            }
+            List<PlayerInGame> userPGs = userPlayers.Where(x => x.playerStats.position == "PG").ToList();
+            List<PlayerInGame> userSGs = userPlayers.Where(x => x.playerStats.position == "SG").ToList();
+            List<PlayerInGame> userSFs = userPlayers.Where(x => x.playerStats.position == "SF").ToList();
+            List<PlayerInGame> userPFs = userPlayers.Where(x => x.playerStats.position == "PF").ToList();
+            List<PlayerInGame> userCs = userPlayers.Where(x => x.playerStats.position == "C").ToList();
+
+            int pgMinsSum = userPGs.Sum(x => x.MinutesToPlay);
+            foreach (PlayerInGame player in userPGs) player.MinutesToPlay = (int)(player.MinutesToPlay / (pgMinsSum / 48.0));
+            pgMinsSum = userPGs.Sum(x => x.MinutesToPlay);
+            if (pgMinsSum != 48)
+            {
+                PlayerInGame currentPlayer = userPGs.OrderBy(x => x.MinutesToPlay).First();
+                currentPlayer.MinutesToPlay -= pgMinsSum - 48;
+            }
+
+            int sgMinsSum = userSGs.Sum(x => x.MinutesToPlay);
+            foreach (PlayerInGame player in userSGs) player.MinutesToPlay = (int)(player.MinutesToPlay / (sgMinsSum / 48.0));
+            sgMinsSum = userSGs.Sum(x => x.MinutesToPlay);
+            if (sgMinsSum != 48)
+            {
+                PlayerInGame currentPlayer = userSGs.OrderBy(x => x.MinutesToPlay).First();
+                currentPlayer.MinutesToPlay -= sgMinsSum - 48;
+            }
+
+            int sfMinsSum = userSFs.Sum(x => x.MinutesToPlay);
+            foreach (PlayerInGame player in userSFs) player.MinutesToPlay = (int)(player.MinutesToPlay / (sfMinsSum / 48.0));
+            sfMinsSum = userSFs.Sum(x => x.MinutesToPlay);
+            if (sfMinsSum != 48)
+            {
+                PlayerInGame currentPlayer = userSFs.OrderBy(x => x.MinutesToPlay).First();
+                currentPlayer.MinutesToPlay -= sfMinsSum - 48;
+            }
+
+            int pfMinsSum = userPFs.Sum(x => x.MinutesToPlay);
+            foreach (PlayerInGame player in userPFs) player.MinutesToPlay = (int)(player.MinutesToPlay / (pfMinsSum / 48.0));
+            pfMinsSum = userPFs.Sum(x => x.MinutesToPlay);
+            if (pfMinsSum != 48)
+            {
+                PlayerInGame currentPlayer = userPFs.OrderBy(x => x.MinutesToPlay).First();
+                currentPlayer.MinutesToPlay -= pfMinsSum - 48;
+            }
+
+            int cMinsSum = userCs.Sum(x => x.MinutesToPlay);
+            foreach (PlayerInGame player in userCs) player.MinutesToPlay = (int)(player.MinutesToPlay / (cMinsSum / 48.0));
+            cMinsSum = userCs.Sum(x => x.MinutesToPlay);
+            if (cMinsSum != 48)
+            {
+                PlayerInGame currentPlayer = userCs.OrderBy(x => x.MinutesToPlay).First();
+                currentPlayer.MinutesToPlay -= cMinsSum - 48;
+            }
         }
 
         public void GenerateMinutesToPlay(bool playoffs)
         {
             Dictionary<int, double> gameValues = GetTeamGameValues(playoffs);
             // now we calculate the minutes for each position in team1
+            if (team1Stats[0].playerStats.teamName == CurrentLeague.UserTeamName) LoadMinutesToPlay(1);
+            else
             {
                 // we calculate the minutes to play for each position in team1
-                List<PlayerInGame> team1PGs = new List<PlayerInGame>();
-                List<PlayerInGame> team1SGs = new List<PlayerInGame>();
-                List<PlayerInGame> team1SFs = new List<PlayerInGame>();
-                List<PlayerInGame> team1PFs = new List<PlayerInGame>();
-                List<PlayerInGame> team1Cs = new List<PlayerInGame>();
-
-                // we get the players into their respective lists
-                foreach (PlayerInGame player in team1Stats)
-                {
-                    if (player.playerStats.position == "PG") team1PGs.Add(player);
-                    else if (player.playerStats.position == "SG") team1SGs.Add(player);
-                    else if (player.playerStats.position == "SF") team1SFs.Add(player);
-                    else if (player.playerStats.position == "PF") team1PFs.Add(player);
-                    else if (player.playerStats.position == "C") team1Cs.Add(player);
-                }
-
-                // minutes calculated for PGs
-                {
-                    if (team1PGs.Count == 0) { };
-                    team1PGs.OrderByDescending(x => x.playerStats.Overall).ToList();
-                    PlayerInGame team1PG1 = team1PGs[0];
-                    PlayerInGame team1PG2 = team1PGs[1];
-                    PlayerInGame team1PG3 = team1PGs[2];
-                    team1PG1.MinutesToPlay = 16;
-                    team1PG2.MinutesToPlay = 16;
-                    team1PG3.MinutesToPlay = 16;
-
-                    // convert pg1's overall from (60-99) to (-17 to +17)
-                    double overall1Variable = -17.5 + (17.5 + 17.5) * (team1PG1.playerStats.Overall - 60) / (99 - 60);
-                    // convert pg1's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue1Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1PG1.playerStats.PlayerId] + 5) / (5 + 60);
-                    team1PG1.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
-                    if (team1PG1.MinutesToPlay < 0) team1PG1.MinutesToPlay = 0;
-
-                    // convert pg2's overall from (60-99) to (-17 to +17)
-                    double overall2Variable = -17.5 + (17.5 + 17.5) * (team1PG2.playerStats.Overall - 60) / (99 - 60);
-                    // convert pg2's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue2Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1PG2.playerStats.PlayerId] + 5) / (5 + 60);
-                    team1PG2.MinutesToPlay += (int)(overall2Variable + gameValue2Variable);
-                    if (team1PG2.MinutesToPlay < 0) team1PG2.MinutesToPlay = 0;
-
-                    // convert pg3's overall from (60-99) to (-17 to +17)
-                    double overall3Variable = -17.5 + (17.5 + 17.5) * (team1PG3.playerStats.Overall - 60) / (99 - 60);
-                    // convert pg3's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue3Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1PG3.playerStats.PlayerId] + 5) / (5 + 60);
-                    team1PG3.MinutesToPlay += (int)(overall3Variable + gameValue3Variable);
-                    if (team1PG3.MinutesToPlay < 0) team1PG3.MinutesToPlay = 0;
-
-                    // we use this numbers to normalise the times so that they add up to 48 minutes
-                    int currentOverallSum = team1PG1.MinutesToPlay + team1PG2.MinutesToPlay + team1PG3.MinutesToPlay;
-                    double currentOverallNormalisedSum = currentOverallSum / (double)48;
-                    team1PG1.MinutesToPlay = (int)Math.Round(team1PG1.MinutesToPlay / currentOverallNormalisedSum);
-                    team1PG2.MinutesToPlay = (int)Math.Round(team1PG2.MinutesToPlay / currentOverallNormalisedSum);
-                    team1PG3.MinutesToPlay = (int)Math.Round(team1PG3.MinutesToPlay / currentOverallNormalisedSum);
-
-                    currentOverallSum = team1PG1.MinutesToPlay + team1PG2.MinutesToPlay + team1PG3.MinutesToPlay;
-                    if (currentOverallSum > 48 || currentOverallSum < 48)
-                    {
-                        team1PG3.MinutesToPlay -= currentOverallSum - 48;
-                    }
-                }
+                List<PlayerInGame> team1PGs = team1Stats.Where(x => x.playerStats.position == "PG").ToList();
+                List<PlayerInGame> team1SGs = team1Stats.Where(x => x.playerStats.position == "SG").ToList();
+                List<PlayerInGame> team1SFs = team1Stats.Where(x => x.playerStats.position == "SF").ToList();
+                List<PlayerInGame> team1PFs = team1Stats.Where(x => x.playerStats.position == "PF").ToList();
+                List<PlayerInGame> team1Cs = team1Stats.Where(x => x.playerStats.position == "C").ToList();
 
                 // minutes calculated for PGs
                 {
@@ -2344,9 +2464,11 @@ namespace LeagueSimulation.Models
                     {
                         team1PG.MinutesToPlay = 16;
                         // convert pg1's overall from (60-99) to (-17 to +17)
-                        double overall1Variable = -17.5 + (17.5 + 17.5) * (team1PG.playerStats.Overall - 60) / (99 - 60);
+                        double overall1Variable = -12.5 + (12.5 + 12) * (team1PG.playerStats.Overall - 60) / (99 - 60);
+                        if (team1PG.playerStats.Overall > 79) overall1Variable += 0.23 * (team1PG.playerStats.Overall - 79);
                         // convert pg1's averageGameValue from (-5 to 60) to (-2 to 9)
-                        double gameValue1Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1PG.playerStats.PlayerId] + 5) / (5 + 60);
+                        double gameValue1Variable = -1 + (1 + 11) * (gameValues[team1PG.playerStats.PlayerId] + 5) / (5 + 50);
+                        if (gameValue1Variable > 11) gameValue1Variable = 11;
                         team1PG.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
                         if (team1PG.MinutesToPlay < 0) team1PG.MinutesToPlay = 0;
                     }
@@ -2354,6 +2476,11 @@ namespace LeagueSimulation.Models
                     // we use this numbers to normalise the times so that they add up to 48 minutes
                     int currentOverallSum = team1PGs.Sum(x => x.MinutesToPlay);
                     double currentOverallNormalisedSum = currentOverallSum / (double)48;
+                    if (currentOverallNormalisedSum <= 0)
+                    {
+                        currentOverallNormalisedSum = 48;
+                        foreach (PlayerInGame team in team1PGs) team.MinutesToPlay = 16;
+                    }
                     foreach (PlayerInGame team1PG in team1PGs)
                     {
                         team1PG.MinutesToPlay = (int)Math.Round(team1PG.MinutesToPlay / currentOverallNormalisedSum);
@@ -2368,50 +2495,6 @@ namespace LeagueSimulation.Models
 
                 // minutes calculated for SGs
                 {
-                    PlayerInGame team1SG1 = team1SGs[0];
-                    PlayerInGame team1SG2 = team1SGs[1];
-                    PlayerInGame team1SG3 = team1SGs[2];
-                    team1SG1.MinutesToPlay = 16;
-                    team1SG2.MinutesToPlay = 16;
-                    team1SG3.MinutesToPlay = 16;
-
-                    // convert sg1's overall from (60-99) to (-17 to +17)
-                    double overall1Variable = -17.5 + (17.5 + 17.5) * (team1SG1.playerStats.Overall - 60) / (99 - 60);
-                    // convert sg1's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue1Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1SG1.playerStats.PlayerId] + 5) / (5 + 60);
-                    team1SG1.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
-                    if (team1SG1.MinutesToPlay < 0) team1SG1.MinutesToPlay = 0;
-
-                    // convert sg2's overall from (60-99) to (-17 to +17)
-                    double overall2Variable = -17.5 + (17.5 + 17.5) * (team1SG2.playerStats.Overall - 60) / (99 - 60);
-                    // convert sg2's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue2Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1SG2.playerStats.PlayerId] + 5) / (5 + 60);
-                    team1SG2.MinutesToPlay += (int)(overall2Variable + gameValue2Variable);
-                    if (team1SG2.MinutesToPlay < 0) team1SG2.MinutesToPlay = 0;
-
-                    // convert sg3's overall from (60-99) to (-17 to +17)
-                    double overall3Variable = -17.5 + (17.5 + 17.5) * (team1SG3.playerStats.Overall - 60) / (99 - 60);
-                    // convert sg3's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue3Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1SG3.playerStats.PlayerId] + 5) / (5 + 60);
-                    team1SG3.MinutesToPlay += (int)(overall3Variable + gameValue3Variable);
-                    if (team1SG3.MinutesToPlay < 0) team1SG3.MinutesToPlay = 0;
-
-                    // we use this numbers to normalise the times so that they add up to 48 minutes
-                    int currentOverallSum = team1SG1.MinutesToPlay + team1SG2.MinutesToPlay + team1SG3.MinutesToPlay;
-                    double currentOverallNormalisedSum = currentOverallSum / (double)48;
-                    team1SG1.MinutesToPlay = (int)Math.Round(team1SG1.MinutesToPlay / currentOverallNormalisedSum);
-                    team1SG2.MinutesToPlay = (int)Math.Round(team1SG2.MinutesToPlay / currentOverallNormalisedSum);
-                    team1SG3.MinutesToPlay = (int)Math.Round(team1SG3.MinutesToPlay / currentOverallNormalisedSum);
-
-                    currentOverallSum = team1SG1.MinutesToPlay + team1SG2.MinutesToPlay + team1SG3.MinutesToPlay;
-                    if (currentOverallSum > 48 || currentOverallSum < 48)
-                    {
-                        team1SG3.MinutesToPlay -= currentOverallSum - 48;
-                    }
-                }
-
-                // minutes calculated for SGs
-                {
 
                     if (team1SGs.Count == 0) { };
                     team1SGs.OrderByDescending(x => x.playerStats.Overall).ToList();
@@ -2419,9 +2502,11 @@ namespace LeagueSimulation.Models
                     {
                         team1SG.MinutesToPlay = 16;
                         // convert SG1's overall from (60-99) to (-17 to +17)
-                        double overall1Variable = -17.5 + (17.5 + 17.5) * (team1SG.playerStats.Overall - 60) / (99 - 60);
+                        double overall1Variable = -12.5 + (12.5 + 12) * (team1SG.playerStats.Overall - 60) / (99 - 60);
+                        if (team1SG.playerStats.Overall > 79) overall1Variable += 0.23 * (team1SG.playerStats.Overall - 79);
                         // convert SG1's averageGameValue from (-5 to 60) to (-2 to 9)
-                        double gameValue1Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1SG.playerStats.PlayerId] + 5) / (5 + 60);
+                        double gameValue1Variable = -1 + (1 + 11) * (gameValues[team1SG.playerStats.PlayerId] + 5) / (5 + 50);
+                        if (gameValue1Variable > 11) gameValue1Variable = 11;
                         team1SG.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
                         if (team1SG.MinutesToPlay < 0) team1SG.MinutesToPlay = 0;
                     }
@@ -2429,6 +2514,11 @@ namespace LeagueSimulation.Models
                     // we use this numbers to normalise the times so that they add up to 48 minutes
                     int currentOverallSum = team1SGs.Sum(x => x.MinutesToPlay);
                     double currentOverallNormalisedSum = currentOverallSum / (double)48;
+                    if (currentOverallNormalisedSum <= 0)
+                    {
+                        currentOverallNormalisedSum = 48;
+                        foreach (PlayerInGame team in team1SGs) team.MinutesToPlay = 16;
+                    }
                     foreach (PlayerInGame team1SG in team1SGs)
                     {
                         team1SG.MinutesToPlay = (int)Math.Round(team1SG.MinutesToPlay / currentOverallNormalisedSum);
@@ -2443,374 +2533,318 @@ namespace LeagueSimulation.Models
 
                 // minutes calculated for SFs
                 {
-                    PlayerInGame team1SF1 = team1SFs[0];
-                    PlayerInGame team1SF2 = team1SFs[1];
-                    PlayerInGame team1SF3 = team1SFs[2];
-                    team1SF1.MinutesToPlay = 16;
-                    team1SF2.MinutesToPlay = 16;
-                    team1SF3.MinutesToPlay = 16;
 
-                    // convert sf1's overall from (60-99) to (-17 to +17)
-                    double overall1Variable = -17.5 + (17.5 + 17.5) * (team1SF1.playerStats.Overall - 60) / (99 - 60);
-                    // convert sf1's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue1Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1SF1.playerStats.PlayerId] + 5) / (5 + 60);
-                    team1SF1.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
-                    if (team1SF1.MinutesToPlay < 0) team1SF1.MinutesToPlay = 0;
-
-                    // convert sf2's overall from (60-99) to (-17 to +17)
-                    double overall2Variable = -17.5 + (17.5 + 17.5) * (team1SF2.playerStats.Overall - 60) / (99 - 60);
-                    // convert sf2's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue2Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1SF2.playerStats.PlayerId] + 5) / (5 + 60);
-                    team1SF2.MinutesToPlay += (int)(overall2Variable + gameValue2Variable);
-                    if (team1SF2.MinutesToPlay < 0) team1SF2.MinutesToPlay = 0;
-
-                    // convert sf3's overall from (60-99) to (-17 to +17)
-                    double overall3Variable = -17.5 + (17.5 + 17.5) * (team1SF3.playerStats.Overall - 60) / (99 - 60);
-                    // convert sf3's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue3Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1SF3.playerStats.PlayerId] + 5) / (5 + 60);
-                    team1SF3.MinutesToPlay += (int)(overall3Variable + gameValue3Variable);
-                    if (team1SF3.MinutesToPlay < 0) team1SF3.MinutesToPlay = 0;
+                    if (team1SFs.Count == 0) { };
+                    team1SFs.OrderByDescending(x => x.playerStats.Overall).ToList();
+                    foreach (PlayerInGame team1SF in team1SFs)
+                    {
+                        team1SF.MinutesToPlay = 16;
+                        // convert SF1's overall from (60-99) to (-17 to +17)
+                        double overall1Variable = -12.5 + (12.5 + 12) * (team1SF.playerStats.Overall - 60) / (99 - 60);
+                        if (team1SF.playerStats.Overall > 79) overall1Variable += 0.23 * (team1SF.playerStats.Overall - 79);
+                        // convert SF1's averageGameValue from (-5 to 60) to (-2 to 9)
+                        double gameValue1Variable = -1 + (1 + 11) * (gameValues[team1SF.playerStats.PlayerId] + 5) / (5 + 50);
+                        if (gameValue1Variable > 11) gameValue1Variable = 11;
+                        team1SF.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
+                        if (team1SF.MinutesToPlay < 0) team1SF.MinutesToPlay = 0;
+                    }
 
                     // we use this numbers to normalise the times so that they add up to 48 minutes
-                    int currentOverallSum = team1SF1.MinutesToPlay + team1SF2.MinutesToPlay + team1SF3.MinutesToPlay;
+                    int currentOverallSum = team1SFs.Sum(x => x.MinutesToPlay);
                     double currentOverallNormalisedSum = currentOverallSum / (double)48;
-                    team1SF1.MinutesToPlay = (int)Math.Round(team1SF1.MinutesToPlay / currentOverallNormalisedSum);
-                    team1SF2.MinutesToPlay = (int)Math.Round(team1SF2.MinutesToPlay / currentOverallNormalisedSum);
-                    team1SF3.MinutesToPlay = (int)Math.Round(team1SF3.MinutesToPlay / currentOverallNormalisedSum);
+                    if (currentOverallNormalisedSum <= 0)
+                    {
+                        currentOverallNormalisedSum = 48;
+                        foreach (PlayerInGame team in team1SFs) team.MinutesToPlay = 16;
+                    }
+                    foreach (PlayerInGame team1SF in team1SFs)
+                    {
+                        team1SF.MinutesToPlay = (int)Math.Round(team1SF.MinutesToPlay / currentOverallNormalisedSum);
+                    }
 
-                    currentOverallSum = team1SF1.MinutesToPlay + team1SF2.MinutesToPlay + team1SF3.MinutesToPlay;
+                    currentOverallSum = team1SFs.Sum(x => x.MinutesToPlay);
                     if (currentOverallSum > 48 || currentOverallSum < 48)
                     {
-                        team1SF3.MinutesToPlay -= currentOverallSum - 48;
+                        team1SFs[team1SFs.Count - 1].MinutesToPlay -= currentOverallSum - 48;
                     }
                 }
 
                 // minutes calculated for PFs
                 {
-                    PlayerInGame team1PF1 = team1PFs[0];
-                    PlayerInGame team1PF2 = team1PFs[1];
-                    PlayerInGame team1PF3 = team1PFs[2];
-                    team1PF1.MinutesToPlay = 16;
-                    team1PF2.MinutesToPlay = 16;
-                    team1PF3.MinutesToPlay = 16;
 
-                    // convert pf1's overall from (60-99) to (-17 to +17)
-                    double overall1Variable = -17.5 + (17.5 + 17.5) * (team1PF1.playerStats.Overall - 60) / (99 - 60);
-                    // convert pf1's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue1Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1PF1.playerStats.PlayerId] + 5) / (5 + 60);
-                    team1PF1.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
-                    if (team1PF1.MinutesToPlay < 0) team1PF1.MinutesToPlay = 0;
-
-                    // convert pf2's overall from (60-99) to (-17 to +17)
-                    double overall2Variable = -17.5 + (17.5 + 17.5) * (team1PF2.playerStats.Overall - 60) / (99 - 60);
-                    // convert pf2's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue2Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1PF2.playerStats.PlayerId] + 5) / (5 + 60);
-                    team1PF2.MinutesToPlay += (int)(overall2Variable + gameValue2Variable);
-                    if (team1PF2.MinutesToPlay < 0) team1PF2.MinutesToPlay = 0;
-
-                    // convert pf3's overall from (60-99) to (-17 to +17)
-                    double overall3Variable = -17.5 + (17.5 + 17.5) * (team1PF3.playerStats.Overall - 60) / (99 - 60);
-                    // convert pf3's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue3Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1PF3.playerStats.PlayerId] + 5) / (5 + 60);
-                    team1PF3.MinutesToPlay += (int)(overall3Variable + gameValue3Variable);
-                    if (team1PF3.MinutesToPlay < 0) team1PF3.MinutesToPlay = 0;
+                    if (team1PFs.Count == 0) { };
+                    team1PFs.OrderByDescending(x => x.playerStats.Overall).ToList();
+                    foreach (PlayerInGame team1PF in team1PFs)
+                    {
+                        team1PF.MinutesToPlay = 16;
+                        // convert PF1's overall from (60-99) to (-17 to +17)
+                        double overall1Variable = -12.5 + (12.5 + 12) * (team1PF.playerStats.Overall - 60) / (99 - 60);
+                        if (team1PF.playerStats.Overall > 79) overall1Variable += 0.23 * (team1PF.playerStats.Overall - 79);
+                        // convert PF1's averageGameValue from (-5 to 60) to (-2 to 9)
+                        double gameValue1Variable = -1 + (1 + 11) * (gameValues[team1PF.playerStats.PlayerId] + 5) / (5 + 50);
+                        if (gameValue1Variable > 11) gameValue1Variable = 11;
+                        team1PF.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
+                        if (team1PF.MinutesToPlay < 0) team1PF.MinutesToPlay = 0;
+                    }
 
                     // we use this numbers to normalise the times so that they add up to 48 minutes
-                    int currentOverallSum = team1PF1.MinutesToPlay + team1PF2.MinutesToPlay + team1PF3.MinutesToPlay;
+                    int currentOverallSum = team1PFs.Sum(x => x.MinutesToPlay);
                     double currentOverallNormalisedSum = currentOverallSum / (double)48;
-                    team1PF1.MinutesToPlay = (int)Math.Round(team1PF1.MinutesToPlay / currentOverallNormalisedSum);
-                    team1PF2.MinutesToPlay = (int)Math.Round(team1PF2.MinutesToPlay / currentOverallNormalisedSum);
-                    team1PF3.MinutesToPlay = (int)Math.Round(team1PF3.MinutesToPlay / currentOverallNormalisedSum);
+                    if (currentOverallNormalisedSum <= 0)
+                    {
+                        currentOverallNormalisedSum = 48;
+                        foreach (PlayerInGame team in team1PFs) team.MinutesToPlay = 16;
+                    }
+                    foreach (PlayerInGame team1PF in team1PFs)
+                    {
+                        team1PF.MinutesToPlay = (int)Math.Round(team1PF.MinutesToPlay / currentOverallNormalisedSum);
+                    }
 
-                    currentOverallSum = team1PF1.MinutesToPlay + team1PF2.MinutesToPlay + team1PF3.MinutesToPlay;
+                    currentOverallSum = team1PFs.Sum(x => x.MinutesToPlay);
                     if (currentOverallSum > 48 || currentOverallSum < 48)
                     {
-                        team1PF3.MinutesToPlay -= currentOverallSum - 48;
+                        team1PFs[team1PFs.Count - 1].MinutesToPlay -= currentOverallSum - 48;
                     }
                 }
 
                 // minutes calculated for Cs
                 {
-                    PlayerInGame team1C1 = team1Cs[0];
-                    PlayerInGame team1C2 = team1Cs[1];
-                    PlayerInGame team1C3 = team1Cs[2];
-                    team1C1.MinutesToPlay = 16;
-                    team1C2.MinutesToPlay = 16;
-                    team1C3.MinutesToPlay = 16;
 
-                    // convert c1's overall from (60-99) to (-17 to +17)
-                    double overall1Variable = -17.5 + (17.5 + 17.5) * (team1C1.playerStats.Overall - 60) / (99 - 60);
-                    // convert c1's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue1Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1C1.playerStats.PlayerId] + 5) / (5 + 60);
-                    team1C1.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
-                    if (team1C1.MinutesToPlay < 0) team1C1.MinutesToPlay = 0;
-
-                    // convert c2's overall from (60-99) to (-17 to +17)
-                    double overall2Variable = -17.5 + (17.5 + 17.5) * (team1C2.playerStats.Overall - 60) / (99 - 60);
-                    // convert c2's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue2Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1C2.playerStats.PlayerId] + 5) / (5 + 60);
-                    team1C2.MinutesToPlay += (int)(overall2Variable + gameValue2Variable);
-                    if (team1C2.MinutesToPlay < 0) team1C2.MinutesToPlay = 0;
-
-                    // convert c3's overall from (60-99) to (-17 to +17)
-                    double overall3Variable = -17.5 + (17.5 + 17.5) * (team1C3.playerStats.Overall - 60) / (99 - 60);
-                    // convert c3's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue3Variable = -3.3 + (3.3 + 10.2) * (gameValues[team1C3.playerStats.PlayerId] + 5) / (5 + 60);
-                    team1C3.MinutesToPlay += (int)(overall3Variable + gameValue3Variable);
-                    if (team1C3.MinutesToPlay < 0) team1C3.MinutesToPlay = 0;
+                    if (team1Cs.Count == 0) { };
+                    team1Cs.OrderByDescending(x => x.playerStats.Overall).ToList();
+                    foreach (PlayerInGame team1C in team1Cs)
+                    {
+                        team1C.MinutesToPlay = 16;
+                        // convert C1's overall from (60-99) to (-17 to +17)
+                        double overall1Variable = -12.5 + (12.5 + 12) * (team1C.playerStats.Overall - 60) / (99 - 60);
+                        if (team1C.playerStats.Overall > 79) overall1Variable += 0.23 * (team1C.playerStats.Overall - 79);
+                        // convert C1's averageGameValue from (-5 to 60) to (-2 to 9)
+                        double gameValue1Variable = -1 + (1 + 11) * (gameValues[team1C.playerStats.PlayerId] + 5) / (5 + 50);
+                        if (gameValue1Variable > 11) gameValue1Variable = 11;
+                        team1C.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
+                        if (team1C.MinutesToPlay < 0) team1C.MinutesToPlay = 0;
+                    }
 
                     // we use this numbers to normalise the times so that they add up to 48 minutes
-                    int currentOverallSum = team1C1.MinutesToPlay + team1C2.MinutesToPlay + team1C3.MinutesToPlay;
+                    int currentOverallSum = team1Cs.Sum(x => x.MinutesToPlay);
                     double currentOverallNormalisedSum = currentOverallSum / (double)48;
-                    team1C1.MinutesToPlay = (int)Math.Round(team1C1.MinutesToPlay / currentOverallNormalisedSum);
-                    team1C2.MinutesToPlay = (int)Math.Round(team1C2.MinutesToPlay / currentOverallNormalisedSum);
-                    team1C3.MinutesToPlay = (int)Math.Round(team1C3.MinutesToPlay / currentOverallNormalisedSum);
+                    if (currentOverallNormalisedSum <= 0)
+                    {
+                        currentOverallNormalisedSum = 48;
+                        foreach (PlayerInGame team in team1Cs) team.MinutesToPlay = 16;
+                    }
+                    foreach (PlayerInGame team1C in team1Cs)
+                    {
+                        team1C.MinutesToPlay = (int)Math.Round(team1C.MinutesToPlay / currentOverallNormalisedSum);
+                    }
 
-                    currentOverallSum = team1C1.MinutesToPlay + team1C2.MinutesToPlay + team1C3.MinutesToPlay;
+                    currentOverallSum = team1Cs.Sum(x => x.MinutesToPlay);
                     if (currentOverallSum > 48 || currentOverallSum < 48)
                     {
-                        team1C3.MinutesToPlay -= currentOverallSum - 48;
+                        team1Cs[team1Cs.Count - 1].MinutesToPlay -= currentOverallSum - 48;
                     }
                 }
 
             }
 
             // we calculate the minutes to play for each position in team2
+            if (team2Stats[0].playerStats.teamName == CurrentLeague.UserTeamName) LoadMinutesToPlay(2);
+            else
             {
-                // we calculate the minutes to play for each position in team1
-                List<PlayerInGame> team2PGs = new List<PlayerInGame>();
-                List<PlayerInGame> team2SGs = new List<PlayerInGame>();
-                List<PlayerInGame> team2SFs = new List<PlayerInGame>();
-                List<PlayerInGame> team2PFs = new List<PlayerInGame>();
-                List<PlayerInGame> team2Cs = new List<PlayerInGame>();
-
-                // we get the players into their respective lists
-                foreach (PlayerInGame player in team2Stats)
-                {
-                    if (player.playerStats.position == "PG") team2PGs.Add(player);
-                    if (player.playerStats.position == "SG") team2SGs.Add(player);
-                    if (player.playerStats.position == "SF") team2SFs.Add(player);
-                    if (player.playerStats.position == "PF") team2PFs.Add(player);
-                    if (player.playerStats.position == "C") team2Cs.Add(player);
-                }
+                // we calculate the minutes to play for each position in team2
+                List<PlayerInGame> team2PGs = team2Stats.Where(x => x.playerStats.position == "PG").ToList();
+                List<PlayerInGame> team2SGs = team2Stats.Where(x => x.playerStats.position == "SG").ToList();
+                List<PlayerInGame> team2SFs = team2Stats.Where(x => x.playerStats.position == "SF").ToList();
+                List<PlayerInGame> team2PFs = team2Stats.Where(x => x.playerStats.position == "PF").ToList();
+                List<PlayerInGame> team2Cs = team2Stats.Where(x => x.playerStats.position == "C").ToList();
 
                 // minutes calculated for PGs
                 {
-                    PlayerInGame team2PG1 = team2PGs[0];
-                    PlayerInGame team2PG2 = team2PGs[1];
-                    PlayerInGame team2PG3 = team2PGs[2];
-                    team2PG1.MinutesToPlay = 16;
-                    team2PG2.MinutesToPlay = 16;
-                    team2PG3.MinutesToPlay = 16;
 
-                    // convert pg1's overall from (60-99) to (-17 to +17)
-                    double overall1Variable = -17.5 + (17.5 + 17.5) * (team2PG1.playerStats.Overall - 60) / (99 - 60);
-                    // convert pg1's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue1Variable = -3.3 + (3.3 + 10.2) * (gameValues[team2PG1.playerStats.PlayerId] + 5) / (5 + 60);
-                    team2PG1.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
-                    if (team2PG1.MinutesToPlay < 0) team2PG1.MinutesToPlay = 0;
-
-                    // convert pg2's overall from (60-99) to (-17 to +17)
-                    double overall2Variable = -17.5 + (17.5 + 17.5) * (team2PG2.playerStats.Overall - 60) / (99 - 60);
-                    // convert pg2's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue2Variable = -3.3 + (3.3 + 10.2) * (gameValues[team2PG2.playerStats.PlayerId] + 5) / (5 + 60);
-                    team2PG2.MinutesToPlay += (int)(overall2Variable + gameValue2Variable);
-                    if (team2PG2.MinutesToPlay < 0) team2PG2.MinutesToPlay = 0;
-
-                    // convert pg3's overall from (60-99) to (-17 to +17)
-                    double overall3Variable = -17.5 + (17.5 + 17.5) * (team2PG3.playerStats.Overall - 60) / (99 - 60);
-                    // convert pg3's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue3Variable = -3.3 + (3.3 + 10.2) * (gameValues[team2PG3.playerStats.PlayerId] + 5) / (5 + 60);
-                    team2PG3.MinutesToPlay += (int)(overall3Variable + gameValue3Variable);
-                    if (team2PG3.MinutesToPlay < 0) team2PG3.MinutesToPlay = 0;
+                    if (team2PGs.Count == 0) { };
+                    team2PGs.OrderByDescending(x => x.playerStats.Overall).ToList();
+                    foreach (PlayerInGame team2PG in team2PGs)
+                    {
+                        team2PG.MinutesToPlay = 16;
+                        // convert pg1's overall from (60-99) to (-17 to +17)
+                        double overall1Variable = -12.5 + (12.5 + 12) * (team2PG.playerStats.Overall - 60) / (99 - 60);
+                        if (team2PG.playerStats.Overall > 79) overall1Variable += 0.23 * (team2PG.playerStats.Overall - 79);
+                        // convert pg1's averageGameValue from (-5 to 60) to (-2 to 9)
+                        double gameValue1Variable = -1 + (1 + 11) * (gameValues[team2PG.playerStats.PlayerId] + 5) / (5 + 50);
+                        if (gameValue1Variable > 11) gameValue1Variable = 11;
+                        team2PG.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
+                        if (team2PG.MinutesToPlay < 0) team2PG.MinutesToPlay = 0;
+                    }
 
                     // we use this numbers to normalise the times so that they add up to 48 minutes
-                    int currentOverallSum = team2PG1.MinutesToPlay + team2PG2.MinutesToPlay + team2PG3.MinutesToPlay;
+                    int currentOverallSum = team2PGs.Sum(x => x.MinutesToPlay);
                     double currentOverallNormalisedSum = currentOverallSum / (double)48;
-                    team2PG1.MinutesToPlay = (int)Math.Round(team2PG1.MinutesToPlay / currentOverallNormalisedSum);
-                    team2PG2.MinutesToPlay = (int)Math.Round(team2PG2.MinutesToPlay / currentOverallNormalisedSum);
-                    team2PG3.MinutesToPlay = (int)Math.Round(team2PG3.MinutesToPlay / currentOverallNormalisedSum);
+                    if (currentOverallNormalisedSum <= 0)
+                    {
+                        currentOverallNormalisedSum = 48;
+                        foreach (PlayerInGame team in team2PGs) team.MinutesToPlay = 16;
+                    }
+                    foreach (PlayerInGame team2PG in team2PGs)
+                    {
+                        team2PG.MinutesToPlay = (int)Math.Round(team2PG.MinutesToPlay / currentOverallNormalisedSum);
+                    }
 
-                    currentOverallSum = team2PG1.MinutesToPlay + team2PG2.MinutesToPlay + team2PG3.MinutesToPlay;
+                    currentOverallSum = team2PGs.Sum(x => x.MinutesToPlay);
                     if (currentOverallSum > 48 || currentOverallSum < 48)
                     {
-                        team2PG3.MinutesToPlay -= currentOverallSum - 48;
+                        team2PGs[team2PGs.Count - 1].MinutesToPlay -= currentOverallSum - 48;
                     }
                 }
 
                 // minutes calculated for SGs
                 {
-                    PlayerInGame team2SG1 = team2SGs[0];
-                    PlayerInGame team2SG2 = team2SGs[1];
-                    PlayerInGame team2SG3 = team2SGs[2];
-                    team2SG1.MinutesToPlay = 16;
-                    team2SG2.MinutesToPlay = 16;
-                    team2SG3.MinutesToPlay = 16;
 
-                    // convert sg1's overall from (60-99) to (-17 to +17)
-                    double overall1Variable = -17.5 + (17.5 + 17.5) * (team2SG1.playerStats.Overall - 60) / (99 - 60);
-                    // convert sg1's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue1Variable = -3.3 + (3.3 + 10.2) * (gameValues[team2SG1.playerStats.PlayerId] + 5) / (5 + 60);
-                    team2SG1.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
-                    if (team2SG1.MinutesToPlay < 0) team2SG1.MinutesToPlay = 0;
-
-                    // convert sg2's overall from (60-99) to (-17 to +17)
-                    double overall2Variable = -17.5 + (17.5 + 17.5) * (team2SG2.playerStats.Overall - 60) / (99 - 60);
-                    // convert sg2's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue2Variable = -3.3 + (3.3 + 10.2) * (gameValues[team2SG2.playerStats.PlayerId] + 5) / (5 + 60);
-                    team2SG2.MinutesToPlay += (int)(overall2Variable + gameValue2Variable);
-                    if (team2SG2.MinutesToPlay < 0) team2SG2.MinutesToPlay = 0;
-
-                    // convert sg3's overall from (60-99) to (-17 to +17)
-                    double overall3Variable = -17.5 + (17.5 + 17.5) * (team2SG3.playerStats.Overall - 60) / (99 - 60);
-                    // convert sg3's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue3Variable = -3.3 + (3.3 + 10.2) * (gameValues[team2SG3.playerStats.PlayerId] + 5) / (5 + 60);
-                    team2SG3.MinutesToPlay += (int)(overall3Variable + gameValue3Variable);
-                    if (team2SG3.MinutesToPlay < 0) team2SG3.MinutesToPlay = 0;
+                    if (team2SGs.Count == 0) { };
+                    team2SGs.OrderByDescending(x => x.playerStats.Overall).ToList();
+                    foreach (PlayerInGame team2SG in team2SGs)
+                    {
+                        team2SG.MinutesToPlay = 16;
+                        // convert SG1's overall from (60-99) to (-17 to +17)
+                        double overall1Variable = -12.5 + (12.5 + 12) * (team2SG.playerStats.Overall - 60) / (99 - 60);
+                        if (team2SG.playerStats.Overall > 79) overall1Variable += 0.23 * (team2SG.playerStats.Overall - 79);
+                        // convert SG1's averageGameValue from (-5 to 60) to (-2 to 9)
+                        double gameValue1Variable = -1 + (1 + 11) * (gameValues[team2SG.playerStats.PlayerId] + 5) / (5 + 50);
+                        if (gameValue1Variable > 11) gameValue1Variable = 11;
+                        team2SG.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
+                        if (team2SG.MinutesToPlay < 0) team2SG.MinutesToPlay = 0;
+                    }
 
                     // we use this numbers to normalise the times so that they add up to 48 minutes
-                    int currentOverallSum = team2SG1.MinutesToPlay + team2SG2.MinutesToPlay + team2SG3.MinutesToPlay;
+                    int currentOverallSum = team2SGs.Sum(x => x.MinutesToPlay);
                     double currentOverallNormalisedSum = currentOverallSum / (double)48;
-                    team2SG1.MinutesToPlay = (int)Math.Round(team2SG1.MinutesToPlay / currentOverallNormalisedSum);
-                    team2SG2.MinutesToPlay = (int)Math.Round(team2SG2.MinutesToPlay / currentOverallNormalisedSum);
-                    team2SG3.MinutesToPlay = (int)Math.Round(team2SG3.MinutesToPlay / currentOverallNormalisedSum);
+                    if (currentOverallNormalisedSum <= 0)
+                    {
+                        currentOverallNormalisedSum = 48;
+                        foreach (PlayerInGame team in team2SGs) team.MinutesToPlay = 16;
+                    }
+                    foreach (PlayerInGame team2SG in team2SGs)
+                    {
+                        team2SG.MinutesToPlay = (int)Math.Round(team2SG.MinutesToPlay / currentOverallNormalisedSum);
+                    }
 
-                    currentOverallSum = team2SG1.MinutesToPlay + team2SG2.MinutesToPlay + team2SG3.MinutesToPlay;
+                    currentOverallSum = team2SGs.Sum(x => x.MinutesToPlay);
                     if (currentOverallSum > 48 || currentOverallSum < 48)
                     {
-                        team2SG3.MinutesToPlay -= currentOverallSum - 48;
+                        team2SGs[team2SGs.Count - 1].MinutesToPlay -= currentOverallSum - 48;
                     }
                 }
 
                 // minutes calculated for SFs
                 {
-                    PlayerInGame team2SF1 = team2SFs[0];
-                    PlayerInGame team2SF2 = team2SFs[1];
-                    PlayerInGame team2SF3 = team2SFs[2];
-                    team2SF1.MinutesToPlay = 16;
-                    team2SF2.MinutesToPlay = 16;
-                    team2SF3.MinutesToPlay = 16;
 
-                    // convert sf1's overall from (60-99) to (-17 to +17)
-                    double overall1Variable = -17.5 + (17.5 + 17.5) * (team2SF1.playerStats.Overall - 60) / (99 - 60);
-                    // convert sf1's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue1Variable = -3.3 + (3.3 + 10.2) * (gameValues[team2SF1.playerStats.PlayerId] + 5) / (5 + 60);
-                    team2SF1.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
-                    if (team2SF1.MinutesToPlay < 0) team2SF1.MinutesToPlay = 0;
-
-                    // convert sf2's overall from (60-99) to (-17 to +17)
-                    double overall2Variable = -17.5 + (17.5 + 17.5) * (team2SF2.playerStats.Overall - 60) / (99 - 60);
-                    // convert sf2's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue2Variable = -3.3 + (3.3 + 10.2) * (gameValues[team2SF2.playerStats.PlayerId] + 5) / (5 + 60);
-                    team2SF2.MinutesToPlay += (int)(overall2Variable + gameValue2Variable);
-                    if (team2SF2.MinutesToPlay < 0) team2SF2.MinutesToPlay = 0;
-
-                    // convert sf3's overall from (60-99) to (-17 to +17)
-                    double overall3Variable = -17.5 + (17.5 + 17.5) * (team2SF3.playerStats.Overall - 60) / (99 - 60);
-                    // convert sf3's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue3Variable = -3.3 + (3.3 + 10.2) * (gameValues[team2SF3.playerStats.PlayerId] + 5) / (5 + 60);
-                    team2SF3.MinutesToPlay += (int)(overall3Variable + gameValue3Variable);
-                    if (team2SF3.MinutesToPlay < 0) team2SF3.MinutesToPlay = 0;
+                    if (team2SFs.Count == 0) { };
+                    team2SFs.OrderByDescending(x => x.playerStats.Overall).ToList();
+                    foreach (PlayerInGame team2SF in team2SFs)
+                    {
+                        team2SF.MinutesToPlay = 16;
+                        // convert SF1's overall from (60-99) to (-17 to +17)
+                        double overall1Variable = -12.5 + (12.5 + 12) * (team2SF.playerStats.Overall - 60) / (99 - 60);
+                        if (team2SF.playerStats.Overall > 79) overall1Variable += 0.23 * (team2SF.playerStats.Overall - 79);
+                        // convert SF1's averageGameValue from (-5 to 60) to (-2 to 9)
+                        double gameValue1Variable = -1 + (1 + 11) * (gameValues[team2SF.playerStats.PlayerId] + 5) / (5 + 50);
+                        if (gameValue1Variable > 11) gameValue1Variable = 11;
+                        team2SF.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
+                        if (team2SF.MinutesToPlay < 0) team2SF.MinutesToPlay = 0;
+                    }
 
                     // we use this numbers to normalise the times so that they add up to 48 minutes
-                    int currentOverallSum = team2SF1.MinutesToPlay + team2SF2.MinutesToPlay + team2SF3.MinutesToPlay;
+                    int currentOverallSum = team2SFs.Sum(x => x.MinutesToPlay);
                     double currentOverallNormalisedSum = currentOverallSum / (double)48;
-                    team2SF1.MinutesToPlay = (int)Math.Round(team2SF1.MinutesToPlay / currentOverallNormalisedSum);
-                    team2SF2.MinutesToPlay = (int)Math.Round(team2SF2.MinutesToPlay / currentOverallNormalisedSum);
-                    team2SF3.MinutesToPlay = (int)Math.Round(team2SF3.MinutesToPlay / currentOverallNormalisedSum);
+                    if (currentOverallNormalisedSum <= 0)
+                    {
+                        currentOverallNormalisedSum = 48;
+                        foreach (PlayerInGame team in team2SFs) team.MinutesToPlay = 16;
+                    }
+                    foreach (PlayerInGame team2SF in team2SFs)
+                    {
+                        team2SF.MinutesToPlay = (int)Math.Round(team2SF.MinutesToPlay / currentOverallNormalisedSum);
+                    }
 
-                    currentOverallSum = team2SF1.MinutesToPlay + team2SF2.MinutesToPlay + team2SF3.MinutesToPlay;
+                    currentOverallSum = team2SFs.Sum(x => x.MinutesToPlay);
                     if (currentOverallSum > 48 || currentOverallSum < 48)
                     {
-                        team2SF3.MinutesToPlay -= currentOverallSum - 48;
+                        team2SFs[team2SFs.Count - 1].MinutesToPlay -= currentOverallSum - 48;
                     }
                 }
 
                 // minutes calculated for PFs
                 {
-                    PlayerInGame team2PF1 = team2PFs[0];
-                    PlayerInGame team2PF2 = team2PFs[1];
-                    PlayerInGame team2PF3 = team2PFs[2];
-                    team2PF1.MinutesToPlay = 16;
-                    team2PF2.MinutesToPlay = 16;
-                    team2PF3.MinutesToPlay = 16;
 
-                    // convert pf1's overall from (60-99) to (-17 to +17)
-                    double overall1Variable = -17.5 + (17.5 + 17.5) * (team2PF1.playerStats.Overall - 60) / (99 - 60);
-                    // convert pf1's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue1Variable = -3.3 + (3.3 + 10.2) * (gameValues[team2PF1.playerStats.PlayerId] + 5) / (5 + 60);
-                    team2PF1.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
-                    if (team2PF1.MinutesToPlay < 0) team2PF1.MinutesToPlay = 0;
-
-                    // convert pf2's overall from (60-99) to (-17 to +17)
-                    double overall2Variable = -17.5 + (17.5 + 17.5) * (team2PF2.playerStats.Overall - 60) / (99 - 60);
-                    // convert pf2's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue2Variable = -3.3 + (3.3 + 10.2) * (gameValues[team2PF2.playerStats.PlayerId] + 5) / (5 + 60);
-                    team2PF2.MinutesToPlay += (int)(overall2Variable + gameValue2Variable);
-                    if (team2PF2.MinutesToPlay < 0) team2PF2.MinutesToPlay = 0;
-
-                    // convert pf3's overall from (60-99) to (-17 to +17)
-                    double overall3Variable = -17.5 + (17.5 + 17.5) * (team2PF3.playerStats.Overall - 60) / (99 - 60);
-                    // convert pf3's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue3Variable = -3.3 + (3.3 + 10.2) * (gameValues[team2PF3.playerStats.PlayerId] + 5) / (5 + 60);
-                    team2PF3.MinutesToPlay += (int)(overall3Variable + gameValue3Variable);
-                    if (team2PF3.MinutesToPlay < 0) team2PF3.MinutesToPlay = 0;
+                    if (team2PFs.Count == 0) { };
+                    team2PFs.OrderByDescending(x => x.playerStats.Overall).ToList();
+                    foreach (PlayerInGame team2PF in team2PFs)
+                    {
+                        team2PF.MinutesToPlay = 16;
+                        // convert PF1's overall from (60-99) to (-17 to +17)
+                        double overall1Variable = -12.5 + (12.5 + 12) * (team2PF.playerStats.Overall - 60) / (99 - 60);
+                        if (team2PF.playerStats.Overall > 79) overall1Variable += 0.23 * (team2PF.playerStats.Overall - 79);
+                        // convert PF1's averageGameValue from (-5 to 60) to (-2 to 9)
+                        double gameValue1Variable = -1 + (1 + 11) * (gameValues[team2PF.playerStats.PlayerId] + 5) / (5 + 50);
+                        if (gameValue1Variable > 11) gameValue1Variable = 11;
+                        team2PF.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
+                        if (team2PF.MinutesToPlay < 0) team2PF.MinutesToPlay = 0;
+                    }
 
                     // we use this numbers to normalise the times so that they add up to 48 minutes
-                    int currentOverallSum = team2PF1.MinutesToPlay + team2PF2.MinutesToPlay + team2PF3.MinutesToPlay;
+                    int currentOverallSum = team2PFs.Sum(x => x.MinutesToPlay);
                     double currentOverallNormalisedSum = currentOverallSum / (double)48;
-                    team2PF1.MinutesToPlay = (int)Math.Round(team2PF1.MinutesToPlay / currentOverallNormalisedSum);
-                    team2PF2.MinutesToPlay = (int)Math.Round(team2PF2.MinutesToPlay / currentOverallNormalisedSum);
-                    team2PF3.MinutesToPlay = (int)Math.Round(team2PF3.MinutesToPlay / currentOverallNormalisedSum);
+                    if (currentOverallNormalisedSum <= 0)
+                    {
+                        currentOverallNormalisedSum = 48;
+                        foreach (PlayerInGame team in team2PFs) team.MinutesToPlay = 16;
+                    }
+                    foreach (PlayerInGame team2PF in team2PFs)
+                    {
+                        team2PF.MinutesToPlay = (int)Math.Round(team2PF.MinutesToPlay / currentOverallNormalisedSum);
+                    }
 
-                    currentOverallSum = team2PF1.MinutesToPlay + team2PF2.MinutesToPlay + team2PF3.MinutesToPlay;
+                    currentOverallSum = team2PFs.Sum(x => x.MinutesToPlay);
                     if (currentOverallSum > 48 || currentOverallSum < 48)
                     {
-                        team2PF3.MinutesToPlay -= currentOverallSum - 48;
+                        team2PFs[team2PFs.Count - 1].MinutesToPlay -= currentOverallSum - 48;
                     }
                 }
 
                 // minutes calculated for Cs
                 {
-                    PlayerInGame team2C1 = team2Cs[0];
-                    PlayerInGame team2C2 = team2Cs[1];
-                    PlayerInGame team2C3 = team2Cs[2];
-                    team2C1.MinutesToPlay = 16;
-                    team2C2.MinutesToPlay = 16;
-                    team2C3.MinutesToPlay = 16;
 
-                    // convert c1's overall from (60-99) to (-17 to +17)
-                    double overall1Variable = -17.5 + (17.5 + 17.5) * (team2C1.playerStats.Overall - 60) / (99 - 60);
-                    // convert c1's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue1Variable = -3.3 + (3.3 + 10.2) * (gameValues[team2C1.playerStats.PlayerId] + 5) / (5 + 60);
-                    team2C1.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
-                    if (team2C1.MinutesToPlay < 0) team2C1.MinutesToPlay = 0;
-
-                    // convert c2's overall from (60-99) to (-17 to +17)
-                    double overall2Variable = -17.5 + (17.5 + 17.5) * (team2C2.playerStats.Overall - 60) / (99 - 60);
-                    // convert c2's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue2Variable = -3.3 + (3.3 + 10.2) * (gameValues[team2C2.playerStats.PlayerId] + 5) / (5 + 60);
-                    team2C2.MinutesToPlay += (int)(overall2Variable + gameValue2Variable);
-                    if (team2C2.MinutesToPlay < 0) team2C2.MinutesToPlay = 0;
-
-                    // convert c3's overall from (60-99) to (-17 to +17)
-                    double overall3Variable = -17.5 + (17.5 + 17.5) * (team2C3.playerStats.Overall - 60) / (99 - 60);
-                    // convert c3's averageGameValue from (-5 to 60) to (-2 to 9)
-                    double gameValue3Variable = -3.3 + (3.3 + 10.2) * (gameValues[team2C3.playerStats.PlayerId] + 5) / (5 + 60);
-                    team2C3.MinutesToPlay += (int)(overall3Variable + gameValue3Variable);
-                    if (team2C3.MinutesToPlay < 0) team2C3.MinutesToPlay = 0;
+                    if (team2Cs.Count == 0) { };
+                    team2Cs.OrderByDescending(x => x.playerStats.Overall).ToList();
+                    foreach (PlayerInGame team2C in team2Cs)
+                    {
+                        team2C.MinutesToPlay = 16;
+                        // convert C1's overall from (60-99) to (-17 to +17)
+                        double overall1Variable = -12.5 + (12.5 + 12) * (team2C.playerStats.Overall - 60) / (99 - 60);
+                        if (team2C.playerStats.Overall > 79) overall1Variable += 0.23 * (team2C.playerStats.Overall - 79);
+                        // convert C1's averageGameValue from (-5 to 60) to (-2 to 9)
+                        double gameValue1Variable = -1 + (1 + 11) * (gameValues[team2C.playerStats.PlayerId] + 5) / (5 + 50);
+                        if (gameValue1Variable > 11) gameValue1Variable = 11;
+                        team2C.MinutesToPlay += (int)(overall1Variable + gameValue1Variable);
+                        if (team2C.MinutesToPlay < 0) team2C.MinutesToPlay = 0;
+                    }
 
                     // we use this numbers to normalise the times so that they add up to 48 minutes
-                    int currentOverallSum = team2C1.MinutesToPlay + team2C2.MinutesToPlay + team2C3.MinutesToPlay;
+                    int currentOverallSum = team2Cs.Sum(x => x.MinutesToPlay);
                     double currentOverallNormalisedSum = currentOverallSum / (double)48;
-                    team2C1.MinutesToPlay = (int)Math.Round(team2C1.MinutesToPlay / currentOverallNormalisedSum);
-                    team2C2.MinutesToPlay = (int)Math.Round(team2C2.MinutesToPlay / currentOverallNormalisedSum);
-                    team2C3.MinutesToPlay = (int)Math.Round(team2C3.MinutesToPlay / currentOverallNormalisedSum);
+                    if (currentOverallNormalisedSum <= 0)
+                    {
+                        currentOverallNormalisedSum = 48;
+                        foreach (PlayerInGame team in team2Cs) team.MinutesToPlay = 16;
+                    }
+                    foreach (PlayerInGame team2C in team2Cs)
+                    {
+                        team2C.MinutesToPlay = (int)Math.Round(team2C.MinutesToPlay / currentOverallNormalisedSum);
+                    }
 
-                    currentOverallSum = team2C1.MinutesToPlay + team2C2.MinutesToPlay + team2C3.MinutesToPlay;
+                    currentOverallSum = team2Cs.Sum(x => x.MinutesToPlay);
                     if (currentOverallSum > 48 || currentOverallSum < 48)
                     {
-                        team2C3.MinutesToPlay -= currentOverallSum - 48;
+                        team2Cs[team2Cs.Count - 1].MinutesToPlay -= currentOverallSum - 48;
                     }
                 }
 
@@ -2976,27 +3010,6 @@ namespace LeagueSimulation.Models
             }
         }
 
-        public double GetPlayerGameValue(PlayerInGame player, bool playoffs)
-        {
-            using (var connection = new SQLiteConnection(connectionString))
-            {
-                connection.Open();
-                string getGameValueQuery = $"SELECT AVG(gameValue) FROM playerGameStats WHERE playerId = {player.playerStats.PlayerId} AND isPlayoffs = {playoffs} AND seasonId = {CurrentLeague.CurrentSeason};";
-                using (var command = new SQLiteCommand(getGameValueQuery, connection))
-                {
-                    using (var reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            if (reader.IsDBNull(0)) return 6;
-                            return (double)reader.GetDecimal(0);
-                        }
-                    }
-                }
-            }
-            return 0;
-        }
-
         public Dictionary<int, double> GetTeamGameValues(bool playoffs)
         {
             Dictionary<int, double> gameValues = new Dictionary<int, double>();
@@ -3014,9 +3027,26 @@ namespace LeagueSimulation.Models
                 AND pot.playerId = pgs.playerId
                 WHERE 
 	                pot.teamId IN ({team1.TeamId}, {team2.TeamId})
-                    AND pot.dayJoined <= {CurrentLeague.CurrentDay}
-                    AND pot.yearJoined <= {CurrentLeague.CurrentSeason} + 2023
+                    AND ((pot.dayJoined <= {CurrentLeague.CurrentDay} AND pot.yearJoined = {CurrentLeague.CurrentSeason} + 2023) OR (pot.yearJoined < {CurrentLeague.CurrentSeason} + 2023))
                     AND pot.dayLeft >= {CurrentLeague.CurrentDay}
+                    AND pot.yearLeft >= {CurrentLeague.CurrentSeason} + 2023
+                GROUP BY 
+                    pot.playerId;
+                ";
+                if (CurrentLeague.Playoffs) getGameValueQuery = $@"
+                SELECT 
+                pot.playerId, 
+                COALESCE(AVG(pgs.gameValue), 0) as gameValue
+                FROM playerOnTeam pot
+                LEFT JOIN playerGameStats pgs
+                ON pgs.isPlayoffs = {playoffs}
+                AND pgs.seasonId = {CurrentLeague.CurrentSeason}
+                AND pot.playerId = pgs.playerId
+                WHERE 
+	                pot.teamId IN ({team1.TeamId}, {team2.TeamId})
+                    AND pot.dayJoined <= 150
+                    AND pot.yearJoined <= {CurrentLeague.CurrentSeason} + 2023
+                    AND pot.dayLeft >= 150
                     AND pot.yearLeft >= {CurrentLeague.CurrentSeason} + 2023
                 GROUP BY 
                     pot.playerId;

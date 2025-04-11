@@ -28,10 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             panel1 = new Panel();
+            playerPlaystyleTextBox = new TextBox();
+            label14 = new Label();
+            playerPositionTextBox = new TextBox();
+            label15 = new Label();
             playerFinderButton = new Button();
             maxHeightLabel = new Label();
             minHeightLabel = new Label();
@@ -87,6 +91,10 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(playerPlaystyleTextBox);
+            panel1.Controls.Add(label14);
+            panel1.Controls.Add(playerPositionTextBox);
+            panel1.Controls.Add(label15);
             panel1.Controls.Add(playerFinderButton);
             panel1.Controls.Add(maxHeightLabel);
             panel1.Controls.Add(minHeightLabel);
@@ -121,10 +129,44 @@
             panel1.Size = new Size(481, 629);
             panel1.TabIndex = 0;
             // 
+            // playerPlaystyleTextBox
+            // 
+            playerPlaystyleTextBox.Location = new Point(165, 500);
+            playerPlaystyleTextBox.Name = "playerPlaystyleTextBox";
+            playerPlaystyleTextBox.Size = new Size(267, 23);
+            playerPlaystyleTextBox.TabIndex = 13;
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label14.Location = new Point(19, 500);
+            label14.Name = "label14";
+            label14.Size = new Size(146, 25);
+            label14.TabIndex = 12;
+            label14.Text = "Player Playstyle:";
+            // 
+            // playerPositionTextBox
+            // 
+            playerPositionTextBox.Location = new Point(165, 471);
+            playerPositionTextBox.Name = "playerPositionTextBox";
+            playerPositionTextBox.Size = new Size(267, 23);
+            playerPositionTextBox.TabIndex = 11;
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label15.Location = new Point(19, 471);
+            label15.Name = "label15";
+            label15.Size = new Size(140, 25);
+            label15.TabIndex = 10;
+            label15.Text = "Player Position:";
+            // 
             // playerFinderButton
             // 
             playerFinderButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            playerFinderButton.Location = new Point(131, 555);
+            playerFinderButton.Location = new Point(133, 566);
             playerFinderButton.Name = "playerFinderButton";
             playerFinderButton.Size = new Size(227, 51);
             playerFinderButton.TabIndex = 9;
@@ -178,7 +220,7 @@
             // 
             maxAPGUpDown.DecimalPlaces = 1;
             maxAPGUpDown.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            maxAPGUpDown.Location = new Point(195, 493);
+            maxAPGUpDown.Location = new Point(195, 422);
             maxAPGUpDown.Name = "maxAPGUpDown";
             maxAPGUpDown.Size = new Size(120, 23);
             maxAPGUpDown.TabIndex = 6;
@@ -188,7 +230,7 @@
             // 
             maxRPGUpDown.DecimalPlaces = 1;
             maxRPGUpDown.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            maxRPGUpDown.Location = new Point(195, 413);
+            maxRPGUpDown.Location = new Point(195, 355);
             maxRPGUpDown.Name = "maxRPGUpDown";
             maxRPGUpDown.Size = new Size(120, 23);
             maxRPGUpDown.TabIndex = 6;
@@ -198,7 +240,7 @@
             // 
             minAPGUpDown.DecimalPlaces = 1;
             minAPGUpDown.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            minAPGUpDown.Location = new Point(195, 454);
+            minAPGUpDown.Location = new Point(195, 393);
             minAPGUpDown.Name = "minAPGUpDown";
             minAPGUpDown.Size = new Size(120, 23);
             minAPGUpDown.TabIndex = 6;
@@ -207,7 +249,7 @@
             // 
             minRPGUpDown.DecimalPlaces = 1;
             minRPGUpDown.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            minRPGUpDown.Location = new Point(195, 374);
+            minRPGUpDown.Location = new Point(195, 330);
             minRPGUpDown.Name = "minRPGUpDown";
             minRPGUpDown.Size = new Size(120, 23);
             minRPGUpDown.TabIndex = 6;
@@ -226,7 +268,7 @@
             // 
             maxPPGUpDown.DecimalPlaces = 1;
             maxPPGUpDown.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            maxPPGUpDown.Location = new Point(195, 331);
+            maxPPGUpDown.Location = new Point(195, 301);
             maxPPGUpDown.Name = "maxPPGUpDown";
             maxPPGUpDown.Size = new Size(120, 23);
             maxPPGUpDown.TabIndex = 6;
@@ -246,7 +288,7 @@
             // 
             minPPGUpDown.DecimalPlaces = 1;
             minPPGUpDown.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
-            minPPGUpDown.Location = new Point(195, 291);
+            minPPGUpDown.Location = new Point(195, 276);
             minPPGUpDown.Name = "minPPGUpDown";
             minPPGUpDown.Size = new Size(120, 23);
             minPPGUpDown.TabIndex = 6;
@@ -255,7 +297,7 @@
             // 
             label12.AutoSize = true;
             label12.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label12.Location = new Point(21, 491);
+            label12.Location = new Point(21, 420);
             label12.Name = "label12";
             label12.Size = new Size(141, 25);
             label12.TabIndex = 3;
@@ -265,7 +307,7 @@
             // 
             label10.AutoSize = true;
             label10.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label10.Location = new Point(21, 411);
+            label10.Location = new Point(21, 353);
             label10.Name = "label10";
             label10.Size = new Size(140, 25);
             label10.TabIndex = 3;
@@ -283,7 +325,7 @@
             // 
             label9.AutoSize = true;
             label9.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label9.Location = new Point(21, 329);
+            label9.Location = new Point(21, 299);
             label9.Name = "label9";
             label9.Size = new Size(140, 25);
             label9.TabIndex = 3;
@@ -303,7 +345,7 @@
             // 
             label11.AutoSize = true;
             label11.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label11.Location = new Point(21, 452);
+            label11.Location = new Point(21, 391);
             label11.Name = "label11";
             label11.Size = new Size(138, 25);
             label11.TabIndex = 1;
@@ -323,7 +365,7 @@
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label8.Location = new Point(21, 372);
+            label8.Location = new Point(21, 328);
             label8.Name = "label8";
             label8.Size = new Size(137, 25);
             label8.TabIndex = 1;
@@ -351,7 +393,7 @@
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label7.Location = new Point(21, 289);
+            label7.Location = new Point(21, 274);
             label7.Name = "label7";
             label7.Size = new Size(137, 25);
             label7.TabIndex = 1;
@@ -417,34 +459,34 @@
             // 
             playerFinderDataGridView.AllowUserToAddRows = false;
             playerFinderDataGridView.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 8F);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            playerFinderDataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = SystemColors.Control;
+            dataGridViewCellStyle4.Font = new Font("Segoe UI", 8F);
+            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+            playerFinderDataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             playerFinderDataGridView.Columns.AddRange(new DataGridViewColumn[] { PlayerFirstname, PlayerSurname, TeamName, PTS, REB, AST });
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Window;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 8F);
-            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
-            playerFinderDataGridView.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = SystemColors.Window;
+            dataGridViewCellStyle5.Font = new Font("Segoe UI", 8F);
+            dataGridViewCellStyle5.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.False;
+            playerFinderDataGridView.DefaultCellStyle = dataGridViewCellStyle5;
             playerFinderDataGridView.Location = new Point(14, 66);
             playerFinderDataGridView.Name = "playerFinderDataGridView";
             playerFinderDataGridView.ReadOnly = true;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = SystemColors.Control;
-            dataGridViewCellStyle3.Font = new Font("Segoe UI", 8F);
-            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            playerFinderDataGridView.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = SystemColors.Control;
+            dataGridViewCellStyle6.Font = new Font("Segoe UI", 8F);
+            dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
+            playerFinderDataGridView.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             playerFinderDataGridView.Size = new Size(574, 540);
             playerFinderDataGridView.TabIndex = 4;
             playerFinderDataGridView.CellClick += leagueLeaderDataGridView_CellClick;
@@ -576,5 +618,9 @@
         private DataGridViewTextBoxColumn PTS;
         private DataGridViewTextBoxColumn REB;
         private DataGridViewTextBoxColumn AST;
+        private TextBox playerPlaystyleTextBox;
+        private Label label14;
+        private TextBox playerPositionTextBox;
+        private Label label15;
     }
 }

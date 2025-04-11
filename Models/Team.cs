@@ -25,22 +25,6 @@ namespace LeagueSimulation.Models
 
         public static string GetCityFromTeamName(string unorganisedName) => GetFullNameAndCityName(unorganisedName).Item1;
 
-        public string GetConference()
-        {
-            string conference = "";
-            string teamNamesFilePath = $@"C:\Users\{CurrentUser}\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Names Files\basketball_team_names_list.txt";
-            string[] teamNames = File.ReadAllLines(teamNamesFilePath);
-            for (int i = 0; i < teamNames.Length; i++)
-            {
-                if (teamNames[i].Contains(teamName))
-                {
-                    if (i < 15) return "East";
-                    else return "West";
-                }
-            }
-            return conference;
-        }
-
         public static (string, string) GetFullNameAndCityName(string teamName)
         {
             // work out number of capital letters in team name

@@ -14,7 +14,7 @@ namespace LeagueSimulation
 {
     public partial class ViewGameResultsUserControl : UserControl
     {
-        public League? league;
+        public League league;
         public int gameId;
         public ViewGameResultsUserControl(League league, int gameId)
         {
@@ -85,8 +85,48 @@ namespace LeagueSimulation
                         WITH currentPlayers AS (
                             SELECT playerId, teamId
                             FROM playerOnTeam
-                            WHERE dayJoined <= {league.CurrentDay} AND yearJoined <= {league.CurrentSeason + 2023}
+                            WHERE ((dayJoined <= {league.CurrentDay} AND yearJoined = {league.CurrentSeason + 2023}) OR (yearJoined < {league.CurrentSeason + 2023}))
                             AND dayLeft >= {league.CurrentDay} AND yearLeft >= {league.CurrentSeason + 2023}
+                        )
+                        SELECT
+                        p.playerForename || ' ' || p.playerSurname as name,
+                        ((l.currentSeason + 2023) - p.dateOfBirth) AS age,
+                        pos.positionShort as playerPosition,
+                        sp.playstyle,
+                        pgs.MP,
+                        pgs.gameValue,
+                        pgs.FGM,
+                        pgs.FGA,
+                        pgs.TFGM as '3PM',
+                        pgs.TFGA as '3PA',
+                        pgs.FTM,
+                        pgs.FTA,
+                        pgs.PTS,
+                        pgs.REB,
+                        pgs.AST,
+                        pgs.STL,
+                        pgs.BLK,
+                        pgs.TOV,
+                        pgs.PF
+
+                        FROM currentPlayers cp, league l
+                        JOIN playerGameStats pgs ON pgs.playerId = p.playerId
+                        AND pgs.isPlayoffs = {league.Playoffs}
+                        AND pgs.gameId = {gameId} -- gameId for the results
+                        AND pgs.seasonId = {league.CurrentSeason}
+                        JOIN players p ON cp.playerId = p.playerId
+                        JOIN teams t ON cp.teamId = t.teamId
+                        AND t.teamName = '{team1Name}' -- teamName to input
+                        JOIN secondaryPlaystyle sp ON sp.secondaryPlaystyleId = p.secondaryPlaystyleId
+                        JOIN position pos ON pos.positionId = p.positionId
+                        ORDER BY MP DESC
+                        ;";
+                    if (league.Playoffs) getPlayerDataQuery = $@"
+                        WITH currentPlayers AS (
+                            SELECT playerId, teamId
+                            FROM playerOnTeam
+                            WHERE ((dayJoined <= 150 AND yearJoined = {league.CurrentSeason + 2023}) OR (yearJoined < {league.CurrentSeason + 2023}))
+                            AND dayLeft >= 150 AND yearLeft >= {league.CurrentSeason + 2023}
                         )
                         SELECT
                         p.playerForename || ' ' || p.playerSurname as name,
@@ -139,8 +179,48 @@ namespace LeagueSimulation
                         WITH currentPlayers AS (
                             SELECT playerId, teamId
                             FROM playerOnTeam
-                            WHERE dayJoined <= {league.CurrentDay} AND yearJoined <= {league.CurrentSeason + 2023}
+                            WHERE ((dayJoined <= {league.CurrentDay} AND yearJoined = {league.CurrentSeason + 2023}) OR (yearJoined < {league.CurrentSeason + 2023}))
                             AND dayLeft >= {league.CurrentDay} AND yearLeft >= {league.CurrentSeason + 2023}
+                        )
+                        SELECT
+                        p.playerForename || ' ' || p.playerSurname as name,
+                        ((l.currentSeason + 2023) - p.dateOfBirth) AS age,
+                        pos.positionShort as playerPosition,
+                        sp.playstyle,
+                        pgs.MP,
+                        pgs.gameValue,
+                        pgs.FGM,
+                        pgs.FGA,
+                        pgs.TFGM as '3PM',
+                        pgs.TFGA as '3PA',
+                        pgs.FTM,
+                        pgs.FTA,
+                        pgs.PTS,
+                        pgs.REB,
+                        pgs.AST,
+                        pgs.STL,
+                        pgs.BLK,
+                        pgs.TOV,
+                        pgs.PF
+
+                        FROM currentPlayers cp, league l
+                        JOIN playerGameStats pgs ON pgs.playerId = p.playerId
+                        AND pgs.isPlayoffs = {league.Playoffs}
+                        AND pgs.gameId = {gameId} -- gameId for the results
+                        AND pgs.seasonId = {league.CurrentSeason}
+                        JOIN players p ON cp.playerId = p.playerId
+                        JOIN teams t ON cp.teamId = t.teamId
+                        AND t.teamName = '{team2Name}' -- teamName to input
+                        JOIN secondaryPlaystyle sp ON sp.secondaryPlaystyleId = p.secondaryPlaystyleId
+                        JOIN position pos ON pos.positionId = p.positionId
+                        ORDER BY MP DESC
+                        ;";
+                    if (league.Playoffs) getPlayerDataQuery = $@"
+                        WITH currentPlayers AS (
+                            SELECT playerId, teamId
+                            FROM playerOnTeam
+                            WHERE ((dayJoined <= 150 AND yearJoined = {league.CurrentSeason + 2023}) OR (yearJoined < {league.CurrentSeason + 2023}))
+                            AND dayLeft >= 150 AND yearLeft >= {league.CurrentSeason + 2023}
                         )
                         SELECT
                         p.playerForename || ' ' || p.playerSurname as name,
@@ -184,11 +264,6 @@ namespace LeagueSimulation
             }
         }
 
-        private void backToScheduleButton_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void team1DataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // makes sure we don't check in the title row
@@ -205,6 +280,7 @@ namespace LeagueSimulation
                     name = (string)rowView["name"];
                 }
                 string[] splitName = name.Split(" ");
+                if (splitName.Length > 2) splitName[1] += ' ' + splitName[2];
                 int playerId = league.GetPlayerIdFromName(splitName[0], splitName[1]);
                 PlayerStatsUserControl playerStatsUserControl = new PlayerStatsUserControl(league, playerId);
                 MenuForm menuForm = new MenuForm();
@@ -239,6 +315,7 @@ namespace LeagueSimulation
                     name = (string)rowView["name"];
                 }
                 string[] splitName = name.Split(" ");
+                if (splitName.Length > 2) splitName[1] += ' ' + splitName[2];
                 int playerId = league.GetPlayerIdFromName(splitName[0], splitName[1]);
                 PlayerStatsUserControl playerStatsUserControl = new PlayerStatsUserControl(league, playerId);
                 MenuForm menuForm = new MenuForm();

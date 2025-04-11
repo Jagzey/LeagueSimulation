@@ -67,6 +67,8 @@ namespace LeagueSimulation
                 string teamName = "";
                 string playerForename = "";
                 string playerSurname = "";
+                string playerPlaystyle = "";
+                string playerPosition = "";
                 if (playerNameTextBox.Text == "") 
                 {
                     playerForename = "%"; playerSurname = "%"; 
@@ -79,6 +81,12 @@ namespace LeagueSimulation
 
                 if (teamNameTextBox.Text == "") teamName = "%";
                 else teamName = teamNameTextBox.Text;
+
+                if (playerPlaystyleTextBox.Text == "") playerPlaystyle = "%";
+                else playerPlaystyle = playerPlaystyleTextBox.Text;
+
+                if (playerPositionTextBox.Text == "") playerPosition = "%";
+                else playerPosition = playerPositionTextBox.Text;
 
                 string findPlayersQuery = $@"
                 SELECT p.playerForename, 
@@ -93,8 +101,8 @@ namespace LeagueSimulation
                 ROUND(AVG(pgs.AST), 1) AS avgAST
                 FROM players p, league
                 JOIN playerOnTeam pot 
-                    ON dayJoined <= league.CurrentDay 
-                    AND yearJoined <= league.CurrentSeason + 2023
+                    ON ((dayJoined <= league.CurrentDay 
+                    AND yearJoined = league.CurrentSeason + 2023) OR (yearJoined < league.CurrentSeason + 2023))
                     AND dayLeft >= league.CurrentDay 
                     AND yearLeft >= league.CurrentSeason + 2023
                     AND pot.playerId = p.playerId
@@ -109,12 +117,54 @@ namespace LeagueSimulation
                 AND p.playerForename LIKE '{playerForename}' 
                 AND p.playerSurname LIKE '{playerSurname}'
                 AND t.teamName LIKE '{teamName}'
+                AND sp.playstyle LIKE '{playerPlaystyle}'
+                AND (pos.positionShort LIKE '{playerPosition}' OR pos.positionName LIKE '{playerPosition}')
                 GROUP BY p.playerId
                 HAVING avgPTS BETWEEN {minPPGUpDown.Value} AND {maxPPGUpDown.Value}
                    AND avgREB BETWEEN {minRPGUpDown.Value} AND {maxRPGUpDown.Value}
                    AND avgAST BETWEEN {minAPGUpDown.Value} AND {maxAPGUpDown.Value}
                 ORDER BY avgPTS DESC;
                 ";
+                if (league.Playoffs)
+                {
+                    findPlayersQuery = $@"
+                SELECT p.playerForename, 
+                p.playerSurname,
+                t.teamName,
+                pos.positionShort AS 'pos',
+                printf('%d''%d', p.height / 12, p.height % 12) AS height,
+                p.weight,
+                sp.playstyle,
+                ROUND(AVG(pgs.PTS), 1) AS avgPTS,
+                ROUND(AVG(pgs.REB), 1) AS avgREB,
+                ROUND(AVG(pgs.AST), 1) AS avgAST
+                FROM players p, league
+                JOIN playerOnTeam pot 
+                    ON ((dayJoined <= 150
+                    AND yearJoined = league.CurrentSeason + 2023) OR (yearJoined < league.CurrentSeason + 2023))
+                    AND dayLeft >= league.CurrentDay 
+                    AND yearLeft >= league.CurrentSeason + 2023
+                    AND pot.playerId = p.playerId
+                JOIN teams t ON t.teamId = pot.teamId
+                JOIN playerGameStats pgs 
+                    ON pgs.playerId = p.playerId
+                    AND pgs.seasonId = league.CurrentSeason
+                JOIN secondaryPlaystyle sp ON sp.secondaryPlaystyleId = p.secondaryPlaystyleId
+                JOIN position pos ON pos.positionId = p.positionId
+                WHERE p.height BETWEEN {minHeightUpDown.Value} AND {maxHeightUpDown.Value}
+                AND p.weight BETWEEN {minWeightUpDown.Value} AND {maxWeightUpDown.Value}
+                AND p.playerForename LIKE '{playerForename}' 
+                AND p.playerSurname LIKE '{playerSurname}'
+                AND t.teamName LIKE '{teamName}'
+                AND sp.playstyle LIKE '{playerPlaystyle}'
+                AND (pos.positionShort LIKE '{playerPosition}' OR pos.positionName LIKE '{playerPosition}')
+                GROUP BY p.playerId
+                HAVING avgPTS BETWEEN {minPPGUpDown.Value} AND {maxPPGUpDown.Value}
+                   AND avgREB BETWEEN {minRPGUpDown.Value} AND {maxRPGUpDown.Value}
+                   AND avgAST BETWEEN {minAPGUpDown.Value} AND {maxAPGUpDown.Value}
+                ORDER BY avgPTS DESC;
+                ";
+                }
                 int rowCount = 0;
                 using (var connection = new SQLiteConnection(league.ConnectionString))
                 {
@@ -136,7 +186,7 @@ namespace LeagueSimulation
             }
             else
             {
-                MessageBox.Show(text: "The team name and/or player name contain invalid characters. Try again.");
+                MessageBox.Show(text: "The player, team, position or playstyle names contain invalid characters. Try again.");
             }
             if (playerNameTextBox.Text == "%% %%") playerNameTextBox.Text = "";
             if (teamNameTextBox.Text == "%%") teamNameTextBox.Text = "";

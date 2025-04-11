@@ -10,7 +10,7 @@ namespace LeagueSimulation
         public League CurrentLeague { get; set; }
         public Main()
         {
-            this.CurrentUser = "nzuobm";
+            this.CurrentUser = "FiercePC";
             InitializeComponent();
         }
 
@@ -49,6 +49,10 @@ namespace LeagueSimulation
                 if (League.CheckIfLeagueExists(saveState, CurrentUser))
                 {
                     MessageBox.Show(text: "A league exists for this save state, press 'Load Game' to load it, or enter a different save state.");
+                }
+                else if (teamNameDropDown.Text == "")
+                {
+                    MessageBox.Show(text: "Please choose a team name before creating your league.");
                 }
                 else
                 {

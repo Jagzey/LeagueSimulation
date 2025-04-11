@@ -37,7 +37,7 @@ namespace LeagueSimulation
                         sp.playstyle,
                         ROUND(AVG(pgs.PTS), 1) as PTS
                         FROM players p
-                        JOIN playerOnTeam pot ON dayJoined <= {league.CurrentDay} AND yearJoined <= {league.CurrentSeason + 2023}
+                        JOIN playerOnTeam pot ON ((dayJoined <= {league.CurrentDay} AND yearJoined = {league.CurrentSeason + 2023}) OR (yearJoined < {league.CurrentSeason + 2023}))
                         AND dayLeft >= {league.CurrentDay} AND yearLeft >= {league.CurrentSeason + 2023}
                         AND pot.playerId = p.playerId
                         JOIN
@@ -51,6 +51,7 @@ namespace LeagueSimulation
                         ORDER BY PTS DESC
                         LIMIT 15
                         ;";
+                        if (league.Playoffs) getPlayerDataQuery = getPlayerDataQuery.Replace($"= {league.CurrentDay} AND", "= 150 AND");
                         SQLiteDataAdapter rosterData = new SQLiteDataAdapter(getPlayerDataQuery, connection);
                         DataTable dt = new DataTable();
                         rosterData.Fill(dt);
@@ -99,7 +100,7 @@ namespace LeagueSimulation
                         sp.playstyle,
                         ROUND(AVG(pgs.REB), 1) as REB
                         FROM players p
-                        JOIN playerOnTeam pot ON dayJoined <= {league.CurrentDay} AND yearJoined <= {league.CurrentSeason + 2023}
+                        JOIN playerOnTeam pot ON ((dayJoined <= {league.CurrentDay} AND yearJoined = {league.CurrentSeason + 2023}) OR (yearJoined < {league.CurrentSeason + 2023}))
                         AND dayLeft >= {league.CurrentDay} AND yearLeft >= {league.CurrentSeason + 2023}
                         AND pot.playerId = p.playerId
                         JOIN
@@ -113,6 +114,7 @@ namespace LeagueSimulation
                         ORDER BY REB DESC
                         LIMIT 15
                         ; ";
+                        if (league.Playoffs) getPlayerDataQuery = getPlayerDataQuery.Replace($"= {league.CurrentDay} AND", "= 150 AND");
                         SQLiteDataAdapter rosterData = new SQLiteDataAdapter(getPlayerDataQuery, connection);
                         DataTable dt = new DataTable();
                         rosterData.Fill(dt);
@@ -161,7 +163,7 @@ namespace LeagueSimulation
                         sp.playstyle,
                         ROUND(AVG(pgs.AST), 1) as AST
                         FROM players p
-                        JOIN playerOnTeam pot ON dayJoined <= {league.CurrentDay} AND yearJoined <= {league.CurrentSeason + 2023}
+                        JOIN playerOnTeam pot ON ((dayJoined <= {league.CurrentDay} AND yearJoined = {league.CurrentSeason + 2023}) OR (yearJoined < {league.CurrentSeason + 2023}))
                         AND dayLeft >= {league.CurrentDay} AND yearLeft >= {league.CurrentSeason + 2023}
                         AND pot.playerId = p.playerId
                         JOIN
@@ -175,6 +177,7 @@ namespace LeagueSimulation
                         ORDER BY AST DESC
                         LIMIT 15
                         ;";
+                        if (league.Playoffs) getPlayerDataQuery = getPlayerDataQuery.Replace($"= {league.CurrentDay} AND", "= 150 AND");
                         SQLiteDataAdapter rosterData = new SQLiteDataAdapter(getPlayerDataQuery, connection);
                         DataTable dt = new DataTable();
                         rosterData.Fill(dt);
@@ -223,7 +226,7 @@ namespace LeagueSimulation
                         sp.playstyle,
                         ROUND(AVG(pgs.STL), 1) as STL
                         FROM players p
-                        JOIN playerOnTeam pot ON dayJoined <= {league.CurrentDay} AND yearJoined <= {league.CurrentSeason + 2023}
+                        JOIN playerOnTeam pot ON ((dayJoined <= {league.CurrentDay} AND yearJoined = {league.CurrentSeason + 2023}) OR (yearJoined < {league.CurrentSeason + 2023}))
                         AND dayLeft >= {league.CurrentDay} AND yearLeft >= {league.CurrentSeason + 2023}
                         AND pot.playerId = p.playerId
                         JOIN
@@ -237,6 +240,7 @@ namespace LeagueSimulation
                         ORDER BY STL DESC
                         LIMIT 15
                         ;";
+                        if (league.Playoffs) getPlayerDataQuery = getPlayerDataQuery.Replace($"= {league.CurrentDay} AND", "= 150 AND");
                         SQLiteDataAdapter rosterData = new SQLiteDataAdapter(getPlayerDataQuery, connection);
                         DataTable dt = new DataTable();
                         rosterData.Fill(dt);
@@ -285,7 +289,7 @@ namespace LeagueSimulation
                         sp.playstyle,
                         ROUND(AVG(pgs.TOV), 1) as TOV
                         FROM players p
-                        JOIN playerOnTeam pot ON dayJoined <= {league.CurrentDay} AND yearJoined <= {league.CurrentSeason + 2023}
+                        JOIN playerOnTeam pot ON ((dayJoined <= {league.CurrentDay} AND yearJoined = {league.CurrentSeason + 2023}) OR (yearJoined < {league.CurrentSeason + 2023}))
                         AND dayLeft >= {league.CurrentDay} AND yearLeft >= {league.CurrentSeason + 2023}
                         AND pot.playerId = p.playerId
                         JOIN
@@ -299,6 +303,7 @@ namespace LeagueSimulation
                         ORDER BY TOV DESC
                         LIMIT 15
                         ;";
+                        if (league.Playoffs) getPlayerDataQuery = getPlayerDataQuery.Replace($"= {league.CurrentDay} AND", "= 150 AND");
                         SQLiteDataAdapter rosterData = new SQLiteDataAdapter(getPlayerDataQuery, connection);
                         DataTable dt = new DataTable();
                         rosterData.Fill(dt);
@@ -347,7 +352,7 @@ namespace LeagueSimulation
                         sp.playstyle,
                         ROUND(AVG(pgs.BLK), 1) as BLK
                         FROM players p
-                        JOIN playerOnTeam pot ON dayJoined <= {league.CurrentDay} AND yearJoined <= {league.CurrentSeason + 2023}
+                        JOIN playerOnTeam pot ON ((dayJoined <= {league.CurrentDay} AND yearJoined = {league.CurrentSeason + 2023}) OR (yearJoined < {league.CurrentSeason + 2023}))
                         AND dayLeft >= {league.CurrentDay} AND yearLeft >= {league.CurrentSeason + 2023}
                         AND pot.playerId = p.playerId
                         JOIN
@@ -361,6 +366,7 @@ namespace LeagueSimulation
                         ORDER BY BLK DESC
                         LIMIT 15
                         ;";
+                        if (league.Playoffs) getPlayerDataQuery = getPlayerDataQuery.Replace($"= {league.CurrentDay} AND", "= 150 AND");
                         SQLiteDataAdapter rosterData = new SQLiteDataAdapter(getPlayerDataQuery, connection);
                         DataTable dt = new DataTable();
                         rosterData.Fill(dt);
@@ -409,7 +415,7 @@ namespace LeagueSimulation
                         sp.playstyle,
                         ROUND(AVG(pgs.gameValue), 1) as gameValue
                         FROM players p
-                        JOIN playerOnTeam pot ON dayJoined <= {league.CurrentDay} AND yearJoined <= {league.CurrentSeason + 2023}
+                        JOIN playerOnTeam pot ON ((dayJoined <= {league.CurrentDay} AND yearJoined = {league.CurrentSeason + 2023}) OR (yearJoined < {league.CurrentSeason + 2023}))
                         AND dayLeft >= {league.CurrentDay} AND yearLeft >= {league.CurrentSeason + 2023}
                         AND pot.playerId = p.playerId
                         JOIN
@@ -423,6 +429,7 @@ namespace LeagueSimulation
                         ORDER BY gameValue DESC
                         LIMIT 15
                         ;";
+                        if (league.Playoffs) getPlayerDataQuery = getPlayerDataQuery.Replace($"= {league.CurrentDay} AND", "= 150 AND");
                         SQLiteDataAdapter rosterData = new SQLiteDataAdapter(getPlayerDataQuery, connection);
                         DataTable dt = new DataTable();
                         rosterData.Fill(dt);
@@ -479,7 +486,7 @@ namespace LeagueSimulation
                         FROM players p, league l
                         JOIN playerGameStats pgs ON pgs.playerId = p.playerId AND pgs.isPlayoffs = 0
                         AND pgs.seasonId = {league.CurrentSeason}
-                        JOIN playerOnTeam pot ON dayJoined <= {league.CurrentDay} AND yearJoined <= {league.CurrentSeason + 2023}
+                        JOIN playerOnTeam pot ON ((dayJoined <= {league.CurrentDay} AND yearJoined = {league.CurrentSeason + 2023}) OR (yearJoined < {league.CurrentSeason + 2023}))
                         AND dayLeft >= {league.CurrentDay} AND yearLeft >= {league.CurrentSeason + 2023}
                         AND pot.playerId = p.playerId
                         JOIN
@@ -494,6 +501,7 @@ namespace LeagueSimulation
                         FROM playerData pd
                         ORDER BY defenseValue DESC
                         LIMIT 15;";
+                        if (league.Playoffs) getPlayerDataQuery = getPlayerDataQuery.Replace($"= {league.CurrentDay} AND", "= 150 AND");
                         SQLiteDataAdapter rosterData = new SQLiteDataAdapter(getPlayerDataQuery, connection);
                         DataTable dt = new DataTable();
                         rosterData.Fill(dt);

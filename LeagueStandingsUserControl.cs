@@ -49,63 +49,63 @@ namespace LeagueSimulation
                 {
                     if (eastFirstPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        eastFirstPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        eastFirstPositionLabel.Font = new Font("Segoe UI", 17.5F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (eastSecondPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        eastSecondPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        eastSecondPositionLabel.Font = new Font("Segoe UI", 17.5F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (eastThirdPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        eastThirdPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        eastThirdPositionLabel.Font = new Font("Segoe UI", 17.5F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (eastFifthPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        eastFifthPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        eastFifthPositionLabel.Font = new Font("Segoe UI", 17.5F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (eastSixthPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        eastSixthPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        eastSixthPositionLabel.Font = new Font("Segoe UI", 17.5F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (eastSeventhPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        eastSeventhPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        eastSeventhPositionLabel.Font = new Font("Segoe UI", 17.5F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (eastEighthPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        eastEighthPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        eastEighthPositionLabel.Font = new Font("Segoe UI", 17.5F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (eastNinthPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        eastNinthPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        eastNinthPositionLabel.Font = new Font("Segoe UI", 17.5F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (eastTenthPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        eastTenthPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        eastTenthPositionLabel.Font = new Font("Segoe UI", 17.5F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (eastEleventhPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        eastEleventhPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        eastEleventhPositionLabel.Font = new Font("Segoe UI", 17.5F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (eastTwelfthPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        eastTwelfthPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        eastTwelfthPositionLabel.Font = new Font("Segoe UI", 17.5F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (eastThirteenthPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        eastThirteenthPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        eastThirteenthPositionLabel.Font = new Font("Segoe UI", 17.5F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (eastFourteenthPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        eastFourteenthPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        eastFourteenthPositionLabel.Font = new Font("Segoe UI", 17.5F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (eastFifteenthPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        eastFifteenthPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        eastFifteenthPositionLabel.Font = new Font("Segoe UI", 17.5F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (eastFourthPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        eastFourthPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        eastFourthPositionLabel.Font = new Font("Segoe UI", 17.5F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                 }
 
@@ -136,63 +136,63 @@ namespace LeagueSimulation
                 {
                     if (westFirstPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        westFirstPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        westFirstPositionLabel.Font = new Font("Segoe UI", 17.5F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (westSecondPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        westSecondPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        westSecondPositionLabel.Font = new Font("Segoe UI", 17.5F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (westThirdPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        westThirdPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        westThirdPositionLabel.Font = new Font("Segoe UI", 17.5F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (westFifthPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        westFifthPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        westFifthPositionLabel.Font = new Font("Segoe UI", 17.5F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (westSixthPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        westSixthPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        westSixthPositionLabel.Font = new Font("Segoe UI", 17.5F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (westSeventhPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        westSeventhPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        westSeventhPositionLabel.Font = new Font("Segoe UI", 17.5F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (westEighthPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        westEighthPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        westEighthPositionLabel.Font = new Font("Segoe UI", 17.5F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (westNinthPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        westNinthPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        westNinthPositionLabel.Font = new Font("Segoe UI", 17.5F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (westTenthPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        westTenthPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        westTenthPositionLabel.Font = new Font("Segoe UI", 17.5F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (westEleventhPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        westEleventhPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        westEleventhPositionLabel.Font = new Font("Segoe UI", 17.5F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (westTwelfthPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        westTwelfthPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        westTwelfthPositionLabel.Font = new Font("Segoe UI", 17.5F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (westThirteenthPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        westThirteenthPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        westThirteenthPositionLabel.Font = new Font("Segoe UI", 17.5F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (westFourteenthPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        westFourteenthPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        westFourteenthPositionLabel.Font = new Font("Segoe UI", 17.5F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (westFifteenthPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        westFifteenthPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        westFifteenthPositionLabel.Font = new Font("Segoe UI", 17.5F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                     else if (westFourthPositionLabel.Text.Contains(league.UserTeamName))
                     {
-                        westFourthPositionLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        westFourthPositionLabel.Font = new Font("Segoe UI", 17.5F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                 }
 
@@ -211,12 +211,12 @@ namespace LeagueSimulation
 
         private void eastFirstPositionLabel_Click(object sender, EventArgs e)
         {
-            string teamName = league.GetTeamNameFromCity(eastFirstPositionLabel.Text.Split(" ")[1]);
+            string teamName = GetTeamNameFromRecordLabel(eastFirstPositionLabel.Text);
             RosterUserControl rosterUserControl = new RosterUserControl(league);
             rosterUserControl.currentTeamRoster.Text = teamName;
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size (50, 50);
+            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size(50, 50);
             menuForm.Size = menuForm.menuFormLayoutPanel.Size + new Size(40, 40);
             menuForm.menuFormLayoutPanel.Controls.Add(rosterUserControl);
             this.Hide();
@@ -227,12 +227,12 @@ namespace LeagueSimulation
 
         private void eastSecondPositionLabel_Click(object sender, EventArgs e)
         {
-            string teamName = league.GetTeamNameFromCity(eastSecondPositionLabel.Text.Split(" ")[1]);
+            string teamName = GetTeamNameFromRecordLabel(eastSecondPositionLabel.Text);
             RosterUserControl rosterUserControl = new RosterUserControl(league);
             rosterUserControl.currentTeamRoster.Text = teamName;
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size (50, 50);
+            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size(50, 50);
             menuForm.Size = menuForm.menuFormLayoutPanel.Size + new Size(40, 40);
             menuForm.menuFormLayoutPanel.Controls.Add(rosterUserControl);
             this.Hide();
@@ -241,13 +241,13 @@ namespace LeagueSimulation
 
         private void eastThirdPositionLabel_Click(object sender, EventArgs e)
         {
-            string teamName = league.GetTeamNameFromCity(eastThirdPositionLabel.Text.Split(" ")[1]);
-            
+            string teamName = GetTeamNameFromRecordLabel(eastThirdPositionLabel.Text);
+
             RosterUserControl rosterUserControl = new RosterUserControl(league);
             rosterUserControl.currentTeamRoster.Text = teamName;
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size (50, 50);
+            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size(50, 50);
             menuForm.Size = menuForm.menuFormLayoutPanel.Size + new Size(40, 40);
             menuForm.menuFormLayoutPanel.Controls.Add(rosterUserControl);
             this.Hide();
@@ -256,12 +256,12 @@ namespace LeagueSimulation
 
         private void eastFourthPositionLabel_Click(object sender, EventArgs e)
         {
-            string teamName = league.GetTeamNameFromCity(eastFourthPositionLabel.Text.Split(" ")[1]);
+            string teamName = GetTeamNameFromRecordLabel(eastFourthPositionLabel.Text);
             RosterUserControl rosterUserControl = new RosterUserControl(league);
             rosterUserControl.currentTeamRoster.Text = teamName;
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size (50, 50);
+            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size(50, 50);
             menuForm.Size = menuForm.menuFormLayoutPanel.Size + new Size(40, 40);
             menuForm.menuFormLayoutPanel.Controls.Add(rosterUserControl);
             this.Hide();
@@ -270,12 +270,12 @@ namespace LeagueSimulation
 
         private void eastFifthPositionLabel_Click(object sender, EventArgs e)
         {
-            string teamName = league.GetTeamNameFromCity(eastFifthPositionLabel.Text.Split(" ")[1]);
+            string teamName = GetTeamNameFromRecordLabel(eastFifthPositionLabel.Text);
             RosterUserControl rosterUserControl = new RosterUserControl(league);
             rosterUserControl.currentTeamRoster.Text = teamName;
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size (50, 50);
+            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size(50, 50);
             menuForm.Size = menuForm.menuFormLayoutPanel.Size + new Size(40, 40);
             menuForm.menuFormLayoutPanel.Controls.Add(rosterUserControl);
             this.Hide();
@@ -284,12 +284,12 @@ namespace LeagueSimulation
 
         private void eastSixthPositionLabel_Click(object sender, EventArgs e)
         {
-            string teamName = league.GetTeamNameFromCity(eastSixthPositionLabel.Text.Split(" ")[1]);
+            string teamName = GetTeamNameFromRecordLabel(eastSixthPositionLabel.Text);
             RosterUserControl rosterUserControl = new RosterUserControl(league);
             rosterUserControl.currentTeamRoster.Text = teamName;
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size (50, 50);
+            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size(50, 50);
             menuForm.Size = menuForm.menuFormLayoutPanel.Size + new Size(40, 40);
             menuForm.menuFormLayoutPanel.Controls.Add(rosterUserControl);
             this.Hide();
@@ -298,12 +298,12 @@ namespace LeagueSimulation
 
         private void eastSeventhPositionLabel_Click(object sender, EventArgs e)
         {
-            string teamName = league.GetTeamNameFromCity(eastSeventhPositionLabel.Text.Split(" ")[1]);
+            string teamName = GetTeamNameFromRecordLabel(eastSeventhPositionLabel.Text);
             RosterUserControl rosterUserControl = new RosterUserControl(league);
             rosterUserControl.currentTeamRoster.Text = teamName;
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size (50, 50);
+            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size(50, 50);
             menuForm.Size = menuForm.menuFormLayoutPanel.Size + new Size(40, 40);
             menuForm.menuFormLayoutPanel.Controls.Add(rosterUserControl);
             this.Hide();
@@ -312,12 +312,12 @@ namespace LeagueSimulation
 
         private void eastEighthPositionLabel_Click(object sender, EventArgs e)
         {
-            string teamName = league.GetTeamNameFromCity(eastEighthPositionLabel.Text.Split(" ")[1]);
+            string teamName = GetTeamNameFromRecordLabel(eastEighthPositionLabel.Text);
             RosterUserControl rosterUserControl = new RosterUserControl(league);
             rosterUserControl.currentTeamRoster.Text = teamName;
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size (50, 50);
+            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size(50, 50);
             menuForm.Size = menuForm.menuFormLayoutPanel.Size + new Size(40, 40);
             menuForm.menuFormLayoutPanel.Controls.Add(rosterUserControl);
             this.Hide();
@@ -326,12 +326,12 @@ namespace LeagueSimulation
 
         private void eastNinthPositionLabel_Click(object sender, EventArgs e)
         {
-            string teamName = league.GetTeamNameFromCity(eastNinthPositionLabel.Text.Split(" ")[1]);
+            string teamName = GetTeamNameFromRecordLabel(eastNinthPositionLabel.Text);
             RosterUserControl rosterUserControl = new RosterUserControl(league);
             rosterUserControl.currentTeamRoster.Text = teamName;
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size (50, 50);
+            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size(50, 50);
             menuForm.Size = menuForm.menuFormLayoutPanel.Size + new Size(40, 40);
             menuForm.menuFormLayoutPanel.Controls.Add(rosterUserControl);
             this.Hide();
@@ -340,12 +340,12 @@ namespace LeagueSimulation
 
         private void eastTenthPositionLabel_Click(object sender, EventArgs e)
         {
-            string teamName = league.GetTeamNameFromCity(eastTenthPositionLabel.Text.Split(" ")[1]);
+            string teamName = GetTeamNameFromRecordLabel(eastTenthPositionLabel.Text);
             RosterUserControl rosterUserControl = new RosterUserControl(league);
             rosterUserControl.currentTeamRoster.Text = teamName;
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size (50, 50);
+            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size(50, 50);
             menuForm.Size = menuForm.menuFormLayoutPanel.Size + new Size(40, 40);
             menuForm.menuFormLayoutPanel.Controls.Add(rosterUserControl);
             this.Hide();
@@ -354,12 +354,12 @@ namespace LeagueSimulation
 
         private void eastEleventhPositionLabel_Click(object sender, EventArgs e)
         {
-            string teamName = league.GetTeamNameFromCity(eastEleventhPositionLabel.Text.Split(" ")[1]);
+            string teamName = GetTeamNameFromRecordLabel(eastEleventhPositionLabel.Text);
             RosterUserControl rosterUserControl = new RosterUserControl(league);
             rosterUserControl.currentTeamRoster.Text = teamName;
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size (50, 50);
+            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size(50, 50);
             menuForm.Size = menuForm.menuFormLayoutPanel.Size + new Size(40, 40);
             menuForm.menuFormLayoutPanel.Controls.Add(rosterUserControl);
             this.Hide();
@@ -368,12 +368,12 @@ namespace LeagueSimulation
 
         private void eastTwelfthPositionLabel_Click(object sender, EventArgs e)
         {
-            string teamName = league.GetTeamNameFromCity(eastTwelfthPositionLabel.Text.Split(" ")[1]);
+            string teamName = GetTeamNameFromRecordLabel(eastTwelfthPositionLabel.Text);
             RosterUserControl rosterUserControl = new RosterUserControl(league);
             rosterUserControl.currentTeamRoster.Text = teamName;
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size (50, 50);
+            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size(50, 50);
             menuForm.Size = menuForm.menuFormLayoutPanel.Size + new Size(40, 40);
             menuForm.menuFormLayoutPanel.Controls.Add(rosterUserControl);
             this.Hide();
@@ -382,12 +382,12 @@ namespace LeagueSimulation
 
         private void eastThirteenthPositionLabel_Click(object sender, EventArgs e)
         {
-            string teamName = league.GetTeamNameFromCity(eastThirteenthPositionLabel.Text.Split(" ")[1]);
+            string teamName = GetTeamNameFromRecordLabel(eastThirteenthPositionLabel.Text);
             RosterUserControl rosterUserControl = new RosterUserControl(league);
             rosterUserControl.currentTeamRoster.Text = teamName;
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size (50, 50);
+            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size(50, 50);
             menuForm.Size = menuForm.menuFormLayoutPanel.Size + new Size(40, 40);
             menuForm.menuFormLayoutPanel.Controls.Add(rosterUserControl);
             this.Hide();
@@ -396,12 +396,12 @@ namespace LeagueSimulation
 
         private void eastFourteenthPositionLabel_Click(object sender, EventArgs e)
         {
-            string teamName = league.GetTeamNameFromCity(eastFourteenthPositionLabel.Text.Split(" ")[1]);
+            string teamName = GetTeamNameFromRecordLabel(eastFourteenthPositionLabel.Text);
             RosterUserControl rosterUserControl = new RosterUserControl(league);
             rosterUserControl.currentTeamRoster.Text = teamName;
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size (50, 50);
+            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size(50, 50);
             menuForm.Size = menuForm.menuFormLayoutPanel.Size + new Size(40, 40);
             menuForm.menuFormLayoutPanel.Controls.Add(rosterUserControl);
             this.Hide();
@@ -410,12 +410,12 @@ namespace LeagueSimulation
 
         private void eastFifteenthPositionLabel_Click(object sender, EventArgs e)
         {
-            string teamName = league.GetTeamNameFromCity(eastFifteenthPositionLabel.Text.Split(" ")[1]);
+            string teamName = GetTeamNameFromRecordLabel(eastFifteenthPositionLabel.Text);
             RosterUserControl rosterUserControl = new RosterUserControl(league);
             rosterUserControl.currentTeamRoster.Text = teamName;
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size (50, 50);
+            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size(50, 50);
             menuForm.Size = menuForm.menuFormLayoutPanel.Size + new Size(40, 40);
             menuForm.menuFormLayoutPanel.Controls.Add(rosterUserControl);
             this.Hide();
@@ -424,12 +424,12 @@ namespace LeagueSimulation
 
         private void westFirstPositionLabel_Click(object sender, EventArgs e)
         {
-            string teamName = league.GetTeamNameFromCity(westFirstPositionLabel.Text.Split(" ")[1]);
+            string teamName = GetTeamNameFromRecordLabel(westFirstPositionLabel.Text);
             RosterUserControl rosterUserControl = new RosterUserControl(league);
             rosterUserControl.currentTeamRoster.Text = teamName;
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size (50, 50);
+            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size(50, 50);
             menuForm.Size = menuForm.menuFormLayoutPanel.Size + new Size(40, 40);
             menuForm.menuFormLayoutPanel.Controls.Add(rosterUserControl);
             this.Hide();
@@ -438,12 +438,12 @@ namespace LeagueSimulation
 
         private void westSecondPositionLabel_Click(object sender, EventArgs e)
         {
-            string teamName = league.GetTeamNameFromCity(westSecondPositionLabel.Text.Split(" ")[1]);
+            string teamName = GetTeamNameFromRecordLabel(westSecondPositionLabel.Text);
             RosterUserControl rosterUserControl = new RosterUserControl(league);
             rosterUserControl.currentTeamRoster.Text = teamName;
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size (50, 50);
+            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size(50, 50);
             menuForm.Size = menuForm.menuFormLayoutPanel.Size + new Size(40, 40);
             menuForm.menuFormLayoutPanel.Controls.Add(rosterUserControl);
             this.Hide();
@@ -452,12 +452,12 @@ namespace LeagueSimulation
 
         private void westThirdPositionLabel_Click(object sender, EventArgs e)
         {
-            string teamName = league.GetTeamNameFromCity(westThirdPositionLabel.Text.Split(" ")[1]);
+            string teamName = GetTeamNameFromRecordLabel(westThirdPositionLabel.Text);
             RosterUserControl rosterUserControl = new RosterUserControl(league);
             rosterUserControl.currentTeamRoster.Text = teamName;
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size (50, 50);
+            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size(50, 50);
             menuForm.Size = menuForm.menuFormLayoutPanel.Size + new Size(40, 40);
             menuForm.menuFormLayoutPanel.Controls.Add(rosterUserControl);
             this.Hide();
@@ -466,12 +466,12 @@ namespace LeagueSimulation
 
         private void westFourthPositionLabel_Click(object sender, EventArgs e)
         {
-            string teamName = league.GetTeamNameFromCity(westFourthPositionLabel.Text.Split(" ")[1]);
+            string teamName = GetTeamNameFromRecordLabel(westFourthPositionLabel.Text);
             RosterUserControl rosterUserControl = new RosterUserControl(league);
             rosterUserControl.currentTeamRoster.Text = teamName;
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size (50, 50);
+            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size(50, 50);
             menuForm.Size = menuForm.menuFormLayoutPanel.Size + new Size(40, 40);
             menuForm.menuFormLayoutPanel.Controls.Add(rosterUserControl);
             this.Hide();
@@ -480,12 +480,12 @@ namespace LeagueSimulation
 
         private void westFifthPositionLabel_Click(object sender, EventArgs e)
         {
-            string teamName = league.GetTeamNameFromCity(westFifthPositionLabel.Text.Split(" ")[1]);
+            string teamName = GetTeamNameFromRecordLabel(westFifthPositionLabel.Text);
             RosterUserControl rosterUserControl = new RosterUserControl(league);
             rosterUserControl.currentTeamRoster.Text = teamName;
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size (50, 50);
+            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size(50, 50);
             menuForm.Size = menuForm.menuFormLayoutPanel.Size + new Size(40, 40);
             menuForm.menuFormLayoutPanel.Controls.Add(rosterUserControl);
             this.Hide();
@@ -494,12 +494,12 @@ namespace LeagueSimulation
 
         private void westSixthPositionLabel_Click(object sender, EventArgs e)
         {
-            string teamName = league.GetTeamNameFromCity(westSixthPositionLabel.Text.Split(" ")[1]);
+            string teamName = GetTeamNameFromRecordLabel(westSixthPositionLabel.Text);
             RosterUserControl rosterUserControl = new RosterUserControl(league);
             rosterUserControl.currentTeamRoster.Text = teamName;
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size (50, 50);
+            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size(50, 50);
             menuForm.Size = menuForm.menuFormLayoutPanel.Size + new Size(40, 40);
             menuForm.menuFormLayoutPanel.Controls.Add(rosterUserControl);
             this.Hide();
@@ -508,12 +508,12 @@ namespace LeagueSimulation
 
         private void westSeventhPositionLabel_Click(object sender, EventArgs e)
         {
-            string teamName = league.GetTeamNameFromCity(westSeventhPositionLabel.Text.Split(" ")[1]);
+            string teamName = GetTeamNameFromRecordLabel(westSeventhPositionLabel.Text);
             RosterUserControl rosterUserControl = new RosterUserControl(league);
             rosterUserControl.currentTeamRoster.Text = teamName;
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size (50, 50);
+            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size(50, 50);
             menuForm.Size = menuForm.menuFormLayoutPanel.Size + new Size(40, 40);
             menuForm.menuFormLayoutPanel.Controls.Add(rosterUserControl);
             this.Hide();
@@ -522,12 +522,12 @@ namespace LeagueSimulation
 
         private void westEighthPositionLabel_Click(object sender, EventArgs e)
         {
-            string teamName = league.GetTeamNameFromCity(westEighthPositionLabel.Text.Split(" ")[1]);
+            string teamName = GetTeamNameFromRecordLabel(westEighthPositionLabel.Text);
             RosterUserControl rosterUserControl = new RosterUserControl(league);
             rosterUserControl.currentTeamRoster.Text = teamName;
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size (50, 50);
+            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size(50, 50);
             menuForm.Size = menuForm.menuFormLayoutPanel.Size + new Size(40, 40);
             menuForm.menuFormLayoutPanel.Controls.Add(rosterUserControl);
             this.Hide();
@@ -536,12 +536,12 @@ namespace LeagueSimulation
 
         private void westNinthPositionLabel_Click(object sender, EventArgs e)
         {
-            string teamName = league.GetTeamNameFromCity(westNinthPositionLabel.Text.Split(" ")[1]);
+            string teamName = GetTeamNameFromRecordLabel(westNinthPositionLabel.Text);
             RosterUserControl rosterUserControl = new RosterUserControl(league);
             rosterUserControl.currentTeamRoster.Text = teamName;
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size (50, 50);
+            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size(50, 50);
             menuForm.Size = menuForm.menuFormLayoutPanel.Size + new Size(40, 40);
             menuForm.menuFormLayoutPanel.Controls.Add(rosterUserControl);
             this.Hide();
@@ -550,12 +550,12 @@ namespace LeagueSimulation
 
         private void westTenthPositionLabel_Click(object sender, EventArgs e)
         {
-            string teamName = league.GetTeamNameFromCity(westTenthPositionLabel.Text.Split(" ")[1]);
+            string teamName = GetTeamNameFromRecordLabel(westTenthPositionLabel.Text);
             RosterUserControl rosterUserControl = new RosterUserControl(league);
             rosterUserControl.currentTeamRoster.Text = teamName;
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size (50, 50);
+            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size(50, 50);
             menuForm.Size = menuForm.menuFormLayoutPanel.Size + new Size(40, 40);
             menuForm.menuFormLayoutPanel.Controls.Add(rosterUserControl);
             this.Hide();
@@ -564,12 +564,12 @@ namespace LeagueSimulation
 
         private void westEleventhPositionLabel_Click(object sender, EventArgs e)
         {
-            string teamName = league.GetTeamNameFromCity(westEleventhPositionLabel.Text.Split(" ")[1]);
+            string teamName = GetTeamNameFromRecordLabel(westEleventhPositionLabel.Text);
             RosterUserControl rosterUserControl = new RosterUserControl(league);
             rosterUserControl.currentTeamRoster.Text = teamName;
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size (50, 50);
+            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size(50, 50);
             menuForm.Size = menuForm.menuFormLayoutPanel.Size + new Size(40, 40);
             menuForm.menuFormLayoutPanel.Controls.Add(rosterUserControl);
             this.Hide();
@@ -578,12 +578,12 @@ namespace LeagueSimulation
 
         private void westTwelfthPositionLabel_Click(object sender, EventArgs e)
         {
-            string teamName = league.GetTeamNameFromCity(westTwelfthPositionLabel.Text.Split(" ")[1]);
+            string teamName = GetTeamNameFromRecordLabel(westTwelfthPositionLabel.Text);
             RosterUserControl rosterUserControl = new RosterUserControl(league);
             rosterUserControl.currentTeamRoster.Text = teamName;
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size (50, 50);
+            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size(50, 50);
             menuForm.Size = menuForm.menuFormLayoutPanel.Size + new Size(40, 40);
             menuForm.menuFormLayoutPanel.Controls.Add(rosterUserControl);
             this.Hide();
@@ -592,12 +592,12 @@ namespace LeagueSimulation
 
         private void westThirteenthPositionLabel_Click(object sender, EventArgs e)
         {
-            string teamName = league.GetTeamNameFromCity(westThirteenthPositionLabel.Text.Split(" ")[1]);
+            string teamName = GetTeamNameFromRecordLabel(westThirteenthPositionLabel.Text);
             RosterUserControl rosterUserControl = new RosterUserControl(league);
             rosterUserControl.currentTeamRoster.Text = teamName;
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size (50, 50);
+            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size(50, 50);
             menuForm.Size = menuForm.menuFormLayoutPanel.Size + new Size(40, 40);
             menuForm.menuFormLayoutPanel.Controls.Add(rosterUserControl);
             this.Hide();
@@ -606,12 +606,12 @@ namespace LeagueSimulation
 
         private void westFourteenthPositionLabel_Click(object sender, EventArgs e)
         {
-            string teamName = league.GetTeamNameFromCity(westFourteenthPositionLabel.Text.Split(" ")[1]);
+            string teamName = GetTeamNameFromRecordLabel(westFourteenthPositionLabel.Text);
             RosterUserControl rosterUserControl = new RosterUserControl(league);
             rosterUserControl.currentTeamRoster.Text = teamName;
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size (50, 50);
+            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size(50, 50);
             menuForm.Size = menuForm.menuFormLayoutPanel.Size + new Size(40, 40);
             menuForm.menuFormLayoutPanel.Controls.Add(rosterUserControl);
             this.Hide();
@@ -620,16 +620,42 @@ namespace LeagueSimulation
 
         private void westFifteenthPositionLabel_Click(object sender, EventArgs e)
         {
-            string teamName = league.GetTeamNameFromCity(westFifteenthPositionLabel.Text.Split(" ")[1]);
+            string teamName = GetTeamNameFromRecordLabel(westFifteenthPositionLabel.Text);
             RosterUserControl rosterUserControl = new RosterUserControl(league);
             rosterUserControl.currentTeamRoster.Text = teamName;
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size (50, 50);
+            menuForm.menuFormLayoutPanel.Size = rosterUserControl.Size += new Size(50, 50);
             menuForm.Size = menuForm.menuFormLayoutPanel.Size + new Size(40, 40);
             menuForm.menuFormLayoutPanel.Controls.Add(rosterUserControl);
             this.Hide();
             menuForm.Show();
+        }
+
+        public string GetTeamNameFromRecordLabel(string recordLabel)
+        {
+            string output = "";
+            foreach (char c in recordLabel)
+            {
+                if (Char.IsUpper(c) && output != "") output += " ";
+                if (Char.IsLetter(c)) output += c;
+            }
+            return output;
+        }
+
+        private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void label10_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel3_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

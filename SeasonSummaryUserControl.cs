@@ -123,7 +123,10 @@ namespace LeagueSimulation
                     JOIN playerGameStats pgs ON pgs.playerId = p.playerId 
                     AND pgs.isPlayoffs = 0
                     AND pgs.seasonId = {currentSeason}
-                    JOIN teams t ON t.teamId = p.teamId
+                    JOIN playerOnTeam pot ON ((pot.dayJoined <= 150 AND pot.yearJoined = {currentSeason} + 2023) OR (pot.yearJoined < {currentSeason} + 2023))
+                    AND (pot.yearLeft > {currentSeason} + 2023)
+                    AND pot.playerId = p.playerId
+                    JOIN teams t ON t.teamId = pot.teamId
                     WHERE p.playerId = (SELECT {award} FROM seasonNonTeamAwards WHERE seasonId = {currentSeason}) -- Enter playerId I want
                     GROUP BY p.playerId
                     ";
@@ -143,7 +146,10 @@ namespace LeagueSimulation
                         AND pgs.isPlayoffs = 1
                         JOIN playoffsSchedule ps ON ps.playoffsGameId = pgs.gameId AND ps.playoffsRound = 'Finals'
                         AND pgs.seasonId = {currentSeason}
-                        JOIN teams t ON t.teamId = p.teamId
+                        JOIN playerOnTeam pot ON ((pot.dayJoined <= 150 AND pot.yearJoined = {currentSeason} + 2023) OR (pot.yearJoined < {currentSeason} + 2023))
+                        AND (pot.yearLeft > {currentSeason} + 2023)
+                        AND pot.playerId = p.playerId
+                        JOIN teams t ON t.teamId = pot.teamId
                         WHERE p.playerId = (SELECT {award} FROM seasonNonTeamAwards WHERE seasonId = {currentSeason}) -- Enter playerId I want
                         GROUP BY p.playerId";
                     }
@@ -163,7 +169,10 @@ namespace LeagueSimulation
                         AND pgs.isPlayoffs = 1
                         JOIN playoffsSchedule ps ON ps.playoffsGameId = pgs.gameId AND ps.playoffsRound = 'Conference Finals'
                         AND pgs.seasonId = {currentSeason}
-                        JOIN teams t ON t.teamId = p.teamId
+                        JOIN playerOnTeam pot ON ((pot.dayJoined <= 150 AND pot.yearJoined = {currentSeason} + 2023) OR (pot.yearJoined < {currentSeason} + 2023))
+                        AND (pot.yearLeft > {currentSeason} + 2023)
+                        AND pot.playerId = p.playerId
+                        JOIN teams t ON t.teamId = pot.teamId
                         WHERE p.playerId = (SELECT {award} FROM seasonNonTeamAwards WHERE seasonId = {currentSeason}) -- Enter playerId I want
                         GROUP BY p.playerId";
                     }
@@ -234,7 +243,10 @@ namespace LeagueSimulation
                     JOIN playerGameStats pgs ON pgs.playerId = p.playerId 
                     AND pgs.isPlayoffs = 0
                     AND pgs.seasonId = {currentSeason}
-                    JOIN teams t ON t.teamId = p.teamId
+                    JOIN playerOnTeam pot ON ((pot.dayJoined <= 150 AND pot.yearJoined = {currentSeason} + 2023) OR (pot.yearJoined < {currentSeason} + 2023))
+                    AND (pot.yearLeft > {currentSeason} + 2023)
+                    AND pot.playerId = p.playerId
+                    JOIN teams t ON t.teamId = pot.teamId
                     WHERE p.playerId = (SELECT {teamAward} FROM seasonTeamAwards WHERE seasonId = {currentSeason} AND positionId = 1) -- Enter playerId I want
                     OR p.playerId = (SELECT {teamAward} FROM seasonTeamAwards WHERE seasonId = {currentSeason} AND positionId = 2)
                     OR p.playerId = (SELECT {teamAward} FROM seasonTeamAwards WHERE seasonId = {currentSeason} AND positionId = 3)

@@ -99,6 +99,17 @@ namespace LeagueSimulation
             menuForm.Show();
         }
 
+        public void LoadTradeProposal(TradeProposalUserControl userControl)
+        {
+            MenuForm menuForm = new MenuForm();
+            menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
+            menuForm.menuFormLayoutPanel.Size = userControl.Size + new Size(10, 10);
+            menuForm.Size = userControl.Size + new Size(40, 40);
+            menuForm.menuFormLayoutPanel.Controls.Add(userControl);
+            this.Hide();
+            menuForm.Show();
+        }
+
         public void LoadSeasonSummary(SeasonSummaryUserControl userControl)
         {
             MenuForm menuForm = new MenuForm();
@@ -176,6 +187,16 @@ namespace LeagueSimulation
         private void MenuForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             this.Show(); // Show the main form again when second form is closed 
+        }
+
+        private void tradeProposalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LoadTradeProposal(new TradeProposalUserControl(CurrentLeague));
+        }
+
+        private void displayPanel_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

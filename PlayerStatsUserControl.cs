@@ -61,8 +61,34 @@ namespace LeagueSimulation
                     WITH currentPlayers AS (
                     SELECT playerId, teamId
                     FROM playerOnTeam
-                    WHERE dayJoined <= {league.CurrentDay} AND yearJoined <= {league.CurrentSeason + 2023}
+                    WHERE ((dayJoined <= {league.CurrentDay} AND yearJoined = {league.CurrentSeason + 2023}) OR (yearJoined < {league.CurrentSeason + 2023}))
                     AND dayLeft >= {league.CurrentDay} AND yearLeft >= {league.CurrentSeason + 2023}
+                )
+                    SELECT 
+	                p.playerId,
+	                p.playerForename || ' ' || p.playerSurname as name,
+	                ((l.currentSeason + 2023) - p.dateOfBirth) AS age,
+	                t.teamName,
+	                pos.positionShort as playerPosition,
+	                printf('%d''%d', p.height / 12, p.height % 12) as height,
+	                p.weight,
+	                sp.playstyle,
+                    p.dateOfBirth
+	
+	
+                    FROM currentPlayers cp, league l
+                    JOIN players p ON cp.playerId = p.playerId
+                    JOIN teams t ON cp.teamId = t.teamId
+                    JOIN secondaryPlaystyle sp ON sp.secondaryPlaystyleId = p.secondaryPlaystyleId
+                    JOIN position pos ON pos.positionId = p.positionId 
+                    WHERE p.playerId = {playerId} -- Enter playerId I want
+                ";
+                if (league.Playoffs) getPlayerQuery = $@"
+                    WITH currentPlayers AS (
+                    SELECT playerId, teamId
+                    FROM playerOnTeam
+                    WHERE ((dayJoined <= 150 AND yearJoined = {league.CurrentSeason + 2023}) OR (yearJoined < {league.CurrentSeason + 2023}))
+                    AND dayLeft >= 150 AND yearLeft >= {league.CurrentSeason + 2023}
                 )
                     SELECT 
 	                p.playerId,
@@ -167,16 +193,16 @@ namespace LeagueSimulation
                     FROM league l, playerGameStats pgs
                     JOIN seasonSchedule ss ON pgs.seasonId = ss.seasonId
                     AND pgs.gameId = ss.gameId
-                    JOIN playerOnTeam pot ON dayJoined <= ss.dayId AND yearJoined <= pgs.seasonId + 2023
+                    JOIN playerOnTeam pot ON ((dayJoined <= ss.dayId AND yearJoined = pgs.seasonId + 2023) OR (yearJoined < pgs.seasonId + 2023))
                     AND dayLeft >= ss.dayId AND yearLeft >= pgs.seasonId + 2023
                     JOIN players p ON pot.playerId = p.playerId
                     AND p.playerId = {playerId} -- Enter playerId I want
                     JOIN teams t ON pot.teamId = t.teamId
                     JOIN secondaryPlaystyle sp ON sp.secondaryPlaystyleId = p.secondaryPlaystyleId
                     JOIN position pos ON pos.positionId = p.positionId
-                    WHERE pgs.IsPlayoffs = 0
+                    WHERE pgs.isPlayoffs = 0
                     AND pgs.playerId = pot.playerId 
-                    GROUP BY p.playerId, pgs.seasonId
+                    GROUP BY p.playerId, pgs.seasonId, pot.teamId
                     ORDER BY currentSeason
                 ;";
                 SQLiteDataAdapter rosterData = new SQLiteDataAdapter(getSeasonDataQuery, connection);
@@ -349,13 +375,18 @@ namespace LeagueSimulation
                     if (numAllDefenses > 0) awardsLabel.Text += $"\n {numAllDefenses}x All-Defense";
                 }
             }
-            
+
         }
 
         private void playerIdUpDown_ValueChanged(object sender, EventArgs e)
         {
             playerId = (int)playerIdUpDown.Value;
             FillLabels();
+        }
+
+        private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

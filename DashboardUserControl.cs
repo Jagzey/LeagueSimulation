@@ -510,9 +510,9 @@ namespace LeagueSimulation
             teamStatsPanel.Controls.Add(reboundsLabel);
             teamStatsPanel.Controls.Add(pointsLabel);
             teamStatsPanel.Controls.Add(teamStatsLabel);
-            teamStatsPanel.Location = new Point(843, 6);
+            teamStatsPanel.Location = new Point(826, 8);
             teamStatsPanel.Name = "teamStatsPanel";
-            teamStatsPanel.Size = new Size(254, 197);
+            teamStatsPanel.Size = new Size(271, 197);
             teamStatsPanel.TabIndex = 5;
             // 
             // turnoversLabel
@@ -567,9 +567,9 @@ namespace LeagueSimulation
             teamLeadersPanel.Controls.Add(rebLeaderLabel);
             teamLeadersPanel.Controls.Add(ptsLeaderLabel);
             teamLeadersPanel.Controls.Add(teamLeadersLabel);
-            teamLeadersPanel.Location = new Point(843, 209);
+            teamLeadersPanel.Location = new Point(826, 209);
             teamLeadersPanel.Name = "teamLeadersPanel";
-            teamLeadersPanel.Size = new Size(254, 193);
+            teamLeadersPanel.Size = new Size(271, 193);
             teamLeadersPanel.TabIndex = 6;
             // 
             // astLeaderLabel
@@ -618,9 +618,9 @@ namespace LeagueSimulation
             schedulePanel.Controls.Add(upcomingGame2Label);
             schedulePanel.Controls.Add(upcomingGame1Label);
             schedulePanel.Controls.Add(upcomingGamesLabel);
-            schedulePanel.Location = new Point(843, 408);
+            schedulePanel.Location = new Point(826, 408);
             schedulePanel.Name = "schedulePanel";
-            schedulePanel.Size = new Size(254, 229);
+            schedulePanel.Size = new Size(271, 229);
             schedulePanel.TabIndex = 8;
             // 
             // upcomingGame3Label

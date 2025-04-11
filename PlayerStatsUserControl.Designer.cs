@@ -160,6 +160,7 @@
             panel2.Name = "panel2";
             panel2.Size = new Size(950, 671);
             panel2.TabIndex = 1;
+            panel2.Paint += panel2_Paint;
             // 
             // awardsLabel
             // 
@@ -192,7 +193,7 @@
             dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
             seasonDataGridView.DefaultCellStyle = dataGridViewCellStyle2;
-            seasonDataGridView.Location = new Point(35, 429);
+            seasonDataGridView.Location = new Point(35, 419);
             seasonDataGridView.Name = "seasonDataGridView";
             seasonDataGridView.ReadOnly = true;
             dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -215,7 +216,7 @@
             seasonDataGridView.RowTemplate.DefaultCellStyle.ForeColor = SystemColors.WindowText;
             seasonDataGridView.RowTemplate.DefaultCellStyle.SelectionBackColor = SystemColors.Highlight;
             seasonDataGridView.RowTemplate.DefaultCellStyle.SelectionForeColor = SystemColors.HighlightText;
-            seasonDataGridView.Size = new Size(903, 222);
+            seasonDataGridView.Size = new Size(903, 249);
             seasonDataGridView.TabIndex = 10;
             // 
             // season

@@ -22,11 +22,8 @@ namespace LeagueSimulation.Models
         public void AddSeconds(int seconds)
         {
             Seconds += seconds;
-            if (Seconds > 60)
-            {
-                Seconds -= 60;
-                Minutes++;
-            }
+            Minutes += Seconds / 60;
+            Seconds %= 60;
         }
 
         public string PrintTime()

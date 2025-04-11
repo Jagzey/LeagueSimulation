@@ -37,6 +37,9 @@
     <Compile Update="SeasonSummaryUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="TradeProposalUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="ViewGameResultsUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
