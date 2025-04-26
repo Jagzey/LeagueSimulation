@@ -123,6 +123,19 @@ namespace LeagueSimulation
             menuForm.Show();
         }
 
+        public void LoadTeamStats(TeamStatsUserControl userControl)
+        {
+            MenuForm menuForm = new MenuForm();
+            menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
+            menuForm.menuFormLayoutPanel.Width = userControl.Width + 10;
+            menuForm.Width = userControl.Width + 40;
+            menuForm.menuFormLayoutPanel.Height = userControl.Height + 10;
+            menuForm.Height = userControl.Height + 40;
+            menuForm.menuFormLayoutPanel.Controls.Add(userControl);
+            this.Hide();
+            menuForm.Show();
+        }
+
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)
         {
             Application.Exit();
@@ -197,6 +210,11 @@ namespace LeagueSimulation
         private void displayPanel_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void teamStatsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LoadTeamStats(new TeamStatsUserControl(CurrentLeague));
         }
     }
 }

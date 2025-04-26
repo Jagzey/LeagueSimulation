@@ -37,7 +37,6 @@
             firstRoundLabel = new Label();
             label1 = new Label();
             bottomPanel = new Panel();
-            label33 = new Label();
             label26 = new Label();
             finals = new Panel();
             team2Finals = new Label();
@@ -60,8 +59,6 @@
             game1WestSecondRound = new Panel();
             team2game1WestSecondRound = new Label();
             team1game1WestSecondRound = new Label();
-            championsPanel = new Panel();
-            champions = new Label();
             game2WestConfFinals = new Panel();
             team2game1WestConfFinals = new Label();
             team1game1WestConfFinals = new Label();
@@ -96,7 +93,6 @@
             game1WestFirstRound.SuspendLayout();
             game2WestSecondRound.SuspendLayout();
             game1WestSecondRound.SuspendLayout();
-            championsPanel.SuspendLayout();
             game2WestConfFinals.SuspendLayout();
             game1EastConfFinals.SuspendLayout();
             game2EastSecondRound.SuspendLayout();
@@ -186,43 +182,31 @@
             // 
             // bottomPanel
             // 
-            bottomPanel.Controls.Add(label33);
             bottomPanel.Controls.Add(label26);
+            bottomPanel.Controls.Add(game2WestFirstRound);
+            bottomPanel.Controls.Add(game3WestFirstRound);
+            bottomPanel.Controls.Add(game2EastFirstRound);
+            bottomPanel.Controls.Add(game3EastFirstRound);
             bottomPanel.Controls.Add(finals);
             bottomPanel.Controls.Add(game4WestFirstRound);
-            bottomPanel.Controls.Add(game3WestFirstRound);
-            bottomPanel.Controls.Add(game2WestFirstRound);
             bottomPanel.Controls.Add(game1WestFirstRound);
             bottomPanel.Controls.Add(game2WestSecondRound);
             bottomPanel.Controls.Add(game1WestSecondRound);
-            bottomPanel.Controls.Add(championsPanel);
             bottomPanel.Controls.Add(game2WestConfFinals);
             bottomPanel.Controls.Add(game1EastConfFinals);
             bottomPanel.Controls.Add(game2EastSecondRound);
             bottomPanel.Controls.Add(game1EastSecondRound);
             bottomPanel.Controls.Add(game4EastFirstRound);
-            bottomPanel.Controls.Add(game3EastFirstRound);
-            bottomPanel.Controls.Add(game2EastFirstRound);
             bottomPanel.Controls.Add(game1EastFirstRound);
             bottomPanel.Location = new Point(3, 50);
             bottomPanel.Name = "bottomPanel";
             bottomPanel.Size = new Size(623, 344);
             bottomPanel.TabIndex = 1;
             // 
-            // label33
-            // 
-            label33.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label33.Location = new Point(252, 287);
-            label33.Name = "label33";
-            label33.Size = new Size(132, 21);
-            label33.TabIndex = 14;
-            label33.Text = "Champions";
-            label33.TextAlign = ContentAlignment.MiddleCenter;
-            // 
             // label26
             // 
             label26.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label26.Location = new Point(253, 173);
+            label26.Location = new Point(252, 218);
             label26.Name = "label26";
             label26.Size = new Size(132, 35);
             label26.TabIndex = 13;
@@ -233,7 +217,7 @@
             // 
             finals.Controls.Add(team2Finals);
             finals.Controls.Add(team1Finals);
-            finals.Location = new Point(253, 208);
+            finals.Location = new Point(252, 256);
             finals.Name = "finals";
             finals.Size = new Size(131, 76);
             finals.TabIndex = 12;
@@ -258,7 +242,7 @@
             // 
             game4WestFirstRound.Controls.Add(team2game4WestFirstRound);
             game4WestFirstRound.Controls.Add(team1game4WestFirstRound);
-            game4WestFirstRound.Location = new Point(509, 257);
+            game4WestFirstRound.Location = new Point(509, 75);
             game4WestFirstRound.Name = "game4WestFirstRound";
             game4WestFirstRound.Size = new Size(111, 68);
             game4WestFirstRound.TabIndex = 11;
@@ -285,7 +269,7 @@
             // 
             game3WestFirstRound.Controls.Add(team2game3WestFirstRound);
             game3WestFirstRound.Controls.Add(team1game3WestFirstRound);
-            game3WestFirstRound.Location = new Point(509, 177);
+            game3WestFirstRound.Location = new Point(509, 237);
             game3WestFirstRound.Name = "game3WestFirstRound";
             game3WestFirstRound.Size = new Size(111, 59);
             game3WestFirstRound.TabIndex = 10;
@@ -312,7 +296,7 @@
             // 
             game2WestFirstRound.Controls.Add(team2game2WestFirstRound);
             game2WestFirstRound.Controls.Add(team1game2WestFirstRound);
-            game2WestFirstRound.Location = new Point(509, 90);
+            game2WestFirstRound.Location = new Point(509, 165);
             game2WestFirstRound.Name = "game2WestFirstRound";
             game2WestFirstRound.Size = new Size(111, 61);
             game2WestFirstRound.TabIndex = 9;
@@ -366,7 +350,7 @@
             // 
             game2WestSecondRound.Controls.Add(team2game2WestSecondRound);
             game2WestSecondRound.Controls.Add(team1game2WestSecondRound);
-            game2WestSecondRound.Location = new Point(388, 221);
+            game2WestSecondRound.Location = new Point(387, 188);
             game2WestSecondRound.Name = "game2WestSecondRound";
             game2WestSecondRound.Size = new Size(115, 73);
             game2WestSecondRound.TabIndex = 7;
@@ -412,27 +396,11 @@
             team1game1WestSecondRound.TabIndex = 2;
             team1game1WestSecondRound.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // championsPanel
-            // 
-            championsPanel.Controls.Add(champions);
-            championsPanel.Location = new Point(253, 310);
-            championsPanel.Name = "championsPanel";
-            championsPanel.Size = new Size(131, 31);
-            championsPanel.TabIndex = 1;
-            // 
-            // champions
-            // 
-            champions.Location = new Point(6, -2);
-            champions.Name = "champions";
-            champions.Size = new Size(118, 35);
-            champions.TabIndex = 3;
-            champions.TextAlign = ContentAlignment.MiddleCenter;
-            // 
             // game2WestConfFinals
             // 
             game2WestConfFinals.Controls.Add(team2game1WestConfFinals);
             game2WestConfFinals.Controls.Add(team1game1WestConfFinals);
-            game2WestConfFinals.Location = new Point(254, 92);
+            game2WestConfFinals.Location = new Point(252, 139);
             game2WestConfFinals.Name = "game2WestConfFinals";
             game2WestConfFinals.Size = new Size(131, 76);
             game2WestConfFinals.TabIndex = 1;
@@ -457,7 +425,7 @@
             // 
             game1EastConfFinals.Controls.Add(team2game1EastConfFinals);
             game1EastConfFinals.Controls.Add(team1game1EastConfFinals);
-            game1EastConfFinals.Location = new Point(254, 3);
+            game1EastConfFinals.Location = new Point(252, 50);
             game1EastConfFinals.Name = "game1EastConfFinals";
             game1EastConfFinals.Size = new Size(131, 83);
             game1EastConfFinals.TabIndex = 1;
@@ -482,7 +450,7 @@
             // 
             game2EastSecondRound.Controls.Add(team2game2EastSecondRound);
             game2EastSecondRound.Controls.Add(team1game2EastSecondRound);
-            game2EastSecondRound.Location = new Point(126, 214);
+            game2EastSecondRound.Location = new Point(126, 188);
             game2EastSecondRound.Name = "game2EastSecondRound";
             game2EastSecondRound.Size = new Size(124, 80);
             game2EastSecondRound.TabIndex = 5;
@@ -497,7 +465,7 @@
             // 
             // team1game2EastSecondRound
             // 
-            team1game2EastSecondRound.Location = new Point(4, 7);
+            team1game2EastSecondRound.Location = new Point(4, 4);
             team1game2EastSecondRound.Name = "team1game2EastSecondRound";
             team1game2EastSecondRound.Size = new Size(118, 35);
             team1game2EastSecondRound.TabIndex = 2;
@@ -532,7 +500,7 @@
             // 
             game4EastFirstRound.Controls.Add(team2game4EastFirstRound);
             game4EastFirstRound.Controls.Add(team1game4EastFirstRound);
-            game4EastFirstRound.Location = new Point(3, 257);
+            game4EastFirstRound.Location = new Point(3, 81);
             game4EastFirstRound.Name = "game4EastFirstRound";
             game4EastFirstRound.Size = new Size(118, 68);
             game4EastFirstRound.TabIndex = 3;
@@ -559,7 +527,7 @@
             // 
             game3EastFirstRound.Controls.Add(team2game3EastFirstRound);
             game3EastFirstRound.Controls.Add(team1game3EastFirstRound);
-            game3EastFirstRound.Location = new Point(3, 177);
+            game3EastFirstRound.Location = new Point(3, 237);
             game3EastFirstRound.Name = "game3EastFirstRound";
             game3EastFirstRound.Size = new Size(118, 59);
             game3EastFirstRound.TabIndex = 2;
@@ -586,7 +554,7 @@
             // 
             game2EastFirstRound.Controls.Add(team2game2EastFirstRound);
             game2EastFirstRound.Controls.Add(team1game2EastFirstRound);
-            game2EastFirstRound.Location = new Point(3, 90);
+            game2EastFirstRound.Location = new Point(3, 173);
             game2EastFirstRound.Name = "game2EastFirstRound";
             game2EastFirstRound.Size = new Size(118, 61);
             game2EastFirstRound.TabIndex = 1;
@@ -654,7 +622,6 @@
             game1WestFirstRound.ResumeLayout(false);
             game2WestSecondRound.ResumeLayout(false);
             game1WestSecondRound.ResumeLayout(false);
-            championsPanel.ResumeLayout(false);
             game2WestConfFinals.ResumeLayout(false);
             game1EastConfFinals.ResumeLayout(false);
             game2EastSecondRound.ResumeLayout(false);
@@ -674,7 +641,6 @@
         private Panel bottomPanel;
         private Panel game2WestSecondRound;
         private Panel game1WestSecondRound;
-        private Panel championsPanel;
         private Panel game2WestConfFinals;
         private Panel game1EastConfFinals;
         private Panel game2EastSecondRound;
@@ -700,7 +666,6 @@
         private Label team1game2WestSecondRound;
         private Label team2game1WestSecondRound;
         private Label team1game1WestSecondRound;
-        private Label champions;
         private Label team2game2EastSecondRound;
         private Label team1game2EastSecondRound;
         private Label team2game1EastSecondRound;
@@ -720,7 +685,6 @@
         private Label team1game1WestConfFinals;
         private Label team2game1EastConfFinals;
         private Label team1game1EastConfFinals;
-        private Label label33;
         private Label label5;
         private Label label4;
         private Label label3;

@@ -16,12 +16,13 @@ namespace LeagueSimulation
     public partial class RosterUserControl : UserControl
     {
         public League? league;
-        public RosterUserControl(League league)
+        public RosterUserControl(League league, string teamName = "")
         {
             InitializeComponent();
             this.league = league;
             // set the current team, to the user's team
             currentTeamRoster.Text = league.UserTeamName;
+            if (teamName != "") currentTeamRoster.Text = teamName;
             FillLabels();
 
             // fill players in the dropdown

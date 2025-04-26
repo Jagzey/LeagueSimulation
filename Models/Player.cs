@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SQLite;
+using System.Text.Json;
 
 namespace LeagueSimulation.Models
 {
@@ -48,7 +49,6 @@ namespace LeagueSimulation.Models
 
         // getters and setters for player's attribtues
         public int Age { get; set; }
-        public int RosterSpot { get; set; }
         public string PrimaryPlaystyle { get; set; }
         public string SecondaryPlaystyle { get; set; }
         public int PlayerId { get; set; }
@@ -77,70 +77,39 @@ namespace LeagueSimulation.Models
 
 
 
-        public static double GenerateRandomNormalDistribution(double mean, double standardDeviation)
+        public static double GenerateRandomNormalDistribution(double mean, double standardDeviation, double minimum = 0, double maximum = 0)
         {
             Random random = new Random();
             double u1 = 1.0 - random.NextDouble(); // Uniform random number from 0 to 1
             double u2 = 1.0 - random.NextDouble();
             double z0 = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Cos(2.0 * Math.PI * u2); // Box-Muller transform
-            return mean + standardDeviation * z0;
+            double result = mean + standardDeviation * z0;
+            if (minimum != 0 && maximum != 0)
+            {
+                if (result < minimum) return minimum;
+                if (result > maximum) return maximum;
+            }
+            return result;
         }
 
         public void RandomHeight(string position)
         {
-            double mean = 0;
-            double stdev = 0;
-            double doubleHeight = 0;
-            if (position == "PG")
+            double mean = 72;
+            double stdev = 2;
+            Dictionary<string, (double, double, double, double)> positionToHeightMulti = new Dictionary<string, (double, double, double, double)>()
             {
-                mean = 75.5;
-                stdev = 2.1;
-                doubleHeight = GenerateRandomNormalDistribution(mean, stdev);
-                while (!(doubleHeight > 70 && doubleHeight < 79))
-                {
-                    doubleHeight = GenerateRandomNormalDistribution(mean, stdev);
-                }
-            }
-            else if (position == "SG")
-            {
-                mean = 77;
-                stdev = 1.4;
-                doubleHeight = GenerateRandomNormalDistribution(mean, stdev);
-                while (!(doubleHeight > 75.5 && doubleHeight < 81))
-                {
-                    doubleHeight = GenerateRandomNormalDistribution(mean, stdev);
-                }
-            }
-            else if (position == "SF")
-            {
-                mean = 80;
-                stdev = 2.38;
-                doubleHeight = GenerateRandomNormalDistribution(mean, stdev);
-                while (!(doubleHeight > 76.8 && doubleHeight < 82))
-                {
-                    doubleHeight = GenerateRandomNormalDistribution(mean, stdev);
-                }
-            }
-            else if (position == "PF")
-            {
-                mean = 81.2;
-                stdev = 2.57;
-                doubleHeight = GenerateRandomNormalDistribution(mean, stdev);
-                while (!(doubleHeight > 78.4 && doubleHeight < 84))
-                {
-                    doubleHeight = GenerateRandomNormalDistribution(mean, stdev);
-                }
-            }
-            else if (position == "C")
-            {
-                mean = 84;
-                stdev = 1.8;
-                doubleHeight = GenerateRandomNormalDistribution(mean, stdev);
-                while (!(doubleHeight > 80 && doubleHeight < 87))
-                {
-                    doubleHeight = GenerateRandomNormalDistribution(mean, stdev);
-                }
-            }
+                {"PG", (3.5, -0.1, 69, 76)},
+                {"SG", (5, -0.5, 74, 78)},
+                {"SF", (7, 0.4, 76, 81)},
+                {"PF", (9.2, 0.5, 78, 83)},
+                {"C", (11, -0.2, 81, 87)}
+            };
+            mean += positionToHeightMulti[position].Item1;
+            stdev += positionToHeightMulti[position].Item2;
+            double min = positionToHeightMulti[position].Item3;
+            double max = positionToHeightMulti[position].Item4;
+            double doubleHeight = GenerateRandomNormalDistribution(mean, stdev, min, max);
+            
 
             int height = (int)doubleHeight;
             string realHeight = $"{height / 12}'{height % 12}";
@@ -152,66 +121,34 @@ namespace LeagueSimulation.Models
             double doubleWeight = 0;
             double mean = 0;
             double stdev = 0;
+            double min = 0;
+            double max = 0;
+            double multiplier = 0;
 
-            if (position == "PG")
+            Dictionary<string, (double, double, double, double)> positionToWeightMulti = new Dictionary<string, (double, double, double, double)>()
             {
-                double multipler = (height - 75.5) / 75.5 * 200;
-                mean = 191 + multipler;
-                stdev = 12;
-                doubleWeight = GenerateRandomNormalDistribution(mean, stdev);
-                while (!(doubleWeight > 150 && doubleWeight < 230))
-                {
-                    doubleWeight = GenerateRandomNormalDistribution(mean, stdev);
-                }
-            }
-            else if (position == "SG")
+                {"PG", (191, 12, 150, 220)},
+                {"SG", (195, 14.8, 170, 235)},
+                {"SF", (230, 14, 190, 255)},
+                {"PF", (252, 20, 220, 280)},
+                {"C", (250, 26, 225, 310)}
+            };
+            Dictionary<string, (double, double)> heightToWeightMulti = new Dictionary<string, (double, double)>()
             {
-                double multipler = (height - 77.5) / 77.5 * 210;
-                mean = 195 + multipler;
-                stdev = 14.8;
-                doubleWeight = GenerateRandomNormalDistribution(mean, stdev);
-                while (!(doubleWeight > 170 && doubleWeight < 236))
-                {
-                    doubleWeight = GenerateRandomNormalDistribution(mean, stdev);
-                }
-            }
-            else if (position == "SF")
-            {
-                double multipler = (height - 79.5) / 79.5 * 180;
-                mean = 230 + multipler;
-                stdev = 14;
-                doubleWeight = GenerateRandomNormalDistribution(mean, stdev);
-                while (!(doubleWeight > 190 && doubleWeight < 265))
-                {
-                    doubleWeight = GenerateRandomNormalDistribution(mean, stdev);
-                }
-            }
-            else if (position == "PF")
-            {
-                double multipler = (height - 81.2) / 81.2 * 200;
-                mean = 252 + multipler;
-                stdev = 20;
-                doubleWeight = GenerateRandomNormalDistribution(mean, stdev);
-                while (!(doubleWeight > 220 && doubleWeight < 285))
-                {
-                    doubleWeight = GenerateRandomNormalDistribution(mean, stdev);
-                }
-            }
-            else if (position == "C")
-            {
-                double multipler = (height - 84) / 84 * 216;
-                mean = 250 + multipler;
-                stdev = 26;
-                doubleWeight = GenerateRandomNormalDistribution(mean, stdev);
-                while (!(doubleWeight > 227 && doubleWeight < 305))
-                {
-                    doubleWeight = GenerateRandomNormalDistribution(mean, stdev);
-                }
-            }
+                {"PG", (75, 200)},
+                {"SG", (77, 210)},
+                {"SF", (80, 180)},
+                {"PF", (82, 200)},
+                {"C", (85, 216)}
+            };
 
-            int weight = (int)doubleWeight;
-            Weight = weight;
-
+            multiplier = (height - heightToWeightMulti[position].Item1) / heightToWeightMulti[position].Item1 * heightToWeightMulti[position].Item2;
+            mean += positionToWeightMulti[position].Item1 + multiplier;
+            stdev += positionToWeightMulti[position].Item2;
+            min = positionToWeightMulti[position].Item3;
+            max = positionToWeightMulti[position].Item4;
+            doubleWeight = GenerateRandomNormalDistribution(mean, stdev, min, max);
+            Weight = (int)doubleWeight;
         }
 
         public void GeneratePrimaryPlaystyle()
@@ -445,8 +382,55 @@ namespace LeagueSimulation.Models
                 "Ripper"
             };
 
+            string json = "";
+            if (File.Exists($"\"C:\\Users\\nzuobm\\OneDrive - The Kings School Chester\\A-Level\\Computer Science\\NEA Project\\Project Files\\LeagueSimulation\\Names Files\\player_stats_config.json\""))
+            {
+                json = File.ReadAllText($"\"C:\\Users\\nzuobm\\OneDrive - The Kings School Chester\\A-Level\\Computer Science\\NEA Project\\Project Files\\LeagueSimulation\\Names Files\\player_stats_config.json\"");
+            }
+            else if (File.Exists($"\"C:\\Users\\FiercePC\\OneDrive - The Kings School Chester\\A-Level\\Computer Science\\NEA Project\\Project Files\\LeagueSimulation\\Names Files\\player_stats_config.json\""))
+            {
+                json = File.ReadAllText($"\"C:\\Users\\FiercePC\\OneDrive - The Kings School Chester\\A-Level\\Computer Science\\NEA Project\\Project Files\\LeagueSimulation\\Names Files\\player_stats_config.json\"");
+            }
+
+            var stats = JsonSerializer.Deserialize<Dictionary<string,Dictionary<string,Dictionary<string,Dictionary<string, int>>>>>(json);
+            if (stats != null)
+            {
+                closeShot = stats[position][primaryPlaystyle][secondaryPlaystyle]["closeShot"];
+                layup = stats[position][primaryPlaystyle][secondaryPlaystyle]["layup"];
+                dunk = stats[position][primaryPlaystyle][secondaryPlaystyle]["dunk"];
+                midRange = stats[position][primaryPlaystyle][secondaryPlaystyle]["midRange"];
+                threePoint = stats[position][primaryPlaystyle][secondaryPlaystyle]["threePoint"];
+                freeThrow = stats[position][primaryPlaystyle][secondaryPlaystyle]["freeThrow"];
+                passing = stats[position][primaryPlaystyle][secondaryPlaystyle]["passing"];
+                ballHandle = stats[position][primaryPlaystyle][secondaryPlaystyle]["ballHandle"];
+                defense = stats[position][primaryPlaystyle][secondaryPlaystyle]["defense"];
+                steal = stats[position][primaryPlaystyle][secondaryPlaystyle]["steal"];
+                block = stats[position][primaryPlaystyle][secondaryPlaystyle]["block"];
+                rebound = stats[position][primaryPlaystyle][secondaryPlaystyle]["rebound"];
+                speed = stats[position][primaryPlaystyle][secondaryPlaystyle]["speed"];
+                strength = stats[position][primaryPlaystyle][secondaryPlaystyle]["strength"];
+                stamina = stats[position][primaryPlaystyle][secondaryPlaystyle]["stamina"];
+            }
+            
+
+
             double statsMean = 0;
-            double statsStdev = 0;
+            double statsStdev = 1.4;
+            closeShot += (int)GenerateRandomNormalDistribution(0, 1.4);
+            layup += (int)GenerateRandomNormalDistribution(0, 1.4);
+            dunk += (int)GenerateRandomNormalDistribution(0, 1.4);
+            midRange += (int)GenerateRandomNormalDistribution(0, 1.4);
+            threePoint += (int)GenerateRandomNormalDistribution(0, 1.4);
+            freeThrow += (int)GenerateRandomNormalDistribution(0, 1.4);
+            passing += (int)GenerateRandomNormalDistribution(0, 1.4);
+            ballHandle += (int)GenerateRandomNormalDistribution(0, 1.4);
+            defense += (int)GenerateRandomNormalDistribution(0, 1.4);
+            steal += (int)GenerateRandomNormalDistribution(0, 1.4);
+            block += (int)GenerateRandomNormalDistribution(0, 1.4);
+            rebound += (int)GenerateRandomNormalDistribution(0, 1.4);
+            speed += (int)GenerateRandomNormalDistribution(0, 1.4);
+            strength += (int)GenerateRandomNormalDistribution(0, 1.4);
+            stamina += (int)GenerateRandomNormalDistribution(0, 1.4);
 
             // converting 60-99 into 0-30
             int multipler = (int)((overall - 50) * 0.6);
@@ -2958,8 +2942,6 @@ namespace LeagueSimulation.Models
             decimal scalar = 22 * ((Weight - 150m) / 150m);
             strength += -11 + (int)scalar;
             if (strength > 99) strength = 99;
-
-            if (closeShot == 0) { }
             CloseShot = closeShot;
             Layup = layup;
             if (CloseShot > Layup) Layup = CloseShot;

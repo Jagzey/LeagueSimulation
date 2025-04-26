@@ -452,6 +452,48 @@ namespace LeagueSimulation
                     label.Font = new Font(label.Font.FontFamily, label.Font.Size + 1);
                 }
             }
+
+            //fill in the retired players
+            {
+                retiredPlayer1.Text = "";
+                List<string> playerNames = new List<string>();
+                List<int> playerAges = new List<int>();
+                using (var connection = new SQLiteConnection(league.ConnectionString))
+                {
+                    connection.Open();
+                    string retiredPlayersQuery = $@"
+                        SELECT
+                        p.playerForename || ' ' || p.playerSurname AS playerName,
+                        pot.yearLeft - dateOfBirth AS age
+                        FROM players p 
+                        JOIN playerOnTeam pot ON pot.playerId = p.playerId
+                        AND pot.yearLeft = {currentSeason} + 2023
+                        AND (SELECT COUNT(*)
+                        FROM playerOnTeam pot2 
+                        WHERE pot2.playerOnTeamId > pot.playerOnTeamId
+                        AND pot2.playerId = p.playerId) = 0
+                        WHERE p.teamId = 0;
+                        ";
+                    using (var command = new SQLiteCommand(retiredPlayersQuery, connection))
+                    {
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                playerNames.Add(reader.GetString(reader.GetOrdinal("playerName")));
+                                playerAges.Add(reader.GetInt32(reader.GetOrdinal("age")));
+                            }
+                        }
+                    }
+                }
+                for (int i = 0;  i < playerNames.Count; i++)
+                {
+                    var playerName = playerNames[i];
+                    var playerAge = playerAges[i];
+
+                    retiredPlayer1.Text += $"{playerName} ({playerAge}) \n";
+                }
+            }
             seasonSummaryDataPanel.Show();
         }
 

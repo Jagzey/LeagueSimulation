@@ -29,7 +29,7 @@ namespace LeagueSimulation
             if (League.CheckIfLeagueExists(saveState, CurrentUser))
             {
                 MessageBox.Show(text: "A league exists for this save state, it will now be loaded.");
-                Form form2 = new Form2(saveState, new League(CurrentUser, saveState, false, League.CheckTeamMatchesSaveState(saveState, CurrentUser)));
+                Form form2 = new Form2(saveState, new League(CurrentUser, saveState, false, League.GetUserTeamName(saveState, CurrentUser)));
                 this.Hide();
                 form2.Show();
             }

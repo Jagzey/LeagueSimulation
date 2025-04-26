@@ -55,11 +55,11 @@ namespace LeagueSimulation
             bool validSearch = true;
             foreach (char c in playerNameTextBox.Text)
             {
-                if (!Char.IsLetter(c) && c != ' ') validSearch = false;
+                if (!Char.IsLetter(c) && c != ' ' && c != '-') validSearch = false;
             }
             foreach (char c in teamNameTextBox.Text)
             {
-                if (!Char.IsLetter(c) && c != ' ') validSearch = false;
+                if (!Char.IsLetter(c) && c != ' ' && c != '-') validSearch = false;
             }
             if (validSearch)
             {

@@ -541,6 +541,7 @@
             easternConferenceStandingsLabel.TabIndex = 0;
             easternConferenceStandingsLabel.Text = "Eastern Conference Standings";
             easternConferenceStandingsLabel.TextAlign = ContentAlignment.MiddleCenter;
+            easternConferenceStandingsLabel.Click += easternConferenceStandingsLabel_Click;
             // 
             // LeagueStandingsUserControl
             // 

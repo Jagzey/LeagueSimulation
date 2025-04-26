@@ -232,7 +232,7 @@ namespace LeagueSimulation
             dashboardPanel.Name = "dashboardPanel";
             dashboardPanel.Size = new Size(401, 25);
             dashboardPanel.TabIndex = 0;
-            dashboardPanel.Text = "Dashboard Panel";
+            dashboardPanel.Text = "Dashboard Menu";
             dashboardPanel.TextAlign = ContentAlignment.TopCenter;
             // 
             // confStandingsLabel
@@ -512,7 +512,7 @@ namespace LeagueSimulation
             teamStatsPanel.Controls.Add(teamStatsLabel);
             teamStatsPanel.Location = new Point(826, 8);
             teamStatsPanel.Name = "teamStatsPanel";
-            teamStatsPanel.Size = new Size(271, 197);
+            teamStatsPanel.Size = new Size(254, 197);
             teamStatsPanel.TabIndex = 5;
             // 
             // turnoversLabel
@@ -550,6 +550,7 @@ namespace LeagueSimulation
             pointsLabel.Size = new Size(200, 41);
             pointsLabel.TabIndex = 2;
             pointsLabel.Text = "Points: ";
+            pointsLabel.Click += pointsLabel_Click;
             // 
             // teamStatsLabel
             // 
@@ -569,7 +570,7 @@ namespace LeagueSimulation
             teamLeadersPanel.Controls.Add(teamLeadersLabel);
             teamLeadersPanel.Location = new Point(826, 209);
             teamLeadersPanel.Name = "teamLeadersPanel";
-            teamLeadersPanel.Size = new Size(271, 193);
+            teamLeadersPanel.Size = new Size(254, 193);
             teamLeadersPanel.TabIndex = 6;
             // 
             // astLeaderLabel
@@ -620,7 +621,7 @@ namespace LeagueSimulation
             schedulePanel.Controls.Add(upcomingGamesLabel);
             schedulePanel.Location = new Point(826, 408);
             schedulePanel.Name = "schedulePanel";
-            schedulePanel.Size = new Size(271, 229);
+            schedulePanel.Size = new Size(254, 229);
             schedulePanel.TabIndex = 8;
             // 
             // upcomingGame3Label
@@ -725,7 +726,7 @@ namespace LeagueSimulation
         private Label playoffsLabel;
         private Label? dashboardPanel;
 
-        private void assistsLabel_Click(object sender, EventArgs e)
+        private void pointsLabel_Click(object sender, EventArgs e)
         {
 
         }

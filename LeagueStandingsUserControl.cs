@@ -657,5 +657,10 @@ namespace LeagueSimulation
         {
 
         }
+
+        private void easternConferenceStandingsLabel_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

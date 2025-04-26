@@ -39,104 +39,23 @@ namespace LeagueSimulation.Models
         {
             List<Player> teamOnePlayers = new List<Player>();
             List<Player> teamTwoPlayers = new List<Player>();
-            Dictionary<int, int> rosterSpots = CalculateRosterSpots(team1.TeamId).Concat(CalculateRosterSpots(team2.TeamId)).ToDictionary(kv => kv.Key, kv => kv.Value);
             // extract the players from team1 and team2 and put them into their respective players lists
             using (var connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
                 string teamPlayersQuery = $@"
-                    WITH currentPlayers AS (
-	                    SELECT playerId, teamId
-	                    FROM playerOnTeam
-	                    WHERE ((dayJoined <= {CurrentLeague.CurrentDay} AND yearJoined = {CurrentLeague.CurrentSeason + 2023}) OR (yearJoined < {CurrentLeague.CurrentSeason + 2023}))
-	                    AND dayLeft >= {CurrentLeague.CurrentDay} AND yearLeft >= {CurrentLeague.CurrentSeason + 2023}
-                    )
-                    SELECT 
-                    p.playerId,
-                    p.height,
-                    p.weight,
-                    p.playerForename,
-                    p.playerSurname,
-                    p.closeShot,
-                    p.layup,
-                    p.dunk,
-                    p.midRange,
-                    p.threePoint,
-                    p.freeThrow,
-                    p.passing,
-                    p.ballHandle,
-                    p.defense,
-                    p.steal,
-                    p.block,
-                    p.rebound,
-                    p.speed,
-                    p.strength,
-                    p.stamina,
-                    p.overall,
-                    cp.teamId,
-                    pos.positionShort AS positionShort,
-                    sp.playstyle AS secondaryPlaystyle,
-                    pp.playstyle AS primaryPlaystyle
-                    FROM
-                        currentPlayers cp
-                    JOIN
-                        players p ON p.playerId = cp.playerId
-                    LEFT JOIN
-                        position pos ON p.positionId = pos.positionId
-                    LEFT JOIN
-                        secondaryPlaystyle sp ON p.secondaryPlaystyleId = sp.secondaryPlaystyleId
-                    LEFT JOIN
-                        primaryPlaystyle pp ON sp.primaryPlaystyleId = pp.primaryPlaystyleId
-                    WHERE
-                        cp.teamId = {team1.TeamId}
-                        OR cp.teamId = {team2.TeamId};
+	                SELECT playerId
+	                FROM playerOnTeam
+	                WHERE ((dayJoined <= {CurrentLeague.CurrentDay} AND yearJoined = {CurrentLeague.CurrentSeason + 2023}) OR (yearJoined < {CurrentLeague.CurrentSeason + 2023}))
+	                AND (dayLeft >= {CurrentLeague.CurrentDay} AND yearLeft >= {CurrentLeague.CurrentSeason + 2023})
+                    AND (teamId = {team1.TeamId} OR teamId = {team2.TeamId})
                 ";
                 if (CurrentLeague.Playoffs) teamPlayersQuery = $@"
-                    WITH currentPlayers AS (
-	                    SELECT playerId, teamId
-	                    FROM playerOnTeam
-	                    WHERE ((dayJoined <= 150 AND yearJoined = {CurrentLeague.CurrentSeason + 2023}) OR (yearJoined < {CurrentLeague.CurrentSeason + 2023}))
-	                    AND (dayLeft >= 150 AND yearLeft >= {CurrentLeague.CurrentSeason + 2023})
-                    )
-                    SELECT 
-                    p.playerId,
-                    p.height,
-                    p.weight,
-                    p.playerForename,
-                    p.playerSurname,
-                    p.closeShot,
-                    p.layup,
-                    p.dunk,
-                    p.midRange,
-                    p.threePoint,
-                    p.freeThrow,
-                    p.passing,
-                    p.ballHandle,
-                    p.defense,
-                    p.steal,
-                    p.block,
-                    p.rebound,
-                    p.speed,
-                    p.strength,
-                    p.stamina,
-                    p.overall,
-                    cp.teamId,
-                    pos.positionShort AS positionShort,
-                    sp.playstyle AS secondaryPlaystyle,
-                    pp.playstyle AS primaryPlaystyle
-                    FROM
-                        currentPlayers cp
-                    JOIN
-                        players p ON p.playerId = cp.playerId
-                    LEFT JOIN
-                        position pos ON p.positionId = pos.positionId
-                    LEFT JOIN
-                        secondaryPlaystyle sp ON p.secondaryPlaystyleId = sp.secondaryPlaystyleId
-                    LEFT JOIN
-                        primaryPlaystyle pp ON sp.primaryPlaystyleId = pp.primaryPlaystyleId
-                    WHERE
-                        cp.teamId = {team1.TeamId}
-                        OR cp.teamId = {team2.TeamId};
+	                SELECT playerId
+	                FROM playerOnTeam
+	                WHERE ((dayJoined <= 150 AND yearJoined = {CurrentLeague.CurrentSeason + 2023}) OR (yearJoined < {CurrentLeague.CurrentSeason + 2023}))
+	                AND (dayLeft >= 150 AND yearLeft >= {CurrentLeague.CurrentSeason + 2023})
+                    AND (teamId = {team1.TeamId} OR teamId = {team2.TeamId})
                 ";
                 using (var command = new SQLiteCommand(teamPlayersQuery, connection))
                 {
@@ -145,232 +64,16 @@ namespace LeagueSimulation.Models
                     {
                         while (reader.Read())
                         {
-                            int currentTeamId = reader.GetInt32(reader.GetOrdinal("teamId"));                            // extract data from a player in database, and put into a player class
-                            Player player = new Player();
-                            player.PlayerId = reader.GetInt32(reader.GetOrdinal("playerId"));
-                            player.position = reader.GetString(reader.GetOrdinal("positionShort"));
-                            player.PrimaryPlaystyle = reader.GetString(reader.GetOrdinal("primaryPlaystyle"));
-                            player.SecondaryPlaystyle = reader.GetString(reader.GetOrdinal("secondaryPlaystyle"));
-                            player.RosterSpot = rosterSpots[player.PlayerId];
-                            player.Height = reader.GetInt32(reader.GetOrdinal("height")); // height in inches
-                            player.Weight = reader.GetInt32(reader.GetOrdinal("weight")); // weight in lbs
-                            player.playerForename = reader.GetString(reader.GetOrdinal("playerForename"));
-                            player.playerSurname = reader.GetString(reader.GetOrdinal("playerSurname"));
-                            player.TeamId = reader.GetInt32(reader.GetOrdinal("teamId"));
-                            player.CloseShot = reader.GetInt32(reader.GetOrdinal("closeShot"));
-                            player.Layup = reader.GetInt32(reader.GetOrdinal("layup"));
-                            player.Dunk = reader.GetInt32(reader.GetOrdinal("dunk"));
-                            player.MidRange = reader.GetInt32(reader.GetOrdinal("midRange"));
-                            player.ThreePoint = reader.GetInt32(reader.GetOrdinal("threePoint"));
-                            player.FreeThrow = reader.GetInt32(reader.GetOrdinal("freeThrow"));
-                            player.Passing = reader.GetInt32(reader.GetOrdinal("passing"));
-                            player.BallHandle = reader.GetInt32(reader.GetOrdinal("ballHandle"));
-                            player.Defense = reader.GetInt32(reader.GetOrdinal("defense"));
-                            player.Steal = reader.GetInt32(reader.GetOrdinal("steal"));
-                            player.Block = reader.GetInt32(reader.GetOrdinal("block"));
-                            player.Rebound = reader.GetInt32(reader.GetOrdinal("rebound"));
-                            player.Speed = reader.GetInt32(reader.GetOrdinal("speed"));
-                            player.Strength = reader.GetInt32(reader.GetOrdinal("strength"));
-                            player.Stamina = reader.GetInt32(reader.GetOrdinal("stamina"));
-                            player.Overall = reader.GetInt32(reader.GetOrdinal("overall"));
-                            // add this extracted player to players list
-                            if (currentTeamId == team1.TeamId)
-                            {
-                                player.teamName = team1.teamName;
-                                teamOnePlayers.Add(player);
-                            }
-                            else if (currentTeamId == team2.TeamId)
-                            {
-                                player.teamName = team2.teamName;
-                                teamTwoPlayers.Add(player);
-                            }
+                            int playerId = reader.GetInt32(reader.GetOrdinal("playerId"));
+                            Player player = CurrentLeague.ExtractCurrentPlayerFromPlayerId(playerId); 
+                            if (player.TeamId == team1.TeamId)  teamOnePlayers.Add(player);
+                            else if (player.TeamId == team2.TeamId) teamTwoPlayers.Add(player);
                         }
                     }
                 }
 
                 return (teamOnePlayers, teamTwoPlayers);
             }
-        }
-
-        public Dictionary<int, int> CalculateRosterSpots(int teamId)
-        {
-            Dictionary<int, int> rosterSpots = new Dictionary<int, int>();
-            // initially, we get the highest overalls for each position, then sort by rosterSpot
-            string getRosterSpotQuery = $@"
-                WITH currentPlayers AS (
-                SELECT 
-                    playerId, 
-                    teamId
-                FROM 
-                    playerOnTeam pot
-                WHERE 
-                    ((dayJoined <= {CurrentLeague.CurrentDay} AND yearJoined = {CurrentLeague.CurrentSeason + 2023}) OR (yearJoined < {CurrentLeague.CurrentSeason + 2023}))
-                    AND dayLeft >= {CurrentLeague.CurrentDay} AND yearLeft >= {CurrentLeague.CurrentSeason + 2023}
-            ),
-            RankedByPosition AS (
-                SELECT
-                    p.playerId,
-                    p.teamId,
-                    p.positionId,
-                    p.overall,
-                    ROW_NUMBER() OVER (
-                        PARTITION BY p.positionId
-                        ORDER BY p.overall DESC
-                    ) AS positionRank
-                FROM
-                    currentPlayers cp
-                JOIN
-                    teams t ON cp.teamId = t.teamId
-                JOIN
-                    players p ON p.playerId = cp.playerId
-                WHERE
-                    cp.teamId = {teamId} -- Filter by the given team
-            ),
-            TopFive AS (
-                SELECT
-                    rbp.playerId,
-                    rbp.teamId,
-                    rbp.positionId,
-                    rbp.overall,
-                    rbp.positionRank,
-                    ROW_NUMBER() OVER (
-                        ORDER BY rbp.positionId, rbp.overall DESC
-                    ) AS rosterSpot
-                FROM
-                    RankedByPosition rbp
-                WHERE
-                    rbp.positionRank = 1 -- Only the top player in each position
-                LIMIT 5 -- Ensure exactly 5 players (one per position)
-            ),
-            RemainingPlayers AS (
-                SELECT
-                    rbp.playerId,
-                    rbp.teamId,
-                    rbp.positionId,
-                    rbp.overall,
-                    rbp.positionRank,
-                    ROW_NUMBER() OVER (
-                        ORDER BY rbp.positionId, rbp.overall DESC
-                    ) + 5 AS rosterSpot
-                FROM
-                    RankedByPosition rbp
-                JOIN
-                    players p ON p.playerId = rbp.playerId
-                JOIN
-                    teams t ON p.teamId = t.teamId
-                WHERE 
-                    rbp.positionRank > 1
-                --LIMIT 10 -- Only include the remaining 10 players
-            )
-            SELECT
-                playerId,
-                teamId,
-                positionId,
-                overall,
-                rosterSpot
-            FROM (
-                SELECT * FROM TopFive
-                UNION ALL
-                SELECT * FROM RemainingPlayers
-            ) rosteredPlayers
-            ORDER BY
-                rosterSpot;
-
-                ";
-            if (CurrentLeague.Playoffs) getRosterSpotQuery = $@"
-                WITH currentPlayers AS (
-                SELECT 
-                    playerId, 
-                    teamId
-                FROM 
-                    playerOnTeam pot
-                WHERE 
-                    ((dayJoined <= 150 AND yearJoined = {CurrentLeague.CurrentSeason + 2023}) OR (yearJoined < {CurrentLeague.CurrentSeason + 2023}))
-                    AND (dayLeft >= 150 AND yearLeft >= {CurrentLeague.CurrentSeason + 2023})
-                    AND pot.teamId = {teamId}
-            ),
-            RankedByPosition AS (
-                SELECT
-                    p.playerId,
-                    p.teamId,
-                    p.positionId,
-                    p.overall,
-                    ROW_NUMBER() OVER (
-                        PARTITION BY p.positionId
-                        ORDER BY p.overall DESC
-                    ) AS positionRank
-                FROM
-                    players p
-                JOIN
-                    teams t ON cp.teamId = t.teamId
-                JOIN
-                    currentPlayers cp ON p.playerId = cp.playerId
-                WHERE
-                    cp.teamId = {teamId} -- Filter by the given team
-            ),
-            TopFive AS (
-                SELECT
-                    rbp.playerId,
-                    rbp.teamId,
-                    rbp.positionId,
-                    rbp.overall,
-                    rbp.positionRank,
-                    ROW_NUMBER() OVER (
-                        ORDER BY rbp.positionId, rbp.overall DESC
-                    ) AS rosterSpot
-                FROM
-                    RankedByPosition rbp
-                WHERE
-                    rbp.positionRank = 1 -- Only the top player in each position
-                LIMIT 5 -- Ensure exactly 5 players (one per position)
-            ),
-            RemainingPlayers AS (
-                SELECT
-                    rbp.playerId,
-                    rbp.teamId,
-                    rbp.positionId,
-                    rbp.overall,
-                    rbp.positionRank,
-                    ROW_NUMBER() OVER (
-                        ORDER BY rbp.positionId, rbp.overall DESC
-                    ) + 5 AS rosterSpot
-                FROM
-                    RankedByPosition rbp
-                JOIN
-                    players p ON p.playerId = rbp.playerId
-                JOIN
-                    teams t ON p.teamId = t.teamId
-                WHERE 
-                    rbp.positionRank > 1
-                --LIMIT 10 -- Only include the remaining 10 players
-            )
-            SELECT
-                playerId,
-                teamId,
-                positionId,
-                overall,
-                rosterSpot
-            FROM (
-                SELECT * FROM TopFive
-                UNION ALL
-                SELECT * FROM RemainingPlayers
-            ) rosteredPlayers
-            ORDER BY
-                rosterSpot;
-
-                ";
-            using (var connection = new SQLiteConnection(CurrentLeague.ConnectionString))
-            {
-                connection.Open();
-                using (var command = new SQLiteCommand(getRosterSpotQuery, connection))
-                {
-                    using (var reader = command.ExecuteReader())
-                    {
-                        while (reader.Read()) rosterSpots.Add(reader.GetInt32(reader.GetOrdinal("playerId")), reader.GetInt32(reader.GetOrdinal("rosterSpot")));
-                    }
-                }
-            }
-            return rosterSpots;
         }
 
         private void AddPlayersIntoInGame()
@@ -385,25 +88,6 @@ namespace LeagueSimulation.Models
             {
                 PlayerInGame playerInGame = new PlayerInGame(player);
                 team2Stats.Add(playerInGame);
-            }
-        }
-
-        private void AddStartersFromInGamePlayers()
-        {
-            foreach (PlayerInGame player in team1Stats)
-            {
-                if (player.playerStats.RosterSpot < 6)
-                {
-                    team1StarterStats.Add(player);
-                }
-
-            }
-            foreach (PlayerInGame player in team2Stats)
-            {
-                if (player.playerStats.RosterSpot < 6)
-                {
-                    team2StarterStats.Add(player);
-                }
             }
         }
 
@@ -432,7 +116,7 @@ namespace LeagueSimulation.Models
                     // if the futureStarter and currentStarter are the same person, we don't do anything
                     if (currentStarter.playerStats.position == futureStarter.playerStats.position && futureStarter != currentStarter)
                     {
-                        string teamName = currentStarter.playerStats.teamName;
+                        string teamName = team1.teamName;
                         string currentPlayerName = currentStarter.playerStats.playerForename + " " + currentStarter.playerStats.playerSurname;
                         string futurePlayerName = futureStarter.playerStats.playerForename + " " + futureStarter.playerStats.playerSurname;
                         CommentatorPhrases.Add($"{teamName}: {currentPlayerName} substituted for {futurePlayerName}");
@@ -456,7 +140,7 @@ namespace LeagueSimulation.Models
                     // if the futureStarter and currentStarter are the same person, we don't do anything
                     if (currentStarter.playerStats.position == futureStarter.playerStats.position && futureStarter != currentStarter)
                     {
-                        string teamName = currentStarter.playerStats.teamName;
+                        string teamName = team2.teamName;
                         string currentPlayerName = currentStarter.playerStats.playerForename + " " + currentStarter.playerStats.playerSurname;
                         string futurePlayerName = futureStarter.playerStats.playerForename + " " + futureStarter.playerStats.playerSurname;
                         CommentatorPhrases.Add($"{teamName}: {currentPlayerName} substituted for {futurePlayerName}");
@@ -472,15 +156,25 @@ namespace LeagueSimulation.Models
 
         public void SetOvertimeRotation()
         {
-            List<PlayerInGame> overtimeTeam1Starters = new List<PlayerInGame>();
-            List<PlayerInGame> team1InRosterOrder = team1Stats.OrderBy(x => x.playerStats.RosterSpot).ToList();
-            for (int i = 0; i < 5; i++) overtimeTeam1Starters.Add(team1InRosterOrder[i]);
+            List<PlayerInGame> overtimeTeam1Starters = new List<PlayerInGame>()
+            {
+                team1Stats.Where(x => x.playerStats.position == "PG").OrderByDescending(x => x.MinutesToPlay).ToList()[0],
+                team1Stats.Where(x => x.playerStats.position == "SG").OrderByDescending(x => x.MinutesToPlay).ToList()[0],
+                team1Stats.Where(x => x.playerStats.position == "SF").OrderByDescending(x => x.MinutesToPlay).ToList()[0],
+                team1Stats.Where(x => x.playerStats.position == "PF").OrderByDescending(x => x.MinutesToPlay).ToList()[0],
+                team1Stats.Where(x => x.playerStats.position == "C").OrderByDescending(x => x.MinutesToPlay).ToList()[0]
+            };
 
-            List<PlayerInGame> overtimeTeam2Starters = new List<PlayerInGame>();
-            List<PlayerInGame> team2InRosterOrder = team2Stats.OrderBy(x => x.playerStats.RosterSpot).ToList();
-            for (int i = 0; i < 5; i++) overtimeTeam2Starters.Add(team2InRosterOrder[i]);
+            List<PlayerInGame> overtimeTeam2Starters = new List<PlayerInGame>()
+            {
+                team2Stats.Where(x => x.playerStats.position == "PG").OrderByDescending(x => x.MinutesToPlay).ToList()[0],
+                team2Stats.Where(x => x.playerStats.position == "SG").OrderByDescending(x => x.MinutesToPlay).ToList()[0],
+                team2Stats.Where(x => x.playerStats.position == "SF").OrderByDescending(x => x.MinutesToPlay).ToList()[0],
+                team2Stats.Where(x => x.playerStats.position == "PF").OrderByDescending(x => x.MinutesToPlay).ToList()[0],
+                team2Stats.Where(x => x.playerStats.position == "C").OrderByDescending(x => x.MinutesToPlay).ToList()[0]
+            };
+
             if (overtimeTeam1Starters.Count != 5 || overtimeTeam2Starters.Count != 5) { }
-
             team1StarterStats = overtimeTeam1Starters;
             team2StarterStats = overtimeTeam2Starters;
         }
@@ -497,6 +191,10 @@ namespace LeagueSimulation.Models
             int rotationSlot = 1;
             int numPasses = 0;
             int endOfGameTime = 48;
+            string oPlayerName = "";
+            string oPlayerTeamName = "";
+            string dPlayerName = "";
+            string dPlayerTeamName = "";
 
             // we write a nice message to the player about which teams are playing
             // we do this only if the game just started, and it's not overtime
@@ -544,7 +242,7 @@ namespace LeagueSimulation.Models
                     // here we check if the game ended in a draw, then go into OT if so
                     if (CheckForDraw().Item1)
                     {
-                        CommentatorPhrases.Add($"The game {team1Stats[0].playerStats.teamName} vs. {team2Stats[0].playerStats.teamName} resulted in a draw! We're going into overtime!");
+                        CommentatorPhrases.Add($"The game {team1.teamName} vs. {team2.teamName} resulted in a draw! We're going into overtime!");
                         CommentatorPhrases.Add($"The score was {CheckForDraw().Item2}");
                         (int, int) score = CalculateScore();
                         ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
@@ -596,10 +294,7 @@ namespace LeagueSimulation.Models
                         defenseStarterStats = team1StarterStats;
                     }
                     if (offenseStarterStats == defenseStarterStats) { }
-                    string oPlayerName = "";
-                    string oPlayerTeamName = "";
-                    string dPlayerName = "";
-                    string dPlayerTeamName = "";
+                    
                     // we calculate who starts with the ball, if the possession just started
                     if (startingPossession)
                     {
@@ -625,43 +320,52 @@ namespace LeagueSimulation.Models
                             }
                         }
 
+                        // we set the playerWithBall and his matchup's name, for the commentator phrases
+                        oPlayerName = $"{playerWithBall.playerStats.playerForename} {playerWithBall.playerStats.playerSurname}";
+                        dPlayerName = $"{playerWithBallMatchup.playerStats.playerForename} {playerWithBallMatchup.playerStats.playerSurname}";
+
+                        if (playerWithBall.playerStats.TeamId == team1.TeamId)
+                        {
+                            oPlayerTeamName = team1.teamName;
+                            dPlayerTeamName = team2.teamName;
+                        }
+                        else
+                        {
+                            oPlayerTeamName = team2.teamName;
+                            dPlayerTeamName = team1.teamName;
+                        }
+
                         // we say who starts the offense
                         string currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
-                        CommentatorPhrases.Add($"{playerWithBall.playerStats.playerForename} {playerWithBall.playerStats.playerSurname} starts the offense for the {playerWithBall.playerStats.teamName}");
+                        CommentatorPhrases.Add($"{playerWithBall.playerStats.playerForename} {playerWithBall.playerStats.playerSurname} starts the offense for the {oPlayerTeamName}");
                         ScoreAfterEachPhrase.Add(currentScore);
                         GameTimestamps.Add(gameClock.PrintTime());
                     }
-
-                    // we set the playerWithBall and his matchup's name, for the commentator phrases
-                    oPlayerName = $"{playerWithBall.playerStats.playerForename} {playerWithBall.playerStats.playerSurname}";
-                    oPlayerTeamName = $"{playerWithBall.playerStats.teamName}";
-                    dPlayerName = $"{playerWithBallMatchup.playerStats.playerForename} {playerWithBallMatchup.playerStats.playerSurname}";
-                    dPlayerTeamName = $"{playerWithBallMatchup.playerStats.teamName}";
 
                     // list of probabilities of events during a single offensive possession for an offensive player
                     bool foulOccurred = false;
 
                     double prob3PAttempted = 0;
                     // events after a 3 point is attempted
-                    double prob3PMade = 0.35;
+                    double prob3PMade = 0.37;
                     double prob3PBlocked = 0.01;
                     double prob3PMissed = 0.65;
 
                     double prob2PAttempted = 0;
                     // events after a 2 point is attempted
-                    double prob2PMade = 0.38;
+                    double prob2PMade = 0.40;
                     double prob2PBlocked = 0.006;
                     double prob2PMissed = 0.586;
 
                     double probLayupAttempted = 0;
                     // events after a layup is attempted
-                    double probLayupMade = 0.51;
+                    double probLayupMade = 0.54;
                     double probLayupBlocked = 0.062;
                     double probLayupMissed = 0.418;
 
                     double probDunkAttempted = 0;
                     // events after a dunk is attempted
-                    double probDunkMade = 0.51;
+                    double probDunkMade = 0.55;
                     double probDunkBlocked = 0.05;
                     double probDunkMissed = 0.50;
 
@@ -714,8 +418,8 @@ namespace LeagueSimulation.Models
                             double dBlockStat = playerWithBallMatchup.playerStats.Block;
                             double dDefenseStat = playerWithBallMatchup.playerStats.Defense;
 
-                            // convert 3 point stat (40-99) to (-0.12 - 0.12)
-                            oThreePointStat = -0.09 + (0.09 + 0.09) * (oThreePointStat - 40) / (99 - 40);
+                            // convert 3 point stat (40-99) to (-0.07 - 0.08)
+                            oThreePointStat = -0.07 + (0.07 + 0.00) * (oThreePointStat - 40) / (99 - 40);
                             if (playerWithBall.ThreePointMade > 10) oThreePointStat -= 0.0007 * (playerWithBall.FieldGoalMade - 10);
                             // convert height difference (-8 - 8) to (-0.07 to 0.07)
                             heightDifference = -0.07 + (0.07 + 0.07) * (heightDifference + 8) / (8 + 8);
@@ -774,7 +478,7 @@ namespace LeagueSimulation.Models
                                     GameTimestamps.Add(gameClock.PrintTime());
                                     // now we have a live free throw for the player fouled
                                     {
-                                        double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01 - 0.1;
+                                        double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01;
                                         // if the free throw is made
                                         if (random.NextDouble() < randomFreeThrowProbability)
                                         {
@@ -818,7 +522,7 @@ namespace LeagueSimulation.Models
                                 // here we have 3 free throws we need to simulate
                                 else
                                 {
-                                    double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01 - 0.1;
+                                    double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01;
                                     string currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
 
                                     CommentatorPhrases.Add($"{oPlayerName} was fouled on his three for the {oPlayerTeamName} by {dPlayerName} of the {dPlayerTeamName}");
@@ -999,7 +703,7 @@ namespace LeagueSimulation.Models
                             double dDefenseStat = playerWithBallMatchup.playerStats.Defense;
 
                             // convert 2 point stat (40-99) to (-0.10 - 0.10)
-                            oTwoPointStat = -0.11 + (0.11 + 0.11) * (oTwoPointStat - 40) / (99 - 40);
+                            oTwoPointStat = -0.10 + (0.10 + 0.11) * (oTwoPointStat - 40) / (99 - 40);
                             if (playerWithBall.FieldGoalMade > 20) oTwoPointStat -= 0.0007 * (playerWithBall.FieldGoalMade - 20);
                             // convert height difference (-8 - 8) to (-0.05 to 0.05)
                             heightDifference = -0.06 + (0.06 + 0.06) * (heightDifference + 8) / (8 + 8);
@@ -1054,7 +758,7 @@ namespace LeagueSimulation.Models
                                     GameTimestamps.Add(gameClock.PrintTime());
                                     // now we have a live free throw for the player fouled
                                     {
-                                        double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01 - 0.1;
+                                        double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01;
                                         // if the free throw is made
                                         if (random.NextDouble() < randomFreeThrowProbability)
                                         {
@@ -1098,7 +802,7 @@ namespace LeagueSimulation.Models
                                 // here we have 2 free throws we need to simulate
                                 else
                                 {
-                                    double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01 - 0.1;
+                                    double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01;
                                     string currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
 
                                     CommentatorPhrases.Add($"{oPlayerName} was fouled on his mid range for the {oPlayerTeamName} by {dPlayerName} of the {dPlayerTeamName}");
@@ -1261,7 +965,7 @@ namespace LeagueSimulation.Models
                             double dDefenseStat = playerWithBallMatchup.playerStats.Defense;
 
                             // convert 2 point stat (40-99) to (-0.11 - 0.11)
-                            oLayupStat = -0.12 + (0.12 + 0.12) * (oLayupStat - 40) / (99 - 40);
+                            oLayupStat = -0.10 + (0.10 + 0.12) * (oLayupStat - 40) / (99 - 40);
                             if (playerWithBall.FieldGoalMade > 4 && playerWithBall.GameValue > 13 && playerWithBall.playerStats.SecondaryPlaystyle != "Playmaker" && playerWithBall.playerStats.PrimaryPlaystyle == "Offensive") oLayupStat += 0.022 + 0.0008 * playerWithBall.FieldGoalMade;
                             if (playerWithBall.FieldGoalMade > 20) oLayupStat -= 0.0007 * (playerWithBall.FieldGoalMade - 20);
                             // convert height difference (-8 - 8) to (-0.11 to 0.11)
@@ -1318,7 +1022,7 @@ namespace LeagueSimulation.Models
                                     GameTimestamps.Add(gameClock.PrintTime());
                                     // now we have a live free throw for the player fouled
                                     {
-                                        double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01 - 0.1;
+                                        double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01;
                                         // if the free throw is made
                                         if (random.NextDouble() < randomFreeThrowProbability)
                                         {
@@ -1362,7 +1066,7 @@ namespace LeagueSimulation.Models
                                 // here we have 2 free throws we need to simulate
                                 else
                                 {
-                                    double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01 - 0.1;
+                                    double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01;
                                     string currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
 
                                     CommentatorPhrases.Add($"{oPlayerName} was fouled on his layup for the {oPlayerTeamName} by {dPlayerName} of the {dPlayerTeamName}");
@@ -1520,7 +1224,7 @@ namespace LeagueSimulation.Models
                             double dDefenseStat = playerWithBallMatchup.playerStats.Defense;
 
                             // convert 2 point stat (40-99) to (-0.11 - 0.11)
-                            oDunkStat = -0.12 + (0.12 + 0.12) * (oDunkStat - 40) / (99 - 40);
+                            oDunkStat = -0.10 + (0.10 + 0.12) * (oDunkStat - 40) / (99 - 40);
                             if (playerWithBall.FieldGoalMade > 20) oDunkStat -= 0.0007 * (playerWithBall.FieldGoalMade - 20);
                             // convert height difference (-8 - 8) to (-0.12 to 0.12)
                             heightDifference = -0.12 + (0.12 + 0.12) * (heightDifference + 8) / (8 + 8);
@@ -1577,7 +1281,7 @@ namespace LeagueSimulation.Models
 
                                     // now we have a live free throw for the player fouled
                                     {
-                                        double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01 - 0.1;
+                                        double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01;
                                         // if the free throw is made
                                         if (random.NextDouble() < randomFreeThrowProbability)
                                         {
@@ -1621,7 +1325,7 @@ namespace LeagueSimulation.Models
                                 // here we have 2 free throws we need to simulate
                                 else
                                 {
-                                    double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01 - 0.1;
+                                    double randomFreeThrowProbability = playerWithBall.playerStats.FreeThrow * 0.01;
                                     string currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
 
                                     CommentatorPhrases.Add($"{oPlayerName} was fouled on his dunk for the {oPlayerTeamName} by {dPlayerName} of the {dPlayerTeamName}");
@@ -1950,15 +1654,21 @@ namespace LeagueSimulation.Models
 
             List<PlayerInGame> offense;
             List<PlayerInGame> defense;
+            string oPlayerTeamName = "";
+            string dPlayerTeamName = "";
             if (possession == 1)
             {
                 offense = team1StarterStats;
                 defense = team2StarterStats;
+                oPlayerTeamName = team1.teamName;
+                dPlayerTeamName = team2.teamName;
             }
             else
             {
                 defense = team1StarterStats;
                 offense = team2StarterStats;
+                oPlayerTeamName = team2.teamName;
+                dPlayerTeamName = team1.teamName;
             }
             if (offense.Count != 5 || defense.Count != 5) { }
 
@@ -2053,7 +1763,7 @@ namespace LeagueSimulation.Models
                 {
                     currentPlayer = c;
                 }
-                CommentatorPhrases.Add($"{currentPlayer.playerStats.playerForename} {currentPlayer.playerStats.playerSurname} got the offensive rebound for the {currentPlayer.playerStats.teamName}");
+                CommentatorPhrases.Add($"{currentPlayer.playerStats.playerForename} {currentPlayer.playerStats.playerSurname} got the offensive rebound for the {oPlayerTeamName}");
                 (int, int) score = CalculateScore();
                 ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
                 GameTimestamps.Add(gameClock.PrintTime());
@@ -2120,7 +1830,7 @@ namespace LeagueSimulation.Models
                 {
                     currentPlayer = c;
                 }
-                CommentatorPhrases.Add($"{currentPlayer.playerStats.playerForename} {currentPlayer.playerStats.playerSurname} got the defensive rebound for the {currentPlayer.playerStats.teamName}");
+                CommentatorPhrases.Add($"{currentPlayer.playerStats.playerForename} {currentPlayer.playerStats.playerSurname} got the defensive rebound for the {dPlayerTeamName}");
                 (int, int) score = CalculateScore();
                 ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
                 GameTimestamps.Add(gameClock.PrintTime());
@@ -2445,7 +2155,7 @@ namespace LeagueSimulation.Models
         {
             Dictionary<int, double> gameValues = GetTeamGameValues(playoffs);
             // now we calculate the minutes for each position in team1
-            if (team1Stats[0].playerStats.teamName == CurrentLeague.UserTeamName) LoadMinutesToPlay(1);
+            if (team1.teamName == CurrentLeague.UserTeamName) LoadMinutesToPlay(1);
             else
             {
                 // we calculate the minutes to play for each position in team1
@@ -2648,7 +2358,7 @@ namespace LeagueSimulation.Models
             }
 
             // we calculate the minutes to play for each position in team2
-            if (team2Stats[0].playerStats.teamName == CurrentLeague.UserTeamName) LoadMinutesToPlay(2);
+            if (team2.teamName == CurrentLeague.UserTeamName) LoadMinutesToPlay(2);
             else
             {
                 // we calculate the minutes to play for each position in team2
@@ -3087,7 +2797,6 @@ namespace LeagueSimulation.Models
             team1Players = players.Item1;
             team2Players = players.Item2;
             AddPlayersIntoInGame();
-            AddStartersFromInGamePlayers();
             GenerateMinutesToPlay(playoffs);
             GeneratePlayerSlots();
             GetStarters();

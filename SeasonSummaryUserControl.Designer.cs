@@ -38,7 +38,6 @@
             label10 = new Label();
             label5 = new Label();
             easternConferenceBestRecordTeam = new Label();
-            retiredPlayer2 = new Label();
             retiredPlayer1 = new Label();
             label8 = new Label();
             allDefense3SGPlayerStats = new Label();
@@ -155,7 +154,6 @@
             seasonSummaryDataPanel.Controls.Add(label10);
             seasonSummaryDataPanel.Controls.Add(label5);
             seasonSummaryDataPanel.Controls.Add(easternConferenceBestRecordTeam);
-            seasonSummaryDataPanel.Controls.Add(retiredPlayer2);
             seasonSummaryDataPanel.Controls.Add(retiredPlayer1);
             seasonSummaryDataPanel.Controls.Add(label8);
             seasonSummaryDataPanel.Controls.Add(allDefense3SGPlayerStats);
@@ -328,23 +326,13 @@
             easternConferenceBestRecordTeam.TabIndex = 95;
             easternConferenceBestRecordTeam.Text = "Toronto Titans (65-17)";
             // 
-            // retiredPlayer2
-            // 
-            retiredPlayer2.AutoSize = true;
-            retiredPlayer2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            retiredPlayer2.Location = new Point(784, 62);
-            retiredPlayer2.Name = "retiredPlayer2";
-            retiredPlayer2.Size = new Size(96, 15);
-            retiredPlayer2.TabIndex = 93;
-            retiredPlayer2.Text = "Andre Harris (33)";
-            // 
             // retiredPlayer1
             // 
             retiredPlayer1.AutoSize = true;
-            retiredPlayer1.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            retiredPlayer1.Location = new Point(784, 46);
+            retiredPlayer1.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            retiredPlayer1.Location = new Point(784, 32);
             retiredPlayer1.Name = "retiredPlayer1";
-            retiredPlayer1.Size = new Size(129, 15);
+            retiredPlayer1.Size = new Size(144, 17);
             retiredPlayer1.TabIndex = 92;
             retiredPlayer1.Text = "Charles Hernandez (37)";
             // 
@@ -352,7 +340,7 @@
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label8.Location = new Point(784, 22);
+            label8.Location = new Point(784, 12);
             label8.Name = "label8";
             label8.Size = new Size(118, 20);
             label8.TabIndex = 91;
@@ -692,7 +680,7 @@
             // 
             label73.AutoSize = true;
             label73.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label73.Location = new Point(523, 22);
+            label73.Location = new Point(523, 12);
             label73.Name = "label73";
             label73.Size = new Size(144, 20);
             label73.TabIndex = 57;
@@ -1042,7 +1030,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(278, 22);
+            label2.Location = new Point(278, 12);
             label2.Name = "label2";
             label2.Size = new Size(137, 20);
             label2.TabIndex = 21;
@@ -1172,7 +1160,7 @@
             // 
             leagueChampsTeamLabel.AutoSize = true;
             leagueChampsTeamLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            leagueChampsTeamLabel.Location = new Point(16, 46);
+            leagueChampsTeamLabel.Location = new Point(16, 40);
             leagueChampsTeamLabel.Name = "leagueChampsTeamLabel";
             leagueChampsTeamLabel.Size = new Size(156, 20);
             leagueChampsTeamLabel.TabIndex = 5;
@@ -1202,7 +1190,7 @@
             // 
             leagueChampsTitleLabel.AutoSize = true;
             leagueChampsTitleLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            leagueChampsTitleLabel.Location = new Point(16, 22);
+            leagueChampsTitleLabel.Location = new Point(17, 12);
             leagueChampsTitleLabel.Name = "leagueChampsTitleLabel";
             leagueChampsTitleLabel.Size = new Size(123, 20);
             leagueChampsTitleLabel.TabIndex = 1;
@@ -1358,7 +1346,6 @@
         private Label allNBA2PGPlayerStats;
         private Label allNBA2PGPlayerInfo;
         private Label label28;
-        private Label retiredPlayer2;
         private Label retiredPlayer1;
         private Label label8;
         private Label eastLabelTitle;

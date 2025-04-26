@@ -194,28 +194,47 @@ namespace LeagueSimulation
             }
             else
             {
+                bool validTrade = true;
                 List<string> playersToTradeAway = new List<string>();
                 List<string> playersToTradeFor = new List<string>();
                 int userTeamId = league.GetIdFromTeamName(league.UserTeamName);
                 int currentTeamId = league.GetIdFromTeamName(teamToTradeWithDropDown.Text);
-                if (CheckValidPlayerToTrade(playerToTradeAway1.Text)) playersToTradeAway.Add(playerToTradeAway1.Text);
-                if (CheckValidPlayerToTrade(playerToTradeAway2.Text)) playersToTradeAway.Add(playerToTradeAway2.Text);
-                if (CheckValidPlayerToTrade(playerToTradeAway3.Text)) playersToTradeAway.Add(playerToTradeAway3.Text);
 
-                if (CheckValidPlayerToTrade(playerToTradeFor1.Text)) playersToTradeFor.Add(playerToTradeFor1.Text);
-                if (CheckValidPlayerToTrade(playerToTradeFor2.Text)) playersToTradeFor.Add(playerToTradeFor2.Text);
-                if (CheckValidPlayerToTrade(playerToTradeFor3.Text)) playersToTradeFor.Add(playerToTradeFor3.Text);
+                if (validTrade && CheckValidPlayerToTrade(playerToTradeAway1.Text)) playersToTradeAway.Add(playerToTradeAway1.Text);
+                else if (playerToTradeAway1.Text != "") validTrade = false; // not a valid player, and a player was entered so trade is invalid
+                if (validTrade && CheckValidPlayerToTrade(playerToTradeAway2.Text)) playersToTradeAway.Add(playerToTradeAway2.Text);
+                else if (playerToTradeAway2.Text != "") validTrade = false; // not a valid player, and a player was entered so trade is invalid
+                if (validTrade && CheckValidPlayerToTrade(playerToTradeAway3.Text)) playersToTradeAway.Add(playerToTradeAway3.Text);
+                else if (playerToTradeAway3.Text != "") validTrade = false; // not a valid player, and a player was entered so trade is invalid
+
+                if (validTrade && CheckValidPlayerToTrade(playerToTradeFor1.Text)) playersToTradeFor.Add(playerToTradeFor1.Text);
+                else if (playerToTradeFor1.Text != "") validTrade = false; // not a valid player, and a player was entered so trade is invalid
+                if (validTrade && CheckValidPlayerToTrade(playerToTradeFor2.Text)) playersToTradeFor.Add(playerToTradeFor2.Text);
+                else if (playerToTradeFor2.Text != "") validTrade = false; // not a valid player, and a player was entered so trade is invalid
+                if (validTrade && CheckValidPlayerToTrade(playerToTradeFor3.Text)) playersToTradeFor.Add(playerToTradeFor3.Text);
+                else if (playerToTradeFor3.Text != "") validTrade = false; // not a valid player, and a player was entered so trade is invalid
 
                 // need to add a check for trade value
-
-                // trade away players to other team
-                foreach (string playerName in playersToTradeAway)
+                foreach (string playerName in playersToTradeFor)
                 {
+                    // get the player's name
                     string[] splitName = playerName.Split(' ');
                     if (splitName.Length > 2) splitName[1] += ' ' + splitName[2];
-                    int playerId = league.GetPlayerIdFromName(splitName[0], splitName[1]);
-                    // set the teamId to the other teamtrade
-                    string setTradeQuery = $@"
+                    string firstName = splitName[0];
+                    string lastName = splitName[1];
+                    int playerId = league.GetPlayerIdFromName(firstName, lastName);
+                }
+
+                // trade away players to other team
+                if (validTrade)
+                {
+                    foreach (string playerName in playersToTradeAway)
+                    {
+                        string[] splitName = playerName.Split(' ');
+                        if (splitName.Length > 2) splitName[1] += ' ' + splitName[2];
+                        int playerId = league.GetPlayerIdFromName(splitName[0], splitName[1]);
+                        // set the teamId to the other teamtrade
+                        string setTradeQuery = $@"
                     UPDATE playerOnTeam 
                     SET dayLeft = (SELECT currentDay FROM league),
                     yearLeft = (SELECT currentSeason FROM league) + 2023
@@ -225,29 +244,29 @@ namespace LeagueSimulation
                      VALUES({playerId}, {currentTeamId}, (SELECT currentDay + 1 FROM league), (SELECT currentSeason + 2023 FROM league), 999, 9999)
                     ";
 
-                    // remove player to minutesSelection table
-                    string setMinutesQuery = $@"
+                        // remove player to minutesSelection table
+                        string setMinutesQuery = $@"
                     ";
 
-                    using (var connection = new SQLiteConnection(league.ConnectionString))
-                    {
-                        connection.Open();
-                        using (var command = new SQLiteCommand(connection))
+                        using (var connection = new SQLiteConnection(league.ConnectionString))
                         {
-                            command.CommandText = setTradeQuery;
-                            command.ExecuteNonQuery();
+                            connection.Open();
+                            using (var command = new SQLiteCommand(connection))
+                            {
+                                command.CommandText = setTradeQuery;
+                                command.ExecuteNonQuery();
+                            }
                         }
                     }
-                }
 
-                // trade for players to your team
-                foreach (string playerName in playersToTradeFor)
-                {
-                    string[] splitName = playerName.Split(' ');
-                    if (splitName.Length > 2) splitName[1] += ' ' + splitName[2];
-                    int playerId = league.GetPlayerIdFromName(splitName[0], splitName[1]);
-                    // set the teamId to your team
-                    string setTradeQuery = $@"
+                    // trade for players to your team
+                    foreach (string playerName in playersToTradeFor)
+                    {
+                        string[] splitName = playerName.Split(' ');
+                        if (splitName.Length > 2) splitName[1] += ' ' + splitName[2];
+                        int playerId = league.GetPlayerIdFromName(splitName[0], splitName[1]);
+                        // set the teamId to your team
+                        string setTradeQuery = $@"
                     UPDATE playerOnTeam 
                     SET dayLeft = (SELECT currentDay FROM league),
                     yearLeft = (SELECT currentSeason FROM league) + 2023
@@ -257,27 +276,29 @@ namespace LeagueSimulation
                      VALUES({playerId}, {userTeamId}, (SELECT currentDay + 1 FROM league), (SELECT currentSeason + 2023 FROM league), 999, 9999);
                     ";
 
-                    // add player to minutesSelection table
-                    string setMinutesQuery = $@"
+                        // add player to minutesSelection table
+                        string setMinutesQuery = $@"
                         INSERT INTO minutesSelection(playerId, minutesToPlay)
                         VALUES({playerId}, 16);
                     ";
 
-                    using (var connection = new SQLiteConnection(league.ConnectionString))
-                    {
-                        connection.Open();
-                        using (var command = new SQLiteCommand(connection))
+                        using (var connection = new SQLiteConnection(league.ConnectionString))
                         {
-                            command.CommandText = setTradeQuery;
-                            command.ExecuteNonQuery();
+                            connection.Open();
+                            using (var command = new SQLiteCommand(connection))
+                            {
+                                command.CommandText = setTradeQuery;
+                                command.ExecuteNonQuery();
 
-                            command.CommandText = setMinutesQuery;
-                            command.ExecuteNonQuery();
+                                command.CommandText = setMinutesQuery;
+                                command.ExecuteNonQuery();
+                            }
                         }
                     }
+
+                    MessageBox.Show(text: "Trade accepted.");
                 }
 
-                MessageBox.Show(text: "Trade accepted.");
             }
             
         }
@@ -287,15 +308,19 @@ namespace LeagueSimulation
             string[] splitName = playerName.Split(' ');
             if (splitName.Length > 2) splitName[1] += ' ' + splitName[2];
             if (playerName == "" || splitName.Length < 2) return false;
+            string firstName = splitName[0];
+            string lastName = splitName[1];
             using (SQLiteConnection connection = new SQLiteConnection(league.ConnectionString))
             {
                 connection.Open();
                 string checkPlayerValidQuery = $@"
-                    SELECT (p.teamId != 0) FROM players p WHERE p.playerForename = '{splitName[0]}' AND p.playerSurname = '{splitName[1]}'
+                    SELECT (p.teamId != 0) FROM players p WHERE p.playerForename = '@firstName' AND p.playerSurname = '@lastName'
                 ;";
 
                 using (SQLiteCommand command = new SQLiteCommand(checkPlayerValidQuery, connection))
                 {
+                    command.Parameters.AddWithValue("@firstName", firstName);
+                    command.Parameters.AddWithValue("@firstName", lastName);
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())

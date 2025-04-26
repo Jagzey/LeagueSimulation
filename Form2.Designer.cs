@@ -51,6 +51,7 @@
             toolStripMenuItem20 = new ToolStripMenuItem();
             displayPanel = new FlowLayoutPanel();
             label1 = new Label();
+            teamStatsToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             panel1.SuspendLayout();
             menuStrip2.SuspendLayout();
@@ -164,7 +165,7 @@
             // rosterMenuItem
             // 
             rosterMenuItem.Name = "rosterMenuItem";
-            rosterMenuItem.Size = new Size(128, 28);
+            rosterMenuItem.Size = new Size(180, 28);
             rosterMenuItem.Text = "Roster";
             rosterMenuItem.Click += rosterMenuItem_Click;
             // 
@@ -177,7 +178,7 @@
             // 
             // toolStripMenuItem17
             // 
-            toolStripMenuItem17.DropDownItems.AddRange(new ToolStripItem[] { playerFinderMenuItem, leagueLeadersToolStripMenuItem });
+            toolStripMenuItem17.DropDownItems.AddRange(new ToolStripItem[] { playerFinderMenuItem, leagueLeadersToolStripMenuItem, teamStatsToolStripMenuItem });
             toolStripMenuItem17.Name = "toolStripMenuItem17";
             toolStripMenuItem17.Size = new Size(193, 28);
             toolStripMenuItem17.Text = "Stats";
@@ -228,6 +229,13 @@
             label1.TabIndex = 4;
             label1.Text = "User Team: ";
             // 
+            // teamStatsToolStripMenuItem
+            // 
+            teamStatsToolStripMenuItem.Name = "teamStatsToolStripMenuItem";
+            teamStatsToolStripMenuItem.Size = new Size(198, 28);
+            teamStatsToolStripMenuItem.Text = "Team Stats";
+            teamStatsToolStripMenuItem.Click += teamStatsToolStripMenuItem_Click;
+            // 
             // Form2
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -277,5 +285,6 @@
         private Label label1;
         private ToolStripMenuItem seasonSummaryToolStripMenuItem;
         private ToolStripMenuItem tradeProposalToolStripMenuItem;
+        private ToolStripMenuItem teamStatsToolStripMenuItem;
     }
 }

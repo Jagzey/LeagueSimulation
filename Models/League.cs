@@ -366,9 +366,9 @@ namespace LeagueSimulation.Models
                     // we store the list of playstyles and their descriptions
                     List<(string, string)> offensiveValues = new List<(string, string)>()
                     {
-                        ("Shooter", "A player who can and will choose to shoot the ball"),
-                        ("Playmaker", "A player who likes to make plays and lead passes to his teammates"),
-                        ("Finisher", "A player who can play fast and loves to attack the rim")
+                        ("Shooter", "a player known for their ability to score points by consistently making accurate shots from various distances, especially beyond the arc"),
+                        ("Playmaker", "a player who excels at creating scoring opportunities for teammates through excellent passing, court vision, and decision-making"),
+                        ("Finisher", "a player who excels at converting scoring opportunities close to the basket, often through layups, dunks, or contested shots")
                     };
                     List<(string, string)> defensiveValues = new List<(string, string)>()
                     {
@@ -377,7 +377,7 @@ namespace LeagueSimulation.Models
                         ("Rim Protector", "A player who likes to prevent buckets in and around the rim")
                     };
 
-                    (string, string) twoWayValue = ("2-Way Player", "A player who can play on both sides of the ball");
+                    (string, string) twoWayValue = ("2-Way Player", "A player who can play effectively on both sides of the ball");
 
                     string secondaryPlaystyleQuery = $@"
                     INSERT INTO secondaryPlaystyle(playstyle,primaryPlaystyleId,description)
@@ -494,8 +494,8 @@ namespace LeagueSimulation.Models
         {
             string teamFilePath = $@"C:\Users\{CurrentUser}\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Names Files\basketball_team_names_list.txt";
             string[] teamNames = File.ReadAllLines(teamFilePath);
-            string playerFilePath = $@"C:\Users\{CurrentUser}\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Names Files\male_names_list.txt";
-            string[] playerNames = File.ReadAllLines(playerFilePath);
+            string playerFilePath = $@"C:\Users\{CurrentUser}\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Names Files\male_names_list_NEW.txt";
+            List<string> playerNames = File.ReadAllLines(playerFilePath).ToList();
 
             // Creates a connection to leagueX database
             string connectionString = $@"Data Source={leagueFileName};Version=3;";
@@ -559,8 +559,9 @@ namespace LeagueSimulation.Models
                                 else position = "C";
 
                                 // generate player name
-                                nameCounter++;
+                                nameCounter = random.Next(playerNames.Count());
                                 string[] playerName = playerNames[nameCounter].Split(' ');
+                                playerNames.Remove(playerNames[nameCounter]);
 
                                 // a player is created, then added to the database
                                 Player player = new Player();
@@ -634,6 +635,7 @@ namespace LeagueSimulation.Models
             }
         }
 
+        // gets the user's team leader in points, rebounds and assists to display to user in the dashboard
         public string GetUserTeamLeaderInStatistic(string stat)
         {
             string fullTeamLeaderString = "";
@@ -697,6 +699,7 @@ namespace LeagueSimulation.Models
 
         }
 
+        // this returns the user's average team stats e.g. average total points per game
         public string GetTeamStatistic(string stat)
         {
             string teamLeaderQuery = $@"
@@ -751,6 +754,8 @@ namespace LeagueSimulation.Models
             }
             return fullTeamAverageStr;
         }
+
+        // returns a team's record, when their team name is entered
         public string GetTeamRecord(string teamName)
         {
             int wins = 0;
@@ -780,66 +785,10 @@ namespace LeagueSimulation.Models
             return $"{wins}-{losses}";
         }
 
+        // this returns the teams in a given conference, in winning percentage order
         public List<string> GetConferenceTeamsByWinPct(int conferenceId)
         {
             List<string> teams = new List<string>();
-            string getTeamsQuery = $@"
-                WITH AllTeams AS (
-                -- Select all teams in the league for the season
-                SELECT DISTINCT 
-                    t.teamId, 
-                    t.teamName, 
-                    t.conferenceId
-                FROM teams t
-                WHERE t.conferenceId = {conferenceId} -- Filter by conference
-            ),
-            TeamGameScores AS (
-                SELECT
-                    sg.seasonId,
-                    sg.gameId,
-                    CASE 
-                        WHEN sg.homeTeamId = p.teamId THEN sg.homeTeamId
-                        WHEN sg.awayTeamId = p.teamId THEN sg.awayTeamId
-                    END AS teamId,
-                    SUM(pgs.PTS) AS teamScore
-                FROM
-                    seasonSchedule sg
-                JOIN playerGameStats pgs ON sg.gameId = pgs.gameId
-                AND pgs.isPlayoffs = FALSE
-                JOIN players p ON p.playerId = pgs.playerId
-                WHERE
-                    sg.gameCompleted = 1 -- Only include completed games
-                AND sg.seasonId = {CurrentSeason}
-                GROUP BY
-                    sg.seasonId, sg.gameId, teamId
-            ),
-            CombinedResults AS (
-                SELECT 
-                    at.teamId,
-                    at.teamName,
-                    COUNT(CASE WHEN tgs.teamScore > opp.teamScore THEN 1 END) AS wins,
-                    COUNT(CASE WHEN tgs.teamScore < opp.teamScore THEN 1 END) AS losses
-                FROM
-                    AllTeams at
-                LEFT JOIN TeamGameScores tgs ON at.teamId = tgs.teamId
-                LEFT JOIN TeamGameScores opp ON tgs.gameId = opp.gameId AND tgs.teamId != opp.teamId
-                GROUP BY
-                    at.teamId, at.teamName
-            )
-            SELECT 
-                cr.teamId,
-                cr.teamName,
-                cr.wins,
-                cr.losses,
-                CASE 
-                    WHEN (cr.wins + cr.losses) > 0 THEN cr.wins * 1.0 / (cr.wins + cr.losses)
-                    ELSE 0.0
-                END AS winPct
-            FROM 
-                CombinedResults cr
-            ORDER BY 
-                winPct DESC;
-            ;";
             string orderTeamsQuery = $@"
                 SELECT 
                 t.teamId, 
@@ -929,7 +878,7 @@ namespace LeagueSimulation.Models
             }
             return "0-0";
         }
-
+        // start copying from here
         public string GetTeamNameFromId(string id)
         {
             string getIdQuery = $"SELECT teamName FROM teams WHERE teamId = {id}";
@@ -1098,7 +1047,8 @@ namespace LeagueSimulation.Models
             }
         }
 
-        public static string CheckTeamMatchesSaveState(int saveState, string currentUser)
+        // used to select the user's team name
+        public static string GetUserTeamName(int saveState, string currentUser)
         {
             string connectionString = $"Data Source={GetStaticLeagueFileName(saveState, currentUser)};Version=3;";
             using (var connection = new SQLiteConnection(connectionString))
@@ -1843,113 +1793,19 @@ namespace LeagueSimulation.Models
         public void GeneratePlayoffsSecondRound()
         {
             // we need to get the winners of all the eastern conference series in the 1st round
-            string getWinnersQuery = $@"
-                WITH TeamGameScores AS (
-                SELECT
-                    ps.seasonId,
-                    ps.playoffsGameId AS gameId,
-                    ps.playoffsRound,
-                    ps.homeTeamId AS homeTeamId,
-                    ps.awayTeamId AS awayTeamId,
-                    ps.seed,
-                    ps.conferenceId,
-                    CASE 
-                        WHEN ps.homeTeamId = p.teamId THEN ps.homeTeamId
-                        WHEN ps.awayTeamId = p.teamId THEN ps.awayTeamId
-                    END AS teamId,
-                    SUM(pgs.PTS) AS teamScore
-                FROM
-                    playoffsSchedule ps
-                JOIN 
-                    playerGameStats pgs ON ps.playoffsGameId = pgs.gameId  AND pgs.isPlayoffs = 1
-                JOIN
-                    players p ON p.playerId = pgs.playerId
-                WHERE
-                    ps.gameCompleted = 1
-                GROUP BY
-                    ps.seasonId, gameId, teamId
-            ),
-            Wins AS (
-                SELECT
-                    tgs.seasonId,
-                    tgs.teamId,
-                    COUNT(*) AS wins
-                FROM
-                    TeamGameScores tgs
-                JOIN
-                    TeamGameScores opp ON tgs.gameId = opp.gameId
-                        AND tgs.teamId != opp.teamId
-                WHERE
-                    tgs.teamScore > opp.teamScore
-                GROUP BY
-                    tgs.seasonId, tgs.teamId
-            ),
-            Losses AS (
-                SELECT
-                    tgs.seasonId,
-                    tgs.teamId,
-                    COUNT(*) AS losses
-                FROM
-                    TeamGameScores tgs
-                JOIN
-                    TeamGameScores opp ON tgs.gameId = opp.gameId
-                        AND tgs.teamId != opp.teamId
-                WHERE
-                    tgs.teamScore < opp.teamScore
-                GROUP BY
-                    tgs.seasonId, tgs.teamId
-            ),
-            CombinedResults AS (
+            string getWinnersNewQuery = $@"
                 SELECT 
-                    tgs.seasonId,
-                    tgs.teamId,
-                    tgs.seed,
-                    tgs.playoffsRound,
-                    tgs.conferenceId,
-                    COALESCE(w.wins, 0) AS wins,
-                    COALESCE(l.losses, 0) AS losses
-                FROM
-                    (SELECT DISTINCT seasonId, teamId, seed, playoffsRound, conferenceId FROM TeamGameScores) tgs
-                LEFT JOIN Wins w ON tgs.seasonId = w.seasonId AND tgs.teamId = w.teamId
-                LEFT JOIN Losses l ON tgs.seasonId = l.seasonId AND tgs.teamId = l.teamId
-            ),
-            UniqueSeriesTeams AS (
-                SELECT 
-                    cr.seasonId,
-                    cr.teamId,
-                    t.teamName,
-                    cr.wins,
-                    cr.losses,
-                    (cr.wins + cr.losses) AS gamesPlayed,
-                    cr.seed,
-                    cr.conferenceId,
-                    cr.playoffsRound,
-                    ROW_NUMBER() OVER (PARTITION BY cr.seed, cr.conferenceId ORDER BY cr.wins DESC) AS row_num
-                FROM 
-                    CombinedResults cr
-                JOIN 
-                    teams t ON cr.teamId = t.teamId
-                WHERE 
-                    cr.seasonId = {CurrentSeason} AND
-                    cr.playoffsRound = 'First Round'
-            )
-            SELECT 
-                seasonId,
-                teamId,
-                teamName,
-                wins,
-                losses,
-                gamesPlayed,
-                seed,
+                CASE
+                   WHEN losses = 4 THEN awayTeamId
+                   WHEN wins = 4 THEN homeTeamId
+                ELSE NULL
+                END AS winner,
                 conferenceId,
-                playoffsRound
-            FROM 
-                UniqueSeriesTeams
-            WHERE 
-                wins == 4
-            ORDER BY 
-                conferenceId, seed
-            ";
+                seed
+                FROM playoffResults
+                WHERE seasonId = {CurrentSeason}
+                AND playoffsRound = 'First Round'
+                ";
             List<int> eastTeamIds = new List<int>();
             List<int> eastSeeds = new List<int>();
             List<int> westTeamIds = new List<int>();
@@ -1960,7 +1816,7 @@ namespace LeagueSimulation.Models
             using (var connection = new SQLiteConnection(ConnectionString))
             {
                 connection.Open();
-                using (var command = new SQLiteCommand(getWinnersQuery, connection))
+                using (var command = new SQLiteCommand(getWinnersNewQuery, connection))
                 {
                     using (var reader = command.ExecuteReader())
                     {
@@ -1970,12 +1826,12 @@ namespace LeagueSimulation.Models
                             // handle east teams
                             if (conferenceId == 1)
                             {
-                                eastTeamIds.Add(reader.GetInt32(reader.GetOrdinal("teamId")));
+                                eastTeamIds.Add(reader.GetInt32(reader.GetOrdinal("winner")));
                                 eastSeeds.Add(reader.GetInt32(reader.GetOrdinal("seed")));
                             }
                             else if (conferenceId == 2)
                             {
-                                westTeamIds.Add(reader.GetInt32(reader.GetOrdinal("teamId")));
+                                westTeamIds.Add(reader.GetInt32(reader.GetOrdinal("winner")));
                                 westSeeds.Add(reader.GetInt32(reader.GetOrdinal("seed")));
                             }
                         }
@@ -1988,9 +1844,9 @@ namespace LeagueSimulation.Models
                 {
                     List<string> currentDay = new List<string>()
                     {
-                        // we add the seed 1-2 game, then the 3-4 game
-                        $"{eastTeamIds[0]},{eastTeamIds[1]}",
-                        $"{eastTeamIds[2]},{eastTeamIds[3]}"
+                        // we add the seed 1-4 game, then the 2-3 game
+                        $"{eastTeamIds[0]},{eastTeamIds[3]}",
+                        $"{eastTeamIds[1]},{eastTeamIds[2]}"
                     };
                     eastPlayoffGames.Add(currentDay);
                 }
@@ -1998,8 +1854,8 @@ namespace LeagueSimulation.Models
                 {
                     List<string> currentDay = new List<string>()
                     {
-                        $"{westTeamIds[0]},{westTeamIds[1]}",
-                        $"{westTeamIds[2]},{westTeamIds[3]}"
+                        $"{westTeamIds[0]},{westTeamIds[3]}",
+                        $"{westTeamIds[1]},{westTeamIds[2]}"
                     };
 
                     westPlayoffGames.Add(currentDay);
@@ -2110,114 +1966,19 @@ namespace LeagueSimulation.Models
         {
             // we need to get the winners of all the eastern conference series in the 2nd round
             // we make the winners play the ECF series; then same for the western conference
-            string getWinnersQuery = $@"
-                WITH TeamGameScores AS (
-                SELECT
-                    ps.seasonId,
-                    ps.playoffsGameId AS gameId,
-                    ps.playoffsRound,
-                    ps.homeTeamId AS homeTeamId,
-                    ps.awayTeamId AS awayTeamId,
-                    ps.seed,
-                    ps.conferenceId,
-                    CASE 
-                        WHEN ps.homeTeamId = p.teamId THEN ps.homeTeamId
-                        WHEN ps.awayTeamId = p.teamId THEN ps.awayTeamId
-                    END AS teamId,
-                    SUM(pgs.PTS) AS teamScore
-                FROM
-                    playoffsSchedule ps
-                JOIN 
-                    playerGameStats pgs ON ps.playoffsGameId = pgs.gameId  AND pgs.isPlayoffs = 1
-                JOIN
-                    players p ON p.playerId = pgs.playerId
-                WHERE
-                    ps.gameCompleted = 1
-                    AND ps.playoffsRound = 'Second Round'
-                GROUP BY
-                    ps.seasonId, gameId, teamId
-            ),
-            Wins AS (
-                SELECT
-                    tgs.seasonId,
-                    tgs.teamId,
-                    COUNT(*) AS wins
-                FROM
-                    TeamGameScores tgs
-                JOIN
-                    TeamGameScores opp ON tgs.gameId = opp.gameId
-                        AND tgs.teamId != opp.teamId
-                WHERE
-                    tgs.teamScore > opp.teamScore
-                GROUP BY
-                    tgs.seasonId, tgs.teamId
-            ),
-            Losses AS (
-                SELECT
-                    tgs.seasonId,
-                    tgs.teamId,
-                    COUNT(*) AS losses
-                FROM
-                    TeamGameScores tgs
-                JOIN
-                    TeamGameScores opp ON tgs.gameId = opp.gameId
-                        AND tgs.teamId != opp.teamId
-                WHERE
-                    tgs.teamScore < opp.teamScore
-                GROUP BY
-                    tgs.seasonId, tgs.teamId
-            ),
-            CombinedResults AS (
+            string getWinnersNewQuery = $@"
                 SELECT 
-                    tgs.seasonId,
-                    tgs.teamId,
-                    tgs.seed,
-                    tgs.playoffsRound,
-                    tgs.conferenceId,
-                    COALESCE(w.wins, 0) AS wins,
-                    COALESCE(l.losses, 0) AS losses
-                FROM
-                    (SELECT DISTINCT seasonId, teamId, seed, playoffsRound, conferenceId FROM TeamGameScores) tgs
-                LEFT JOIN Wins w ON tgs.seasonId = w.seasonId AND tgs.teamId = w.teamId
-                LEFT JOIN Losses l ON tgs.seasonId = l.seasonId AND tgs.teamId = l.teamId
-            ),
-            UniqueSeriesTeams AS (
-                SELECT 
-                    cr.seasonId,
-                    cr.teamId,
-                    t.teamName,
-                    cr.wins,
-                    cr.losses,
-                    (cr.wins + cr.losses) AS gamesPlayed,
-                    cr.seed,
-                    cr.conferenceId,
-                    cr.playoffsRound,
-                    ROW_NUMBER() OVER (PARTITION BY cr.seed, cr.conferenceId ORDER BY cr.wins DESC) AS row_num
-                FROM 
-                    CombinedResults cr
-                JOIN 
-                    teams t ON cr.teamId = t.teamId
-                WHERE 
-                    cr.seasonId = {CurrentSeason} AND
-                    cr.playoffsRound = 'Second Round'
-            )
-            SELECT 
-                seasonId,
-                teamId,
-                teamName,
-                wins,
-                losses,
-                gamesPlayed,
-                seed,
+                CASE
+                   WHEN losses = 4 THEN awayTeamId
+                   WHEN wins = 4 THEN homeTeamId
+                ELSE NULL
+                END AS winner,
                 conferenceId,
-                playoffsRound
-            FROM 
-                UniqueSeriesTeams
-            WHERE 
-                wins == 4
-            ORDER BY 
-                conferenceId, seed
-            ";
+                seed
+                FROM playoffResults
+                WHERE seasonId = {CurrentSeason}
+                AND playoffsRound = 'Second Round'
+                ";
             List<int> eastTeamIds = new List<int>();
             List<int> eastSeeds = new List<int>();
             List<int> westTeamIds = new List<int>();
@@ -2228,7 +1989,7 @@ namespace LeagueSimulation.Models
             using (var connection = new SQLiteConnection(ConnectionString))
             {
                 connection.Open();
-                using (var command = new SQLiteCommand(getWinnersQuery, connection))
+                using (var command = new SQLiteCommand(getWinnersNewQuery, connection))
                 {
                     using (var reader = command.ExecuteReader())
                     {
@@ -2238,12 +1999,12 @@ namespace LeagueSimulation.Models
                             // handle east teams
                             if (conferenceId == 1)
                             {
-                                eastTeamIds.Add(reader.GetInt32(reader.GetOrdinal("teamId")));
+                                eastTeamIds.Add(reader.GetInt32(reader.GetOrdinal("winner")));
                                 eastSeeds.Add(reader.GetInt32(reader.GetOrdinal("seed")));
                             }
                             else if (conferenceId == 2)
                             {
-                                westTeamIds.Add(reader.GetInt32(reader.GetOrdinal("teamId")));
+                                westTeamIds.Add(reader.GetInt32(reader.GetOrdinal("winner")));
                                 westSeeds.Add(reader.GetInt32(reader.GetOrdinal("seed")));
                             }
                         }
@@ -2376,124 +2137,26 @@ namespace LeagueSimulation.Models
         public void GeneratePlayoffsFinals()
         {
             // we need to get the winners of the ECF and WCF, then put them into a head-to-head Finals!
-            string getWinnersQuery = $@"
-                WITH TeamGameScores AS (
-                SELECT
-                    ps.seasonId,
-                    ps.playoffsGameId AS gameId,
-                    ps.playoffsRound,
-                    ps.homeTeamId AS homeTeamId,
-                    ps.awayTeamId AS awayTeamId,
-                    ps.seed,
-                    ps.conferenceId,
-                    CASE 
-                        WHEN ps.homeTeamId = p.teamId THEN ps.homeTeamId
-                        WHEN ps.awayTeamId = p.teamId THEN ps.awayTeamId
-                    END AS teamId,
-                    SUM(pgs.PTS) AS teamScore
-                FROM
-                    playoffsSchedule ps
-                JOIN 
-                    playerGameStats pgs ON ps.playoffsGameId = pgs.gameId  AND pgs.isPlayoffs = 1
-                JOIN
-                    players p ON p.playerId = pgs.playerId
-                WHERE
-                    ps.gameCompleted = 1
-                    AND ps.playoffsRound = 'Conference Finals'
-                GROUP BY
-                    ps.seasonId, gameId, teamId
-            ),
-            Wins AS (
-                SELECT
-                    tgs.seasonId,
-                    tgs.teamId,
-                    COUNT(*) AS wins
-                FROM
-                    TeamGameScores tgs
-                JOIN
-                    TeamGameScores opp ON tgs.gameId = opp.gameId
-                        AND tgs.teamId != opp.teamId
-                WHERE
-                    tgs.teamScore > opp.teamScore
-                GROUP BY
-                    tgs.seasonId, tgs.teamId
-            ),
-            Losses AS (
-                SELECT
-                    tgs.seasonId,
-                    tgs.teamId,
-                    COUNT(*) AS losses
-                FROM
-                    TeamGameScores tgs
-                JOIN
-                    TeamGameScores opp ON tgs.gameId = opp.gameId
-                        AND tgs.teamId != opp.teamId
-                WHERE
-                    tgs.teamScore < opp.teamScore
-                GROUP BY
-                    tgs.seasonId, tgs.teamId
-            ),
-            CombinedResults AS (
+            string getWinnersNewQuery = $@"
                 SELECT 
-                    tgs.seasonId,
-                    tgs.teamId,
-                    tgs.seed,
-                    tgs.playoffsRound,
-                    tgs.conferenceId,
-                    COALESCE(w.wins, 0) AS wins,
-                    COALESCE(l.losses, 0) AS losses
-                FROM
-                    (SELECT DISTINCT seasonId, teamId, seed, playoffsRound, conferenceId FROM TeamGameScores) tgs
-                LEFT JOIN Wins w ON tgs.seasonId = w.seasonId AND tgs.teamId = w.teamId
-                LEFT JOIN Losses l ON tgs.seasonId = l.seasonId AND tgs.teamId = l.teamId
-            ),
-            UniqueSeriesTeams AS (
-                SELECT 
-                    cr.seasonId,
-                    cr.teamId,
-                    t.teamName,
-                    cr.wins,
-                    cr.losses,
-                    (cr.wins + cr.losses) AS gamesPlayed,
-                    cr.seed,
-                    cr.conferenceId,
-                    cr.playoffsRound,
-                    ROW_NUMBER() OVER (PARTITION BY cr.seed, cr.conferenceId ORDER BY cr.wins DESC) AS row_num
-                FROM 
-                    CombinedResults cr
-                JOIN 
-                    teams t ON cr.teamId = t.teamId
-                WHERE 
-                    cr.seasonId = {CurrentSeason} AND
-                    cr.playoffsRound = 'Conference Finals'
-            )
-            SELECT 
-                seasonId,
-                teamId,
-                teamName,
-                wins,
-                losses,
-                gamesPlayed,
-                seed,
-                conferenceId,
-                playoffsRound
-            FROM 
-                UniqueSeriesTeams
-            WHERE 
-                wins == 4
-            ORDER BY 
-                conferenceId, seed
-            ";
+                CASE
+                   WHEN losses = 4 THEN awayTeamId
+                   WHEN wins = 4 THEN homeTeamId
+                ELSE NULL
+                END AS winner,
+                conferenceId
+                FROM playoffResults
+                WHERE seasonId = {CurrentSeason}
+                AND playoffsRound = 'Conference Finals'
+                ";
             int eastTeamId = 0;
-            List<int> eastSeeds = new List<int>();
             int westTeamId = 0;
-            List<int> westSeeds = new List<int>();
             List<List<string>> finalsPlayoffGames = new List<List<string>>();
             // this connection gets all the winners of all the series in the 1st round
             using (var connection = new SQLiteConnection(ConnectionString))
             {
                 connection.Open();
-                using (var command = new SQLiteCommand(getWinnersQuery, connection))
+                using (var command = new SQLiteCommand(getWinnersNewQuery, connection))
                 {
                     using (var reader = command.ExecuteReader())
                     {
@@ -2503,13 +2166,11 @@ namespace LeagueSimulation.Models
                             // handle east teams
                             if (conferenceId == 1)
                             {
-                                eastTeamId = reader.GetInt32(reader.GetOrdinal("teamId"));
-                                eastSeeds.Add(reader.GetInt32(reader.GetOrdinal("seed")));
+                                eastTeamId = reader.GetInt32(reader.GetOrdinal("winner"));
                             }
                             else if (conferenceId == 2)
                             {
-                                westTeamId = reader.GetInt32(reader.GetOrdinal("teamId"));
-                                westSeeds.Add(reader.GetInt32(reader.GetOrdinal("seed")));
+                                westTeamId = reader.GetInt32(reader.GetOrdinal("winner"));
                             }
                         }
                     }
@@ -2576,6 +2237,7 @@ namespace LeagueSimulation.Models
             }
 
         }
+        // start from here
         public string GetGameScore(int gameId)
         {
             using (var connection = new SQLiteConnection(ConnectionString))
@@ -2584,7 +2246,7 @@ namespace LeagueSimulation.Models
                 string tablePicker = "season";
                 string gamePicker = "g";
                 if (Playoffs) { tablePicker = "playoffs"; gamePicker = "playoffsG"; }
-                string getEasternConferenceTeamsInPlayoffsQuery = $@"
+                string gameScoreQuery = $@"
                     WITH homeTeamPlayers AS (
                     SELECT playerId, teamId
                     FROM playerOnTeam
@@ -2618,7 +2280,7 @@ namespace LeagueSimulation.Models
                     SELECT *
                     FROM homeTeamPoints, awayTeamPoints
                 ;";
-                if (Playoffs) getEasternConferenceTeamsInPlayoffsQuery = $@"
+                if (Playoffs) gameScoreQuery = $@"
                     WITH homeTeamPlayers AS (
                     SELECT playerId, teamId
                     FROM playerOnTeam
@@ -2653,7 +2315,7 @@ namespace LeagueSimulation.Models
                     FROM homeTeamPoints, awayTeamPoints
                 ;";
 
-                using (var command = new SQLiteCommand(getEasternConferenceTeamsInPlayoffsQuery, connection))
+                using (var command = new SQLiteCommand(gameScoreQuery, connection))
                 {
                     using (var reader = command.ExecuteReader())
                     {
@@ -2892,6 +2554,170 @@ namespace LeagueSimulation.Models
             }
         }
 
+        public Player ExtractCurrentPlayerFromPlayerId(int playerId)
+        {
+            Player player = new Player();
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                string teamPlayersQuery = $@"
+                    WITH currentPlayers AS (
+	                    SELECT playerId, teamId
+	                    FROM playerOnTeam
+	                    WHERE ((dayJoined <= {CurrentDay} AND yearJoined = {CurrentSeason + 2023}) OR (yearJoined < {CurrentSeason + 2023}))
+	                    AND dayLeft >= {CurrentDay} AND yearLeft >= {CurrentSeason + 2023}
+                    )
+                    SELECT 
+                    p.playerId,
+                    p.height,
+                    p.weight,
+                    p.playerForename,
+                    p.playerSurname,
+                    p.closeShot,
+                    p.layup,
+                    p.dunk,
+                    p.midRange,
+                    p.threePoint,
+                    p.freeThrow,
+                    p.passing,
+                    p.ballHandle,
+                    p.defense,
+                    p.steal,
+                    p.block,
+                    p.rebound,
+                    p.speed,
+                    p.strength,
+                    p.stamina,
+                    p.overall,
+                    p.potential,
+                    cp.teamId,
+                    league.currentSeason + 2023 - p.dateOfBirth as age,
+                    pos.positionShort AS positionShort,
+                    sp.playstyle AS secondaryPlaystyle,
+                    pp.playstyle AS primaryPlaystyle
+                    FROM
+                        currentPlayers cp, league
+                    JOIN
+                        players p ON p.playerId = cp.playerId
+                    LEFT JOIN
+                        position pos ON p.positionId = pos.positionId
+                    LEFT JOIN
+                        secondaryPlaystyle sp ON p.secondaryPlaystyleId = sp.secondaryPlaystyleId
+                    LEFT JOIN
+                        primaryPlaystyle pp ON sp.primaryPlaystyleId = pp.primaryPlaystyleId
+                    WHERE cp.playerId = {playerId};
+                ";
+                if (Playoffs) teamPlayersQuery = $@"
+                    WITH currentPlayers AS (
+	                    SELECT playerId, teamId
+	                    FROM playerOnTeam
+	                    WHERE ((dayJoined <= 150 AND yearJoined = {CurrentSeason + 2023}) OR (yearJoined < {CurrentSeason + 2023}))
+	                    AND (dayLeft >= 150 AND yearLeft >= {CurrentSeason + 2023})
+                    )
+                    SELECT 
+                    p.playerId,
+                    p.height,
+                    p.weight,
+                    p.playerForename,
+                    p.playerSurname,
+                    p.closeShot,
+                    p.layup,
+                    p.dunk,
+                    p.midRange,
+                    p.threePoint,
+                    p.freeThrow,
+                    p.passing,
+                    p.ballHandle,
+                    p.defense,
+                    p.steal,
+                    p.block,
+                    p.rebound,
+                    p.speed,
+                    p.strength,
+                    p.stamina,
+                    p.overall,
+                    p.potential,
+                    cp.teamId,
+                    league.currentSeason + 2023 - p.dateOfBirth as age,
+                    pos.positionShort AS positionShort,
+                    sp.playstyle AS secondaryPlaystyle,
+                    pp.playstyle AS primaryPlaystyle
+                    FROM
+                        currentPlayers cp, league
+                    JOIN
+                        players p ON p.playerId = cp.playerId
+                    LEFT JOIN
+                        position pos ON p.positionId = pos.positionId
+                    LEFT JOIN
+                        secondaryPlaystyle sp ON p.secondaryPlaystyleId = sp.secondaryPlaystyleId
+                    LEFT JOIN
+                        primaryPlaystyle pp ON sp.primaryPlaystyleId = pp.primaryPlaystyleId
+                    WHERE cp.playerId = {playerId};
+                ";
+                using (var command = new SQLiteCommand(teamPlayersQuery, connection))
+                {
+                    // this reader, will extract all the players from team1, and put them into the list
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            // extract data from a player in database, and put into a player class
+                            
+                            player.PlayerId = reader.GetInt32(reader.GetOrdinal("playerId"));
+                            player.position = reader.GetString(reader.GetOrdinal("positionShort"));
+                            player.PrimaryPlaystyle = reader.GetString(reader.GetOrdinal("primaryPlaystyle"));
+                            player.SecondaryPlaystyle = reader.GetString(reader.GetOrdinal("secondaryPlaystyle"));
+                            player.Height = reader.GetInt32(reader.GetOrdinal("height")); // height in inches
+                            player.Weight = reader.GetInt32(reader.GetOrdinal("weight")); // weight in lbs
+                            player.playerForename = reader.GetString(reader.GetOrdinal("playerForename"));
+                            player.playerSurname = reader.GetString(reader.GetOrdinal("playerSurname"));
+                            player.TeamId = reader.GetInt32(reader.GetOrdinal("teamId"));
+                            player.CloseShot = reader.GetInt32(reader.GetOrdinal("closeShot"));
+                            player.Layup = reader.GetInt32(reader.GetOrdinal("layup"));
+                            player.Dunk = reader.GetInt32(reader.GetOrdinal("dunk"));
+                            player.MidRange = reader.GetInt32(reader.GetOrdinal("midRange"));
+                            player.ThreePoint = reader.GetInt32(reader.GetOrdinal("threePoint"));
+                            player.FreeThrow = reader.GetInt32(reader.GetOrdinal("freeThrow"));
+                            player.Passing = reader.GetInt32(reader.GetOrdinal("passing"));
+                            player.BallHandle = reader.GetInt32(reader.GetOrdinal("ballHandle"));
+                            player.Defense = reader.GetInt32(reader.GetOrdinal("defense"));
+                            player.Steal = reader.GetInt32(reader.GetOrdinal("steal"));
+                            player.Block = reader.GetInt32(reader.GetOrdinal("block"));
+                            player.Rebound = reader.GetInt32(reader.GetOrdinal("rebound"));
+                            player.Speed = reader.GetInt32(reader.GetOrdinal("speed"));
+                            player.Strength = reader.GetInt32(reader.GetOrdinal("strength"));
+                            player.Stamina = reader.GetInt32(reader.GetOrdinal("stamina"));
+                            player.Overall = reader.GetInt32(reader.GetOrdinal("overall"));
+                            player.Potential = reader.GetInt32(reader.GetOrdinal("potential"));
+                            player.Age = reader.GetInt32(reader.GetOrdinal("age"));
+                        }
+                    }
+                }
+
+                return player;
+            }
+        }
+
+        public double GetPlayerCurrentGameValue(int playerId)
+        {
+            string getPlayerGameValueQuery = $"SELECT ROUND(AVG(pgs.gameValue), 1) as gameValue\r\nFROM players p, league\r\nJOIN playerGameStats pgs ON pgs.seasonId = currentSeason\r\nAND pgs.playerId = p.playerId\r\nWHERE p.playerId = {playerId};";
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var command = new SQLiteCommand(getPlayerGameValueQuery, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            return reader.GetDouble(0);
+                        }
+                    }
+                }
+            }
+            return 0.0;
+        }
+
         public void MoveToNextPlayoffRound()
         {
             if (PlayoffsRound == "First Round") PlayoffsRound = "Second Round";
@@ -3014,134 +2840,18 @@ namespace LeagueSimulation.Models
                 LIMIT 1
                 
                 ";
-                string setChampionQuery = $@"
-                WITH currentPlayers AS (
-                SELECT pot.playerId, pot.teamId AS currentTeamId
-                FROM playerOnTeam pot
-                WHERE dayJoined <= 150 AND yearJoined <= {CurrentSeason + 2023}
-                AND dayLeft >= 150 AND yearLeft >= {CurrentSeason + 2023}
-                ),
-                TeamGameScores AS (
-                    SELECT
-                        ps.seasonId,
-                        ps.playoffsGameId AS gameId,
-                        ps.playoffsRound,
-                        ps.homeTeamId AS homeTeamId,
-                        ps.awayTeamId AS awayTeamId,
-                        ps.seed,
-                        ps.conferenceId,
-                        CASE
-                        WHEN ps.homeTeamId = cp.currentTeamId THEN ps.homeTeamId
-                        WHEN ps.awayTeamId = cp.currentTeamId THEN ps.awayTeamId
-                        END AS derivedTeamId,
-                        SUM(pgs.PTS) AS teamScore
-                    FROM
-                        playoffsSchedule ps
-                    JOIN 
-                        playerGameStats pgs ON ps.playoffsGameId = pgs.gameId  AND pgs.isPlayoffs = 1
-                    JOIN
-                        currentPlayers cp ON cp.playerId = pgs.playerId
-                    JOIN
-                        players p ON p.playerId = cp.playerId
-                    WHERE
-                        ps.gameCompleted = 1 
-                        AND ps.playoffsRound = 'Finals'
-                    GROUP BY
-                        ps.seasonId, gameId, derivedTeamId
-                ),
-                Wins AS (
-                    SELECT
-                        tgs.seasonId,
-                        tgs.derivedTeamId as teamId,
-                        COUNT(*) AS wins
-                    FROM
-                        TeamGameScores tgs
-                    JOIN
-                        TeamGameScores opp ON tgs.gameId = opp.gameId
-                            AND tgs.derivedTeamId != opp.derivedTeamId
-                    WHERE
-                        tgs.teamScore > opp.teamScore
-                    GROUP BY
-                        tgs.seasonId, tgs.derivedTeamId
-                ),
-                Losses AS (
-                    SELECT
-                        tgs.seasonId,
-                        tgs.derivedTeamId as teamId,
-                        COUNT(*) AS losses
-                    FROM
-                        TeamGameScores tgs
-                    JOIN
-                        TeamGameScores opp ON tgs.gameId = opp.gameId
-                            AND tgs.derivedTeamId != opp.derivedTeamId
-                    WHERE
-                        tgs.teamScore < opp.teamScore
-                    GROUP BY
-                        tgs.seasonId, tgs.derivedTeamId
-                ),
-                CombinedResults AS (
-                    SELECT 
-                        tgs.seasonId,
-                        tgs.derivedTeamId as teamId,
-                        tgs.seed,
-                        tgs.playoffsRound,
-                        tgs.conferenceId,
-                        COALESCE(w.wins, 0) AS wins,
-                        COALESCE(l.losses, 0) AS losses
-                    FROM
-                        (SELECT DISTINCT seasonId, derivedTeamId, seed, playoffsRound, conferenceId FROM TeamGameScores) tgs
-                    LEFT JOIN Wins w ON tgs.seasonId = w.seasonId AND tgs.derivedTeamId = w.teamId
-                    LEFT JOIN Losses l ON tgs.seasonId = l.seasonId AND tgs.derivedTeamId = l.teamId
-                ),
-                UniqueSeriesTeams AS (
-                    SELECT 
-                        cr.seasonId,
-                        cr.teamId,
-                        t.teamName,
-                        cr.wins,
-                        cr.losses,
-                        (cr.wins + cr.losses) AS gamesPlayed,
-                        cr.seed,
-                        cr.conferenceId,
-                        cr.playoffsRound,
-                        ROW_NUMBER() OVER (PARTITION BY cr.seed, cr.conferenceId ORDER BY cr.wins DESC) AS row_num
-                    FROM 
-                        CombinedResults cr
-                    JOIN 
-                        teams t ON cr.teamId = t.teamId
-                    WHERE 
-                        cr.seasonId = {CurrentSeason} AND
-                        cr.playoffsRound = 'Finals'
-                ),
-                UncompleteSeries AS(
-                SELECT 
-                    seasonId,
-                    teamId,
-                    teamName,
-                    wins,
-                    losses,
-                    gamesPlayed,
-                    seed,
-                    conferenceId,
-                    playoffsRound
-                FROM 
-                    UniqueSeriesTeams
-                WHERE 
-                    --row_num = 1
-                 (wins == 4)
-                ORDER BY 
-                    conferenceId, seed
-                    )
-                SELECT DISTINCT 
-                us.seed, 
-                us.teamId AS winner,
-                us.conferenceId, 
-                us.wins,
-                us.losses
-                FROM UncompleteSeries us
-                JOIN playoffsSchedule ps ON ps.seed = us.seed 
-                AND ps.conferenceId = us.conferenceId
-                AND ps.playoffsRound = 'Finals'
+                string setChampionNewQuery = $@"
+                    SELECT pr.homeTeamId
+                    FROM playoffResults pr, league
+                    WHERE pr.seasonId = league.CurrentSeason
+                    AND pr.playoffsRound = 'Finals'
+                    AND (pr.wins = 4)
+                    UNION
+                    SELECT pr.awayTeamId
+                    FROM playoffResults pr, league
+                    WHERE pr.seasonId = league.CurrentSeason
+                    AND pr.playoffsRound = 'Finals'
+                    AND (pr.losses = 4)
                 ";
                 using (var connection = new SQLiteConnection(ConnectionString))
                 {
@@ -3212,13 +2922,13 @@ namespace LeagueSimulation.Models
                         }
                     }
 
-                    using (var command = new SQLiteCommand(setChampionQuery, connection))
+                    using (var command = new SQLiteCommand(setChampionNewQuery, connection))
                     {
                         using (var reader = command.ExecuteReader())
                         {
                             while (reader.Read())
                             {
-                                Champion = reader.GetInt32(reader.GetOrdinal("winner"));
+                                Champion = reader.GetInt32(0);
                             }
                         }
                     }
@@ -3433,49 +3143,18 @@ namespace LeagueSimulation.Models
             }
 
             //carry out player retirement and give out rookies
+            List<Player> players = new List<Player>();
             {
                 // extract all the players in the current league
-                List<Player> players = new List<Player>();
                 string getPlayersQuery = $@"
                     SELECT 
-                    p.playerId,
-                    p.playerForename,
-                    p.playerSurname,
-                    ((l.currentSeason + 2023) - p.dateOfBirth) AS age,
-                    t.teamId,
-                    t.teamName,
-                    pos.positionShort as playerPosition,
-                    printf('%d''%d', p.height / 12, p.height % 12) as height,
-                    p.height as intHeight,
-                    p.weight,
-                    pp.playstyle as pPlaystyle,
-                    sp.playstyle as sPlaystyle,
-                    p.overall,
-                    p.potential,
-                    ROUND(AVG(pgs.gameValue), 1) as gameValue,
-                    ROUND(AVG(pgs.MP), 1) AS minutesPlayed,
-                    p.overall,
-                    p.potential,
-                    p.layup,
-                    p.dunk,
-                    p.midRange,
-                    p.threePoint,
-                    p.freeThrow,
-                    p.passing,
-                    p.ballHandle,
-                    p.defense,
-                    p.steal,
-                    p.block,
-                    p.rebound,
-                    p.speed,
-                    p.stamina,
-                    p.strength
+                    p.playerId
 
                     FROM players p, league l
                     JOIN playerGameStats pgs ON pgs.playerId = p.playerId
                     AND pgs.isPlayoffs = FALSE
                     JOIN playerOnTeam pot ON yearJoined <= {2023 + CurrentSeason}
-                        AND yearLeft >= {2023 + CurrentSeason}
+                        AND yearLeft > {2023 + CurrentSeason}
                         AND pot.playerId = p.playerId
                     JOIN
                             teams t ON t.teamId = pot.teamId
@@ -3483,7 +3162,6 @@ namespace LeagueSimulation.Models
                     JOIN secondaryPlaystyle sp ON sp.secondaryPlaystyleId = p.secondaryPlaystyleId
                     JOIN primaryPlaystyle pp ON sp.primaryPlaystyleId = pp.primaryPlaystyleId
                     JOIN position pos ON pos.positionId = p.positionId
-                    WHERE age > 30
                     GROUP BY p.playerId
                     ";
                 using (var connection = new SQLiteConnection(ConnectionString))
@@ -3496,45 +3174,19 @@ namespace LeagueSimulation.Models
 
                             while (reader.Read())
                             {
-                                Player player = new Player();
-                                player.PlayerId = reader.GetInt32(reader.GetOrdinal("playerId"));
-                                player.Age = reader.GetInt32(reader.GetOrdinal("age"));
-                                player.position = reader.GetString(reader.GetOrdinal("playerPosition"));
-                                player.PrimaryPlaystyle = reader.GetString(reader.GetOrdinal("pPlaystyle"));
-                                player.SecondaryPlaystyle = reader.GetString(reader.GetOrdinal("sPlaystyle"));
-                                player.Height = reader.GetInt32(reader.GetOrdinal("intHeight")); // height in inches
-                                player.Weight = reader.GetInt32(reader.GetOrdinal("weight")); // weight in lbs
-                                player.playerForename = reader.GetString(reader.GetOrdinal("playerForename"));
-                                player.playerSurname = reader.GetString(reader.GetOrdinal("playerSurname"));
-                                player.TeamId = reader.GetInt32(reader.GetOrdinal("teamId"));
-                                player.teamName = reader.GetString(reader.GetOrdinal("teamName"));
-                                player.Layup = reader.GetInt32(reader.GetOrdinal("layup"));
-                                player.Dunk = reader.GetInt32(reader.GetOrdinal("dunk"));
-                                player.MidRange = reader.GetInt32(reader.GetOrdinal("midRange"));
-                                player.ThreePoint = reader.GetInt32(reader.GetOrdinal("threePoint"));
-                                player.FreeThrow = reader.GetInt32(reader.GetOrdinal("freeThrow"));
-                                player.Passing = reader.GetInt32(reader.GetOrdinal("passing"));
-                                player.BallHandle = reader.GetInt32(reader.GetOrdinal("ballHandle"));
-                                player.Defense = reader.GetInt32(reader.GetOrdinal("defense"));
-                                player.Steal = reader.GetInt32(reader.GetOrdinal("steal"));
-                                player.Block = reader.GetInt32(reader.GetOrdinal("block"));
-                                player.Rebound = reader.GetInt32(reader.GetOrdinal("rebound"));
-                                player.Speed = reader.GetInt32(reader.GetOrdinal("speed"));
-                                player.Strength = reader.GetInt32(reader.GetOrdinal("strength"));
-                                player.Stamina = reader.GetInt32(reader.GetOrdinal("stamina"));
-                                player.Overall = reader.GetInt32(reader.GetOrdinal("overall"));
-                                player.Potential = reader.GetInt32(reader.GetOrdinal("potential"));
-                                player.MinutesPlayed = reader.GetDouble(reader.GetOrdinal("minutesPlayed"));
-                                player.GameValue = reader.GetDouble(reader.GetOrdinal("gameValue"));
+                                int playerId = reader.GetInt32(reader.GetOrdinal("playerId"));
+                                Player player = ExtractCurrentPlayerFromPlayerId(playerId);
+                                player.GameValue = GetPlayerCurrentGameValue(player.PlayerId);
                                 players.Add(player);
                             }
                         }
                     }
                 }
-                foreach (Player player in players)
+
+                for (int i = 0; i < players.Count; i++)
                 {
-                    if (player.Age < 31) continue;
-                    if (player.PlayerId == 119) { };
+                    Player player = players[i];
+                    if (player.Age < 32) continue;
                     double playerGameValue = player.GameValue;
                     double avgGameValue = -1;
                     string averageGameValueQuery = $@"
@@ -3554,7 +3206,7 @@ namespace LeagueSimulation.Models
                             {
                                 while (reader.Read())
                                 {
-                                    if (reader.IsDBNull(0)) avgGameValue = 5;
+                                    if (reader.IsDBNull(0)) avgGameValue = 3;
                                     else avgGameValue = reader.GetDouble(0);
                                 }
                             }
@@ -3562,7 +3214,7 @@ namespace LeagueSimulation.Models
                     }
                     double playerGameValueDiff = playerGameValue - avgGameValue;
                     double retireProbability = 0;
-                    // convert range of gameValueDiff (-9 to 15) to (-0.45 to 0.65)
+                    // convert range of gameValueDiff (-9 to 15) to (-0.3 to 0.45)
                     playerGameValueDiff = (-0.3 + (0.3 + 0.45) * (playerGameValueDiff + 9) / (15 + 9)) * -1;
                     // convert player age from (31-40) to (0.09-0.74)
                     double ageVariable = 0.09 + (0.74 - 0.09) * (player.Age - 31) / (40 - 31);
@@ -3572,6 +3224,8 @@ namespace LeagueSimulation.Models
                     // inititate retirement (playerOnTeam and teamId goes to zero)
                     if (new Random().NextDouble() < retireProbability)
                     {
+                        // remove the player from the current 'players' list
+                        players.Remove(player);
                         int currentTeamId = player.TeamId;
                         string setRetirementQuery = $@"
                             UPDATE playerOnTeam
@@ -3796,110 +3450,12 @@ namespace LeagueSimulation.Models
                                 command.ExecuteNonQuery();
                             }
                         }
-
                     }
                 }
-
             }
 
             // carry out player progression
             {
-                // extract all the players in the current league
-                List<Player> players = new List<Player>();
-                string getPlayersQuery = $@"
-                    SELECT 
-                    p.playerId,
-                    p.playerForename,
-                    p.playerSurname,
-                    ((l.currentSeason + 2023) - p.dateOfBirth) AS age,
-                    t.teamId,
-                    t.teamName,
-                    pos.positionShort as playerPosition,
-                    printf('%d''%d', p.height / 12, p.height % 12) as height,
-                    p.height as intHeight,
-                    p.weight,
-                    pp.playstyle as pPlaystyle,
-                    sp.playstyle as sPlaystyle,
-                    p.overall,
-                    p.potential,
-                    ROUND(AVG(pgs.gameValue), 1) as gameValue,
-                    ROUND(AVG(pgs.MP), 1) AS minutesPlayed,
-                    p.overall,
-                    p.potential,
-                    p.layup,
-                    p.dunk,
-                    p.midRange,
-                    p.threePoint,
-                    p.freeThrow,
-                    p.passing,
-                    p.ballHandle,
-                    p.defense,
-                    p.steal,
-                    p.block,
-                    p.rebound,
-                    p.speed,
-                    p.stamina,
-                    p.strength
-
-                    FROM players p, league l
-                    JOIN playerGameStats pgs ON pgs.playerId = p.playerId
-                    AND pgs.isPlayoffs = FALSE
-                    JOIN playerOnTeam pot ON dayJoined <= 150 AND yearJoined <= {2023 + CurrentSeason}
-                        AND dayLeft >= 1 AND yearLeft >= {2023 + 1 + CurrentSeason}
-                        AND pot.playerId = p.playerId
-                    JOIN
-                            teams t ON t.teamId = pot.teamId
-                    AND t.teamId != 0
-                    JOIN secondaryPlaystyle sp ON sp.secondaryPlaystyleId = p.secondaryPlaystyleId
-                    JOIN primaryPlaystyle pp ON sp.primaryPlaystyleId = pp.primaryPlaystyleId
-                    JOIN position pos ON pos.positionId = p.positionId
-                    GROUP BY p.playerId
-                    ";
-                using (var connection = new SQLiteConnection(ConnectionString))
-                {
-                    connection.Open();
-                    using (var command = new SQLiteCommand(getPlayersQuery, connection))
-                    {
-                        using (var reader = command.ExecuteReader())
-                        {
-
-                            while (reader.Read())
-                            {
-                                Player player = new Player();
-                                player.PlayerId = reader.GetInt32(reader.GetOrdinal("playerId"));
-                                player.Age = reader.GetInt32(reader.GetOrdinal("age"));
-                                player.position = reader.GetString(reader.GetOrdinal("playerPosition"));
-                                player.PrimaryPlaystyle = reader.GetString(reader.GetOrdinal("pPlaystyle"));
-                                player.SecondaryPlaystyle = reader.GetString(reader.GetOrdinal("sPlaystyle"));
-                                player.Height = reader.GetInt32(reader.GetOrdinal("intHeight")); // height in inches
-                                player.Weight = reader.GetInt32(reader.GetOrdinal("weight")); // weight in lbs
-                                player.playerForename = reader.GetString(reader.GetOrdinal("playerForename"));
-                                player.playerSurname = reader.GetString(reader.GetOrdinal("playerSurname"));
-                                player.TeamId = reader.GetInt32(reader.GetOrdinal("teamId"));
-                                player.teamName = reader.GetString(reader.GetOrdinal("teamName"));
-                                player.Layup = reader.GetInt32(reader.GetOrdinal("layup"));
-                                player.Dunk = reader.GetInt32(reader.GetOrdinal("dunk"));
-                                player.MidRange = reader.GetInt32(reader.GetOrdinal("midRange"));
-                                player.ThreePoint = reader.GetInt32(reader.GetOrdinal("threePoint"));
-                                player.FreeThrow = reader.GetInt32(reader.GetOrdinal("freeThrow"));
-                                player.Passing = reader.GetInt32(reader.GetOrdinal("passing"));
-                                player.BallHandle = reader.GetInt32(reader.GetOrdinal("ballHandle"));
-                                player.Defense = reader.GetInt32(reader.GetOrdinal("defense"));
-                                player.Steal = reader.GetInt32(reader.GetOrdinal("steal"));
-                                player.Block = reader.GetInt32(reader.GetOrdinal("block"));
-                                player.Rebound = reader.GetInt32(reader.GetOrdinal("rebound"));
-                                player.Speed = reader.GetInt32(reader.GetOrdinal("speed"));
-                                player.Strength = reader.GetInt32(reader.GetOrdinal("strength"));
-                                player.Stamina = reader.GetInt32(reader.GetOrdinal("stamina"));
-                                player.Overall = reader.GetInt32(reader.GetOrdinal("overall"));
-                                player.Potential = reader.GetInt32(reader.GetOrdinal("potential"));
-                                player.MinutesPlayed = reader.GetDouble(reader.GetOrdinal("minutesPlayed"));
-                                player.GameValue = reader.GetDouble(reader.GetOrdinal("gameValue"));
-                                players.Add(player);
-                            }
-                        }
-                    }
-                }
 
                 // find the average gameValue from players with overall, x - 5 < x < x + 5
                 // where x is the current player's overall e.g. 85 < x < 95 where overall is 90
@@ -3939,8 +3495,8 @@ namespace LeagueSimulation.Models
                     // now we set the boost the player gets
                     double finalBoost = 0;
                     double playerGameValueDiff = playerGameValue - avgGameValue;
-                    // convert range of gameValueDiff (-20 to 35) to (-1 to 1)
-                    playerGameValueDiff = -1 + (1 + 1) * (playerGameValueDiff + 20) / (35 + 20);
+                    // convert range of gameValueDiff (-20 to 25) to (-1.1 to 1.1)
+                    playerGameValueDiff = -1 + (1 + 1) * (playerGameValueDiff + 20) / (25 + 20);
                     if (playerGameValueDiff > 1.1) playerGameValueDiff = 1.1;
                     else if (playerGameValueDiff < -1.1) playerGameValueDiff = -1.1;
 
@@ -3957,12 +3513,12 @@ namespace LeagueSimulation.Models
 
                     // add extra boost for high potential players, and make sure any extreme boosts don't occur
                     if (player.Potential > player.Overall) finalBoost += (player.Potential - player.Overall) / 5.0;
-                    if (finalBoost > 7 && player.Age > 25) { finalBoost = 7 + Player.GenerateRandomNormalDistribution(-1.1, 0.4); }
+                    if (finalBoost > 7 && player.Age > 24) { finalBoost = 7 + Player.GenerateRandomNormalDistribution(-1.1, 0.4); }
                     else if (finalBoost < -7) { finalBoost = -7 + Player.GenerateRandomNormalDistribution(1.1, 0.4); }
                     finalBoost = Math.Round(finalBoost);
 
                     // reduce the potential of older players
-                    if (player.Age > 28) player.Potential -= 36 - player.Age;
+                    if (player.Age > 29) player.Potential -= 36 - player.Age;
                     if (player.Overall + finalBoost < 60 || player.Potential + finalBoost < 60) finalBoost = 0;
                     else if (player.Overall + finalBoost > 99) finalBoost = 99 - player.Overall;
                     else if (player.Potential + finalBoost > 99) finalBoost = 99 - player.Potential;
@@ -4014,6 +3570,9 @@ namespace LeagueSimulation.Models
                         player.Stamina += (int)finalBoost;
                         if (player.Stamina > 99) player.Stamina = 99;
                         else if (player.Stamina < 25) player.Stamina = 25;
+                        player.Strength += (int)finalBoost;
+                        if (player.Strength > 99) player.Strength = 99;
+                        else if (player.Strength < 25) player.Strength = 25;
                     }
                     if (finalBoost < -3) { }
                     int finalPotBoost = (int)finalBoost - 3;
@@ -4043,7 +3602,8 @@ namespace LeagueSimulation.Models
                     speed = {player.Speed},
                     stamina = {player.Stamina},
                     overall = {player.Overall},
-                    potential = {player.Potential}
+                    potential = {player.Potential},
+                    strength = {player.Strength}
                     WHERE playerId = {player.PlayerId}; 
                     " + $"\n";
                     //now we add the player's progression to the database
@@ -4160,6 +3720,10 @@ namespace LeagueSimulation.Models
             else if (currentSuffix == "III") { finalSuffix = "IV"; }
             else if (currentSuffix == "IV") { finalSuffix = "V"; }
             else if (currentSuffix == "V") { finalSuffix = "VI"; }
+            else if (currentSuffix == "VI") { finalSuffix = "VII"; }
+            else if (currentSuffix == "VII") { finalSuffix = "VIII"; }
+            else if (currentSuffix == "VIII") { finalSuffix = "IX"; }
+            else if (currentSuffix == "IX") { finalSuffix = "X"; }
 
             return new List<string>() { currentSuffix, finalSuffix };
         }
@@ -4192,132 +3756,23 @@ namespace LeagueSimulation.Models
 
         public bool CheckIfFullPlayoffRoundGamesComplete()
         {
-            string checkFullRoundGamesCompleteQuery = $@"
-                    WITH TeamGameScores AS (
-                SELECT
-                    ps.seasonId,
-                    ps.playoffsGameId AS gameId,
-                    ps.playoffsRound,
-                    ps.homeTeamId AS homeTeamId,
-                    ps.awayTeamId AS awayTeamId,
-                    ps.seed,
-                    ps.conferenceId,
-                    CASE 
-                        WHEN ps.homeTeamId = p.teamId THEN ps.homeTeamId
-                        WHEN ps.awayTeamId = p.teamId THEN ps.awayTeamId
-                    END AS teamId,
-                    SUM(pgs.PTS) AS teamScore
-                FROM
-                    playoffsSchedule ps
-                JOIN 
-                    playerGameStats pgs ON ps.playoffsGameId = pgs.gameId  AND pgs.isPlayoffs = 1
-                JOIN
-                    players p ON p.playerId = pgs.playerId
-                WHERE
-                    ps.gameCompleted = 1 AND ps.playoffsRound = '{PlayoffsRound}'
-                GROUP BY
-                    ps.seasonId, gameId, teamId
-            ),
-            Wins AS (
-                SELECT
-                    tgs.seasonId,
-                    tgs.teamId,
-                    COUNT(*) AS wins
-                FROM
-                    TeamGameScores tgs
-                JOIN
-                    TeamGameScores opp ON tgs.gameId = opp.gameId
-                        AND tgs.teamId != opp.teamId
-                WHERE
-                    tgs.teamScore > opp.teamScore
-                GROUP BY
-                    tgs.seasonId, tgs.teamId
-            ),
-            Losses AS (
-                SELECT
-                    tgs.seasonId,
-                    tgs.teamId,
-                    COUNT(*) AS losses
-                FROM
-                    TeamGameScores tgs
-                JOIN
-                    TeamGameScores opp ON tgs.gameId = opp.gameId
-                        AND tgs.teamId != opp.teamId
-                WHERE
-                    tgs.teamScore < opp.teamScore
-                GROUP BY
-                    tgs.seasonId, tgs.teamId
-            ),
-            CombinedResults AS (
-                SELECT 
-                    tgs.seasonId,
-                    tgs.teamId,
-                    tgs.seed,
-                    tgs.playoffsRound,
-                    tgs.conferenceId,
-                    COALESCE(w.wins, 0) AS wins,
-                    COALESCE(l.losses, 0) AS losses
-                FROM
-                    (SELECT DISTINCT seasonId, teamId, seed, playoffsRound, conferenceId FROM TeamGameScores) tgs
-                LEFT JOIN Wins w ON tgs.seasonId = w.seasonId AND tgs.teamId = w.teamId
-                LEFT JOIN Losses l ON tgs.seasonId = l.seasonId AND tgs.teamId = l.teamId
-            ),
-            UniqueSeriesTeams AS (
-                SELECT 
-                    cr.seasonId,
-                    cr.teamId,
-                    t.teamName,
-                    cr.wins,
-                    cr.losses,
-                    (cr.wins + cr.losses) AS gamesPlayed,
-                    cr.seed,
-                    cr.conferenceId,
-                    cr.playoffsRound,
-                    ROW_NUMBER() OVER (PARTITION BY cr.seed, cr.conferenceId ORDER BY cr.wins DESC) AS row_num
-                FROM 
-                    CombinedResults cr
-                JOIN 
-                    teams t ON cr.teamId = t.teamId
-                WHERE 
-                    cr.seasonId = {CurrentSeason} AND
-                    cr.playoffsRound = '{PlayoffsRound}'
-            ),
-            UncompleteSeries AS(
-            SELECT 
-                seasonId,
-                teamId,
-                teamName,
-                wins,
-                losses,
-                gamesPlayed,
-                seed,
-                conferenceId,
-                playoffsRound
-            FROM 
-                UniqueSeriesTeams
-            WHERE 
-                --row_num = 1
-             (wins < 4 AND losses < 4)
-            ORDER BY 
-                conferenceId, seed
-	            )
-            SELECT DISTINCT us.seed, us.conferenceId, ps.homeTeamId, ps.awayTeamId
-            FROM UncompleteSeries us
-            JOIN playoffsSchedule ps ON ps.seed = us.seed 
-            AND ps.conferenceId = us.conferenceId
-            AND ps.playoffsRound = '{PlayoffsRound}'
+            string checkFullRoundGamesCompleteNewQuery = $@"
+                SELECT COUNT(*) = 0
+                FROM playoffResults pr
+                WHERE pr.seasonId = {CurrentSeason}
+                AND pr.playoffsRound = '{PlayoffsRound}'
+                AND (wins < 4 AND losses < 4)
                 ";
             using (var connection = new SQLiteConnection(ConnectionString))
             {
                 connection.Open();
-                using (var command = new SQLiteCommand(checkFullRoundGamesCompleteQuery, connection))
+                using (var command = new SQLiteCommand(checkFullRoundGamesCompleteNewQuery, connection))
                 {
                     using (var reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            if (reader.IsDBNull(0)) return true;
-                            else return false;
+                            return reader.GetBoolean(0);
                         }
                     }
                 }
@@ -4327,123 +3782,13 @@ namespace LeagueSimulation.Models
 
         public void AddAnyNeededPlayoffGames()
         {
-            string getUncompleteSeriesQuery = $@"
-                WITH TeamGameScores AS (
-                SELECT
-                    ps.seasonId,
-                    ps.playoffsGameId AS gameId,
-                    ps.playoffsRound,
-                    ps.homeTeamId AS homeTeamId,
-                    ps.awayTeamId AS awayTeamId,
-		            ps.seed,
-		            ps.conferenceId,
-                    CASE 
-                        WHEN ps.homeTeamId = p.teamId THEN ps.homeTeamId
-                        WHEN ps.awayTeamId = p.teamId THEN ps.awayTeamId
-                    END AS teamId,
-                    SUM(pgs.PTS) AS teamScore
-                FROM
-                    playoffsSchedule ps
-                JOIN 
-                    playerGameStats pgs ON ps.playoffsGameId = pgs.gameId  AND pgs.isPlayoffs = 1
-                JOIN
-                    players p ON p.playerId = pgs.playerId
-                WHERE
-                    ps.gameCompleted = 1
-                    AND ps.seasonId = {CurrentSeason}
-                    AND ps.playoffsRound = '{PlayoffsRound}'
-                GROUP BY
-                    ps.seasonId, gameId, teamId
-            ),
-            Wins AS (
-                SELECT
-                    tgs.seasonId,
-                    tgs.teamId,
-                    COUNT(*) AS wins
-                FROM
-                    TeamGameScores tgs
-                JOIN
-                    TeamGameScores opp ON tgs.gameId = opp.gameId
-                        AND tgs.teamId != opp.teamId
-                WHERE
-                    tgs.teamScore > opp.teamScore
-                GROUP BY
-                    tgs.seasonId, tgs.teamId
-            ),
-            Losses AS (
-                SELECT
-                    tgs.seasonId,
-                    tgs.teamId,
-                    COUNT(*) AS losses
-                FROM
-                    TeamGameScores tgs
-                JOIN
-                    TeamGameScores opp ON tgs.gameId = opp.gameId
-                        AND tgs.teamId != opp.teamId
-                WHERE
-                    tgs.teamScore < opp.teamScore
-                GROUP BY
-                    tgs.seasonId, tgs.teamId
-            ),
-            CombinedResults AS (
-                SELECT 
-                    tgs.seasonId,
-                    tgs.teamId,
-		            tgs.seed,
-		            tgs.playoffsRound,
-		            tgs.conferenceId,
-                    COALESCE(w.wins, 0) AS wins,
-                    COALESCE(l.losses, 0) AS losses
-                FROM
-                    (SELECT DISTINCT seasonId, teamId, seed, playoffsRound, conferenceId FROM TeamGameScores) tgs
-                LEFT JOIN Wins w ON tgs.seasonId = w.seasonId AND tgs.teamId = w.teamId
-                LEFT JOIN Losses l ON tgs.seasonId = l.seasonId AND tgs.teamId = l.teamId
-            ),
-            UniqueSeriesTeams AS (
-                SELECT 
-                    cr.seasonId,
-                    cr.teamId,
-                    t.teamName,
-                    cr.wins,
-                    cr.losses,
-                    (cr.wins + cr.losses) AS gamesPlayed,
-                    cr.seed,
-                    cr.conferenceId,
-                    cr.playoffsRound,
-                    ROW_NUMBER() OVER (PARTITION BY cr.seed, cr.conferenceId ORDER BY cr.wins DESC) AS row_num
-                FROM 
-                    CombinedResults cr
-                JOIN 
-                    teams t ON cr.teamId = t.teamId
-                WHERE 
-                    cr.seasonId = {CurrentSeason} AND
-		            cr.playoffsRound = '{PlayoffsRound}'
-            ),
-            UncompleteSeries AS (SELECT 
-                seasonId,
-                teamId,
-                teamName,
-                wins,
-                losses,
-                gamesPlayed,
-                seed,
-                conferenceId,
-                playoffsRound
-            FROM 
-                UniqueSeriesTeams
-            WHERE 
-                row_num = 1
-	            AND wins < 4
-            ORDER BY 
-                conferenceId, seed
-	            )
-	            SELECT DISTINCT us.seed, us.conferenceId, ps.homeTeamId, ps.awayTeamId
-	            FROM UncompleteSeries us
-	            JOIN playoffsSchedule ps ON ps.seed = us.seed 
-	            AND ps.conferenceId = us.conferenceId
-                AND ps.seasonId = {CurrentSeason}
-                AND ps.playoffsRound = '{PlayoffsRound}'
-            ";
+            string getUncompleteSeriesNewQuery = $@"
+                SELECT pr.seed, pr.conferenceId, pr.homeTeamId, pr.awayTeamId
+                FROM playoffResults pr
+                WHERE pr.wins < 4 AND pr.losses < 4
+                AND pr.playoffsRound = '{PlayoffsRound}'
+                AND pr.seasonId = {CurrentSeason}
+                ";
             List<int> seeds = new List<int>();
             List<int> conferenceIds = new List<int>();
             List<int> homeTeamIds = new List<int>();
@@ -4451,7 +3796,7 @@ namespace LeagueSimulation.Models
             using (var connection = new SQLiteConnection(ConnectionString))
             {
                 connection.Open();
-                using (var command = new SQLiteCommand(getUncompleteSeriesQuery, connection))
+                using (var command = new SQLiteCommand(getUncompleteSeriesNewQuery, connection))
                 {
                     using (var reader = command.ExecuteReader())
                     {

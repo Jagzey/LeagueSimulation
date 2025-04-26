@@ -700,7 +700,7 @@ namespace LeagueSimulation
             menuForm.Show();
         }
 
-        private void game1SimGameButton_Click(object sender, EventArgs e)
+        private void SimGameFunction(int gameNumber)
         {
             if ((int)currentDayShownNum.Value != league.CurrentDay)
             {
@@ -716,17 +716,34 @@ namespace LeagueSimulation
                 int currentGameSeason = league.CurrentSeason;
                 string currentPlayoffsRound = "";
                 if (league.Playoffs) currentPlayoffsRound = league.PlayoffsRound;
-                league.SimulateGame(schedule[(int)currentDayShownNum.Value - 1][0], currentDay, true);
-                string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][0].Split(',');
+                league.SimulateGame(schedule[(int)currentDayShownNum.Value - 1][gameNumber], currentDay, true);
+                string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][gameNumber].Split(',');
                 teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
                 teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                UpdateGame1Panel(teamsPlaying);
+
+                if (gameNumber == 0) UpdateGame1Panel(teamsPlaying);
+                else if (gameNumber == 1) UpdateGame2Panel(teamsPlaying);
+                else if (gameNumber == 2) UpdateGame3Panel(teamsPlaying);
+                else if (gameNumber == 3) UpdateGame4Panel(teamsPlaying);
+                else if (gameNumber == 4) UpdateGame5Panel(teamsPlaying);
+                else if (gameNumber == 5) UpdateGame6Panel(teamsPlaying);
+                else if (gameNumber == 6) UpdateGame7Panel(teamsPlaying);
+                else if (gameNumber == 7) UpdateGame8Panel(teamsPlaying);
+                else if (gameNumber == 8) UpdateGame9Panel(teamsPlaying);
+                else if (gameNumber == 9) UpdateGame10Panel(teamsPlaying);
+                else if (gameNumber == 10) UpdateGame11Panel(teamsPlaying);
+                else if (gameNumber == 11) UpdateGame12Panel(teamsPlaying);
+                else if (gameNumber == 12) UpdateGame13Panel(teamsPlaying);
+
                 if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
                 else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
                 simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
                 if (league.CurrentSeason > currentSeason) LoadSeasonSummary(new SeasonSummaryUserControl(league));
             }
+            
         }
+
+        private void game1SimGameButton_Click(object sender, EventArgs e) => SimGameFunction(0);
 
         private void UpdateGame1Panel(string[] teamsPlaying)
         {
@@ -744,29 +761,7 @@ namespace LeagueSimulation
             game1ViewGameResults.Show();
         }
 
-        private void game2SimGameButton_Click(object sender, EventArgs e)
-        {
-            if ((int)currentDayShownNum.Value != league.CurrentDay)
-            {
-                MessageBox.Show(text: "You can only simulate the current day of the season. Simulate each day before this one before simulating games here.");
-            }
-            else
-            {
-                int currentSeason = league.CurrentSeason;
-                List<List<string>> schedule = new List<List<string>>();
-                if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
-                else schedule = league.CurrentSchedule;
-                league.SimulateGame(schedule[(int)currentDayShownNum.Value - 1][1], (int)currentDayShownNum.Value, true);
-                string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][1].Split(',');
-                teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                UpdateGame2Panel(teamsPlaying);
-                if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
-                else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
-                simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
-                if (league.CurrentSeason > currentSeason) LoadSeasonSummary(new SeasonSummaryUserControl(league));
-            }
-        }
+        private void game2SimGameButton_Click(object sender, EventArgs e) => SimGameFunction(1);
 
         private void UpdateGame2Panel(string[] teamsPlaying)
         {
@@ -784,29 +779,7 @@ namespace LeagueSimulation
             game2ViewGameResults.Show();
         }
 
-        private void game3SimGameButton_Click(object sender, EventArgs e)
-        {
-            if ((int)currentDayShownNum.Value != league.CurrentDay)
-            {
-                MessageBox.Show(text: "You can only simulate the current day of the season. Simulate each day before this one before simulating games here.");
-            }
-            else
-            {
-                int currentSeason = league.CurrentSeason;
-                List<List<string>> schedule = new List<List<string>>();
-                if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
-                else schedule = league.CurrentSchedule;
-                league.SimulateGame(schedule[(int)currentDayShownNum.Value - 1][2], (int)currentDayShownNum.Value, true);
-                string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][2].Split(',');
-                teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                UpdateGame3Panel(teamsPlaying);
-                if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
-                else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
-                simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
-                if (league.CurrentSeason > currentSeason) LoadSeasonSummary(new SeasonSummaryUserControl(league));
-            }
-        }
+        private void game3SimGameButton_Click(object sender, EventArgs e) => SimGameFunction(2);
 
         private void UpdateGame3Panel(string[] teamsPlaying)
         {
@@ -824,29 +797,7 @@ namespace LeagueSimulation
             game3ViewGameResults.Show();
         }
 
-        private void game4SimGameButton_Click(object sender, EventArgs e)
-        {
-            if ((int)currentDayShownNum.Value != league.CurrentDay)
-            {
-                MessageBox.Show(text: "You can only simulate the current day of the season. Simulate each day before this one before simulating games here.");
-            }
-            else
-            {
-                int currentSeason = league.CurrentSeason;
-                List<List<string>> schedule = new List<List<string>>();
-                if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
-                else schedule = league.CurrentSchedule;
-                league.SimulateGame(schedule[(int)currentDayShownNum.Value - 1][3], (int)currentDayShownNum.Value, true);
-                string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][3].Split(',');
-                teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                UpdateGame4Panel(teamsPlaying);
-                if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
-                else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
-                simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
-                if (league.CurrentSeason > currentSeason) LoadSeasonSummary(new SeasonSummaryUserControl(league));
-            }
-        }
+        private void game4SimGameButton_Click(object sender, EventArgs e) => SimGameFunction(3);
 
         private void UpdateGame4Panel(string[] teamsPlaying)
         {
@@ -864,29 +815,7 @@ namespace LeagueSimulation
             game4ViewGameResults.Show();
         }
 
-        private void game5SimGameButton_Click(object sender, EventArgs e)
-        {
-            if ((int)currentDayShownNum.Value != league.CurrentDay)
-            {
-                MessageBox.Show(text: "You can only simulate the current day of the season. Simulate each day before this one before simulating games here.");
-            }
-            else
-            {
-                int currentSeason = league.CurrentSeason;
-                List<List<string>> schedule = new List<List<string>>();
-                if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
-                else schedule = league.CurrentSchedule;
-                league.SimulateGame(schedule[(int)currentDayShownNum.Value - 1][4], (int)currentDayShownNum.Value, true);
-                string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][4].Split(',');
-                teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                UpdateGame5Panel(teamsPlaying);
-                if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
-                else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
-                simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
-                if (league.CurrentSeason > currentSeason) LoadSeasonSummary(new SeasonSummaryUserControl(league));
-            }
-        }
+        private void game5SimGameButton_Click(object sender, EventArgs e) => SimGameFunction(4);
 
         private void UpdateGame5Panel(string[] teamsPlaying)
         {
@@ -904,29 +833,7 @@ namespace LeagueSimulation
             game5ViewGameResults.Show();
         }
 
-        private void game6SimGameButton_Click(object sender, EventArgs e)
-        {
-            if ((int)currentDayShownNum.Value != league.CurrentDay)
-            {
-                MessageBox.Show(text: "You can only simulate the current day of the season. Simulate each day before this one before simulating games here.");
-            }
-            else
-            {
-                int currentSeason = league.CurrentSeason;
-                List<List<string>> schedule = new List<List<string>>();
-                if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
-                else schedule = league.CurrentSchedule;
-                league.SimulateGame(schedule[(int)currentDayShownNum.Value - 1][5], (int)currentDayShownNum.Value, true);
-                string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][5].Split(',');
-                teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                UpdateGame6Panel(teamsPlaying);
-                if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
-                else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
-                simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
-                if (league.CurrentSeason > currentSeason) LoadSeasonSummary(new SeasonSummaryUserControl(league));
-            }
-        }
+        private void game6SimGameButton_Click(object sender, EventArgs e) => SimGameFunction(5);
 
         private void UpdateGame6Panel(string[] teamsPlaying)
         {
@@ -944,29 +851,7 @@ namespace LeagueSimulation
             game6ViewGameResults.Show();
         }
 
-        private void game7SimGameButton_Click(object sender, EventArgs e)
-        {
-            if ((int)currentDayShownNum.Value != league.CurrentDay)
-            {
-                MessageBox.Show(text: "You can only simulate the current day of the season. Simulate each day before this one before simulating games here.");
-            }
-            else
-            {
-                int currentSeason = league.CurrentSeason;
-                List<List<string>> schedule = new List<List<string>>();
-                if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
-                else schedule = league.CurrentSchedule;
-                league.SimulateGame(schedule[(int)currentDayShownNum.Value - 1][6], (int)currentDayShownNum.Value, true);
-                string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][6].Split(',');
-                teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                UpdateGame7Panel(teamsPlaying);
-                if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
-                else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
-                simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
-                if (league.CurrentSeason > currentSeason) LoadSeasonSummary(new SeasonSummaryUserControl(league));
-            }
-        }
+        private void game7SimGameButton_Click(object sender, EventArgs e) => SimGameFunction(6);
 
         private void UpdateGame7Panel(string[] teamsPlaying)
         {
@@ -984,29 +869,7 @@ namespace LeagueSimulation
             game7ViewGameResults.Show();
         }
 
-        private void game8SimGameButton_Click(object sender, EventArgs e)
-        {
-            if ((int)currentDayShownNum.Value != league.CurrentDay)
-            {
-                MessageBox.Show(text: "You can only simulate the current day of the season. Simulate each day before this one before simulating games here.");
-            }
-            else
-            {
-                int currentSeason = league.CurrentSeason;
-                List<List<string>> schedule = new List<List<string>>();
-                if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
-                else schedule = league.CurrentSchedule;
-                league.SimulateGame(schedule[(int)currentDayShownNum.Value - 1][7], (int)currentDayShownNum.Value, true);
-                string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][7].Split(',');
-                teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                UpdateGame8Panel(teamsPlaying);
-                if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
-                else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
-                simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
-                if (league.CurrentSeason > currentSeason) LoadSeasonSummary(new SeasonSummaryUserControl(league));
-            }
-        }
+        private void game8SimGameButton_Click(object sender, EventArgs e) => SimGameFunction(7);
 
         private void UpdateGame8Panel(string[] teamsPlaying)
         {
@@ -1025,26 +888,7 @@ namespace LeagueSimulation
             game8ViewGameResults.Show();
         }
 
-        private void game9SimGameButton_Click(object sender, EventArgs e)
-        {
-            if ((int)currentDayShownNum.Value != league.CurrentDay)
-            {
-                MessageBox.Show(text: "You can only simulate the current day of the season. Simulate each day before this one before simulating games here.");
-            }
-            else
-            {
-                int currentSeason = league.CurrentSeason;
-                league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][8], (int)currentDayShownNum.Value, true);
-                string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][8].Split(',');
-                teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                UpdateGame9Panel(teamsPlaying);
-                if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
-                else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
-                simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
-                if (league.CurrentSeason > currentSeason) LoadSeasonSummary(new SeasonSummaryUserControl(league));
-            }
-        }
+        private void game9SimGameButton_Click(object sender, EventArgs e) => SimGameFunction(8);
 
         private void UpdateGame9Panel(string[] teamsPlaying)
         {
@@ -1056,27 +900,7 @@ namespace LeagueSimulation
             game9SimGameButton.Hide();
             game9ViewGameResults.Show();
         }
-        private void game10SimGameButton_Click(object sender, EventArgs e)
-        {
-            if ((int)currentDayShownNum.Value != league.CurrentDay)
-            {
-                MessageBox.Show(text: "You can only simulate the current day of the season. Simulate each day before this one before simulating games here.");
-            }
-            else
-            {
-                int currentSeason = league.CurrentSeason;
-                league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][9], (int)currentDayShownNum.Value, true);
-                string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][9].Split(',');
-                teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                UpdateGame10Panel(teamsPlaying);
-                if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
-                else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
-                simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
-                if (league.CurrentSeason > currentSeason) LoadSeasonSummary(new SeasonSummaryUserControl(league));
-            }
-            FillLabels();
-        }
+        private void game10SimGameButton_Click(object sender, EventArgs e) => SimGameFunction(9);
 
         private void UpdateGame10Panel(string[] teamsPlaying)
         {
@@ -1088,27 +912,7 @@ namespace LeagueSimulation
             game10SimGameButton.Hide();
             game10ViewGameResults.Show();
         }
-        private void game11SimGameButton_Click(object sender, EventArgs e)
-        {
-            if ((int)currentDayShownNum.Value != league.CurrentDay)
-            {
-                MessageBox.Show(text: "You can only simulate the current day of the season. Simulate each day before this one before simulating games here.");
-            }
-            else
-            {
-                int currentSeason = league.CurrentSeason;
-                league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][10], (int)currentDayShownNum.Value, true);
-                string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][10].Split(',');
-                teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                UpdateGame11Panel(teamsPlaying);
-                if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
-                else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
-                simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
-                if (league.CurrentSeason > currentSeason) LoadSeasonSummary(new SeasonSummaryUserControl(league));
-            }
-            FillLabels();
-        }
+        private void game11SimGameButton_Click(object sender, EventArgs e) => SimGameFunction(10);
 
         private void UpdateGame11Panel(string[] teamsPlaying)
         {
@@ -1121,27 +925,7 @@ namespace LeagueSimulation
             game11ViewGameResults.Show();
         }
 
-        private void game12SimGameButton_Click(object sender, EventArgs e)
-        {
-            if ((int)currentDayShownNum.Value != league.CurrentDay)
-            {
-                MessageBox.Show(text: "You can only simulate the current day of the season. Simulate each day before this one before simulating games here.");
-            }
-            else
-            {
-                int currentSeason = league.CurrentSeason;
-                league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][11], (int)currentDayShownNum.Value, true);
-                string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][11].Split(',');
-                teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                UpdateGame12Panel(teamsPlaying);
-                if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
-                else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
-                simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
-                if (league.CurrentSeason > currentSeason) LoadSeasonSummary(new SeasonSummaryUserControl(league));
-            }
-            FillLabels();
-        }
+        private void game12SimGameButton_Click(object sender, EventArgs e) => SimGameFunction(11);
 
         private void UpdateGame12Panel(string[] teamsPlaying)
         {
@@ -1154,27 +938,7 @@ namespace LeagueSimulation
             game12ViewGameResults.Show();
         }
 
-        private void game13SimGameButton_Click(object sender, EventArgs e)
-        {
-            if ((int)currentDayShownNum.Value != league.CurrentDay)
-            {
-                MessageBox.Show(text: "You can only simulate the current day of the season. Simulate each day before this one before simulating games here.");
-            }
-            else
-            {
-                int currentSeason = league.CurrentSeason;
-                league.SimulateGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][12], (int)currentDayShownNum.Value, true);
-                string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][12].Split(',');
-                teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                UpdateGame13Panel(teamsPlaying);
-                if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
-                else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
-                simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
-                if (league.CurrentSeason > currentSeason) LoadSeasonSummary(new SeasonSummaryUserControl(league));
-            }
-            FillLabels();
-        }
+        private void game13SimGameButton_Click(object sender, EventArgs e) => SimGameFunction(12);
 
         private void game1WatchGameButton_Click(object sender, EventArgs e)
         {
@@ -1182,23 +946,7 @@ namespace LeagueSimulation
             {
                 MessageBox.Show(text: "You can only simulate the current day of the season. Simulate each day before this one before simulating games here.");
             }
-            else
-            {
-                int currentSeason = league.CurrentSeason;
-                List<List<string>> schedule = new List<List<string>>();
-                if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
-                else schedule = league.CurrentSchedule;
-                string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][0].Split(',');
-                (List<string>, List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][0], (int)currentDayShownNum.Value);
-                teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                UpdateGame1Panel(teamsPlaying);
-                LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, phrases.Item3, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
-                if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
-                else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
-                simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
-                if (league.CurrentSeason > currentSeason) LoadSeasonSummary(new SeasonSummaryUserControl(league));
-            }
+            else WatchGameFunction(0);
             
         }
 
@@ -1534,7 +1282,7 @@ namespace LeagueSimulation
             
         }
 
-        private void game2WatchGameButton_Click(object sender, EventArgs e)
+        private void WatchGameFunction(int gameNumber)
         {
             if ((int)currentDayShownNum.Value != league.CurrentDay)
             {
@@ -1546,11 +1294,25 @@ namespace LeagueSimulation
                 List<List<string>> schedule = new List<List<string>>();
                 if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
                 else schedule = league.CurrentSchedule;
-                string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][1].Split(',');
-                (List<string>, List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][2], (int)currentDayShownNum.Value);
+                string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][gameNumber].Split(',');
+                (List<string>, List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][gameNumber], (int)currentDayShownNum.Value);
                 teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
                 teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                UpdateGame2Panel(teamsPlaying);
+
+                if (gameNumber == 0) UpdateGame1Panel(teamsPlaying);
+                else if (gameNumber == 1) UpdateGame2Panel(teamsPlaying);
+                else if (gameNumber == 2) UpdateGame3Panel(teamsPlaying);
+                else if (gameNumber == 3) UpdateGame4Panel(teamsPlaying);
+                else if (gameNumber == 4) UpdateGame5Panel(teamsPlaying);
+                else if (gameNumber == 5) UpdateGame6Panel(teamsPlaying);
+                else if (gameNumber == 6) UpdateGame7Panel(teamsPlaying);
+                else if (gameNumber == 7) UpdateGame8Panel(teamsPlaying);
+                else if (gameNumber == 8) UpdateGame9Panel(teamsPlaying);
+                else if (gameNumber == 9) UpdateGame10Panel(teamsPlaying);
+                else if (gameNumber == 10) UpdateGame11Panel(teamsPlaying);
+                else if (gameNumber == 11) UpdateGame12Panel(teamsPlaying);
+                else if (gameNumber == 12) UpdateGame13Panel(teamsPlaying);
+
                 LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, phrases.Item3, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
                 if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
                 else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
@@ -1560,275 +1322,29 @@ namespace LeagueSimulation
             
         }
 
-        private void game3WatchGameButton_Click(object sender, EventArgs e)
-        {
-            if ((int)currentDayShownNum.Value != league.CurrentDay)
-            {
-                MessageBox.Show(text: "You can only simulate the current day of the season. Simulate each day before this one before simulating games here.");
-            }
-            else
-            {
-                int currentSeason = league.CurrentSeason;
-                List<List<string>> schedule = new List<List<string>>();
-                if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
-                else schedule = league.CurrentSchedule;
-                string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][2].Split(',');
-                (List<string>, List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][2], (int)currentDayShownNum.Value);
-                teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                UpdateGame3Panel(teamsPlaying);
-                LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, phrases.Item3, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
-                if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
-                else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
-                simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
-                if (league.CurrentSeason > currentSeason) LoadSeasonSummary(new SeasonSummaryUserControl(league));
-            }
-            
-        }
+        private void game2WatchGameButton_Click(object sender, EventArgs e) => WatchGameFunction(1);
 
-        private void game4WatchGameButton_Click(object sender, EventArgs e)
-        {
-            if ((int)currentDayShownNum.Value != league.CurrentDay)
-            {
-                MessageBox.Show(text: "You can only simulate the current day of the season. Simulate each day before this one before simulating games here.");
-            }
-            else
-            {
-                int currentSeason = league.CurrentSeason;
-                List<List<string>> schedule = new List<List<string>>();
-                if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
-                else schedule = league.CurrentSchedule;
-                string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][3].Split(',');
-                (List<string>, List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][3], (int)currentDayShownNum.Value);
-                teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                UpdateGame4Panel(teamsPlaying);
-                LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, phrases.Item3, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
-                if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
-                else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
-                simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
-                if (league.CurrentSeason > currentSeason) LoadSeasonSummary(new SeasonSummaryUserControl(league));
-            }
-            
-        }
+        private void game3WatchGameButton_Click(object sender, EventArgs e) => WatchGameFunction(2);
 
-        private void game5WatchGameButton_Click(object sender, EventArgs e)
-        {
-            if ((int)currentDayShownNum.Value != league.CurrentDay)
-            {
-                MessageBox.Show(text: "You can only simulate the current day of the season. Simulate each day before this one before simulating games here.");
-            }
-            else 
-            {
-                int currentSeason = league.CurrentSeason;
-                List<List<string>> schedule = new List<List<string>>();
-                if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
-                else schedule = league.CurrentSchedule;
-                string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][4].Split(',');
-                (List<string>, List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][4], (int)currentDayShownNum.Value);
-                teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                UpdateGame5Panel(teamsPlaying);
-                LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, phrases.Item3, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
-                if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
-                else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
-                simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
-                if (league.CurrentSeason > currentSeason) LoadSeasonSummary(new SeasonSummaryUserControl(league));
-            }
-            
-        }
+        private void game4WatchGameButton_Click(object sender, EventArgs e) => WatchGameFunction(3);
 
-        private void game6WatchGameButton_Click(object sender, EventArgs e)
-        {
-            if ((int)currentDayShownNum.Value != league.CurrentDay)
-            {
-                MessageBox.Show(text: "You can only simulate the current day of the season. Simulate each day before this one before simulating games here.");
-            }
-            else
-            {
-                int currentSeason = league.CurrentSeason;
-                List<List<string>> schedule = new List<List<string>>();
-                if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
-                else schedule = league.CurrentSchedule;
-                string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][5].Split(',');
-                (List<string>, List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][5], (int)currentDayShownNum.Value);
-                teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                UpdateGame6Panel(teamsPlaying);
-                LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, phrases.Item3, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
-                if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
-                else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
-                simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
-                if (league.CurrentSeason > currentSeason) LoadSeasonSummary(new SeasonSummaryUserControl(league));
-            }
-            
-        }
+        private void game5WatchGameButton_Click(object sender, EventArgs e) => WatchGameFunction(4);
 
-        private void game7WatchGameButton_Click(object sender, EventArgs e)
-        {
-            if ((int)currentDayShownNum.Value != league.CurrentDay)
-            {
-                MessageBox.Show(text: "You can only simulate the current day of the season. Simulate each day before this one before simulating games here.");
-            }
-            else
-            {
-                int currentSeason = league.CurrentSeason;
-                List<List<string>> schedule = new List<List<string>>();
-                if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
-                else schedule = league.CurrentSchedule;
-                string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][6].Split(',');
-                (List<string>, List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][6], (int)currentDayShownNum.Value);
-                teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                UpdateGame7Panel(teamsPlaying);
-                LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, phrases.Item3, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
-                if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
-                else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
-                simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
-                if (league.CurrentSeason > currentSeason) LoadSeasonSummary(new SeasonSummaryUserControl(league));
-            }
-            
-        }
+        private void game6WatchGameButton_Click(object sender, EventArgs e) => WatchGameFunction(5);
 
-        private void game8WatchGameButton_Click(object sender, EventArgs e)
-        {
-            if ((int)currentDayShownNum.Value != league.CurrentDay)
-            {
-                MessageBox.Show(text: "You can only simulate the current day of the season. Simulate each day before this one before simulating games here.");
-            }
-            else
-            {
-                int currentSeason = league.CurrentSeason;
-                List<List<string>> schedule = new List<List<string>>();
-                if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
-                else schedule = league.CurrentSchedule;
-                string[] teamsPlaying = schedule[(int)currentDayShownNum.Value - 1][7].Split(',');
-                (List<string>, List<string>, List<string>) phrases = league.WatchGame(schedule[(int)currentDayShownNum.Value - 1][7], (int)currentDayShownNum.Value);
-                teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                UpdateGame8Panel(teamsPlaying);
-                LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, phrases.Item3, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
-                if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
-                else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
-                simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
-                if (league.CurrentSeason > currentSeason) LoadSeasonSummary(new SeasonSummaryUserControl(league));
-            }
-            
-        }
+        private void game7WatchGameButton_Click(object sender, EventArgs e) => WatchGameFunction(6);
 
-        private void game9WatchGameButton_Click(object sender, EventArgs e)
-        {
-            if ((int)currentDayShownNum.Value != league.CurrentDay)
-            {
-                MessageBox.Show(text: "You can only simulate the current day of the season. Simulate each day before this one before simulating games here.");
-            }
-            else
-            {
-                int currentSeason = league.CurrentSeason;
-                (List<string>, List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][8], (int)currentDayShownNum.Value);
-                string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][8].Split(',');
-                teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                UpdateGame9Panel(teamsPlaying);
-                LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, phrases.Item3, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
-                if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
-                else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
-                simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
-                if (league.CurrentSeason > currentSeason) LoadSeasonSummary(new SeasonSummaryUserControl(league));
-            }
-           
-        }
+        private void game8WatchGameButton_Click(object sender, EventArgs e) => WatchGameFunction(7);
 
-        private void game10WatchGameButton_Click(object sender, EventArgs e)
-        {
-            if ((int)currentDayShownNum.Value != league.CurrentDay)
-            {
-                MessageBox.Show(text: "You can only simulate the current day of the season. Simulate each day before this one before simulating games here.");
-            }
-            else
-            {
-                int currentSeason = league.CurrentSeason;
-                (List<string>, List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][9], (int)currentDayShownNum.Value);
-                string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][9].Split(',');
-                teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                UpdateGame10Panel(teamsPlaying);
-                LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, phrases.Item3, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
-                if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
-                else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
-                simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
-                if (league.CurrentSeason > currentSeason) LoadSeasonSummary(new SeasonSummaryUserControl(league));
-            }
-            
-        }
+        private void game9WatchGameButton_Click(object sender, EventArgs e) => WatchGameFunction(8);
 
-        private void game11WatchGameButton_Click(object sender, EventArgs e)
-        {
-            if ((int)currentDayShownNum.Value != league.CurrentDay)
-            {
-                MessageBox.Show(text: "You can only simulate the current day of the season. Simulate each day before this one before simulating games here.");
-            }
-            else 
-            {
-                int currentSeason = league.CurrentSeason;
-                (List<string>, List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][10], (int)currentDayShownNum.Value);
-                string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][10].Split(',');
-                teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                UpdateGame11Panel(teamsPlaying);
-                LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, phrases.Item3, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
-                if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
-                else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
-                simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
-                if (league.CurrentSeason > currentSeason) LoadSeasonSummary(new SeasonSummaryUserControl(league));
-            }
-            
-        }
+        private void game10WatchGameButton_Click(object sender, EventArgs e) => WatchGameFunction(9);
 
-        private void game12WatchGameButton_Click(object sender, EventArgs e)
-        {
-            if ((int)currentDayShownNum.Value != league.CurrentDay)
-            {
-                MessageBox.Show(text: "You can only simulate the current day of the season. Simulate each day before this one before simulating games here.");
-            }
-            else
-            {
-                int currentSeason = league.CurrentSeason;
-                (List<string>, List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][11], (int)currentDayShownNum.Value);
-                string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][11].Split(',');
-                teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                UpdateGame12Panel(teamsPlaying);
-                LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, phrases.Item3, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
-                if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
-                else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
-                simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
-                if (league.CurrentSeason > currentSeason) LoadSeasonSummary(new SeasonSummaryUserControl(league));
-            }
-        }
+        private void game11WatchGameButton_Click(object sender, EventArgs e) => WatchGameFunction(10);
 
-        private void game13WatchGameButton_Click(object sender, EventArgs e)
-        {
-            if ((int)currentDayShownNum.Value != league.CurrentDay)
-            {
-                MessageBox.Show(text: "You can only simulate the current day of the season. Simulate each day before this one before simulating games here.");
-            }
-            else
-            {
-                int currentSeason = league.CurrentSeason;
-                (List<string>, List<string>, List<string>) phrases = league.WatchGame(league.CurrentSchedule[(int)currentDayShownNum.Value - 1][12], (int)currentDayShownNum.Value);
-                string[] teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][12].Split(',');
-                teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                UpdateGame13Panel(teamsPlaying);
-                LoadWatchGameUserControl(new WatchGameUserControl(league, phrases.Item1, phrases.Item2, phrases.Item3, (int)currentDayShownNum.Value, teamsPlaying[0], teamsPlaying[1]));
-                if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
-                else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
-                simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
-                if (league.CurrentSeason > currentSeason) LoadSeasonSummary(new SeasonSummaryUserControl(league));
-            }
+        private void game12WatchGameButton_Click(object sender, EventArgs e) => WatchGameFunction(11);
 
-        }
+        private void game13WatchGameButton_Click(object sender, EventArgs e) => WatchGameFunction(12);
 
         private void simToEndButton_Click(object sender, EventArgs e)
         {
@@ -1953,226 +1469,47 @@ namespace LeagueSimulation
 
         }
 
-        private void game1ViewGameResults_Click(object sender, EventArgs e)
+        private void ViewGameResultsFunction(int  gameNumber)
         {
             string teamsPlaying = "";
             int gameId = 0;
             if (league.Playoffs)
             {
-                teamsPlaying = league.CurrentPlayoffsSchedule[(int)currentDayShownNum.Value - 1][0];
+                teamsPlaying = league.CurrentPlayoffsSchedule[(int)currentDayShownNum.Value - 1][gameNumber];
                 gameId = league.GetPlayoffGameId(teamsPlaying, (int)currentDayShownNum.Value);
             }
             else
             {
-                teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][0];
+                teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][gameNumber];
                 gameId = league.GetGameId(teamsPlaying, (int)currentDayShownNum.Value);
             }
             LoadViewGameResultsUserControl(new ViewGameResultsUserControl(league, gameId));
         }
 
-        private void game2ViewGameResults_Click(object sender, EventArgs e)
-        {
-            string teamsPlaying = "";
-            int gameId = 0;
-            if (league.Playoffs)
-            {
-                teamsPlaying = league.CurrentPlayoffsSchedule[(int)currentDayShownNum.Value - 1][1];
-                gameId = league.GetPlayoffGameId(teamsPlaying, (int)currentDayShownNum.Value);
-            }
-            else
-            {
-                teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][1];
-                gameId = league.GetGameId(teamsPlaying, (int)currentDayShownNum.Value);
-            }
-            LoadViewGameResultsUserControl(new ViewGameResultsUserControl(league, gameId));
-        }
+        private void game1ViewGameResults_Click(object sender, EventArgs e) => ViewGameResultsFunction(0);
 
-        private void game3ViewGameResults_Click(object sender, EventArgs e)
-        {
-            string teamsPlaying = "";
-            int gameId = 0;
-            if (league.Playoffs)
-            {
-                teamsPlaying = league.CurrentPlayoffsSchedule[(int)currentDayShownNum.Value - 1][2];
-                gameId = league.GetPlayoffGameId(teamsPlaying, (int)currentDayShownNum.Value);
-            }
-            else
-            {
-                teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][2];
-                gameId = league.GetGameId(teamsPlaying, (int)currentDayShownNum.Value);
-            }
-            LoadViewGameResultsUserControl(new ViewGameResultsUserControl(league, gameId));
-        }
+        private void game2ViewGameResults_Click(object sender, EventArgs e) => ViewGameResultsFunction(1);
 
-        private void game4ViewGameResults_Click(object sender, EventArgs e)
-        {
-            string teamsPlaying = "";
-            int gameId = 0;
-            if (league.Playoffs)
-            {
-                teamsPlaying = league.CurrentPlayoffsSchedule[(int)currentDayShownNum.Value - 1][3];
-                gameId = league.GetPlayoffGameId(teamsPlaying, (int)currentDayShownNum.Value);
-            }
-            else
-            {
-                teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][3];
-                gameId = league.GetGameId(teamsPlaying, (int)currentDayShownNum.Value);
-            }
-            LoadViewGameResultsUserControl(new ViewGameResultsUserControl(league, gameId));
-        }
+        private void game3ViewGameResults_Click(object sender, EventArgs e) => ViewGameResultsFunction(2);
 
-        private void game5ViewGameResults_Click(object sender, EventArgs e)
-        {
-            string teamsPlaying = "";
-            int gameId = 0;
-            if (league.Playoffs)
-            {
-                teamsPlaying = league.CurrentPlayoffsSchedule[(int)currentDayShownNum.Value - 1][4];
-                gameId = league.GetPlayoffGameId(teamsPlaying, (int)currentDayShownNum.Value);
-            }
-            else
-            {
-                teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][4];
-                gameId = league.GetGameId(teamsPlaying, (int)currentDayShownNum.Value);
-            }
-            LoadViewGameResultsUserControl(new ViewGameResultsUserControl(league, gameId));
-        }
+        private void game4ViewGameResults_Click(object sender, EventArgs e) => ViewGameResultsFunction(3);
+        private void game5ViewGameResults_Click(object sender, EventArgs e) => ViewGameResultsFunction(4);
 
-        private void game6ViewGameResults_Click(object sender, EventArgs e)
-        {
-            string teamsPlaying = "";
-            int gameId = 0;
-            if (league.Playoffs)
-            {
-                teamsPlaying = league.CurrentPlayoffsSchedule[(int)currentDayShownNum.Value - 1][5];
-                gameId = league.GetPlayoffGameId(teamsPlaying, (int)currentDayShownNum.Value);
-            }
-            else
-            {
-                teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][5];
-                gameId = league.GetGameId(teamsPlaying, (int)currentDayShownNum.Value);
-            }
-            LoadViewGameResultsUserControl(new ViewGameResultsUserControl(league, gameId));
-        }
+        private void game6ViewGameResults_Click(object sender, EventArgs e) => ViewGameResultsFunction(5);
 
-        private void game7ViewGameResults_Click(object sender, EventArgs e)
-        {
-            string teamsPlaying = "";
-            int gameId = 0;
-            if (league.Playoffs)
-            {
-                teamsPlaying = league.CurrentPlayoffsSchedule[(int)currentDayShownNum.Value - 1][6];
-                gameId = league.GetPlayoffGameId(teamsPlaying, (int)currentDayShownNum.Value);
-            }
-            else
-            {
-                teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][6];
-                gameId = league.GetGameId(teamsPlaying, (int)currentDayShownNum.Value);
-            }
-            LoadViewGameResultsUserControl(new ViewGameResultsUserControl(league, gameId));
-        }
+        private void game7ViewGameResults_Click(object sender, EventArgs e) => ViewGameResultsFunction(6);
 
-        private void game8ViewGameResults_Click(object sender, EventArgs e)
-        {
-            string teamsPlaying = "";
-            int gameId = 0;
-            if (league.Playoffs)
-            {
-                teamsPlaying = league.CurrentPlayoffsSchedule[(int)currentDayShownNum.Value - 1][7];
-                gameId = league.GetPlayoffGameId(teamsPlaying, (int)currentDayShownNum.Value);
-            }
-            else
-            {
-                teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][7];
-                gameId = league.GetGameId(teamsPlaying, (int)currentDayShownNum.Value);
-            }
-            LoadViewGameResultsUserControl(new ViewGameResultsUserControl(league, gameId));
-        }
+        private void game8ViewGameResults_Click(object sender, EventArgs e) => ViewGameResultsFunction(7);
 
-        private void game9ViewGameResults_Click(object sender, EventArgs e)
-        {
-            string teamsPlaying = "";
-            int gameId = 0;
-            if (league.Playoffs)
-            {
-                teamsPlaying = league.CurrentPlayoffsSchedule[(int)currentDayShownNum.Value - 1][8];
-                gameId = league.GetPlayoffGameId(teamsPlaying, (int)currentDayShownNum.Value);
-            }
-            else
-            {
-                teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][8];
-                gameId = league.GetGameId(teamsPlaying, (int)currentDayShownNum.Value);
-            }
-            LoadViewGameResultsUserControl(new ViewGameResultsUserControl(league, gameId));
-        }
+        private void game9ViewGameResults_Click(object sender, EventArgs e) => ViewGameResultsFunction(8);
 
-        private void game10ViewGameResults_Click(object sender, EventArgs e)
-        {
-            string teamsPlaying = "";
-            int gameId = 0;
-            if (league.Playoffs)
-            {
-                teamsPlaying = league.CurrentPlayoffsSchedule[(int)currentDayShownNum.Value - 1][9];
-                gameId = league.GetPlayoffGameId(teamsPlaying, (int)currentDayShownNum.Value);
-            }
-            else
-            {
-                teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][9];
-                gameId = league.GetGameId(teamsPlaying, (int)currentDayShownNum.Value);
-            }
-            LoadViewGameResultsUserControl(new ViewGameResultsUserControl(league, gameId));
-        }
+        private void game10ViewGameResults_Click(object sender, EventArgs e) => ViewGameResultsFunction(9);
 
-        private void game11ViewGameResults_Click(object sender, EventArgs e)
-        {
-            string teamsPlaying = "";
-            int gameId = 0;
-            if (league.Playoffs)
-            {
-                teamsPlaying = league.CurrentPlayoffsSchedule[(int)currentDayShownNum.Value - 1][10];
-                gameId = league.GetPlayoffGameId(teamsPlaying, (int)currentDayShownNum.Value);
-            }
-            else
-            {
-                teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][10];
-                gameId = league.GetGameId(teamsPlaying, (int)currentDayShownNum.Value);
-            }
-            LoadViewGameResultsUserControl(new ViewGameResultsUserControl(league, gameId));
-        }
+        private void game11ViewGameResults_Click(object sender, EventArgs e) => ViewGameResultsFunction(10);
 
-        private void game12ViewGameResults_Click(object sender, EventArgs e)
-        {
-            string teamsPlaying = "";
-            int gameId = 0;
-            if (league.Playoffs)
-            {
-                teamsPlaying = league.CurrentPlayoffsSchedule[(int)currentDayShownNum.Value - 1][11];
-                gameId = league.GetPlayoffGameId(teamsPlaying, (int)currentDayShownNum.Value);
-            }
-            else
-            {
-                teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][11];
-                gameId = league.GetGameId(teamsPlaying, (int)currentDayShownNum.Value);
-            }
-            LoadViewGameResultsUserControl(new ViewGameResultsUserControl(league, gameId));
-        }
+        private void game12ViewGameResults_Click(object sender, EventArgs e) => ViewGameResultsFunction(11);
 
-        private void game13ViewGameResults_Click(object sender, EventArgs e)
-        {
-            string teamsPlaying = "";
-            int gameId = 0;
-            if (league.Playoffs)
-            {
-                teamsPlaying = league.CurrentPlayoffsSchedule[(int)currentDayShownNum.Value - 1][12];
-                gameId = league.GetPlayoffGameId(teamsPlaying, (int)currentDayShownNum.Value);
-            }
-            else
-            {
-                teamsPlaying = league.CurrentSchedule[(int)currentDayShownNum.Value - 1][12];
-                gameId = league.GetGameId(teamsPlaying, (int)currentDayShownNum.Value);
-            }
-            LoadViewGameResultsUserControl(new ViewGameResultsUserControl(league, gameId));
-        }
+        private void game13ViewGameResults_Click(object sender, EventArgs e) => ViewGameResultsFunction(12);
 
     }
 }
