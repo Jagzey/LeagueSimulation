@@ -95,3 +95,4 @@ C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\N
 C:\Users\nzuobm\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\obj\Debug\net8.0-windows\LeagueSimulation.TradeProposalUserControl.resources
 C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\obj\Debug\net8.0-windows\LeagueSimulation.TradeProposalUserControl.resources
 C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\obj\Debug\net8.0-windows\LeagueSimulation.TeamStatsUserControl.resources
+C:\Users\nzuobm\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\obj\Debug\net8.0-windows\LeagueSimulation.TeamStatsUserControl.resources

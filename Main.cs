@@ -10,7 +10,8 @@ namespace LeagueSimulation
         public League CurrentLeague { get; set; }
         public Main()
         {
-            this.CurrentUser = "FiercePC";
+            if (Directory.Exists("C:/Users/FiercePC")) this.CurrentUser = "FiercePC";
+            else if (Directory.Exists("C:/Users/nzuobm")) this.CurrentUser = "nzuobm";
             InitializeComponent();
         }
 
@@ -41,7 +42,7 @@ namespace LeagueSimulation
 
         private void createGameButton_Click(object sender, EventArgs e)
         {
-            string teamNamesConnectionString = $@"Data Source=C:\\Users\\{CurrentUser}\\OneDrive - The Kings School Chester\\A-Level\\Computer Science\\NEA Project\\Project Files\\LeagueGenerator\\Names Files\\basketball_team_names_list.txt;Version=3;";
+            string teamNamesConnectionString = $@"Data Source=C:\\Users\\{CurrentUser}\\OneDrive - The Kings School Chester\\A-Level\\Computer Science\\NEA Project\\Project Files\\LeagueGenerator\\Player Data\\basketball_team_names_list.txt;Version=3;";
             // first, we check if the save state is valid
             int saveState = (int)saveStateNum.Value;
             // this occurs if the user's input is an integer

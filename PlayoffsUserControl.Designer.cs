@@ -38,18 +38,24 @@
             label1 = new Label();
             bottomPanel = new Panel();
             label26 = new Label();
+            game2WestFirstRound = new Panel();
+            team2game2WestFirstRound = new Label();
+            team1game2WestFirstRound = new Label();
+            game3WestFirstRound = new Panel();
+            team2game3WestFirstRound = new Label();
+            team1game3WestFirstRound = new Label();
+            game2EastFirstRound = new Panel();
+            team2game2EastFirstRound = new Label();
+            team1game2EastFirstRound = new Label();
+            game3EastFirstRound = new Panel();
+            team2game3EastFirstRound = new Label();
+            team1game3EastFirstRound = new Label();
             finals = new Panel();
             team2Finals = new Label();
             team1Finals = new Label();
             game4WestFirstRound = new Panel();
             team2game4WestFirstRound = new Label();
             team1game4WestFirstRound = new Label();
-            game3WestFirstRound = new Panel();
-            team2game3WestFirstRound = new Label();
-            team1game3WestFirstRound = new Label();
-            game2WestFirstRound = new Panel();
-            team2game2WestFirstRound = new Label();
-            team1game2WestFirstRound = new Label();
             game1WestFirstRound = new Panel();
             team2game1WestFirstRound = new Label();
             team1game1WestFirstRound = new Label();
@@ -74,22 +80,18 @@
             game4EastFirstRound = new Panel();
             team2game4EastFirstRound = new Label();
             team1game4EastFirstRound = new Label();
-            game3EastFirstRound = new Panel();
-            team2game3EastFirstRound = new Label();
-            team1game3EastFirstRound = new Label();
-            game2EastFirstRound = new Panel();
-            team2game2EastFirstRound = new Label();
-            team1game2EastFirstRound = new Label();
             game1EastFirstRound = new Panel();
             team2game1EastFirstRound = new Label();
             team1game1EastFirstRound = new Label();
             playoffsFlowLayoutPanel.SuspendLayout();
             topPanel.SuspendLayout();
             bottomPanel.SuspendLayout();
+            game2WestFirstRound.SuspendLayout();
+            game3WestFirstRound.SuspendLayout();
+            game2EastFirstRound.SuspendLayout();
+            game3EastFirstRound.SuspendLayout();
             finals.SuspendLayout();
             game4WestFirstRound.SuspendLayout();
-            game3WestFirstRound.SuspendLayout();
-            game2WestFirstRound.SuspendLayout();
             game1WestFirstRound.SuspendLayout();
             game2WestSecondRound.SuspendLayout();
             game1WestSecondRound.SuspendLayout();
@@ -98,8 +100,6 @@
             game2EastSecondRound.SuspendLayout();
             game1EastSecondRound.SuspendLayout();
             game4EastFirstRound.SuspendLayout();
-            game3EastFirstRound.SuspendLayout();
-            game2EastFirstRound.SuspendLayout();
             game1EastFirstRound.SuspendLayout();
             SuspendLayout();
             // 
@@ -213,6 +213,114 @@
             label26.Text = "Finals";
             label26.TextAlign = ContentAlignment.MiddleCenter;
             // 
+            // game2WestFirstRound
+            // 
+            game2WestFirstRound.Controls.Add(team2game2WestFirstRound);
+            game2WestFirstRound.Controls.Add(team1game2WestFirstRound);
+            game2WestFirstRound.Location = new Point(509, 165);
+            game2WestFirstRound.Name = "game2WestFirstRound";
+            game2WestFirstRound.Size = new Size(111, 61);
+            game2WestFirstRound.TabIndex = 9;
+            // 
+            // team2game2WestFirstRound
+            // 
+            team2game2WestFirstRound.Location = new Point(3, 32);
+            team2game2WestFirstRound.Name = "team2game2WestFirstRound";
+            team2game2WestFirstRound.Size = new Size(111, 31);
+            team2game2WestFirstRound.TabIndex = 3;
+            team2game2WestFirstRound.Text = "Salt Lake City (8) 1";
+            team2game2WestFirstRound.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // team1game2WestFirstRound
+            // 
+            team1game2WestFirstRound.Location = new Point(-3, -3);
+            team1game2WestFirstRound.Name = "team1game2WestFirstRound";
+            team1game2WestFirstRound.Size = new Size(118, 35);
+            team1game2WestFirstRound.TabIndex = 2;
+            team1game2WestFirstRound.Text = "New York  (1) 3";
+            team1game2WestFirstRound.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // game3WestFirstRound
+            // 
+            game3WestFirstRound.Controls.Add(team2game3WestFirstRound);
+            game3WestFirstRound.Controls.Add(team1game3WestFirstRound);
+            game3WestFirstRound.Location = new Point(509, 237);
+            game3WestFirstRound.Name = "game3WestFirstRound";
+            game3WestFirstRound.Size = new Size(111, 59);
+            game3WestFirstRound.TabIndex = 10;
+            // 
+            // team2game3WestFirstRound
+            // 
+            team2game3WestFirstRound.Location = new Point(3, 31);
+            team2game3WestFirstRound.Name = "team2game3WestFirstRound";
+            team2game3WestFirstRound.Size = new Size(111, 31);
+            team2game3WestFirstRound.TabIndex = 3;
+            team2game3WestFirstRound.Text = "Salt Lake City (8) 1";
+            team2game3WestFirstRound.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // team1game3WestFirstRound
+            // 
+            team1game3WestFirstRound.Location = new Point(-3, -4);
+            team1game3WestFirstRound.Name = "team1game3WestFirstRound";
+            team1game3WestFirstRound.Size = new Size(118, 35);
+            team1game3WestFirstRound.TabIndex = 2;
+            team1game3WestFirstRound.Text = "New York  (1) 3";
+            team1game3WestFirstRound.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // game2EastFirstRound
+            // 
+            game2EastFirstRound.Controls.Add(team2game2EastFirstRound);
+            game2EastFirstRound.Controls.Add(team1game2EastFirstRound);
+            game2EastFirstRound.Location = new Point(3, 162);
+            game2EastFirstRound.Name = "game2EastFirstRound";
+            game2EastFirstRound.Size = new Size(118, 61);
+            game2EastFirstRound.TabIndex = 1;
+            // 
+            // team2game2EastFirstRound
+            // 
+            team2game2EastFirstRound.Location = new Point(0, 32);
+            team2game2EastFirstRound.Name = "team2game2EastFirstRound";
+            team2game2EastFirstRound.Size = new Size(117, 31);
+            team2game2EastFirstRound.TabIndex = 3;
+            team2game2EastFirstRound.Text = "Salt Lake City (8) 1";
+            team2game2EastFirstRound.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // team1game2EastFirstRound
+            // 
+            team1game2EastFirstRound.Location = new Point(-1, 0);
+            team1game2EastFirstRound.Name = "team1game2EastFirstRound";
+            team1game2EastFirstRound.Size = new Size(118, 35);
+            team1game2EastFirstRound.TabIndex = 2;
+            team1game2EastFirstRound.Text = "New York  (1) 3";
+            team1game2EastFirstRound.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // game3EastFirstRound
+            // 
+            game3EastFirstRound.Controls.Add(team2game3EastFirstRound);
+            game3EastFirstRound.Controls.Add(team1game3EastFirstRound);
+            game3EastFirstRound.Location = new Point(3, 237);
+            game3EastFirstRound.Name = "game3EastFirstRound";
+            game3EastFirstRound.Size = new Size(118, 59);
+            game3EastFirstRound.TabIndex = 2;
+            // 
+            // team2game3EastFirstRound
+            // 
+            team2game3EastFirstRound.Location = new Point(0, 31);
+            team2game3EastFirstRound.Name = "team2game3EastFirstRound";
+            team2game3EastFirstRound.Size = new Size(115, 31);
+            team2game3EastFirstRound.TabIndex = 3;
+            team2game3EastFirstRound.Text = "Salt Lake City (8) 1";
+            team2game3EastFirstRound.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // team1game3EastFirstRound
+            // 
+            team1game3EastFirstRound.Location = new Point(1, -4);
+            team1game3EastFirstRound.Name = "team1game3EastFirstRound";
+            team1game3EastFirstRound.Size = new Size(118, 35);
+            team1game3EastFirstRound.TabIndex = 2;
+            team1game3EastFirstRound.Text = "New York  (1) 3";
+            team1game3EastFirstRound.TextAlign = ContentAlignment.MiddleCenter;
+            // 
             // finals
             // 
             finals.Controls.Add(team2Finals);
@@ -264,60 +372,6 @@
             team1game4WestFirstRound.TabIndex = 2;
             team1game4WestFirstRound.Text = "New York  (1) 3";
             team1game4WestFirstRound.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // game3WestFirstRound
-            // 
-            game3WestFirstRound.Controls.Add(team2game3WestFirstRound);
-            game3WestFirstRound.Controls.Add(team1game3WestFirstRound);
-            game3WestFirstRound.Location = new Point(509, 237);
-            game3WestFirstRound.Name = "game3WestFirstRound";
-            game3WestFirstRound.Size = new Size(111, 59);
-            game3WestFirstRound.TabIndex = 10;
-            // 
-            // team2game3WestFirstRound
-            // 
-            team2game3WestFirstRound.Location = new Point(3, 31);
-            team2game3WestFirstRound.Name = "team2game3WestFirstRound";
-            team2game3WestFirstRound.Size = new Size(111, 31);
-            team2game3WestFirstRound.TabIndex = 3;
-            team2game3WestFirstRound.Text = "Salt Lake City (8) 1";
-            team2game3WestFirstRound.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // team1game3WestFirstRound
-            // 
-            team1game3WestFirstRound.Location = new Point(-3, -4);
-            team1game3WestFirstRound.Name = "team1game3WestFirstRound";
-            team1game3WestFirstRound.Size = new Size(118, 35);
-            team1game3WestFirstRound.TabIndex = 2;
-            team1game3WestFirstRound.Text = "New York  (1) 3";
-            team1game3WestFirstRound.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // game2WestFirstRound
-            // 
-            game2WestFirstRound.Controls.Add(team2game2WestFirstRound);
-            game2WestFirstRound.Controls.Add(team1game2WestFirstRound);
-            game2WestFirstRound.Location = new Point(509, 165);
-            game2WestFirstRound.Name = "game2WestFirstRound";
-            game2WestFirstRound.Size = new Size(111, 61);
-            game2WestFirstRound.TabIndex = 9;
-            // 
-            // team2game2WestFirstRound
-            // 
-            team2game2WestFirstRound.Location = new Point(3, 32);
-            team2game2WestFirstRound.Name = "team2game2WestFirstRound";
-            team2game2WestFirstRound.Size = new Size(111, 31);
-            team2game2WestFirstRound.TabIndex = 3;
-            team2game2WestFirstRound.Text = "Salt Lake City (8) 1";
-            team2game2WestFirstRound.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // team1game2WestFirstRound
-            // 
-            team1game2WestFirstRound.Location = new Point(-3, -3);
-            team1game2WestFirstRound.Name = "team1game2WestFirstRound";
-            team1game2WestFirstRound.Size = new Size(118, 35);
-            team1game2WestFirstRound.TabIndex = 2;
-            team1game2WestFirstRound.Text = "New York  (1) 3";
-            team1game2WestFirstRound.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // game1WestFirstRound
             // 
@@ -523,60 +577,6 @@
             team1game4EastFirstRound.Text = "New York  (1) 3";
             team1game4EastFirstRound.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // game3EastFirstRound
-            // 
-            game3EastFirstRound.Controls.Add(team2game3EastFirstRound);
-            game3EastFirstRound.Controls.Add(team1game3EastFirstRound);
-            game3EastFirstRound.Location = new Point(3, 237);
-            game3EastFirstRound.Name = "game3EastFirstRound";
-            game3EastFirstRound.Size = new Size(118, 59);
-            game3EastFirstRound.TabIndex = 2;
-            // 
-            // team2game3EastFirstRound
-            // 
-            team2game3EastFirstRound.Location = new Point(0, 31);
-            team2game3EastFirstRound.Name = "team2game3EastFirstRound";
-            team2game3EastFirstRound.Size = new Size(115, 31);
-            team2game3EastFirstRound.TabIndex = 3;
-            team2game3EastFirstRound.Text = "Salt Lake City (8) 1";
-            team2game3EastFirstRound.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // team1game3EastFirstRound
-            // 
-            team1game3EastFirstRound.Location = new Point(1, -4);
-            team1game3EastFirstRound.Name = "team1game3EastFirstRound";
-            team1game3EastFirstRound.Size = new Size(118, 35);
-            team1game3EastFirstRound.TabIndex = 2;
-            team1game3EastFirstRound.Text = "New York  (1) 3";
-            team1game3EastFirstRound.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // game2EastFirstRound
-            // 
-            game2EastFirstRound.Controls.Add(team2game2EastFirstRound);
-            game2EastFirstRound.Controls.Add(team1game2EastFirstRound);
-            game2EastFirstRound.Location = new Point(3, 173);
-            game2EastFirstRound.Name = "game2EastFirstRound";
-            game2EastFirstRound.Size = new Size(118, 61);
-            game2EastFirstRound.TabIndex = 1;
-            // 
-            // team2game2EastFirstRound
-            // 
-            team2game2EastFirstRound.Location = new Point(0, 32);
-            team2game2EastFirstRound.Name = "team2game2EastFirstRound";
-            team2game2EastFirstRound.Size = new Size(117, 31);
-            team2game2EastFirstRound.TabIndex = 3;
-            team2game2EastFirstRound.Text = "Salt Lake City (8) 1";
-            team2game2EastFirstRound.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // team1game2EastFirstRound
-            // 
-            team1game2EastFirstRound.Location = new Point(1, -3);
-            team1game2EastFirstRound.Name = "team1game2EastFirstRound";
-            team1game2EastFirstRound.Size = new Size(118, 35);
-            team1game2EastFirstRound.TabIndex = 2;
-            team1game2EastFirstRound.Text = "New York  (1) 3";
-            team1game2EastFirstRound.TextAlign = ContentAlignment.MiddleCenter;
-            // 
             // game1EastFirstRound
             // 
             game1EastFirstRound.Controls.Add(team2game1EastFirstRound);
@@ -615,10 +615,12 @@
             topPanel.ResumeLayout(false);
             topPanel.PerformLayout();
             bottomPanel.ResumeLayout(false);
+            game2WestFirstRound.ResumeLayout(false);
+            game3WestFirstRound.ResumeLayout(false);
+            game2EastFirstRound.ResumeLayout(false);
+            game3EastFirstRound.ResumeLayout(false);
             finals.ResumeLayout(false);
             game4WestFirstRound.ResumeLayout(false);
-            game3WestFirstRound.ResumeLayout(false);
-            game2WestFirstRound.ResumeLayout(false);
             game1WestFirstRound.ResumeLayout(false);
             game2WestSecondRound.ResumeLayout(false);
             game1WestSecondRound.ResumeLayout(false);
@@ -627,8 +629,6 @@
             game2EastSecondRound.ResumeLayout(false);
             game1EastSecondRound.ResumeLayout(false);
             game4EastFirstRound.ResumeLayout(false);
-            game3EastFirstRound.ResumeLayout(false);
-            game2EastFirstRound.ResumeLayout(false);
             game1EastFirstRound.ResumeLayout(false);
             ResumeLayout(false);
         }

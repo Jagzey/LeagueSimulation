@@ -157,8 +157,8 @@ namespace LeagueSimulation.Models
             Random random = new Random();
             List<string> playstyles = new List<string>() { "Offensive", "Defensive", "2-Way" };
             int value = random.Next(1, 100);
-            if (value < 46) primaryPlaystyle = playstyles[0];
-            else if (value < 69) primaryPlaystyle = playstyles[1];
+            if (value < 56) primaryPlaystyle = playstyles[0];
+            else if (value < 75) primaryPlaystyle = playstyles[1];
             else primaryPlaystyle = playstyles[2];
             PrimaryPlaystyle = primaryPlaystyle;
         }
@@ -383,13 +383,13 @@ namespace LeagueSimulation.Models
             };
 
             string json = "";
-            if (File.Exists($@"C:\Users\nzuobm\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Names Files\player_stats_config.json"))
+            if (File.Exists($@"C:\Users\nzuobm\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Player Data\player_stats_config.json"))
             {
-                json = File.ReadAllText($@"C:\Users\nzuobm\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Names Files\player_stats_config.json");
+                json = File.ReadAllText($@"C:\Users\nzuobm\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Player Data\player_stats_config.json");
             }
-            else if (File.Exists($@"C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Names Files\player_stats_config.json"))
+            else if (File.Exists($@"C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Player Data\player_stats_config.json"))
             {
-                json = File.ReadAllText($@"C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Names Files\player_stats_config.json");
+                json = File.ReadAllText($@"C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Player Data\player_stats_config.json");
             }
 
             var stats = JsonSerializer.Deserialize<Dictionary<string,Dictionary<string,Dictionary<string,Dictionary<string, int>>>>>(json);
@@ -412,23 +412,25 @@ namespace LeagueSimulation.Models
                 stamina = stats[position][primaryPlaystyle][secondaryPlaystyle]["stamina"];
             }
 
-            // converting 60-99 into 0-30
-            int multipler = (int)((overall - 50) * 0.6);
-            closeShot = (int)GenerateRandomNormalDistribution(closeShot, 1.4, 25, 99 - multipler) + multipler;
-            layup = (int)GenerateRandomNormalDistribution(layup, 1.4, 25, 99 - multipler) + multipler;
-            dunk = (int)GenerateRandomNormalDistribution(dunk, 1.4, 25, 99 - multipler) + multipler;
-            midRange = (int)GenerateRandomNormalDistribution(midRange, 1.4, 25, 99 - multipler) + multipler;
-            threePoint = (int)GenerateRandomNormalDistribution(threePoint, 1.4, 25, 99 - multipler) + multipler;
-            freeThrow = (int)GenerateRandomNormalDistribution(freeThrow, 1.4, 25, 99 - multipler) + multipler;
-            passing = (int)GenerateRandomNormalDistribution(passing, 1.4, 25, 99 - multipler) + multipler;
-            ballHandle = (int)GenerateRandomNormalDistribution(ballHandle, 1.4, 25, 99 - multipler) + multipler;
-            defense = (int)GenerateRandomNormalDistribution(defense, 1.4, 25, 99 - multipler) + multipler;
-            steal = (int)GenerateRandomNormalDistribution(steal, 1.4, 25, 99 - multipler) + multipler;
-            block = (int)GenerateRandomNormalDistribution(block, 1.4, 25, 99 - multipler) + multipler;
-            rebound = (int)GenerateRandomNormalDistribution(rebound, 1.4, 25, 99 - multipler) + multipler;
-            speed = (int)GenerateRandomNormalDistribution(speed, 1.4, 25, 99 - multipler) + multipler;
-            strength = (int)GenerateRandomNormalDistribution(strength, 1.4, 25, 99 - multipler) + multipler;
-            stamina = (int)GenerateRandomNormalDistribution(stamina, 1.4, 25, 99 - multipler) + multipler;
+            // converting 60-99 into 0-35
+            int multipler2 = (int)((overall - 50) * 0.66);
+            double multipler = overall * 0.96 / 60.0;
+            if (multipler < 1) multipler = 1;
+            closeShot = (int)(GenerateRandomNormalDistribution(closeShot, 1.4, 25, 99 / multipler) * multipler);
+            layup = (int)(GenerateRandomNormalDistribution(layup, 1.4, 25, 99 / multipler) * multipler);
+            dunk = (int)(GenerateRandomNormalDistribution(dunk, 1.4, 25, 99 / multipler) * multipler);
+            midRange = (int)(GenerateRandomNormalDistribution(midRange, 1.4, 25, 99 / multipler) * multipler);
+            threePoint = (int)(GenerateRandomNormalDistribution(threePoint, 1.4, 25, 99 / multipler) * multipler);
+            freeThrow = (int)(GenerateRandomNormalDistribution(freeThrow, 1.4, 25, 99 / multipler) * multipler);
+            passing = (int)(GenerateRandomNormalDistribution(passing, 1.4, 25, 99 / multipler) * multipler);
+            ballHandle = (int)(GenerateRandomNormalDistribution(ballHandle, 1.4, 25, 99 / multipler) * multipler);
+            defense = (int)(GenerateRandomNormalDistribution(defense, 1.4, 25, 99 / multipler) * multipler);
+            steal = (int)(GenerateRandomNormalDistribution(steal, 1.4, 25, 99 / multipler) * multipler);
+            block = (int)(GenerateRandomNormalDistribution(block, 1.4, 25, 99 / multipler) * multipler);
+            rebound = (int)(GenerateRandomNormalDistribution(rebound, 1.4, 25, 99 / multipler) * multipler);
+            speed = (int)(GenerateRandomNormalDistribution(speed, 1.4, 25, 99 / multipler) * multipler);
+            strength = (int)(GenerateRandomNormalDistribution(strength, 1.4, 25, 99 / multipler) * multipler);
+            stamina = (int)(GenerateRandomNormalDistribution(stamina, 1.4, 25, 99 / multipler) * multipler);
 
             // use weight scalar to scale strength (150-300) to (-11 to +11)
             decimal scalar = 22 * ((Weight - 150m) / 150m);
@@ -456,51 +458,55 @@ namespace LeagueSimulation.Models
         public void GenerateAgeOvrAndPotential(double overallMean, bool isRookie)
         {
             // we generate the age of the current player
-            double ageMean = 26.5;
-            double ageStDev = 4.5;
+            double ageMean = 26.8;
+            double ageStDev = 4.1;
+            int ageMax = 40;
+            int ageMin = 18;
             if (isRookie)
             {
                 ageMean = 20;
                 ageStDev = 0.5;
+                ageMax = 22;
             }
-            int age = (int)GenerateRandomNormalDistribution(ageMean, ageStDev);
-            if (age < 18) age = 18;
-            if (age > 40) age = 40;
+            int age = (int)GenerateRandomNormalDistribution(ageMean, ageStDev, ageMin, ageMax);
             Age = age;
 
             // we make sure players that are older than 33 and younger than 21, are not very good
             // compared to the rest of the league
-            if (age < 22)
+            double overallStDev = 8.0;
+            if (age < 28)
             {
-                overallMean -= 3.8 + (22 - age);
+                overallMean -= 2.45 * (28 - age);
+                overallStDev -= 0.73 * (28 - age);
+                if (overallMean < 62) overallMean = 62;
+                if (overallStDev < 1.5) overallStDev = 1.5;
             }
             else if (age > 33)
             {
-                overallMean -= 4.5 + (age - 33);
+                overallMean -= 3.5 + (age - 33);
+                overallStDev -= 0.4 * (age - 33);
             }
 
             // now we generate the overall of the player
-            double overallStDev = 7.6;
-            int overall = (int)GenerateRandomNormalDistribution(overallMean, overallStDev);
-            if (overall < 60) overall = 60;
-            else if (overall > 99) overall = 99;
-            else if (!isRookie && overall > 98) overall = 98;
-            Overall = overall;
+            int ovrMax = 99;
+            int ovrMin = 60;
+            if (isRookie) ovrMax = 70 ;
+            Overall = (int)GenerateRandomNormalDistribution(overallMean, overallStDev, ovrMin, ovrMax);
 
             // we calculate the potential of the player
             if (age < 28)
             {
                 // this gets the age difference, and an additional overallDifference is added
                 // this makes sure players with really low overall, can have really high potential
-                double ageDifference = (27 - age) * 0.7 + (80 - overall) * 0.6;
-                int potentialMean = (int)(3 + ageDifference);
-                int potentialStDev = 2;
+                double ageDifference = (28 - age) * 0.4 + (80 - Overall) * 0.40;
+                int potentialMean = (int)(ageDifference);
+                int potentialStDev = 4;
                 int potential = (int)GenerateRandomNormalDistribution(potentialMean, potentialStDev);
-                Potential = potential + overall;
+                Potential = potential + Overall;
 
             }
             else Potential = age;
-            if (Potential < overall) Potential = overall;
+            if (Potential < Overall) Potential = Overall;
         }
 
         public void GeneratePlayer(string pos, int teamId, string teamName, string forename, string surname, int meanOverall)

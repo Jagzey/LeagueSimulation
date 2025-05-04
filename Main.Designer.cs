@@ -105,7 +105,7 @@
             // 
             teamNameDropDown.DropDownStyle = ComboBoxStyle.DropDownList;
             teamNameDropDown.FormattingEnabled = true;
-            teamNameDropDown.Items.AddRange(new object[] { "New York Bankers", "Philadelphia Hawks", "Boston Beavers", "Miami Crocodiles", "Atlanta Raptors", "Washington Wolves", "Charlotte Vipers", "Orlando Knights", "Detroit Thunder", "Cleveland Crows", "Milwaukee Spartans", "Indianapolis Falcons", "Chicago Raiders", "Brooklyn Bulls", "Toronto Titans", "Los Angeles Warriors", "San Francisco Saints", "Phoenix Dragons", "Dallas Cowboys", "Houston Eagles", "Denver Raccoons", "Portland Tornados", "San Antonio Kangaroos", "Las Vegas Dimes", "Seattle Panthers", "Sacramento Sharks", "Salt Lake City Lions", "Oklahoma City Sonics", "New Orleans Raiders", "Minneapolis Seals" });
+            teamNameDropDown.Items.AddRange(new object[] { "New York Sentinels", "Philadelphia Hawks", "Boston Beavers", "Miami Crocodiles", "Atlanta Raptors", "Washington Wolves", "Charlotte Vipers", "Orlando Knights", "Detroit Thunder", "Cleveland Crows", "Milwaukee Spartans", "Indianapolis Falcons", "Chicago Raiders", "Brooklyn Bulls", "Toronto Titans", "Los Angeles Warriors", "San Francisco Saints", "Phoenix Dragons", "Dallas Cowboys", "Houston Eagles", "Denver Raccoons", "Portland Tornados", "San Antonio Kangaroos", "Las Vegas Dimes", "Seattle Panthers", "Sacramento Sharks", "Salt Lake City Lions", "Oklahoma City Sonics", "New Orleans Raiders", "Minneapolis Seals" });
             teamNameDropDown.Location = new Point(74, 168);
             teamNameDropDown.Name = "teamNameDropDown";
             teamNameDropDown.Size = new Size(200, 23);

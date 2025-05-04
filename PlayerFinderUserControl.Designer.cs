@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             panel1 = new Panel();
             playerPlaystyleTextBox = new TextBox();
             label14 = new Label();
@@ -70,9 +70,18 @@
             PlayerFirstname = new DataGridViewTextBoxColumn();
             PlayerSurname = new DataGridViewTextBoxColumn();
             TeamName = new DataGridViewTextBoxColumn();
+            height = new DataGridViewTextBoxColumn();
+            Weight = new DataGridViewTextBoxColumn();
+            Position = new DataGridViewTextBoxColumn();
+            Playstyle = new DataGridViewTextBoxColumn();
             PTS = new DataGridViewTextBoxColumn();
             REB = new DataGridViewTextBoxColumn();
             AST = new DataGridViewTextBoxColumn();
+            STL = new DataGridViewTextBoxColumn();
+            BLK = new DataGridViewTextBoxColumn();
+            TOV = new DataGridViewTextBoxColumn();
+            FGPCT = new DataGridViewTextBoxColumn();
+            TFGPCT = new DataGridViewTextBoxColumn();
             playersFoundLabel = new Label();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)minHeightUpDown).BeginInit();
@@ -126,14 +135,14 @@
             panel1.Controls.Add(playerFinderLabel);
             panel1.Location = new Point(3, 3);
             panel1.Name = "panel1";
-            panel1.Size = new Size(481, 629);
+            panel1.Size = new Size(371, 629);
             panel1.TabIndex = 0;
             // 
             // playerPlaystyleTextBox
             // 
             playerPlaystyleTextBox.Location = new Point(165, 500);
             playerPlaystyleTextBox.Name = "playerPlaystyleTextBox";
-            playerPlaystyleTextBox.Size = new Size(267, 23);
+            playerPlaystyleTextBox.Size = new Size(186, 23);
             playerPlaystyleTextBox.TabIndex = 13;
             // 
             // label14
@@ -150,7 +159,7 @@
             // 
             playerPositionTextBox.Location = new Point(165, 471);
             playerPositionTextBox.Name = "playerPositionTextBox";
-            playerPositionTextBox.Size = new Size(267, 23);
+            playerPositionTextBox.Size = new Size(186, 23);
             playerPositionTextBox.TabIndex = 11;
             // 
             // label15
@@ -166,7 +175,7 @@
             // playerFinderButton
             // 
             playerFinderButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            playerFinderButton.Location = new Point(133, 566);
+            playerFinderButton.Location = new Point(72, 556);
             playerFinderButton.Name = "playerFinderButton";
             playerFinderButton.Size = new Size(227, 51);
             playerFinderButton.TabIndex = 9;
@@ -182,7 +191,7 @@
             maxHeightLabel.Name = "maxHeightLabel";
             maxHeightLabel.Size = new Size(36, 25);
             maxHeightLabel.TabIndex = 8;
-            maxHeightLabel.Text = "7'2";
+            maxHeightLabel.Text = "7'3";
             // 
             // minHeightLabel
             // 
@@ -200,7 +209,7 @@
             minHeightUpDown.Maximum = new decimal(new int[] { 86, 0, 0, 0 });
             minHeightUpDown.Minimum = new decimal(new int[] { 69, 0, 0, 0 });
             minHeightUpDown.Name = "minHeightUpDown";
-            minHeightUpDown.Size = new Size(120, 23);
+            minHeightUpDown.Size = new Size(51, 23);
             minHeightUpDown.TabIndex = 7;
             minHeightUpDown.Value = new decimal(new int[] { 69, 0, 0, 0 });
             minHeightUpDown.ValueChanged += minHeightUpDown_ValueChanged;
@@ -208,12 +217,12 @@
             // maxHeightUpDown
             // 
             maxHeightUpDown.Location = new Point(300, 170);
-            maxHeightUpDown.Maximum = new decimal(new int[] { 86, 0, 0, 0 });
+            maxHeightUpDown.Maximum = new decimal(new int[] { 87, 0, 0, 0 });
             maxHeightUpDown.Minimum = new decimal(new int[] { 69, 0, 0, 0 });
             maxHeightUpDown.Name = "maxHeightUpDown";
-            maxHeightUpDown.Size = new Size(120, 23);
+            maxHeightUpDown.Size = new Size(51, 23);
             maxHeightUpDown.TabIndex = 7;
-            maxHeightUpDown.Value = new decimal(new int[] { 86, 0, 0, 0 });
+            maxHeightUpDown.Value = new decimal(new int[] { 87, 0, 0, 0 });
             maxHeightUpDown.ValueChanged += maxHeightUpDown_ValueChanged;
             // 
             // maxAPGUpDown
@@ -222,7 +231,7 @@
             maxAPGUpDown.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
             maxAPGUpDown.Location = new Point(195, 422);
             maxAPGUpDown.Name = "maxAPGUpDown";
-            maxAPGUpDown.Size = new Size(120, 23);
+            maxAPGUpDown.Size = new Size(66, 23);
             maxAPGUpDown.TabIndex = 6;
             maxAPGUpDown.Value = new decimal(new int[] { 100, 0, 0, 0 });
             // 
@@ -232,7 +241,7 @@
             maxRPGUpDown.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
             maxRPGUpDown.Location = new Point(195, 355);
             maxRPGUpDown.Name = "maxRPGUpDown";
-            maxRPGUpDown.Size = new Size(120, 23);
+            maxRPGUpDown.Size = new Size(66, 23);
             maxRPGUpDown.TabIndex = 6;
             maxRPGUpDown.Value = new decimal(new int[] { 100, 0, 0, 0 });
             // 
@@ -242,7 +251,7 @@
             minAPGUpDown.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
             minAPGUpDown.Location = new Point(195, 393);
             minAPGUpDown.Name = "minAPGUpDown";
-            minAPGUpDown.Size = new Size(120, 23);
+            minAPGUpDown.Size = new Size(66, 23);
             minAPGUpDown.TabIndex = 6;
             // 
             // minRPGUpDown
@@ -251,7 +260,7 @@
             minRPGUpDown.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
             minRPGUpDown.Location = new Point(195, 330);
             minRPGUpDown.Name = "minRPGUpDown";
-            minRPGUpDown.Size = new Size(120, 23);
+            minRPGUpDown.Size = new Size(66, 23);
             minRPGUpDown.TabIndex = 6;
             // 
             // maxWeightUpDown
@@ -260,7 +269,7 @@
             maxWeightUpDown.Maximum = new decimal(new int[] { 375, 0, 0, 0 });
             maxWeightUpDown.Minimum = new decimal(new int[] { 125, 0, 0, 0 });
             maxWeightUpDown.Name = "maxWeightUpDown";
-            maxWeightUpDown.Size = new Size(120, 23);
+            maxWeightUpDown.Size = new Size(66, 23);
             maxWeightUpDown.TabIndex = 6;
             maxWeightUpDown.Value = new decimal(new int[] { 375, 0, 0, 0 });
             // 
@@ -270,7 +279,7 @@
             maxPPGUpDown.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
             maxPPGUpDown.Location = new Point(195, 301);
             maxPPGUpDown.Name = "maxPPGUpDown";
-            maxPPGUpDown.Size = new Size(120, 23);
+            maxPPGUpDown.Size = new Size(66, 23);
             maxPPGUpDown.TabIndex = 6;
             maxPPGUpDown.Value = new decimal(new int[] { 100, 0, 0, 0 });
             // 
@@ -280,7 +289,7 @@
             minWeightUpDown.Maximum = new decimal(new int[] { 375, 0, 0, 0 });
             minWeightUpDown.Minimum = new decimal(new int[] { 125, 0, 0, 0 });
             minWeightUpDown.Name = "minWeightUpDown";
-            minWeightUpDown.Size = new Size(120, 23);
+            minWeightUpDown.Size = new Size(66, 23);
             minWeightUpDown.TabIndex = 6;
             minWeightUpDown.Value = new decimal(new int[] { 125, 0, 0, 0 });
             // 
@@ -290,7 +299,7 @@
             minPPGUpDown.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
             minPPGUpDown.Location = new Point(195, 276);
             minPPGUpDown.Name = "minPPGUpDown";
-            minPPGUpDown.Size = new Size(120, 23);
+            minPPGUpDown.Size = new Size(66, 23);
             minPPGUpDown.TabIndex = 6;
             // 
             // label12
@@ -315,11 +324,11 @@
             // 
             // label2
             // 
-            label2.Location = new Point(3, 30);
+            label2.Location = new Point(55, 31);
             label2.Name = "label2";
-            label2.Size = new Size(475, 36);
+            label2.Size = new Size(281, 36);
             label2.TabIndex = 5;
-            label2.Text = "This menu lets you search for a certain player in the league. If you do not want to search for a given criteria, please leave the criteria blank and then it will not be filtered for\r\n";
+            label2.Text = "If you don't want to specify a criteria, leave it blank, \r\nthen it will not be filtered for\r\n";
             // 
             // label9
             // 
@@ -375,7 +384,7 @@
             // 
             teamNameTextBox.Location = new Point(153, 98);
             teamNameTextBox.Name = "teamNameTextBox";
-            teamNameTextBox.Size = new Size(267, 23);
+            teamNameTextBox.Size = new Size(198, 23);
             teamNameTextBox.TabIndex = 4;
             teamNameTextBox.Text = "Manchester Magic";
             // 
@@ -423,7 +432,7 @@
             // 
             playerNameTextBox.Location = new Point(153, 69);
             playerNameTextBox.Name = "playerNameTextBox";
-            playerNameTextBox.Size = new Size(267, 23);
+            playerNameTextBox.Size = new Size(198, 23);
             playerNameTextBox.TabIndex = 2;
             // 
             // playerNameLabel
@@ -440,7 +449,7 @@
             // 
             playerFinderLabel.AutoSize = true;
             playerFinderLabel.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            playerFinderLabel.Location = new Point(133, 0);
+            playerFinderLabel.Location = new Point(90, 1);
             playerFinderLabel.Name = "playerFinderLabel";
             playerFinderLabel.Size = new Size(218, 30);
             playerFinderLabel.TabIndex = 0;
@@ -450,44 +459,44 @@
             // 
             panel2.Controls.Add(playerFinderDataGridView);
             panel2.Controls.Add(playersFoundLabel);
-            panel2.Location = new Point(490, 3);
+            panel2.Location = new Point(390, 3);
             panel2.Name = "panel2";
-            panel2.Size = new Size(607, 629);
+            panel2.Size = new Size(922, 629);
             panel2.TabIndex = 1;
             // 
             // playerFinderDataGridView
             // 
             playerFinderDataGridView.AllowUserToAddRows = false;
             playerFinderDataGridView.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = SystemColors.Control;
-            dataGridViewCellStyle4.Font = new Font("Segoe UI", 8F);
-            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-            playerFinderDataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
-            playerFinderDataGridView.Columns.AddRange(new DataGridViewColumn[] { PlayerFirstname, PlayerSurname, TeamName, PTS, REB, AST });
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = SystemColors.Window;
-            dataGridViewCellStyle5.Font = new Font("Segoe UI", 8F);
-            dataGridViewCellStyle5.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.False;
-            playerFinderDataGridView.DefaultCellStyle = dataGridViewCellStyle5;
-            playerFinderDataGridView.Location = new Point(14, 66);
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 8F);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            playerFinderDataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            playerFinderDataGridView.Columns.AddRange(new DataGridViewColumn[] { PlayerFirstname, PlayerSurname, TeamName, height, Weight, Position, Playstyle, PTS, REB, AST, STL, BLK, TOV, FGPCT, TFGPCT });
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Window;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 8F);
+            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            playerFinderDataGridView.DefaultCellStyle = dataGridViewCellStyle2;
+            playerFinderDataGridView.Location = new Point(3, 67);
             playerFinderDataGridView.Name = "playerFinderDataGridView";
             playerFinderDataGridView.ReadOnly = true;
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = SystemColors.Control;
-            dataGridViewCellStyle6.Font = new Font("Segoe UI", 8F);
-            dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
-            playerFinderDataGridView.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
-            playerFinderDataGridView.Size = new Size(574, 540);
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = SystemColors.Control;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 8F);
+            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            playerFinderDataGridView.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            playerFinderDataGridView.Size = new Size(905, 540);
             playerFinderDataGridView.TabIndex = 4;
             playerFinderDataGridView.CellClick += leagueLeaderDataGridView_CellClick;
             // 
@@ -515,13 +524,45 @@
             TeamName.ReadOnly = true;
             TeamName.Width = 145;
             // 
+            // height
+            // 
+            height.DataPropertyName = "realHeight";
+            height.HeaderText = "Height";
+            height.Name = "height";
+            height.ReadOnly = true;
+            height.Width = 50;
+            // 
+            // Weight
+            // 
+            Weight.DataPropertyName = "weight";
+            Weight.HeaderText = "Weight";
+            Weight.Name = "Weight";
+            Weight.ReadOnly = true;
+            Weight.Width = 50;
+            // 
+            // Position
+            // 
+            Position.DataPropertyName = "playerPosition";
+            Position.HeaderText = "Position";
+            Position.Name = "Position";
+            Position.ReadOnly = true;
+            Position.Width = 55;
+            // 
+            // Playstyle
+            // 
+            Playstyle.DataPropertyName = "playerPlaystyle";
+            Playstyle.HeaderText = "Playstyle";
+            Playstyle.Name = "Playstyle";
+            Playstyle.ReadOnly = true;
+            Playstyle.Width = 65;
+            // 
             // PTS
             // 
             PTS.DataPropertyName = "avgPTS";
             PTS.HeaderText = "PTS";
             PTS.Name = "PTS";
             PTS.ReadOnly = true;
-            PTS.Width = 60;
+            PTS.Width = 40;
             // 
             // REB
             // 
@@ -529,7 +570,7 @@
             REB.HeaderText = "REB";
             REB.Name = "REB";
             REB.ReadOnly = true;
-            REB.Width = 60;
+            REB.Width = 40;
             // 
             // AST
             // 
@@ -537,7 +578,47 @@
             AST.HeaderText = "AST";
             AST.Name = "AST";
             AST.ReadOnly = true;
-            AST.Width = 60;
+            AST.Width = 40;
+            // 
+            // STL
+            // 
+            STL.DataPropertyName = "avgSTL";
+            STL.HeaderText = "STL";
+            STL.Name = "STL";
+            STL.ReadOnly = true;
+            STL.Width = 40;
+            // 
+            // BLK
+            // 
+            BLK.DataPropertyName = "avgBLK";
+            BLK.HeaderText = "BLK";
+            BLK.Name = "BLK";
+            BLK.ReadOnly = true;
+            BLK.Width = 40;
+            // 
+            // TOV
+            // 
+            TOV.DataPropertyName = "avgTOV";
+            TOV.HeaderText = "TOV";
+            TOV.Name = "TOV";
+            TOV.ReadOnly = true;
+            TOV.Width = 40;
+            // 
+            // FGPCT
+            // 
+            FGPCT.DataPropertyName = "avgFGPCT";
+            FGPCT.HeaderText = "FG%";
+            FGPCT.Name = "FGPCT";
+            FGPCT.ReadOnly = true;
+            FGPCT.Width = 40;
+            // 
+            // TFGPCT
+            // 
+            TFGPCT.DataPropertyName = "avgTFGPCT";
+            TFGPCT.HeaderText = "3P%";
+            TFGPCT.Name = "TFGPCT";
+            TFGPCT.ReadOnly = true;
+            TFGPCT.Width = 40;
             // 
             // playersFoundLabel
             // 
@@ -556,7 +637,7 @@
             Controls.Add(panel2);
             Controls.Add(panel1);
             Name = "PlayerFinderUserControl";
-            Size = new Size(1100, 635);
+            Size = new Size(1315, 635);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)minHeightUpDown).EndInit();
@@ -612,15 +693,24 @@
         private Label playersFoundLabel;
         private DataGridView playerFinderDataGridView;
         private NumericUpDown minHeightUpDown;
-        private DataGridViewTextBoxColumn PlayerFirstname;
-        private DataGridViewTextBoxColumn PlayerSurname;
-        private DataGridViewTextBoxColumn TeamName;
-        private DataGridViewTextBoxColumn PTS;
-        private DataGridViewTextBoxColumn REB;
-        private DataGridViewTextBoxColumn AST;
         private TextBox playerPlaystyleTextBox;
         private Label label14;
         private TextBox playerPositionTextBox;
         private Label label15;
+        private DataGridViewTextBoxColumn PlayerFirstname;
+        private DataGridViewTextBoxColumn PlayerSurname;
+        private DataGridViewTextBoxColumn TeamName;
+        private DataGridViewTextBoxColumn height;
+        private DataGridViewTextBoxColumn Weight;
+        private DataGridViewTextBoxColumn Position;
+        private DataGridViewTextBoxColumn Playstyle;
+        private DataGridViewTextBoxColumn PTS;
+        private DataGridViewTextBoxColumn REB;
+        private DataGridViewTextBoxColumn AST;
+        private DataGridViewTextBoxColumn STL;
+        private DataGridViewTextBoxColumn BLK;
+        private DataGridViewTextBoxColumn TOV;
+        private DataGridViewTextBoxColumn FGPCT;
+        private DataGridViewTextBoxColumn TFGPCT;
     }
 }

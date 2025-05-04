@@ -164,12 +164,11 @@
             // 
             // commentatorPhrasesLabel
             // 
-            commentatorPhrasesLabel.AutoSize = true;
             commentatorPhrasesLabel.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            commentatorPhrasesLabel.Location = new Point(301, 179);
+            commentatorPhrasesLabel.Location = new Point(129, 179);
             commentatorPhrasesLabel.MaximumSize = new Size(540, 0);
             commentatorPhrasesLabel.Name = "commentatorPhrasesLabel";
-            commentatorPhrasesLabel.Size = new Size(533, 125);
+            commentatorPhrasesLabel.Size = new Size(540, 10000);
             commentatorPhrasesLabel.TabIndex = 4;
             commentatorPhrasesLabel.Text = resources.GetString("commentatorPhrasesLabel.Text");
             commentatorPhrasesLabel.Click += commentatorPhrasesLabel_Click;
@@ -188,7 +187,6 @@
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion

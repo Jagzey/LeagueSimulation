@@ -28,17 +28,27 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle11 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle12 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
             label1 = new Label();
             label2 = new Label();
             label3 = new Label();
             currentTeamDataGridView = new DataGridView();
+            PlayerFirstname = new DataGridViewTextBoxColumn();
+            PlayerSurname = new DataGridViewTextBoxColumn();
+            PTS = new DataGridViewTextBoxColumn();
+            REB = new DataGridViewTextBoxColumn();
+            AST = new DataGridViewTextBoxColumn();
             teamToTradeWithDataGridView = new DataGridView();
+            dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn2 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn3 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn4 = new DataGridViewTextBoxColumn();
+            dataGridViewTextBoxColumn5 = new DataGridViewTextBoxColumn();
             teamToTradeWithDropDown = new ComboBox();
             label4 = new Label();
             label5 = new Label();
@@ -52,16 +62,6 @@
             proposeTradeButton = new Button();
             teamRecordLabel = new Label();
             currentTeamRecord = new Label();
-            PlayerFirstname = new DataGridViewTextBoxColumn();
-            PlayerSurname = new DataGridViewTextBoxColumn();
-            PTS = new DataGridViewTextBoxColumn();
-            REB = new DataGridViewTextBoxColumn();
-            AST = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn2 = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn3 = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn4 = new DataGridViewTextBoxColumn();
-            dataGridViewTextBoxColumn5 = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)currentTeamDataGridView).BeginInit();
             ((System.ComponentModel.ISupportInitialize)teamToTradeWithDataGridView).BeginInit();
             SuspendLayout();
@@ -100,79 +100,159 @@
             // 
             currentTeamDataGridView.AllowUserToAddRows = false;
             currentTeamDataGridView.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle7.BackColor = SystemColors.Control;
-            dataGridViewCellStyle7.Font = new Font("Segoe UI", 8F);
-            dataGridViewCellStyle7.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle7.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle7.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle7.WrapMode = DataGridViewTriState.True;
-            currentTeamDataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 8F);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            currentTeamDataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             currentTeamDataGridView.Columns.AddRange(new DataGridViewColumn[] { PlayerFirstname, PlayerSurname, PTS, REB, AST });
-            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.BackColor = SystemColors.Window;
-            dataGridViewCellStyle8.Font = new Font("Segoe UI", 8F);
-            dataGridViewCellStyle8.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle8.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle8.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle8.WrapMode = DataGridViewTriState.False;
-            currentTeamDataGridView.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Window;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 8F);
+            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
+            currentTeamDataGridView.DefaultCellStyle = dataGridViewCellStyle2;
             currentTeamDataGridView.Location = new Point(3, 120);
             currentTeamDataGridView.Name = "currentTeamDataGridView";
             currentTeamDataGridView.ReadOnly = true;
-            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.BackColor = SystemColors.Control;
-            dataGridViewCellStyle9.Font = new Font("Segoe UI", 8F);
-            dataGridViewCellStyle9.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle9.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle9.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle9.WrapMode = DataGridViewTriState.True;
-            currentTeamDataGridView.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = SystemColors.Control;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 8F);
+            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            currentTeamDataGridView.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             currentTeamDataGridView.Size = new Size(400, 490);
             currentTeamDataGridView.TabIndex = 5;
             currentTeamDataGridView.CellClick += currentTeamDataGridView_CellClick;
+            // 
+            // PlayerFirstname
+            // 
+            PlayerFirstname.DataPropertyName = "playerForename";
+            PlayerFirstname.HeaderText = "Firstname";
+            PlayerFirstname.Name = "PlayerFirstname";
+            PlayerFirstname.ReadOnly = true;
+            PlayerFirstname.Width = 90;
+            // 
+            // PlayerSurname
+            // 
+            PlayerSurname.DataPropertyName = "playerSurname";
+            PlayerSurname.HeaderText = "Surname";
+            PlayerSurname.Name = "PlayerSurname";
+            PlayerSurname.ReadOnly = true;
+            PlayerSurname.Width = 90;
+            // 
+            // PTS
+            // 
+            PTS.DataPropertyName = "PTS";
+            PTS.HeaderText = "PTS";
+            PTS.Name = "PTS";
+            PTS.ReadOnly = true;
+            PTS.Width = 60;
+            // 
+            // REB
+            // 
+            REB.DataPropertyName = "REB";
+            REB.HeaderText = "REB";
+            REB.Name = "REB";
+            REB.ReadOnly = true;
+            REB.Width = 60;
+            // 
+            // AST
+            // 
+            AST.DataPropertyName = "AST";
+            AST.HeaderText = "AST";
+            AST.Name = "AST";
+            AST.ReadOnly = true;
+            AST.Width = 60;
             // 
             // teamToTradeWithDataGridView
             // 
             teamToTradeWithDataGridView.AllowUserToAddRows = false;
             teamToTradeWithDataGridView.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle10.BackColor = SystemColors.Control;
-            dataGridViewCellStyle10.Font = new Font("Segoe UI", 8F);
-            dataGridViewCellStyle10.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle10.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle10.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle10.WrapMode = DataGridViewTriState.True;
-            teamToTradeWithDataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = SystemColors.Control;
+            dataGridViewCellStyle4.Font = new Font("Segoe UI", 8F);
+            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+            teamToTradeWithDataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             teamToTradeWithDataGridView.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn1, dataGridViewTextBoxColumn2, dataGridViewTextBoxColumn3, dataGridViewTextBoxColumn4, dataGridViewTextBoxColumn5 });
-            dataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle11.BackColor = SystemColors.Window;
-            dataGridViewCellStyle11.Font = new Font("Segoe UI", 8F);
-            dataGridViewCellStyle11.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle11.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle11.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle11.WrapMode = DataGridViewTriState.False;
-            teamToTradeWithDataGridView.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = SystemColors.Window;
+            dataGridViewCellStyle5.Font = new Font("Segoe UI", 8F);
+            dataGridViewCellStyle5.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.False;
+            teamToTradeWithDataGridView.DefaultCellStyle = dataGridViewCellStyle5;
             teamToTradeWithDataGridView.Location = new Point(697, 120);
             teamToTradeWithDataGridView.Name = "teamToTradeWithDataGridView";
             teamToTradeWithDataGridView.ReadOnly = true;
-            dataGridViewCellStyle12.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle12.BackColor = SystemColors.Control;
-            dataGridViewCellStyle12.Font = new Font("Segoe UI", 8F);
-            dataGridViewCellStyle12.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle12.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle12.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle12.WrapMode = DataGridViewTriState.True;
-            teamToTradeWithDataGridView.RowHeadersDefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = SystemColors.Control;
+            dataGridViewCellStyle6.Font = new Font("Segoe UI", 8F);
+            dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
+            teamToTradeWithDataGridView.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
             teamToTradeWithDataGridView.Size = new Size(400, 490);
             teamToTradeWithDataGridView.TabIndex = 6;
             teamToTradeWithDataGridView.CellClick += teamToTradeWithDataGridView_CellClick;
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            dataGridViewTextBoxColumn1.DataPropertyName = "playerForename";
+            dataGridViewTextBoxColumn1.HeaderText = "Firstname";
+            dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            dataGridViewTextBoxColumn1.ReadOnly = true;
+            dataGridViewTextBoxColumn1.Width = 90;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            dataGridViewTextBoxColumn2.DataPropertyName = "playerSurname";
+            dataGridViewTextBoxColumn2.HeaderText = "Surname";
+            dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            dataGridViewTextBoxColumn2.ReadOnly = true;
+            dataGridViewTextBoxColumn2.Width = 90;
+            // 
+            // dataGridViewTextBoxColumn3
+            // 
+            dataGridViewTextBoxColumn3.DataPropertyName = "PTS";
+            dataGridViewTextBoxColumn3.HeaderText = "PTS";
+            dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            dataGridViewTextBoxColumn3.ReadOnly = true;
+            dataGridViewTextBoxColumn3.Width = 60;
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            dataGridViewTextBoxColumn4.DataPropertyName = "REB";
+            dataGridViewTextBoxColumn4.HeaderText = "REB";
+            dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            dataGridViewTextBoxColumn4.ReadOnly = true;
+            dataGridViewTextBoxColumn4.Width = 60;
+            // 
+            // dataGridViewTextBoxColumn5
+            // 
+            dataGridViewTextBoxColumn5.DataPropertyName = "AST";
+            dataGridViewTextBoxColumn5.HeaderText = "AST";
+            dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
+            dataGridViewTextBoxColumn5.ReadOnly = true;
+            dataGridViewTextBoxColumn5.Width = 60;
             // 
             // teamToTradeWithDropDown
             // 
             teamToTradeWithDropDown.DropDownStyle = ComboBoxStyle.DropDownList;
             teamToTradeWithDropDown.FormattingEnabled = true;
-            teamToTradeWithDropDown.Items.AddRange(new object[] { "New York Bankers", "Philadelphia Hawks", "Boston Beavers", "Miami Crocodiles", "Atlanta Raptors", "Washington Wolves", "Charlotte Vipers", "Orlando Knights", "Detroit Thunder", "Cleveland Crows", "Milwaukee Spartans", "Indianapolis Falcons", "Chicago Raiders", "Brooklyn Bulls", "Toronto Titans", "Los Angeles Warriors", "San Francisco Saints", "Phoenix Dragons", "Dallas Cowboys", "Houston Eagles", "Denver Raccoons", "Portland Tornados", "San Antonio Kangaroos", "Las Vegas Dimes", "Seattle Panthers", "Sacramento Sharks", "Salt Lake City Lions", "Oklahoma City Sonics", "New Orleans Raiders", "Minneapolis Seals" });
+            teamToTradeWithDropDown.Items.AddRange(new object[] { "New York Sentinels", "Philadelphia Hawks", "Boston Beavers", "Miami Crocodiles", "Atlanta Raptors", "Washington Wolves", "Charlotte Vipers", "Orlando Knights", "Detroit Thunder", "Cleveland Crows", "Milwaukee Spartans", "Indianapolis Falcons", "Chicago Raiders", "Brooklyn Bulls", "Toronto Titans", "Los Angeles Warriors", "San Francisco Saints", "Phoenix Dragons", "Dallas Cowboys", "Houston Eagles", "Denver Raccoons", "Portland Tornados", "San Antonio Kangaroos", "Las Vegas Dimes", "Seattle Panthers", "Sacramento Sharks", "Salt Lake City Lions", "Oklahoma City Sonics", "New Orleans Raiders", "Minneapolis Seals" });
             teamToTradeWithDropDown.Location = new Point(831, 64);
             teamToTradeWithDropDown.Name = "teamToTradeWithDropDown";
             teamToTradeWithDropDown.Size = new Size(142, 23);
@@ -276,86 +356,6 @@
             currentTeamRecord.Size = new Size(81, 15);
             currentTeamRecord.TabIndex = 15;
             currentTeamRecord.Text = "Team Record: ";
-            // 
-            // PlayerFirstname
-            // 
-            PlayerFirstname.DataPropertyName = "playerForename";
-            PlayerFirstname.HeaderText = "Firstname";
-            PlayerFirstname.Name = "PlayerFirstname";
-            PlayerFirstname.ReadOnly = true;
-            PlayerFirstname.Width = 90;
-            // 
-            // PlayerSurname
-            // 
-            PlayerSurname.DataPropertyName = "playerSurname";
-            PlayerSurname.HeaderText = "Surname";
-            PlayerSurname.Name = "PlayerSurname";
-            PlayerSurname.ReadOnly = true;
-            PlayerSurname.Width = 90;
-            // 
-            // PTS
-            // 
-            PTS.DataPropertyName = "PTS";
-            PTS.HeaderText = "PTS";
-            PTS.Name = "PTS";
-            PTS.ReadOnly = true;
-            PTS.Width = 60;
-            // 
-            // REB
-            // 
-            REB.DataPropertyName = "REB";
-            REB.HeaderText = "REB";
-            REB.Name = "REB";
-            REB.ReadOnly = true;
-            REB.Width = 60;
-            // 
-            // AST
-            // 
-            AST.DataPropertyName = "AST";
-            AST.HeaderText = "AST";
-            AST.Name = "AST";
-            AST.ReadOnly = true;
-            AST.Width = 60;
-            // 
-            // dataGridViewTextBoxColumn1
-            // 
-            dataGridViewTextBoxColumn1.DataPropertyName = "playerForename";
-            dataGridViewTextBoxColumn1.HeaderText = "Firstname";
-            dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            dataGridViewTextBoxColumn1.ReadOnly = true;
-            dataGridViewTextBoxColumn1.Width = 90;
-            // 
-            // dataGridViewTextBoxColumn2
-            // 
-            dataGridViewTextBoxColumn2.DataPropertyName = "playerSurname";
-            dataGridViewTextBoxColumn2.HeaderText = "Surname";
-            dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-            dataGridViewTextBoxColumn2.ReadOnly = true;
-            dataGridViewTextBoxColumn2.Width = 90;
-            // 
-            // dataGridViewTextBoxColumn3
-            // 
-            dataGridViewTextBoxColumn3.DataPropertyName = "PTS";
-            dataGridViewTextBoxColumn3.HeaderText = "PTS";
-            dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
-            dataGridViewTextBoxColumn3.ReadOnly = true;
-            dataGridViewTextBoxColumn3.Width = 60;
-            // 
-            // dataGridViewTextBoxColumn4
-            // 
-            dataGridViewTextBoxColumn4.DataPropertyName = "REB";
-            dataGridViewTextBoxColumn4.HeaderText = "REB";
-            dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
-            dataGridViewTextBoxColumn4.ReadOnly = true;
-            dataGridViewTextBoxColumn4.Width = 60;
-            // 
-            // dataGridViewTextBoxColumn5
-            // 
-            dataGridViewTextBoxColumn5.DataPropertyName = "AST";
-            dataGridViewTextBoxColumn5.HeaderText = "AST";
-            dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
-            dataGridViewTextBoxColumn5.ReadOnly = true;
-            dataGridViewTextBoxColumn5.Width = 60;
             // 
             // TradeProposalUserControl
             // 

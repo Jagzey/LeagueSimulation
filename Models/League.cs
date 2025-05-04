@@ -106,7 +106,7 @@ namespace LeagueSimulation.Models
                         );";
 
                 string createPlayerGameStatsQuery = @"
-                        CREATE TABLE playerGameStats(
+                        CREATE TABLE IF NOT EXISTS playerGameStats(
                         playerGameStatsId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                         gameId INTEGER NOT NULL,
                         playerId INTEGER NOT NULL,
@@ -131,7 +131,7 @@ namespace LeagueSimulation.Models
                         );";
 
                 string createScheduleTableQuery = @"
-                    CREATE TABLE seasonSchedule(
+                    CREATE TABLE IF NOT EXISTS seasonSchedule(
                     gameId INTEGER NOT NULL,
                     seasonId INTEGER NOT NULL,
                     dayId INTEGER NOT NULL,
@@ -142,7 +142,7 @@ namespace LeagueSimulation.Models
                     );";
 
                 string createPlayoffsScheduleTableQuery = @"
-                    CREATE TABLE playoffsSchedule(
+                    CREATE TABLE IF NOT EXISTS playoffsSchedule(
                     playoffsGameId INTEGER NOT NULL,
                     seasonId INTEGER NOT NULL,
                     dayId INTEGER NOT NULL,
@@ -156,7 +156,7 @@ namespace LeagueSimulation.Models
                     );";
 
                 string leagueTableQuery = @"
-                    CREATE TABLE league(
+                    CREATE TABLE IF NOT EXISTS league(
                     leagueId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                     currentDay INTEGER NOT NULL,
                     currentSeason INTEGER NOT NULL,
@@ -164,14 +164,14 @@ namespace LeagueSimulation.Models
                     );";
 
                 string primaryPlaystyleQuery = @"
-                    CREATE TABLE primaryPlaystyle(
+                    CREATE TABLE IF NOT EXISTS primaryPlaystyle(
                     primaryPlaystyleId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                     playstyle TEXT NOT NULL,
                     description TEXT NOT NULL
                     );";
 
                 string secondaryPlaystyleQuery = @"
-                    CREATE TABLE secondaryPlaystyle(
+                    CREATE TABLE IF NOT EXISTS secondaryPlaystyle(
                     secondaryPlaystyleId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                     primaryPlaystyleId INTEGER NOT NULL,
                     playstyle TEXT NOT NULL,
@@ -179,7 +179,7 @@ namespace LeagueSimulation.Models
                     );";
 
                 string positionQuery = $@"
-                    CREATE TABLE position(
+                    CREATE TABLE IF NOT EXISTS position(
                     positionId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                     positionShort TEXT NOT NULL,
                     positionName TEXT NOT NULL,
@@ -187,7 +187,7 @@ namespace LeagueSimulation.Models
                     );";
 
                 string progressionQuery = $@"
-                    CREATE TABLE playerProgression(
+                    CREATE TABLE IF NOT EXISTS playerProgression(
                     progressionId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                     playerId INTEGER NOT NULL,
                     seasonId INTEGER NOT NULL,
@@ -195,7 +195,7 @@ namespace LeagueSimulation.Models
                     );";
 
                 string awardsTeamQuery = $@"
-                    CREATE TABLE seasonTeamAwards(
+                    CREATE TABLE IF NOT EXISTS seasonTeamAwards(
                     seasonId INTEGER NOT NULL,
                     positionId INTEGER NOT NULL,
                     AllNBAOne INTEGER NOT NULL,
@@ -208,7 +208,7 @@ namespace LeagueSimulation.Models
                     );";
 
                 string awardsNonTeamQuery = $@"
-                    CREATE TABLE seasonNonTeamAwards(
+                    CREATE TABLE IF NOT EXISTS seasonNonTeamAwards(
                     seasonId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                     MVP INTEGER NOT NULL,
                     DPOY INTEGER NOT NULL,
@@ -262,7 +262,7 @@ namespace LeagueSimulation.Models
                         );";
 
                 string createPlayerGameStatsIndexQuery = $@"
-                CREATE INDEX playerGameStatsOnlySeasonIdIndex ON playerGameStats(seasonId);
+                CREATE INDEX IF NOT EXISTS playerGameStatsOnlySeasonIdIndex ON playerGameStats(seasonId);
                 CREATE INDEX playerGameStatsPlayerIdSeasonIdIndex ON playerGameStats(playerId, seasonId);";
 
                 string createSeasonScheduleIndexQuery = $"CREATE INDEX seasonScheduleIndex ON seasonSchedule(seasonId);";
@@ -492,9 +492,9 @@ namespace LeagueSimulation.Models
         }
         public void GenerateTeams(string leagueFileName)
         {
-            string teamFilePath = $@"C:\Users\{CurrentUser}\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Names Files\basketball_team_names_list.txt";
+            string teamFilePath = $@"C:\Users\{CurrentUser}\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Player Data\basketball_team_names_list.txt";
             string[] teamNames = File.ReadAllLines(teamFilePath);
-            string playerFilePath = $@"C:\Users\{CurrentUser}\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Names Files\male_names_list_NEW.txt";
+            string playerFilePath = $@"C:\Users\{CurrentUser}\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Player Data\male_names_list_NEW.txt";
             List<string> playerNames = File.ReadAllLines(playerFilePath).ToList();
 
             // Creates a connection to leagueX database
@@ -538,7 +538,7 @@ namespace LeagueSimulation.Models
                                 conference = 2;
                                 team.Position -= 15;
                             }
-                            int teamOverall = random.Next(78, 83);
+                            int teamOverall = random.Next(77, 82);
                             fullTeamQuery += $@"
 	                        (
                             '{team.teamName}',
@@ -1299,7 +1299,7 @@ namespace LeagueSimulation.Models
         {
             // we get the team file names
             Random random = new Random();
-            string fileTeamNamesPath = @$"C:\Users\{CurrentUser}\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Names Files\basketball_team_names_list.txt";
+            string fileTeamNamesPath = @$"C:\Users\{CurrentUser}\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Player Data\basketball_team_names_list.txt";
             string[] teamNames = File.ReadAllLines(fileTeamNamesPath);
             int[] gamesPlayed = new int[teamNames.Length];
             List<string> generatedGames = new List<string>();
@@ -3197,6 +3197,12 @@ namespace LeagueSimulation.Models
                     ORDER BY ROUND(AVG(pgs.gameValue), 1) DESC
 
                     ";
+                    string playerMinutesPlayedQuery = $@"
+                    SELECT COALESCE(ROUND(AVG(pgs.MP), 1), 0) as minutesPlayed
+                    FROM players p
+                    JOIN playerGameStats pgs ON pgs.playerId = p.playerId
+                    WHERE p.playerId = {player.PlayerId}";
+                    double minutesPlayed = 0;
                     using (var connection = new SQLiteConnection(ConnectionString))
                     {
                         connection.Open();
@@ -3211,14 +3217,24 @@ namespace LeagueSimulation.Models
                                 }
                             }
                         }
+                        using (var command = new SQLiteCommand(averageGameValueQuery, connection))
+                        {
+                            using (var reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    minutesPlayed = reader.GetDouble(0);
+                                }
+                            }
+                        }
                     }
                     double playerGameValueDiff = playerGameValue - avgGameValue;
                     double retireProbability = 0;
-                    // convert range of gameValueDiff (-9 to 15) to (-0.3 to 0.45)
-                    playerGameValueDiff = (-0.3 + (0.3 + 0.45) * (playerGameValueDiff + 9) / (15 + 9)) * -1;
+                    // convert range of gameValueDiff (-9 to 15) to (0.3 to -0.70)
+                    playerGameValueDiff = (-0.3 + (0.3 + 0.62) * (playerGameValueDiff + 9) / (15 + 9)) * -1;
                     // convert player age from (31-40) to (0.09-0.74)
-                    double ageVariable = 0.09 + (0.74 - 0.09) * (player.Age - 31) / (40 - 31);
-                    if (player.Age > 40) ageVariable = 100;
+                    double ageVariable = 0.10 + (0.65 - 0.10) * 0.82 * (player.Age - 31) / (40 - 31);
+                    if (player.Age > 40) ageVariable = 0.99;
                     retireProbability = playerGameValueDiff + ageVariable;
 
                     // inititate retirement (playerOnTeam and teamId goes to zero)
@@ -3476,6 +3492,12 @@ namespace LeagueSimulation.Models
                     ORDER BY ROUND(AVG(pgs.gameValue), 1) DESC
 
                     ";
+                    string playerMinutesPlayed = $@"
+                    SELECT COALESCE(ROUND(AVG(pgs.MP), 1), 0) as minutesPlayed
+                    FROM players p
+                    JOIN playerGameStats pgs ON pgs.playerId = p.playerId
+                    WHERE p.playerId = {player.PlayerId}";
+                    double minutesPlayed = 0;
                     using (var connection = new SQLiteConnection(ConnectionString))
                     {
                         connection.Open();
@@ -3490,6 +3512,16 @@ namespace LeagueSimulation.Models
                                 }
                             }
                         }
+                        using (var command = new SQLiteCommand(averageGameValueQuery, connection))
+                        {
+                            using (var reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    minutesPlayed = reader.GetDouble(0);
+                                }
+                            }
+                        }
                     }
 
                     // now we set the boost the player gets
@@ -3497,28 +3529,36 @@ namespace LeagueSimulation.Models
                     double playerGameValueDiff = playerGameValue - avgGameValue;
                     // convert range of gameValueDiff (-20 to 25) to (-1.1 to 1.1)
                     playerGameValueDiff = -1 + (1 + 1) * (playerGameValueDiff + 20) / (25 + 20);
+                    playerGameValueDiff += minutesPlayed / 48;
+                    if (player.Age < 24) playerGameValueDiff += (24 - player.Age) * 0.12;
                     if (playerGameValueDiff > 1.1) playerGameValueDiff = 1.1;
+                    if (playerGameValueDiff > 0.84 && player.Age < 26) playerGameValueDiff *= 2;
                     else if (playerGameValueDiff < -1.1) playerGameValueDiff = -1.1;
 
-                    // convert range of age (18 to 38) to (2.5 to -4.0)
-                    double ageVariable = 2.5 + (- 4.0 - 2.5) * (player.Age - 18) / (38 - 18);
-                    if (player.Age >= 30) ageVariable -= 2.0 + 0.2 * (player.Age - 30);
+                    // convert range of age (18 to 38) to (2.5 to -3.0)
+                    double ageVariable = 2.5 + (- 3.0 - 2.5) * (player.Age - 18) / (38 - 18);
+                    if (player.Age >= 30) ageVariable -= 2.0 + 0.3 * (player.Age - 30);
                     finalBoost += playerGameValueDiff + ageVariable;
 
                     // slightly randomises the boost, so there could be a slight increase or decrease in performance
-                    double finalBoostMultiplier = Player.GenerateRandomNormalDistribution(0, 1.4);
+                    double finalBoostMultiplier = Player.GenerateRandomNormalDistribution(0, 1.0);
                     finalBoost += finalBoostMultiplier;
+
                     // add team position boost to player, the worse their team finished, the bigger the boost they get
-                    if (player.Age < 33) finalBoost += GetTeamPositionPlayerBoost(player.TeamId);
+                    if (player.Age < 35) finalBoost += GetTeamPositionPlayerBoost(player.TeamId);
 
                     // add extra boost for high potential players, and make sure any extreme boosts don't occur
-                    if (player.Potential > player.Overall) finalBoost += (player.Potential - player.Overall) / 5.0;
-                    if (finalBoost > 7 && player.Age > 24) { finalBoost = 7 + Player.GenerateRandomNormalDistribution(-1.1, 0.4); }
+                    if (player.Potential > player.Overall)
+                    {
+                        finalBoost += (player.Potential - player.Overall) / 7.2;
+                        if (player.Age < 23) finalBoost *= 1 + 0.02 * (22 - player.Age);
+                    }
+                    if (finalBoost > 7 && player.Age > 19) { finalBoost = 7 + Player.GenerateRandomNormalDistribution(-1.1, 0.4); }
                     else if (finalBoost < -7) { finalBoost = -7 + Player.GenerateRandomNormalDistribution(1.1, 0.4); }
                     finalBoost = Math.Round(finalBoost);
 
                     // reduce the potential of older players
-                    if (player.Age > 29) player.Potential -= 36 - player.Age;
+                    if (player.Age > 30) player.Potential -= 36 - player.Age;
                     if (player.Overall + finalBoost < 60 || player.Potential + finalBoost < 60) finalBoost = 0;
                     else if (player.Overall + finalBoost > 99) finalBoost = 99 - player.Overall;
                     else if (player.Potential + finalBoost > 99) finalBoost = 99 - player.Potential;
@@ -3526,58 +3566,58 @@ namespace LeagueSimulation.Models
                     
                     // once a player hits 33, they have no potential
                     if (player.Age > 32) player.Potential = player.Overall;
-                    
 
 
+                    double overallMultiplier = (player.Overall + finalBoost) / player.Overall;
                     // now we set the attributes
                     {
-                        player.Layup += (int)finalBoost;
+                        player.Dunk = (int)(player.Dunk * overallMultiplier);
+                        player.MidRange = (int)(player.MidRange * overallMultiplier);
+                        player.ThreePoint = (int)(player.ThreePoint * overallMultiplier);
+                        player.FreeThrow = (int)(player.FreeThrow * overallMultiplier);
+                        player.Passing = (int)(player.Passing * overallMultiplier);
+                        player.BallHandle = (int)(player.BallHandle * overallMultiplier);
+                        player.Defense = (int)(player.Defense * overallMultiplier);
+                        player.Steal = (int)(player.Steal * overallMultiplier);
+                        player.Block = (int)(player.Block * overallMultiplier);
+                        player.Rebound = (int)(player.Rebound * overallMultiplier);
+                        player.Speed = (int)(player.Speed * overallMultiplier);
+                        player.Stamina = (int)(player.Stamina * overallMultiplier);
+                        player.Strength = (int)(player.Strength * overallMultiplier);
+                        player.Layup = (int)(player.Layup * overallMultiplier);
+
                         if (player.Layup > 99) player.Layup = 99;
                         else if (player.Layup < 25) player.Layup = 25;
-                        player.Dunk += (int)finalBoost;
                         if (player.Dunk > 99) player.Dunk = 99;
                         else if (player.Dunk < 25) player.Dunk = 25;
-                        player.MidRange += (int)finalBoost;
                         if (player.MidRange > 99) player.MidRange = 99;
                         else if (player.MidRange < 25) player.MidRange = 25;
-                        player.ThreePoint += (int)finalBoost;
                         if (player.ThreePoint > 99) player.ThreePoint = 99;
                         else if (player.ThreePoint < 25) player.ThreePoint = 25;
-                        player.FreeThrow += (int)finalBoost;
                         if (player.FreeThrow > 99) player.FreeThrow = 99;
                         else if (player.FreeThrow < 25) player.FreeThrow = 25;
-                        player.Passing += (int)finalBoost;
                         if (player.Passing > 99) player.Passing = 99;
                         else if (player.Passing < 25) player.Passing = 25;
-                        player.BallHandle += (int)finalBoost;
                         if (player.BallHandle > 99) player.BallHandle = 99;
                         else if (player.BallHandle < 25) player.BallHandle = 25;
-                        player.Defense += (int)finalBoost;
                         if (player.Defense > 99) player.Defense = 99;
                         else if (player.Defense < 25) player.Defense = 25;
-                        player.Steal += (int)finalBoost;
                         if (player.Steal > 99) player.Steal = 99;
                         else if (player.Steal < 25) player.Steal = 25;
-                        player.Block += (int)finalBoost;
                         if (player.Block > 99) player.Block = 99;
                         else if (player.Block < 25) player.Block = 25;
-                        player.Rebound += (int)finalBoost;
                         if (player.Rebound > 99) player.Rebound = 99;
                         else if (player.Rebound < 25) player.Rebound = 25;
-                        player.Speed += (int)finalBoost;
                         if (player.Speed > 99) player.Speed = 99;
                         else if (player.Speed < 25) player.Speed = 25;
-                        player.Stamina += (int)finalBoost;
                         if (player.Stamina > 99) player.Stamina = 99;
                         else if (player.Stamina < 25) player.Stamina = 25;
-                        player.Strength += (int)finalBoost;
                         if (player.Strength > 99) player.Strength = 99;
                         else if (player.Strength < 25) player.Strength = 25;
                     }
-                    if (finalBoost < -3) { }
-                    int finalPotBoost = (int)finalBoost - 3;
+                    int finalPotBoost = (int)(finalBoost * 0.5);
                     if (finalPotBoost < -4) player.Potential += 4 + finalPotBoost;
-                    else if (finalPotBoost < 0) { finalPotBoost = 0; }
+                    else if (finalPotBoost < 0) finalPotBoost = 0; 
 
                     player.Overall += (int)finalBoost;
                     player.Potential += finalPotBoost;
@@ -3644,7 +3684,13 @@ namespace LeagueSimulation.Models
                     REINDEX playerGameStatsPlayerIdSeasonIdIndex;
                     UPDATE league
                     SET currentDay = {CurrentDay},
-                    currentSeason = {CurrentSeason}
+                    currentSeason = {CurrentSeason};
+                    DELETE FROM minutesSelection
+                    WHERE playerId NOT IN (
+                    SELECT p.playerId
+                    FROM players p
+                    JOIN teams t ON t.teamId = p.teamId
+                    AND t.teamName = '{UserTeamName}');
                     ;";
                     using (var command = new SQLiteCommand(connection))
                     {

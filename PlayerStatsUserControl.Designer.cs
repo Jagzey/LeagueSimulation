@@ -32,14 +32,17 @@
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
             panel1 = new Panel();
             label1 = new Label();
             playerIdUpDown = new NumericUpDown();
             titleLabel = new Label();
             panel2 = new Panel();
+            potentialLabel = new Label();
+            overallLabel = new Label();
+            label5 = new Label();
+            label4 = new Label();
+            defenseAttributesLabel = new Label();
+            offenseAttributesLabel = new Label();
             awardsLabel = new Label();
             seasonDataGridView = new DataGridView();
             season = new DataGridViewTextBoxColumn();
@@ -63,23 +66,6 @@
             STL = new DataGridViewTextBoxColumn();
             BLK = new DataGridViewTextBoxColumn();
             TOV = new DataGridViewTextBoxColumn();
-            attributesGridView = new DataGridView();
-            ageAttributes = new DataGridViewTextBoxColumn();
-            overallAttributes = new DataGridViewTextBoxColumn();
-            potentialAttributes = new DataGridViewTextBoxColumn();
-            layup = new DataGridViewTextBoxColumn();
-            dunk = new DataGridViewTextBoxColumn();
-            midRange = new DataGridViewTextBoxColumn();
-            threePoint = new DataGridViewTextBoxColumn();
-            freeThrow = new DataGridViewTextBoxColumn();
-            Passing = new DataGridViewTextBoxColumn();
-            ballHandle = new DataGridViewTextBoxColumn();
-            defense = new DataGridViewTextBoxColumn();
-            steal = new DataGridViewTextBoxColumn();
-            block = new DataGridViewTextBoxColumn();
-            rebound = new DataGridViewTextBoxColumn();
-            speed = new DataGridViewTextBoxColumn();
-            stamina = new DataGridViewTextBoxColumn();
             summaryGridView = new DataGridView();
             gamesPlayed = new DataGridViewTextBoxColumn();
             PTS = new DataGridViewTextBoxColumn();
@@ -99,7 +85,6 @@
             ((System.ComponentModel.ISupportInitialize)playerIdUpDown).BeginInit();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)seasonDataGridView).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)attributesGridView).BeginInit();
             ((System.ComponentModel.ISupportInitialize)summaryGridView).BeginInit();
             SuspendLayout();
             // 
@@ -144,9 +129,14 @@
             // 
             // panel2
             // 
+            panel2.Controls.Add(potentialLabel);
+            panel2.Controls.Add(overallLabel);
+            panel2.Controls.Add(label5);
+            panel2.Controls.Add(label4);
+            panel2.Controls.Add(defenseAttributesLabel);
+            panel2.Controls.Add(offenseAttributesLabel);
             panel2.Controls.Add(awardsLabel);
             panel2.Controls.Add(seasonDataGridView);
-            panel2.Controls.Add(attributesGridView);
             panel2.Controls.Add(summaryGridView);
             panel2.Controls.Add(ageLabel);
             panel2.Controls.Add(dateOfBirthLabel);
@@ -162,12 +152,70 @@
             panel2.TabIndex = 1;
             panel2.Paint += panel2_Paint;
             // 
+            // potentialLabel
+            // 
+            potentialLabel.AutoSize = true;
+            potentialLabel.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            potentialLabel.Location = new Point(35, 305);
+            potentialLabel.Name = "potentialLabel";
+            potentialLabel.Size = new Size(155, 25);
+            potentialLabel.TabIndex = 14;
+            potentialLabel.Text = "Potential: 77 (+2)";
+            // 
+            // overallLabel
+            // 
+            overallLabel.AutoSize = true;
+            overallLabel.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            overallLabel.Location = new Point(35, 248);
+            overallLabel.Name = "overallLabel";
+            overallLabel.Size = new Size(141, 25);
+            overallLabel.TabIndex = 14;
+            overallLabel.Text = "Overall: 75 (+2)";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label5.Location = new Point(380, 195);
+            label5.Name = "label5";
+            label5.Size = new Size(72, 21);
+            label5.TabIndex = 13;
+            label5.Text = "Defense";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label4.Location = new Point(222, 195);
+            label4.Name = "label4";
+            label4.Size = new Size(69, 21);
+            label4.TabIndex = 13;
+            label4.Text = "Offense";
+            // 
+            // defenseAttributesLabel
+            // 
+            defenseAttributesLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            defenseAttributesLabel.Location = new Point(362, 225);
+            defenseAttributesLabel.Name = "defenseAttributesLabel";
+            defenseAttributesLabel.Size = new Size(119, 148);
+            defenseAttributesLabel.TabIndex = 12;
+            defenseAttributesLabel.Text = "Defense: xx\r\nSteal: xx\r\nBlock: xx\r\nRebound: xx\r\nSpeed: xx\r\nStrength: xx\r\nStamina: xx\r\n\r\n";
+            // 
+            // offenseAttributesLabel
+            // 
+            offenseAttributesLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            offenseAttributesLabel.Location = new Point(210, 225);
+            offenseAttributesLabel.Name = "offenseAttributesLabel";
+            offenseAttributesLabel.Size = new Size(119, 158);
+            offenseAttributesLabel.TabIndex = 12;
+            offenseAttributesLabel.Text = "Layup: xx\r\nDunk: xx\r\nMid Range: xx\r\nThree Point: xx\r\nFree Throw: xx\r\nPassing: xx\r\nBall Handle: xx\r\n\r\n";
+            // 
             // awardsLabel
             // 
             awardsLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            awardsLabel.Location = new Point(442, 12);
+            awardsLabel.Location = new Point(674, 12);
             awardsLabel.Name = "awardsLabel";
-            awardsLabel.Size = new Size(264, 261);
+            awardsLabel.Size = new Size(264, 384);
             awardsLabel.TabIndex = 11;
             awardsLabel.Text = "Awards:";
             // 
@@ -193,7 +241,7 @@
             dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
             seasonDataGridView.DefaultCellStyle = dataGridViewCellStyle2;
-            seasonDataGridView.Location = new Point(35, 419);
+            seasonDataGridView.Location = new Point(35, 399);
             seasonDataGridView.Name = "seasonDataGridView";
             seasonDataGridView.ReadOnly = true;
             dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -387,170 +435,6 @@
             TOV.ReadOnly = true;
             TOV.Width = 30;
             // 
-            // attributesGridView
-            // 
-            attributesGridView.AllowUserToAddRows = false;
-            attributesGridView.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = SystemColors.Control;
-            dataGridViewCellStyle5.Font = new Font("Segoe UI", 7F);
-            dataGridViewCellStyle5.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
-            attributesGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
-            attributesGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            attributesGridView.Columns.AddRange(new DataGridViewColumn[] { ageAttributes, overallAttributes, potentialAttributes, layup, dunk, midRange, threePoint, freeThrow, Passing, ballHandle, defense, steal, block, rebound, speed, stamina });
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = SystemColors.Window;
-            dataGridViewCellStyle6.Font = new Font("Segoe UI", 7F);
-            dataGridViewCellStyle6.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.False;
-            attributesGridView.DefaultCellStyle = dataGridViewCellStyle6;
-            attributesGridView.Location = new Point(35, 276);
-            attributesGridView.Name = "attributesGridView";
-            attributesGridView.ReadOnly = true;
-            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle7.BackColor = SystemColors.Control;
-            dataGridViewCellStyle7.Font = new Font("Segoe UI", 7F);
-            dataGridViewCellStyle7.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle7.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle7.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle7.WrapMode = DataGridViewTriState.True;
-            attributesGridView.RowHeadersDefaultCellStyle = dataGridViewCellStyle7;
-            attributesGridView.Size = new Size(903, 137);
-            attributesGridView.TabIndex = 9;
-            // 
-            // ageAttributes
-            // 
-            ageAttributes.DataPropertyName = "age";
-            ageAttributes.HeaderText = "Age";
-            ageAttributes.Name = "ageAttributes";
-            ageAttributes.ReadOnly = true;
-            ageAttributes.Width = 35;
-            // 
-            // overallAttributes
-            // 
-            overallAttributes.DataPropertyName = "overall";
-            overallAttributes.HeaderText = "Overall";
-            overallAttributes.Name = "overallAttributes";
-            overallAttributes.ReadOnly = true;
-            overallAttributes.Width = 55;
-            // 
-            // potentialAttributes
-            // 
-            potentialAttributes.DataPropertyName = "potential";
-            potentialAttributes.HeaderText = "Potential";
-            potentialAttributes.Name = "potentialAttributes";
-            potentialAttributes.ReadOnly = true;
-            potentialAttributes.Width = 60;
-            // 
-            // layup
-            // 
-            layup.DataPropertyName = "layup";
-            layup.HeaderText = "Layup";
-            layup.Name = "layup";
-            layup.ReadOnly = true;
-            layup.Width = 50;
-            // 
-            // dunk
-            // 
-            dunk.DataPropertyName = "dunk";
-            dunk.HeaderText = "Dunk";
-            dunk.Name = "dunk";
-            dunk.ReadOnly = true;
-            dunk.Width = 50;
-            // 
-            // midRange
-            // 
-            midRange.DataPropertyName = "midRange";
-            midRange.HeaderText = "Mid Range";
-            midRange.Name = "midRange";
-            midRange.ReadOnly = true;
-            midRange.Width = 80;
-            // 
-            // threePoint
-            // 
-            threePoint.DataPropertyName = "threePoint";
-            threePoint.HeaderText = "Three Point";
-            threePoint.Name = "threePoint";
-            threePoint.ReadOnly = true;
-            threePoint.Width = 80;
-            // 
-            // freeThrow
-            // 
-            freeThrow.DataPropertyName = "freeThrow";
-            freeThrow.HeaderText = "Free Throw";
-            freeThrow.Name = "freeThrow";
-            freeThrow.ReadOnly = true;
-            freeThrow.Width = 82;
-            // 
-            // Passing
-            // 
-            Passing.DataPropertyName = "passing";
-            Passing.HeaderText = "Passing";
-            Passing.Name = "Passing";
-            Passing.ReadOnly = true;
-            Passing.Width = 55;
-            // 
-            // ballHandle
-            // 
-            ballHandle.DataPropertyName = "ballHandle";
-            ballHandle.HeaderText = "Ball Handle";
-            ballHandle.Name = "ballHandle";
-            ballHandle.ReadOnly = true;
-            ballHandle.Width = 82;
-            // 
-            // defense
-            // 
-            defense.DataPropertyName = "defense";
-            defense.HeaderText = "Defense";
-            defense.Name = "defense";
-            defense.ReadOnly = true;
-            defense.Width = 55;
-            // 
-            // steal
-            // 
-            steal.DataPropertyName = "steal";
-            steal.HeaderText = "Steal";
-            steal.Name = "steal";
-            steal.ReadOnly = true;
-            steal.Width = 55;
-            // 
-            // block
-            // 
-            block.DataPropertyName = "block";
-            block.HeaderText = "Block";
-            block.Name = "block";
-            block.ReadOnly = true;
-            block.Width = 55;
-            // 
-            // rebound
-            // 
-            rebound.DataPropertyName = "rebound";
-            rebound.HeaderText = "Rebound";
-            rebound.Name = "rebound";
-            rebound.ReadOnly = true;
-            rebound.Width = 60;
-            // 
-            // speed
-            // 
-            speed.DataPropertyName = "speed";
-            speed.HeaderText = "Speed";
-            speed.Name = "speed";
-            speed.ReadOnly = true;
-            speed.Width = 55;
-            // 
-            // stamina
-            // 
-            stamina.DataPropertyName = "stamina";
-            stamina.HeaderText = "Stamina";
-            stamina.Name = "stamina";
-            stamina.ReadOnly = true;
-            stamina.Width = 60;
-            // 
             // summaryGridView
             // 
             summaryGridView.AllowUserToAddRows = false;
@@ -615,7 +499,7 @@
             // 
             ageLabel.AutoSize = true;
             ageLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            ageLabel.Location = new Point(712, 196);
+            ageLabel.Location = new Point(487, 204);
             ageLabel.Name = "ageLabel";
             ageLabel.Size = new Size(59, 20);
             ageLabel.TabIndex = 7;
@@ -625,7 +509,7 @@
             // 
             dateOfBirthLabel.AutoSize = true;
             dateOfBirthLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dateOfBirthLabel.Location = new Point(712, 163);
+            dateOfBirthLabel.Location = new Point(487, 170);
             dateOfBirthLabel.Name = "dateOfBirthLabel";
             dateOfBirthLabel.Size = new Size(135, 20);
             dateOfBirthLabel.TabIndex = 6;
@@ -635,7 +519,7 @@
             // 
             playstyleLabel.AutoSize = true;
             playstyleLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            playstyleLabel.Location = new Point(712, 122);
+            playstyleLabel.Location = new Point(487, 131);
             playstyleLabel.Name = "playstyleLabel";
             playstyleLabel.Size = new Size(123, 20);
             playstyleLabel.TabIndex = 5;
@@ -645,7 +529,7 @@
             // 
             positionLabel.AutoSize = true;
             positionLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            positionLabel.Location = new Point(712, 85);
+            positionLabel.Location = new Point(487, 93);
             positionLabel.Name = "positionLabel";
             positionLabel.Size = new Size(77, 20);
             positionLabel.TabIndex = 4;
@@ -655,7 +539,7 @@
             // 
             weightLabel.AutoSize = true;
             weightLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            weightLabel.Location = new Point(712, 48);
+            weightLabel.Location = new Point(487, 57);
             weightLabel.Name = "weightLabel";
             weightLabel.Size = new Size(110, 20);
             weightLabel.TabIndex = 3;
@@ -665,7 +549,7 @@
             // 
             heightLabel.AutoSize = true;
             heightLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            heightLabel.Location = new Point(712, 12);
+            heightLabel.Location = new Point(487, 21);
             heightLabel.Name = "heightLabel";
             heightLabel.Size = new Size(80, 20);
             heightLabel.TabIndex = 2;
@@ -705,7 +589,6 @@
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)seasonDataGridView).EndInit();
-            ((System.ComponentModel.ISupportInitialize)attributesGridView).EndInit();
             ((System.ComponentModel.ISupportInitialize)summaryGridView).EndInit();
             ResumeLayout(false);
         }
@@ -724,7 +607,6 @@
         private Label dateOfBirthLabel;
         private Label playstyleLabel;
         private Label positionLabel;
-        private DataGridView attributesGridView;
         private Label label1;
         public NumericUpDown playerIdUpDown;
         private DataGridViewTextBoxColumn gamesPlayed;
@@ -756,21 +638,11 @@
         private DataGridViewTextBoxColumn STL;
         private DataGridViewTextBoxColumn BLK;
         private DataGridViewTextBoxColumn TOV;
-        private DataGridViewTextBoxColumn ageAttributes;
-        private DataGridViewTextBoxColumn overallAttributes;
-        private DataGridViewTextBoxColumn potentialAttributes;
-        private DataGridViewTextBoxColumn layup;
-        private DataGridViewTextBoxColumn dunk;
-        private DataGridViewTextBoxColumn midRange;
-        private DataGridViewTextBoxColumn threePoint;
-        private DataGridViewTextBoxColumn freeThrow;
-        private DataGridViewTextBoxColumn Passing;
-        private DataGridViewTextBoxColumn ballHandle;
-        private DataGridViewTextBoxColumn defense;
-        private DataGridViewTextBoxColumn steal;
-        private DataGridViewTextBoxColumn block;
-        private DataGridViewTextBoxColumn rebound;
-        private DataGridViewTextBoxColumn speed;
-        private DataGridViewTextBoxColumn stamina;
+        private Label offenseAttributesLabel;
+        private Label defenseAttributesLabel;
+        private Label potentialLabel;
+        private Label overallLabel;
+        private Label label5;
+        private Label label4;
     }
 }

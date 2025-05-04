@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using static System.ComponentModel.Design.ObjectSelectorEditor;
 using System.Xml.Linq;
 using LeagueSimulation.Models;
+using System.Xml;
 
 namespace LeagueSimulation
 {
@@ -218,9 +219,18 @@ namespace LeagueSimulation
             {
                 connection.Open();
                 string getPlayerQuery = $@"
+                    WITH progressionData AS (
+                        SELECT COALESCE(pp.progression, 0) as progression, p.playerId
+                        FROM players p
+                        LEFT JOIN playerProgression pp ON pp.playerId = p.playerId
+                        WHERE p.playerId = {playerId}
+                        ORDER BY pp.seasonId DESC
+                        LIMIT 1
+                    )
                     SELECT 
                     p.playerId,
                     ((l.currentSeason + 2023) - p.dateOfBirth) AS age,
+                    pd.progression,
                     p.overall,
                     p.potential,
                     p.layup,
@@ -238,13 +248,45 @@ namespace LeagueSimulation
                     p.stamina,
                     p.strength
                     FROM players p, league l
-                    WHERE p.playerId = {playerId} -- Enter playerId I want
+                    JOIN progressionData pd ON pd.playerId = p.playerId
+                    WHERE p.playerId = {playerId}
                 ";
-                SQLiteDataAdapter rosterData = new SQLiteDataAdapter(getPlayerQuery, connection);
-                DataTable dt = new DataTable();
-                rosterData.Fill(dt);
-                attributesGridView.AutoGenerateColumns = false;
-                attributesGridView.DataSource = dt;
+                using (var command = new SQLiteCommand(getPlayerQuery, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            overallLabel.Text = $"Overall: {reader.GetInt32(reader.GetOrdinal("overall"))}";
+                            potentialLabel.Text = $"Potential: {reader.GetInt32(reader.GetOrdinal("potential"))}";
+                            int prog = 0;
+                            prog = reader.GetInt32(reader.GetOrdinal("progression"));
+                            char sign = '+';
+                            if (prog < 0) { sign = '-'; prog *= -1; }
+                            if (prog != 0)
+                            {
+                                overallLabel.Text = $"Overall: {reader.GetInt32(reader.GetOrdinal("overall"))} ({sign}{prog})";
+                                potentialLabel.Text = $"Potential: {reader.GetInt32(reader.GetOrdinal("potential"))} ({sign}{prog})";
+                            }
+
+                            offenseAttributesLabel.Text = offenseAttributesLabel.Text.Replace("Layup: xx", $"Layup: {reader.GetInt32(reader.GetOrdinal("layup"))}");
+                            offenseAttributesLabel.Text = offenseAttributesLabel.Text.Replace("Dunk: xx", $"Dunk: {reader.GetInt32(reader.GetOrdinal("dunk"))}");
+                            offenseAttributesLabel.Text = offenseAttributesLabel.Text.Replace("Mid Range: xx", $"Mid Range: {reader.GetInt32(reader.GetOrdinal("midRange"))}");
+                            offenseAttributesLabel.Text = offenseAttributesLabel.Text.Replace("Three Point: xx", $"Three Point: {reader.GetInt32(reader.GetOrdinal("threePoint"))}");
+                            offenseAttributesLabel.Text = offenseAttributesLabel.Text.Replace("Free Throw: xx", $"Free Throw: {reader.GetInt32(reader.GetOrdinal("freeThrow"))}");
+                            offenseAttributesLabel.Text = offenseAttributesLabel.Text.Replace("Passing: xx", $"Passing: {reader.GetInt32(reader.GetOrdinal("passing"))}");
+                            offenseAttributesLabel.Text = offenseAttributesLabel.Text.Replace("Ball Handle: xx", $"Ball Handle: {reader.GetInt32(reader.GetOrdinal("ballHandle"))}");
+
+                            defenseAttributesLabel.Text = defenseAttributesLabel.Text.Replace("Defense: xx", $"Defense: {reader.GetInt32(reader.GetOrdinal("defense"))}");
+                            defenseAttributesLabel.Text = defenseAttributesLabel.Text.Replace("Steal: xx", $"Steal: {reader.GetInt32(reader.GetOrdinal("steal"))}");
+                            defenseAttributesLabel.Text = defenseAttributesLabel.Text.Replace("Block: xx", $"Block: {reader.GetInt32(reader.GetOrdinal("block"))}");
+                            defenseAttributesLabel.Text = defenseAttributesLabel.Text.Replace("Rebound: xx", $"Rebound: {reader.GetInt32(reader.GetOrdinal("rebound"))}");
+                            defenseAttributesLabel.Text = defenseAttributesLabel.Text.Replace("Speed: xx", $"Speed: {reader.GetInt32(reader.GetOrdinal("speed"))}");
+                            defenseAttributesLabel.Text = defenseAttributesLabel.Text.Replace("Stamina: xx", $"Stamina: {reader.GetInt32(reader.GetOrdinal("stamina"))}");
+                            defenseAttributesLabel.Text = defenseAttributesLabel.Text.Replace("Strength: xx", $"Strength: {reader.GetInt32(reader.GetOrdinal("strength"))}");
+                        }
+                    }
+                }
             }
         }
         public void FillLabels()

@@ -241,7 +241,7 @@ namespace LeagueSimulation
                     WHERE playerOnTeamId = (SELECT MAX(playerOnTeamId) FROM playerOnTeam WHERE playerId = {playerId});
                     UPDATE players SET teamId = {currentTeamId} WHERE playerId = {playerId};
                     INSERT INTO playerOnTeam(playerId, teamId, dayJoined, yearJoined, dayLeft, yearLeft)
-                     VALUES({playerId}, {currentTeamId}, (SELECT currentDay + 1 FROM league), (SELECT currentSeason + 2023 FROM league), 999, 9999)
+                     VALUES({playerId}, {currentTeamId}, (SELECT currentDay + 1 FROM league), (SELECT currentSeason + 2023 FROM league), 999, 9999);
                     ";
 
                         // remove player to minutesSelection table
@@ -274,6 +274,7 @@ namespace LeagueSimulation
                     UPDATE players SET teamId = {userTeamId} WHERE playerId = {playerId};
                     INSERT INTO playerOnTeam(playerId, teamId, dayJoined, yearJoined, dayLeft, yearLeft)
                      VALUES({playerId}, {userTeamId}, (SELECT currentDay + 1 FROM league), (SELECT currentSeason + 2023 FROM league), 999, 9999);
+                    
                     ";
 
                         // add player to minutesSelection table
@@ -314,13 +315,12 @@ namespace LeagueSimulation
             {
                 connection.Open();
                 string checkPlayerValidQuery = $@"
-                    SELECT (p.teamId != 0) FROM players p WHERE p.playerForename = '@firstName' AND p.playerSurname = '@lastName'
-                ;";
+                    SELECT (p.teamId != 0) FROM players p WHERE p.playerForename = @firstName AND p.playerSurname = @lastName;";
 
                 using (SQLiteCommand command = new SQLiteCommand(checkPlayerValidQuery, connection))
                 {
                     command.Parameters.AddWithValue("@firstName", firstName);
-                    command.Parameters.AddWithValue("@firstName", lastName);
+                    command.Parameters.AddWithValue("@lastName", lastName);
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())

@@ -69,9 +69,9 @@ namespace LeagueSimulation
                 string playerSurname = "";
                 string playerPlaystyle = "";
                 string playerPosition = "";
-                if (playerNameTextBox.Text == "") 
+                if (playerNameTextBox.Text == "")
                 {
-                    playerForename = "%"; playerSurname = "%"; 
+                    playerForename = "%"; playerSurname = "%";
                 }
                 else
                 {
@@ -92,13 +92,18 @@ namespace LeagueSimulation
                 SELECT p.playerForename, 
                 p.playerSurname,
                 t.teamName,
-                pos.positionShort AS 'pos',
-                printf('%d''%d', p.height / 12, p.height % 12) AS height,
+                pos.positionShort AS playerPosition,
+                printf('%d''%d', p.height / 12, p.height % 12) AS realHeight,
                 p.weight,
-                sp.playstyle,
-                ROUND(AVG(pgs.PTS), 1) AS avgPTS,
-                ROUND(AVG(pgs.REB), 1) AS avgREB,
-                ROUND(AVG(pgs.AST), 1) AS avgAST
+                sp.playstyle as playerPlaystyle,
+                COALESCE(ROUND(AVG(pgs.PTS), 1), 0.0) AS avgPTS,
+                COALESCE(ROUND(AVG(pgs.REB), 1), 0.0) AS avgREB,
+                COALESCE(ROUND(AVG(pgs.AST), 1), 0.0) AS avgAST,
+                COALESCE(ROUND(AVG(pgs.STL), 1), 0.0) AS avgSTL,
+                COALESCE(ROUND(AVG(pgs.BLK), 1), 0.0) AS avgBLK,
+                COALESCE(ROUND(AVG(pgs.TOV), 1), 0.0) AS avgTOV,
+                COALESCE(ROUND(100 * AVG(pgs.FGM) / AVG(pgs.FGA), 1), 0) AS avgFGPCT,
+                COALESCE(ROUND(100 * AVG(pgs.TFGM) / AVG(pgs.TFGA), 1), 0) AS avgTFGPCT
                 FROM players p, league
                 JOIN playerOnTeam pot 
                     ON ((dayJoined <= league.CurrentDay 
@@ -131,13 +136,18 @@ namespace LeagueSimulation
                 SELECT p.playerForename, 
                 p.playerSurname,
                 t.teamName,
-                pos.positionShort AS 'pos',
-                printf('%d''%d', p.height / 12, p.height % 12) AS height,
+                pos.positionShort AS playerPosition,
+                printf('%d''%d', p.height / 12, p.height % 12) AS realHeight,
                 p.weight,
-                sp.playstyle,
-                ROUND(AVG(pgs.PTS), 1) AS avgPTS,
-                ROUND(AVG(pgs.REB), 1) AS avgREB,
-                ROUND(AVG(pgs.AST), 1) AS avgAST
+                sp.playstyle as playerPlaystyle,
+                COALESCE(ROUND(AVG(pgs.PTS), 1), 0) AS avgPTS,
+                COALESCE(ROUND(AVG(pgs.REB), 1), 0) AS avgREB,
+                COALESCE(ROUND(AVG(pgs.AST), 1), 0) AS avgAST,
+                COALESCE(ROUND(AVG(pgs.STL), 1), 0) AS avgSTL,
+                COALESCE(ROUND(AVG(pgs.BLK), 1), 0) AS avgBLK,
+                COALESCE(ROUND(AVG(pgs.TOV), 1), 0) AS avgTOV,
+                COALESCE(ROUND(100 * AVG(pgs.FGM) / AVG(pgs.FGA), 1), 0) AS avgFGPCT,
+                COALESCE(ROUND(100 * AVG(pgs.TFGM) / AVG(pgs.TFGA), 1), 0) AS avgTFGPCT
                 FROM players p, league
                 JOIN playerOnTeam pot 
                     ON ((dayJoined <= 150

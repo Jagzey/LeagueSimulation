@@ -9,6 +9,12 @@ namespace LeagueSimulation
         public string? CommentatorPhrase;
         public string? ScoreAfterPhrase;
         public string? CurrentTime;
+        public List<Label> GameTeamLabels;
+        public List<Panel> Panels;
+        public List<Button> WatchGameButtons;
+        public List<Button> SimGameButtons;
+        public List<Button> ViewGameResultsButtons;
+
         public FullScheduleUserControl(League? league)
         {
             this.league = league;
@@ -25,6 +31,90 @@ namespace LeagueSimulation
             }
             currentDayShownNum.Value = league.CurrentDay;
 
+            // fill the lists
+            {
+                GameTeamLabels = new List<Label>()
+                {
+                    game1TeamsLabel,
+                    game2TeamsLabel,
+                    game3TeamsLabel,
+                    game4TeamsLabel,
+                    game5TeamsLabel,
+                    game6TeamsLabel,
+                    game7TeamsLabel,
+                    game8TeamsLabel,
+                    game9TeamsLabel,
+                    game10TeamsLabel,
+                    game11TeamsLabel,
+                    game12TeamsLabel,
+                    game13TeamsLabel,
+                };
+                Panels = new List<Panel>()
+                {
+                    panel1,
+                    panel2,
+                    panel3,
+                    panel4,
+                    panel5,
+                    panel6,
+                    panel7,
+                    panel8,
+                    panel9,
+                    panel10,
+                    panel11,
+                    panel12,
+                    panel13
+                };
+                WatchGameButtons = new List<Button>()
+                {
+                    game1WatchGameButton,
+                    game2WatchGameButton,
+                    game3WatchGameButton,
+                    game4WatchGameButton,
+                    game5WatchGameButton,
+                    game6WatchGameButton,
+                    game7WatchGameButton,
+                    game8WatchGameButton,
+                    game9WatchGameButton,
+                    game10WatchGameButton,
+                    game11WatchGameButton,
+                    game12WatchGameButton,
+                    game13WatchGameButton
+                };
+                SimGameButtons = new List<Button>()
+                {
+                    game1SimGameButton,
+                    game2SimGameButton,
+                    game3SimGameButton,
+                    game4SimGameButton,
+                    game5SimGameButton,
+                    game6SimGameButton,
+                    game7SimGameButton,
+                    game8SimGameButton,
+                    game9SimGameButton,
+                    game10SimGameButton,
+                    game11SimGameButton,
+                    game12SimGameButton,
+                    game13SimGameButton
+                };
+                ViewGameResultsButtons = new List<Button>()
+                {
+                    game1ViewGameResults,
+                    game2ViewGameResults,
+                    game3ViewGameResults,
+                    game4ViewGameResults,
+                    game5ViewGameResults,
+                    game6ViewGameResults,
+                    game7ViewGameResults,
+                    game8ViewGameResults,
+                    game9ViewGameResults,
+                    game10ViewGameResults,
+                    game11ViewGameResults,
+                    game12ViewGameResults,
+                    game13ViewGameResults,
+                };
+            }
+
             FillLabels();
         }
 
@@ -36,6 +126,13 @@ namespace LeagueSimulation
             if (!league.Playoffs) currentDayGames = league.GetGamesForDay(currentDayShown);
             else currentDayGames = league.GetPlayoffGamesForDay(currentDayShown);
 
+            foreach (Label gameTeamLabel in GameTeamLabels)
+            {
+                if (gameTeamLabel.Font.Bold)
+                {
+                    gameTeamLabel.Font = new Font(gameTeamLabel.Font, FontStyle.Regular);
+                }
+            }
             {
                 if (game1TeamsLabel.Font.Bold)
                 {
@@ -370,7 +467,7 @@ namespace LeagueSimulation
                     }
                 }
 
-                
+
             }
 
             // we get rid of the buttons that should not be used
@@ -740,10 +837,26 @@ namespace LeagueSimulation
                 simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
                 if (league.CurrentSeason > currentSeason) LoadSeasonSummary(new SeasonSummaryUserControl(league));
             }
-            
+
         }
 
         private void game1SimGameButton_Click(object sender, EventArgs e) => SimGameFunction(0);
+
+        private void UpdateGamePanel(int index, string[] teamsPlaying)
+        {
+            string team1Record = league.GetTeamRecord(teamsPlaying[0]);
+            string team2Record = league.GetTeamRecord(teamsPlaying[1]);
+            if (league.Playoffs)
+            {
+                team1Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[0]).ToString(), league.GetIdFromTeamName(teamsPlaying[1]).ToString());
+                team2Record = league.GetSeriesRecordToDisplay(league.GetIdFromTeamName(teamsPlaying[1]).ToString(), league.GetIdFromTeamName(teamsPlaying[0]).ToString());
+            }
+            GameTeamLabels[index].Text = $"{teamsPlaying[0]} {team1Record} vs. {teamsPlaying[1]} {team2Record}";
+            GameTeamLabels[index].Refresh();
+            WatchGameButtons[index].Hide();
+            SimGameButtons[index].Hide();
+            ViewGameResultsButtons[index].Show();
+        }
 
         private void UpdateGame1Panel(string[] teamsPlaying)
         {
@@ -947,7 +1060,7 @@ namespace LeagueSimulation
                 MessageBox.Show(text: "You can only simulate the current day of the season. Simulate each day before this one before simulating games here.");
             }
             else WatchGameFunction(0);
-            
+
         }
 
         public void LoadViewGameResultsUserControl(ViewGameResultsUserControl userControl)
@@ -1043,245 +1156,6 @@ namespace LeagueSimulation
             game13ViewGameResults.Show();
         }
 
-        private void simDayButton_Click(object sender, EventArgs e)
-        {
-            if ((int)currentDayShownNum.Value != league.CurrentDay)
-            {
-                MessageBox.Show(text: "You can only simulate the current day of the season. Simulate each day before this one before simulating games here.");
-            }
-            else
-            {
-                int currentSeason = league.CurrentSeason;
-                List<List<string>> schedule = new List<List<string>>();
-                if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
-                else schedule = league.CurrentSchedule;
-                league.SimulateDay(schedule[(int)currentDayShownNum.Value - 1], (int)currentDayShownNum.Value, league.Playoffs);
-
-                // now we update all the buttons on the screen
-                {
-                    List<string> gamesInDay = schedule[(int)currentDayShownNum.Value - 1];
-                    if (gamesInDay.Count > 0)
-                    {
-                        string[] teamsPlaying = gamesInDay[0].Split(",");
-                        teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                        teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                        UpdateGame1Panel(teamsPlaying);
-                    }
-                    if (gamesInDay.Count > 1)
-                    {
-                        string[] teamsPlaying = gamesInDay[1].Split(",");
-                        teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                        teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                        UpdateGame2Panel(teamsPlaying);
-                    }
-                    if (gamesInDay.Count > 2)
-                    {
-                        string[] teamsPlaying = gamesInDay[2].Split(",");
-                        teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                        teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                        UpdateGame3Panel(teamsPlaying);
-                    }
-                    if (gamesInDay.Count > 3)
-                    {
-                        string[] teamsPlaying = gamesInDay[3].Split(",");
-                        teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                        teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                        UpdateGame4Panel(teamsPlaying);
-                    }
-                    if (gamesInDay.Count > 4)
-                    {
-                        string[] teamsPlaying = gamesInDay[4].Split(",");
-                        teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                        teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                        UpdateGame5Panel(teamsPlaying);
-                    }
-                    if (gamesInDay.Count > 5)
-                    {
-                        string[] teamsPlaying = gamesInDay[5].Split(",");
-                        teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                        teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                        UpdateGame6Panel(teamsPlaying);
-                    }
-                    if (gamesInDay.Count > 6)
-                    {
-                        string[] teamsPlaying = gamesInDay[6].Split(",");
-                        teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                        teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                        UpdateGame7Panel(teamsPlaying);
-                    }
-                    if (gamesInDay.Count > 7)
-                    {
-                        string[] teamsPlaying = gamesInDay[7].Split(",");
-                        teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                        teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                        UpdateGame8Panel(teamsPlaying);
-                    }
-                    if (gamesInDay.Count > 8)
-                    {
-                        string[] teamsPlaying = gamesInDay[8].Split(",");
-                        teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                        teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                        UpdateGame9Panel(teamsPlaying);
-                    }
-                    if (gamesInDay.Count > 9)
-                    {
-                        string[] teamsPlaying = gamesInDay[9].Split(",");
-                        teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                        teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                        UpdateGame10Panel(teamsPlaying);
-                    }
-                    if (gamesInDay.Count > 10)
-                    {
-                        string[] teamsPlaying = gamesInDay[10].Split(",");
-                        teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                        teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                        UpdateGame11Panel(teamsPlaying);
-                    }
-                    if (gamesInDay.Count > 11)
-                    {
-                        string[] teamsPlaying = gamesInDay[11].Split(",");
-                        teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                        teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                        UpdateGame12Panel(teamsPlaying);
-                    }
-                    if (gamesInDay.Count > 12)
-                    {
-                        string[] teamsPlaying = gamesInDay[12].Split(",");
-                        teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                        teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                        UpdateGame13Panel(teamsPlaying);
-                    }
-                }
-                if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
-                else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
-                simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
-                if (league.CurrentSeason > currentSeason) LoadSeasonSummary(new SeasonSummaryUserControl(league));
-            }
-            
-        }
-
-        // this button simulates a month within a season
-        private void button1_Click(object sender, EventArgs e)
-        {
-            if ((int)currentDayShownNum.Value != league.CurrentDay)
-            {
-                MessageBox.Show(text: "You can only simulate the current day of the season. Simulate each day before this one before simulating games here.");
-            }
-            else
-            {
-                List<List<string>> schedule = new List<List<string>>();
-                if (league.Playoffs) schedule = league.CurrentPlayoffsSchedule;
-                else schedule = league.CurrentSchedule;
-                int simEnd = 30;
-                if (simEnd + league.CurrentDay > schedule.Count) simEnd = schedule.Count;
-                for (int i = 0; i < simEnd; i++)
-                {
-                    league.SimulateDay(schedule[(int)currentDayShownNum.Value - 1 + i], (int)currentDayShownNum.Value + i, league.Playoffs);
-                }
-                if (league.Playoffs) currentDayShownNum.Maximum = league.CurrentPlayoffsSchedule.Count;
-                else currentDayShownNum.Maximum = league.CurrentSchedule.Count;
-                simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
-
-                // now we update all the buttons on the screen
-                {
-                    currentDayShownNum.Value = league.CurrentDay;
-                    List<string> gamesInDay = schedule[(int)currentDayShownNum.Value - 1];
-                    if (gamesInDay.Count > 0)
-                    {
-                        string[] teamsPlaying = gamesInDay[0].Split(",");
-                        teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                        teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                        UpdateGame1Panel(teamsPlaying);
-                    }
-                    if (gamesInDay.Count > 1)
-                    {
-                        string[] teamsPlaying = gamesInDay[1].Split(",");
-                        teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                        teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                        UpdateGame2Panel(teamsPlaying);
-                    }
-                    if (gamesInDay.Count > 2)
-                    {
-                        string[] teamsPlaying = gamesInDay[2].Split(",");
-                        teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                        teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                        UpdateGame3Panel(teamsPlaying);
-                    }
-                    if (gamesInDay.Count > 3)
-                    {
-                        string[] teamsPlaying = gamesInDay[3].Split(",");
-                        teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                        teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                        UpdateGame4Panel(teamsPlaying);
-                    }
-                    if (gamesInDay.Count > 4)
-                    {
-                        string[] teamsPlaying = gamesInDay[4].Split(",");
-                        teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                        teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                        UpdateGame5Panel(teamsPlaying);
-                    }
-                    if (gamesInDay.Count > 5)
-                    {
-                        string[] teamsPlaying = gamesInDay[5].Split(",");
-                        teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                        teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                        UpdateGame6Panel(teamsPlaying);
-                    }
-                    if (gamesInDay.Count > 6)
-                    {
-                        string[] teamsPlaying = gamesInDay[6].Split(",");
-                        teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                        teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                        UpdateGame7Panel(teamsPlaying);
-                    }
-                    if (gamesInDay.Count > 7)
-                    {
-                        string[] teamsPlaying = gamesInDay[7].Split(",");
-                        teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                        teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                        UpdateGame8Panel(teamsPlaying);
-                    }
-                    if (gamesInDay.Count > 8)
-                    {
-                        string[] teamsPlaying = gamesInDay[8].Split(",");
-                        teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                        teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                        UpdateGame9Panel(teamsPlaying);
-                    }
-                    if (gamesInDay.Count > 9)
-                    {
-                        string[] teamsPlaying = gamesInDay[9].Split(",");
-                        teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                        teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                        UpdateGame10Panel(teamsPlaying);
-                    }
-                    if (gamesInDay.Count > 10)
-                    {
-                        string[] teamsPlaying = gamesInDay[10].Split(",");
-                        teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                        teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                        UpdateGame11Panel(teamsPlaying);
-                    }
-                    if (gamesInDay.Count > 11)
-                    {
-                        string[] teamsPlaying = gamesInDay[11].Split(",");
-                        teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                        teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                        UpdateGame12Panel(teamsPlaying);
-                    }
-                    if (gamesInDay.Count > 12)
-                    {
-                        string[] teamsPlaying = gamesInDay[12].Split(",");
-                        teamsPlaying[0] = league.GetTeamNameFromId(teamsPlaying[0]);
-                        teamsPlaying[1] = league.GetTeamNameFromId(teamsPlaying[1]);
-                        UpdateGame13Panel(teamsPlaying);
-                    }
-                }
-            }
-            
-        }
-
         private void WatchGameFunction(int gameNumber)
         {
             if ((int)currentDayShownNum.Value != league.CurrentDay)
@@ -1319,7 +1193,7 @@ namespace LeagueSimulation
                 simToValue.Maximum = currentDayShownNum.Maximum - league.CurrentDay + 1;
                 if (league.CurrentSeason > currentSeason) LoadSeasonSummary(new SeasonSummaryUserControl(league));
             }
-            
+
         }
 
         private void game2WatchGameButton_Click(object sender, EventArgs e) => WatchGameFunction(1);
@@ -1469,7 +1343,7 @@ namespace LeagueSimulation
 
         }
 
-        private void ViewGameResultsFunction(int  gameNumber)
+        private void ViewGameResultsFunction(int gameNumber)
         {
             string teamsPlaying = "";
             int gameId = 0;
