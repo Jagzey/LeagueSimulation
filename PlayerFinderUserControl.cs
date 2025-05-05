@@ -119,11 +119,11 @@ namespace LeagueSimulation
                 JOIN position pos ON pos.positionId = p.positionId
                 WHERE p.height BETWEEN {minHeightUpDown.Value} AND {maxHeightUpDown.Value}
                 AND p.weight BETWEEN {minWeightUpDown.Value} AND {maxWeightUpDown.Value}
-                AND p.playerForename LIKE '{playerForename}' 
-                AND p.playerSurname LIKE '{playerSurname}'
-                AND t.teamName LIKE '{teamName}'
-                AND sp.playstyle LIKE '{playerPlaystyle}'
-                AND (pos.positionShort LIKE '{playerPosition}' OR pos.positionName LIKE '{playerPosition}')
+                AND p.playerForename LIKE @playerForename
+                AND p.playerSurname LIKE @playerSurname
+                AND t.teamName LIKE @teamName
+                AND sp.playstyle LIKE @playerPlaystyle
+                AND (pos.positionShort LIKE @playerPosition OR pos.positionName LIKE @playerPosition)
                 GROUP BY p.playerId
                 HAVING avgPTS BETWEEN {minPPGUpDown.Value} AND {maxPPGUpDown.Value}
                    AND avgREB BETWEEN {minRPGUpDown.Value} AND {maxRPGUpDown.Value}
@@ -163,11 +163,11 @@ namespace LeagueSimulation
                 JOIN position pos ON pos.positionId = p.positionId
                 WHERE p.height BETWEEN {minHeightUpDown.Value} AND {maxHeightUpDown.Value}
                 AND p.weight BETWEEN {minWeightUpDown.Value} AND {maxWeightUpDown.Value}
-                AND p.playerForename LIKE '{playerForename}' 
-                AND p.playerSurname LIKE '{playerSurname}'
-                AND t.teamName LIKE '{teamName}'
-                AND sp.playstyle LIKE '{playerPlaystyle}'
-                AND (pos.positionShort LIKE '{playerPosition}' OR pos.positionName LIKE '{playerPosition}')
+                AND p.playerForename LIKE @playerForename
+                AND p.playerSurname LIKE @playerSurname
+                AND t.teamName LIKE @teamName
+                AND sp.playstyle LIKE @playerPlaystyle
+                AND (pos.positionShort LIKE @playerPosition OR pos.positionName LIKE @playerPosition)
                 GROUP BY p.playerId
                 HAVING avgPTS BETWEEN {minPPGUpDown.Value} AND {maxPPGUpDown.Value}
                    AND avgREB BETWEEN {minRPGUpDown.Value} AND {maxRPGUpDown.Value}
@@ -179,6 +179,12 @@ namespace LeagueSimulation
                 using (var connection = new SQLiteConnection(league.ConnectionString))
                 {
                     SQLiteDataAdapter rosterData = new SQLiteDataAdapter(findPlayersQuery, connection);
+                    rosterData.SelectCommand.Parameters.AddWithValue("@playerForename", playerForename);
+                    rosterData.SelectCommand.Parameters.AddWithValue("@playerSurname", playerSurname);
+                    rosterData.SelectCommand.Parameters.AddWithValue("@teamName", teamName);
+                    rosterData.SelectCommand.Parameters.AddWithValue("@playerPlaystyle", playerPlaystyle);
+                    rosterData.SelectCommand.Parameters.AddWithValue("@playerPosition", playerPosition);
+
                     DataTable dt = new DataTable();
                     rosterData.Fill(dt);
                     playerFinderDataGridView.AutoGenerateColumns = false;

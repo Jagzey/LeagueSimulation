@@ -37,100 +37,18 @@ namespace LeagueSimulation
             displayPanel.Controls.Add(dashboardUserControl);
         }
 
-        private void LoadFullSchedule(FullScheduleUserControl fullScheduleUserControl)
+        private void LoadUserControl(UserControl userControl)
         {
-            // clear current data in the displayPanel
             displayPanel.Controls.Clear();
-            // add the full schedule user control to the display panel
-            displayPanel.Controls.Add(fullScheduleUserControl);
+            displayPanel.Controls.Add(userControl);
         }
 
-        private void LoadLeagueStandings(LeagueStandingsUserControl leagueStandingsUserControl)
-        {
-            // clear current data in the displayPanel
-            displayPanel.Controls.Clear();
-            // add the full league standings control to the display panel
-            displayPanel.Controls.Add(leagueStandingsUserControl);
-        }
-
-        private void LoadRoster(RosterUserControl rosterUserControl)
-        {
-            // clear current data in the display panel
-            displayPanel.Controls.Clear();
-            // add the roster control to the display panel
-            displayPanel.Controls.Add(rosterUserControl);
-        }
-
-        private void LoadLeagueLeaders(LeagueLeadersUserControl leagueLeadersUserControl)
-        {
-            // clear current data in the display panel
-            displayPanel.Controls.Clear();
-            // add the league leader control to the display panel
-            displayPanel.Controls.Add(leagueLeadersUserControl);
-        }
-
-        private void LoadPlayoffs(PlayoffsUserControl playoffsUserControl)
-        {
-            // clear current data in the display panel
-            displayPanel.Controls.Clear();
-            // add the league leader control to the display panel
-            displayPanel.Controls.Add(playoffsUserControl);
-        }
-
-        public void LoadPlayerStats(PlayerStatsUserControl userControl)
+        private void LoadSeperateUserControl(UserControl userControl)
         {
             MenuForm menuForm = new MenuForm();
             menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
             menuForm.menuFormLayoutPanel.Size = userControl.Size + new Size(10, 10);
             menuForm.Size = userControl.Size + new Size(40, 40);
-            menuForm.menuFormLayoutPanel.Controls.Add(userControl);
-            this.Hide();
-            menuForm.Show();
-        }
-
-        public void LoadPlayerFinder(PlayerFinderUserControl userControl)
-        {
-            MenuForm menuForm = new MenuForm();
-            menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = userControl.Size + new Size(10, 10);
-            menuForm.Size = userControl.Size + new Size(40, 40);
-            menuForm.menuFormLayoutPanel.Controls.Add(userControl);
-            this.Hide();
-            menuForm.Show();
-        }
-
-        public void LoadTradeProposal(TradeProposalUserControl userControl)
-        {
-            MenuForm menuForm = new MenuForm();
-            menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Size = userControl.Size + new Size(10, 10);
-            menuForm.Size = userControl.Size + new Size(40, 40);
-            menuForm.menuFormLayoutPanel.Controls.Add(userControl);
-            this.Hide();
-            menuForm.Show();
-        }
-
-        public void LoadSeasonSummary(SeasonSummaryUserControl userControl)
-        {
-            MenuForm menuForm = new MenuForm();
-            menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Width = userControl.Width + 10;
-            menuForm.Width = userControl.Width + 40;
-            menuForm.menuFormLayoutPanel.Height = userControl.Height + 10;
-            menuForm.Height = userControl.Height + 40;
-            menuForm.menuFormLayoutPanel.Controls.Add(userControl);
-            this.Hide();
-            menuForm.Show();
-        }
-
-        public void LoadTeamStats(TeamStatsUserControl userControl)
-        {
-            MenuForm menuForm = new MenuForm();
-            menuForm.FormClosed += new FormClosedEventHandler(MenuForm_FormClosed);
-            menuForm.menuFormLayoutPanel.Width = userControl.Width + 10;
-            menuForm.Width = userControl.Width + 40;
-            menuForm.menuFormLayoutPanel.Height = userControl.Height + 10;
-            menuForm.Height = userControl.Height + 40;
             menuForm.menuFormLayoutPanel.Controls.Add(userControl);
             this.Hide();
             menuForm.Show();
@@ -158,22 +76,22 @@ namespace LeagueSimulation
 
         private void fullScheduleMenuItem_Click(object sender, EventArgs e)
         {
-            LoadFullSchedule(new FullScheduleUserControl(CurrentLeague));
+            LoadUserControl(new FullScheduleUserControl(CurrentLeague));
         }
 
         private void leagueStandingsMenuItem_Click(object sender, EventArgs e)
         {
-            LoadLeagueStandings(new LeagueStandingsUserControl(CurrentLeague));
+            LoadUserControl(new LeagueStandingsUserControl(CurrentLeague));
         }
 
         private void rosterMenuItem_Click(object sender, EventArgs e)
         {
-            LoadRoster(new RosterUserControl(CurrentLeague));
+            LoadUserControl(new RosterUserControl(CurrentLeague));
         }
 
         private void leagueLeadersToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            LoadLeagueLeaders(new LeagueLeadersUserControl(CurrentLeague));
+            LoadUserControl(new LeagueLeadersUserControl(CurrentLeague));
         }
 
         // playoffs menu click
@@ -183,17 +101,17 @@ namespace LeagueSimulation
             {
                 MessageBox.Show(text: "The playoffs haven't started yet. Come back when the regular season finishes");
             }
-            else LoadPlayoffs(new PlayoffsUserControl(CurrentLeague));
+            else LoadUserControl(new PlayoffsUserControl(CurrentLeague));
         }
 
         private void playerStatsMenuItem_Click(object sender, EventArgs e)
         {
-            LoadPlayerFinder(new PlayerFinderUserControl(CurrentLeague));
+            LoadSeperateUserControl(new PlayerFinderUserControl(CurrentLeague));
         }
 
         private void seasonSummaryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (CurrentLeague.CurrentSeason > 1) LoadSeasonSummary(new SeasonSummaryUserControl(CurrentLeague));
+            if (CurrentLeague.CurrentSeason > 1) LoadSeperateUserControl(new SeasonSummaryUserControl(CurrentLeague));
             else MessageBox.Show(text: "The season hasn't finished yet. Come back when the full season finishes");
         }
 
@@ -204,17 +122,12 @@ namespace LeagueSimulation
 
         private void tradeProposalToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            LoadTradeProposal(new TradeProposalUserControl(CurrentLeague));
-        }
-
-        private void displayPanel_Paint(object sender, PaintEventArgs e)
-        {
-
+            LoadSeperateUserControl(new TradeProposalUserControl(CurrentLeague));
         }
 
         private void teamStatsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            LoadTeamStats(new TeamStatsUserControl(CurrentLeague));
+            LoadSeperateUserControl(new TeamStatsUserControl(CurrentLeague));
         }
     }
 }

@@ -126,7 +126,6 @@
             panel3.Name = "panel3";
             panel3.Size = new Size(543, 584);
             panel3.TabIndex = 1;
-            panel3.Paint += panel3_Paint;
             // 
             // label1
             // 
@@ -320,7 +319,6 @@
             westernConferenceStandingsLabel.Size = new Size(408, 37);
             westernConferenceStandingsLabel.TabIndex = 0;
             westernConferenceStandingsLabel.Text = "Western Conference Standings";
-            westernConferenceStandingsLabel.Click += westernConferenceStandingsLabel_Click;
             // 
             // panel2
             // 
@@ -346,7 +344,6 @@
             panel2.Name = "panel2";
             panel2.Size = new Size(539, 584);
             panel2.TabIndex = 0;
-            panel2.Paint += panel2_Paint;
             // 
             // eastNonPlayoffsLabel
             // 
@@ -442,7 +439,6 @@
             label10.Name = "label10";
             label10.Size = new Size(538, 1);
             label10.TabIndex = 10;
-            label10.Click += label10_Click;
             // 
             // eastEighthPositionLabel
             // 
@@ -541,7 +537,6 @@
             easternConferenceStandingsLabel.TabIndex = 0;
             easternConferenceStandingsLabel.Text = "Eastern Conference Standings";
             easternConferenceStandingsLabel.TextAlign = ContentAlignment.MiddleCenter;
-            easternConferenceStandingsLabel.Click += easternConferenceStandingsLabel_Click;
             // 
             // LeagueStandingsUserControl
             // 

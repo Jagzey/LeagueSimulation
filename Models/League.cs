@@ -1047,28 +1047,6 @@ namespace LeagueSimulation.Models
             }
         }
 
-        // used to select the user's team name
-        public static string GetUserTeamName(int saveState, string currentUser)
-        {
-            string connectionString = $"Data Source={GetStaticLeagueFileName(saveState, currentUser)};Version=3;";
-            using (var connection = new SQLiteConnection(connectionString))
-            {
-                connection.Open();
-                string getTeamNameFromSaveState = "SELECT userTeamName FROM league";
-                using (var command = new SQLiteCommand(getTeamNameFromSaveState, connection))
-                {
-                    using (var reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            return reader.GetString(0);
-                        }
-                    }
-                }
-            }
-            return "";
-        }
-
         public void InsertLeagueData()
         {
             using (var connection = new SQLiteConnection(ConnectionString))
@@ -2449,25 +2427,10 @@ namespace LeagueSimulation.Models
             }
 
         }
-        public static bool CheckIfLeagueExists(int saveState, string currentUser)
-        {
-            // this is the string of the file name
-            string variableFileName = $"C:\\Users\\{currentUser}\\OneDrive - The Kings School Chester\\A-Level\\Computer Science\\NEA Project\\Project Files\\LeagueSimulation\\Databases\\League{saveState}.db";
-            // if the file doesn't exist, we initialise the database
-            if (!File.Exists(variableFileName)) return false;
-            return true;
-        }
         public string GetLeagueFileName(int saveState)
         {
             // this is the string of the file name
             return $"C:\\Users\\{CurrentUser}\\OneDrive - The Kings School Chester\\A-Level\\Computer Science\\NEA Project\\Project Files\\LeagueSimulation\\Databases\\League{saveState}.db";
-        }
-
-        public static string GetStaticLeagueFileName(int saveState, string currentUser)
-        {
-            // this is the string of the file name
-            string variableFileName = $@"C:\Users\{currentUser}\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Databases\League{saveState}.db";
-            return variableFileName;
         }
 
         public void SimulateDay(List<string> games, int currentDaySimulated, bool playoffs)
@@ -4083,12 +4046,12 @@ namespace LeagueSimulation.Models
             return currentDay;
         }
 
-        public League(string currentUser, int saveState, bool createLeague, string userTeamName)
+        public League(string currentUser, int saveState, bool createLeague, string userTeamName, string leagueFileName)
         {
             CurrentUser = currentUser;
             CurrentDay = 1;
             CurrentSeason = 1;
-            LeagueFileName = GetLeagueFileName(saveState);
+            LeagueFileName = leagueFileName;
             ConnectionString = $"Data Source={LeagueFileName};Version=3;";
             CurrentSaveState = saveState;
             UserTeamName = userTeamName;

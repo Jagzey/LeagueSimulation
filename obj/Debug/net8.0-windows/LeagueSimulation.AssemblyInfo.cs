@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LeagueSimulation")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+eb0d8ac5f180992ebd6af0072bf1c69e3d595414")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+342eb8a0a9c2e453e33b3357476e5562d78fc7cd")]
 [assembly: System.Reflection.AssemblyProductAttribute("LeagueSimulation")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LeagueSimulation")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

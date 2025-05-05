@@ -176,6 +176,17 @@ namespace LeagueSimulation.Models
                 "Lockdown",
                 "Ripper"
             };
+
+            string json = "";
+            if (File.Exists($@"C:\Users\nzuobm\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Player Data\player_playstyles_config.json"))
+            {
+                json = File.ReadAllText($@"C:\Users\nzuobm\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Player Data\player_playstyles_config.json");
+            }
+            else if (File.Exists($@"C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Player Data\player_playstyles_config.json"))
+            {
+                json = File.ReadAllText($@"C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Player Data\player_playstyles_config.json");
+            }
+
             Random random = new Random();
             if (position == "PG")
             {
@@ -235,27 +246,27 @@ namespace LeagueSimulation.Models
             {
                 if (primaryPlaystyle == "Offensive")
                 {
-                    playstyles = new List<string> { "Shooter", "Playmaker", "Inside-Scorer", "Finisher" };
+                    playstyles = new List<string> { "Shooter", "Playmaker", "Finisher" };
                     if (height - 79 < -2)
                     {
                         value = random.Next(0, 100);
                         if (value < 45) secondaryPlaystyle = playstyles[0];
                         else if (value < 73) secondaryPlaystyle = playstyles[1];
-                        else if (value <= 100) secondaryPlaystyle = playstyles[3];
+                        else if (value <= 100) secondaryPlaystyle = playstyles[2];
                     }
                     else if (height - 79 < 1)
                     {
                         value = random.Next(0, 100);
                         if (value < 48) secondaryPlaystyle = playstyles[0];
                         else if (value < 71) secondaryPlaystyle = playstyles[1];
-                        else if (value <= 100) secondaryPlaystyle = playstyles[3];
+                        else if (value <= 100) secondaryPlaystyle = playstyles[2];
                     }
                     else
                     {
                         value = random.Next(0, 100);
                         if (value < 40) secondaryPlaystyle = playstyles[0];
                         else if (value < 69) secondaryPlaystyle = playstyles[1];
-                        else if (value <= 100) secondaryPlaystyle = playstyles[3];
+                        else if (value <= 100) secondaryPlaystyle = playstyles[2];
                     }
 
                 }

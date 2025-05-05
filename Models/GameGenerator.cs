@@ -1,4 +1,6 @@
-﻿using System.Data.SQLite;
+﻿using System;
+using System.Data.SQLite;
+using System.Runtime.CompilerServices;
 
 namespace LeagueSimulation.Models
 {
@@ -295,7 +297,6 @@ namespace LeagueSimulation.Models
                         offenseStarterStats = team2StarterStats;
                         defenseStarterStats = team1StarterStats;
                     }
-                    if (offenseStarterStats == defenseStarterStats) { }
                     
                     // we calculate who starts with the ball, if the possession just started
                     if (startingPossession)
@@ -391,7 +392,6 @@ namespace LeagueSimulation.Models
                     int overallDifference = playerWithBallMatchup.playerStats.Overall - playerWithBall.playerStats.Overall;
                     double probFoulAfterShot = 0;
                     probFoulAfterShot = -0.05 + 0.10 * (overallDifference + 40) / 80;
-                    //probFoulAfterShot = -100;
 
                     if (playerWithBall.playerStats.PlayerId == 124) { };
                     List<double> attemptedEventProbabilites = new List<double>();
@@ -531,6 +531,7 @@ namespace LeagueSimulation.Models
                                     ScoreAfterEachPhrase.Add(currentScore);
                                     GameTimestamps.Add(gameClock.PrintTime());
                                     // here we simulate the first non-live free throw
+                                    NonLiveFreeThrowEvent(oPlayerName, oPlayerTeamName, randomFreeThrowProbability);
                                     {
                                         // if the free throw is made
                                         if (random.NextDouble() < randomFreeThrowProbability)
@@ -1536,81 +1537,49 @@ namespace LeagueSimulation.Models
                                         overallsSum += player.playerStats.Overall;
                                         playersToPass.Add(player);
                                     }
-                                    // convert gameValue from range (-5 - 60) to (-3.6 - 3.9) to add to chance they get the ball
-                                    double gameValue1 = -5.4 + (5.9 + 5.4) * (playersToPass[0].GameValue + 5) / (5 + 44);
-                                    if (gameValue1 > 5.9) gameValue1 = 5.9;
-                                    double gameValue2 = -5.4 + (5.9 + 5.4) * (playersToPass[1].GameValue + 5) / (5 + 44);
-                                    if (gameValue2 > 5.9) gameValue2 = 5.9;
-                                    double gameValue3 = -5.4 + (5.9 + 5.4) * (playersToPass[2].GameValue + 5) / (5 + 44);
-                                    if (gameValue3 > 5.9) gameValue3 = 5.9;
-                                    double gameValue4 = -5.4 + (5.9 + 5.4) * (playersToPass[3].GameValue + 5) / (5 + 44);
-                                    if (gameValue4 > 5.9) gameValue4 = 5.9;
+
+                                    List<double> overallMultipliers = [0, 0, 0, 0];
+
                                     playersToPass = playersToPass.OrderByDescending(x => x.playerStats.Overall).ToList();
-                                    double playstyleVariable1 = 0;
-                                    double playstyleVariable2 = 0;
-                                    double playstyleVariable3 = 0;
-                                    double playstyleVariable4 = 0;
+
                                     for (int i = 0; i < playersToPass.Count; i++)
                                     {
                                         PlayerInGame player = playersToPass[i];
-                                        int currentPlaystyleVariable = 0;
-                                        if (player.playerStats.PrimaryPlaystyle == "Offensive")
+                                        double currentOverallMultiplier = overallMultipliers[i];
+                                        currentOverallMultiplier += player.playerStats.Overall;
+                                        if (playersToPass[i].FieldGoalMade > 5) currentOverallMultiplier += 0.20 + playersToPass[i].FieldGoalMade * 0.023;
+
+                                        double gameValue = -5.4 + (5.9 + 5.4) * (playersToPass[i].GameValue + 5) / (5 + 44);
+                                        if (gameValue > 5.9) gameValue = 5.9;
+                                        overallMultipliers[i] += gameValue;
+                                        if (player.playerStats.SecondaryPlaystyle == "Shooter" || player.playerStats.SecondaryPlaystyle == "Finisher")
                                         {
-                                            if (player.playerStats.SecondaryPlaystyle == "Shooter" || player.playerStats.SecondaryPlaystyle == "Finisher")
-                                            {
-                                                currentPlaystyleVariable = 22;
-                                            }
-                                            else if (player.playerStats.SecondaryPlaystyle == "Playmaker")
-                                            {
-                                                currentPlaystyleVariable = 14;
-                                            }
+                                            overallMultipliers[i] += 18;
+                                        }
+                                        else if (player.playerStats.SecondaryPlaystyle == "Playmaker")
+                                        {
+                                            overallMultipliers[i] += 12;
                                         }
                                         else if (player.playerStats.PrimaryPlaystyle == "Defensive")
                                         {
-                                            currentPlaystyleVariable = -15;
+                                            overallMultipliers[i] += -12;
                                         }
-
-                                        if (i == 0) playstyleVariable1 = currentPlaystyleVariable;
-                                        else if (i == 1) playstyleVariable2 = currentPlaystyleVariable;
-                                        else if (i == 2) playstyleVariable3 = currentPlaystyleVariable;
-                                        else playstyleVariable4 = currentPlaystyleVariable;
                                     }
-                                    gameValue1 += playstyleVariable1;
-                                    gameValue2 += playstyleVariable2;
-                                    gameValue3 += playstyleVariable3;
-                                    gameValue4 += playstyleVariable4;
 
                                     // here we check their playstyles and make sure that 
                                     // now we add these gameValues to the overallsSum, so that the divisions are normalised
-                                    overallsSum += gameValue1 + gameValue2 + gameValue3 + gameValue4;
-
-
-                                    // this section checks the overalls of the players who could be passed to
+                                    overallsSum += overallMultipliers.Sum();
                                     double randomProb = random.NextDouble();
-                                    double overall1 = playersToPass[0].playerStats.Overall + gameValue1;
-                                    if (playersToPass[0].FieldGoalMade > 5) overall1 += 0.20 + playersToPass[0].FieldGoalMade * 0.023;
-                                    double overall2 = playersToPass[1].playerStats.Overall + gameValue2;
-                                    if (playersToPass[1].FieldGoalMade > 5) overall2 += 0.20 + playersToPass[0].FieldGoalMade * 0.023;
-                                    double overall3 = playersToPass[2].playerStats.Overall + gameValue3;
-                                    if (playersToPass[2].FieldGoalMade > 5) overall3 += 0.20 + playersToPass[0].FieldGoalMade * 0.023;
-                                    double overall4 = playersToPass[3].playerStats.Overall + gameValue4;
-                                    if (playersToPass[3].FieldGoalMade > 5) overall4 += 0.20 + playersToPass[0].FieldGoalMade * 0.023;
-                                    PlayerInGame potentialPlayerWithBall;
-                                    if (randomProb < overall1 / overallsSum)
+                                    PlayerInGame potentialPlayerWithBall = playersToPass[0];
+                                    double currentOverallsSum = 0.0;
+                                    // this section checks the overalls of the players who could be passed to
+
+                                    for (int i = 0; i < overallMultipliers.Count; i++)
                                     {
-                                        potentialPlayerWithBall = playersToPass[0];
-                                    }
-                                    else if (randomProb < overall1 / overallsSum + overall2 / overallsSum)
-                                    {
-                                        potentialPlayerWithBall = playersToPass[1];
-                                    }
-                                    else if (randomProb < overall1 / overallsSum + overall2 / overallsSum + overall3 / overallsSum)
-                                    {
-                                        potentialPlayerWithBall = playersToPass[2];
-                                    }
-                                    else
-                                    {
-                                        potentialPlayerWithBall = playersToPass[3];
+                                        PlayerInGame player = playersToPass[i];
+                                        if (i == overallMultipliers.Count - 1) { potentialPlayerWithBall = player; break; }
+                                        currentOverallsSum += player.playerStats.Overall / overallsSum;
+                                        if (randomProb < currentOverallsSum) { potentialPlayerWithBall = player; break; }
                                     }
 
                                     CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} made a pass to {potentialPlayerWithBall.playerStats.playerForename} {potentialPlayerWithBall.playerStats.playerSurname}");
@@ -1622,16 +1591,8 @@ namespace LeagueSimulation.Models
                                     playerWithBall = potentialPlayerWithBall;
                                     oPlayerName = $"{playerWithBall.playerStats.playerForename} {playerWithBall.playerStats.playerSurname}";
                                     // now we set the matchup for playerWithBall
-                                    foreach (PlayerInGame playerInGame2 in defenseStarterStats)
-                                    {
-                                        if (playerInGame2.playerStats.position == playerWithBall.playerStats.position)
-                                        {
-                                            playerWithBallMatchup = playerInGame2;
-                                            break;
-                                        }
-                                    }
+                                    playerWithBallMatchup = defenseStarterStats.Where(x => x.playerStats.position == playerWithBall.playerStats.position).ToList()[0];
                                     validPass = true;
-
                                 }
                                 startingPossession = false;
                                 numPasses++;
@@ -1658,7 +1619,33 @@ namespace LeagueSimulation.Models
                     }
                 }
             }
-            //gameClock.AddSeconds(0);
+        }
+
+        private void NonLiveFreeThrowEvent(string oPlayerName, string oPlayerTeamName, double randomFreeThrowProbability)
+        {
+            Random random = new Random();
+            string currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+            // if the free throw is made
+            if (random.NextDouble() < randomFreeThrowProbability)
+            {
+                playerWithBall.FreeThrowAttempted++;
+                playerWithBall.FreeThrowMade++;
+                playerWithBall.Points++;
+                CommentatorPhrases.Add($"{oPlayerName} made a free throw for the {oPlayerTeamName}.");
+                currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                ScoreAfterEachPhrase.Add(currentScore);
+                GameTimestamps.Add(gameClock.PrintTime());
+            }
+            // if the free throw is missed
+            else
+            {
+                CommentatorPhrases.Add($"{oPlayerName} of the {oPlayerTeamName} missed a free throw.");
+                playerWithBall.FreeThrowAttempted++;
+
+                currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
+                ScoreAfterEachPhrase.Add(currentScore);
+                GameTimestamps.Add(gameClock.PrintTime());
+            }
         }
 
         public int CalculatePossessionTime(int numPasses)
@@ -1689,7 +1676,6 @@ namespace LeagueSimulation.Models
                 oPlayerTeamName = team2.teamName;
                 dPlayerTeamName = team1.teamName;
             }
-            if (offense.Count != 5 || defense.Count != 5) { }
 
 
             double probORebound = 0.29;
@@ -1699,15 +1685,8 @@ namespace LeagueSimulation.Models
             foreach (PlayerInGame player in offense)
             {
                 // find playerMatchup
-                PlayerInGame playerMatchup = new PlayerInGame(new Player());
-                foreach (PlayerInGame player2 in defense)
-                {
-                    if (player2.playerStats.position == player.playerStats.position)
-                    {
-                        playerMatchup = player2;
-                        break;
-                    }
-                }
+                PlayerInGame playerMatchup = defense.Where(x => x.playerStats.position == playerWithBall.playerStats.position).ToList()[0];
+
                 // convert rebound number from (45-99) to (-0.01 - 0.01) then add it to offensive rebound probability
                 probORebound += -0.01 + (0.01 + 0.01) * (player.playerStats.Rebound - 45) / (99 - 45);
                 // convert strengthDifference from (-63 - 63) to (-0.20 to 0.20)
@@ -1721,15 +1700,7 @@ namespace LeagueSimulation.Models
             {
 
                 // find playerMatchup
-                PlayerInGame playerMatchup = new PlayerInGame(new Player());
-                foreach (PlayerInGame player2 in offense)
-                {
-                    if (player2.playerStats.position == player.playerStats.position)
-                    {
-                        playerMatchup = player2;
-                        break;
-                    }
-                }
+                PlayerInGame playerMatchup = offense.Where(x => x.playerStats.position == playerWithBall.playerStats.position).ToList()[0];
                 // convert rebound number from (45-99) to (-0.01 - 0.01) then add it to defensive rebound probability
                 probDRebound += -0.01 + (0.01 + 0.01) * (player.playerStats.Rebound - 45) / (99 - 45);
                 // convert strengthDifference from (-63 - 63) to (-0.20 to 0.20)
@@ -1791,24 +1762,7 @@ namespace LeagueSimulation.Models
                 playerWithBall = currentPlayer;
 
                 // now we set the matchup for playerWithBall
-                foreach (PlayerInGame playerInGame2 in defense)
-                {
-                    if (playerInGame2.playerStats.position == playerWithBall.playerStats.position)
-                    {
-                        playerWithBallMatchup = playerInGame2;
-                        break;
-                    }
-                }
-                if (possession == 1)
-                {
-                    offense = team1StarterStats;
-                    defense = team2StarterStats;
-                }
-                else
-                {
-                    offense = team2StarterStats;
-                    defense = team1StarterStats;
-                }
+                playerWithBallMatchup = defense.Where(x => x.playerStats.position == playerWithBall.playerStats.position).ToList()[0];
                 return 1;
             }
             // if a defensive rebound occurs
@@ -1858,16 +1812,6 @@ namespace LeagueSimulation.Models
                 playerWithBall = currentPlayer;
 
                 // now we change possession
-                if (possession == 1)
-                {
-                    offense = team1StarterStats;
-                    defense = team2StarterStats;
-                }
-                else
-                {
-                    offense = team2StarterStats;
-                    defense = team1StarterStats;
-                }
                 return 0;
             }
             // if no rebound occurs (out of bounds)
@@ -1884,16 +1828,11 @@ namespace LeagueSimulation.Models
 
         public int CalculateAssistProbability()
         {
-            Random random = new Random();
             double probAssist = 0.8398;
             // convert passing from range (45-99) to (-0.03 - 0.16)
             probAssist += 0.16 * (playerWhoPassed.playerStats.Passing - 45) / (99 - 45);
             // this returns 1 if an assist occurred
-            if (random.NextDouble() < probAssist)
-            {
-                playerWhoPassed.Assists++;
-                return 1;
-            }
+            if (new Random().NextDouble() < probAssist) { playerWhoPassed.Assists++; return 1; }
             // returns -1 if no assist
             return -1;
         }

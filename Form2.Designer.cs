@@ -39,7 +39,7 @@
             dashboardMenuItem = new ToolStripMenuItem();
             toolStripMenuItem3 = new ToolStripMenuItem();
             leagueStandingsMenuItem = new ToolStripMenuItem();
-            toolStripMenuItem5 = new ToolStripMenuItem();
+            playoffsStripMenuItem = new ToolStripMenuItem();
             seasonSummaryToolStripMenuItem = new ToolStripMenuItem();
             toolStripMenuItem8 = new ToolStripMenuItem();
             rosterMenuItem = new ToolStripMenuItem();
@@ -47,11 +47,11 @@
             toolStripMenuItem17 = new ToolStripMenuItem();
             playerFinderMenuItem = new ToolStripMenuItem();
             leagueLeadersToolStripMenuItem = new ToolStripMenuItem();
+            teamStatsToolStripMenuItem = new ToolStripMenuItem();
             tradeProposalToolStripMenuItem = new ToolStripMenuItem();
             toolStripMenuItem20 = new ToolStripMenuItem();
             displayPanel = new FlowLayoutPanel();
             label1 = new Label();
-            teamStatsToolStripMenuItem = new ToolStripMenuItem();
             menuStrip1.SuspendLayout();
             panel1.SuspendLayout();
             menuStrip2.SuspendLayout();
@@ -129,7 +129,7 @@
             // 
             // toolStripMenuItem3
             // 
-            toolStripMenuItem3.DropDownItems.AddRange(new ToolStripItem[] { leagueStandingsMenuItem, toolStripMenuItem5, seasonSummaryToolStripMenuItem });
+            toolStripMenuItem3.DropDownItems.AddRange(new ToolStripItem[] { leagueStandingsMenuItem, playoffsStripMenuItem, seasonSummaryToolStripMenuItem });
             toolStripMenuItem3.Name = "toolStripMenuItem3";
             toolStripMenuItem3.Size = new Size(193, 28);
             toolStripMenuItem3.Text = "League";
@@ -141,12 +141,12 @@
             leagueStandingsMenuItem.Text = "Standings";
             leagueStandingsMenuItem.Click += leagueStandingsMenuItem_Click;
             // 
-            // toolStripMenuItem5
+            // playoffsStripMenuItem
             // 
-            toolStripMenuItem5.Name = "toolStripMenuItem5";
-            toolStripMenuItem5.Size = new Size(211, 28);
-            toolStripMenuItem5.Text = "Playoffs";
-            toolStripMenuItem5.Click += toolStripMenuItem5_Click;
+            playoffsStripMenuItem.Name = "playoffsStripMenuItem";
+            playoffsStripMenuItem.Size = new Size(211, 28);
+            playoffsStripMenuItem.Text = "Playoffs";
+            playoffsStripMenuItem.Click += toolStripMenuItem5_Click;
             // 
             // seasonSummaryToolStripMenuItem
             // 
@@ -165,7 +165,7 @@
             // rosterMenuItem
             // 
             rosterMenuItem.Name = "rosterMenuItem";
-            rosterMenuItem.Size = new Size(180, 28);
+            rosterMenuItem.Size = new Size(128, 28);
             rosterMenuItem.Text = "Roster";
             rosterMenuItem.Click += rosterMenuItem_Click;
             // 
@@ -197,6 +197,13 @@
             leagueLeadersToolStripMenuItem.Text = "League Leaders";
             leagueLeadersToolStripMenuItem.Click += leagueLeadersToolStripMenuItem_Click;
             // 
+            // teamStatsToolStripMenuItem
+            // 
+            teamStatsToolStripMenuItem.Name = "teamStatsToolStripMenuItem";
+            teamStatsToolStripMenuItem.Size = new Size(198, 28);
+            teamStatsToolStripMenuItem.Text = "Team Stats";
+            teamStatsToolStripMenuItem.Click += teamStatsToolStripMenuItem_Click;
+            // 
             // tradeProposalToolStripMenuItem
             // 
             tradeProposalToolStripMenuItem.Name = "tradeProposalToolStripMenuItem";
@@ -218,7 +225,6 @@
             displayPanel.Size = new Size(1111, 642);
             displayPanel.TabIndex = 3;
             displayPanel.WrapContents = false;
-            displayPanel.Paint += displayPanel_Paint;
             // 
             // label1
             // 
@@ -228,13 +234,6 @@
             label1.Size = new Size(67, 15);
             label1.TabIndex = 4;
             label1.Text = "User Team: ";
-            // 
-            // teamStatsToolStripMenuItem
-            // 
-            teamStatsToolStripMenuItem.Name = "teamStatsToolStripMenuItem";
-            teamStatsToolStripMenuItem.Size = new Size(198, 28);
-            teamStatsToolStripMenuItem.Text = "Team Stats";
-            teamStatsToolStripMenuItem.Click += teamStatsToolStripMenuItem_Click;
             // 
             // Form2
             // 
@@ -272,7 +271,7 @@
         private ToolStripMenuItem dashboardMenuItem;
         private ToolStripMenuItem toolStripMenuItem3;
         private ToolStripMenuItem leagueStandingsMenuItem;
-        private ToolStripMenuItem toolStripMenuItem5;
+        private ToolStripMenuItem playoffsStripMenuItem;
         private ToolStripMenuItem toolStripMenuItem8;
         private ToolStripMenuItem rosterMenuItem;
         private ToolStripMenuItem fullScheduleMenuItem;
