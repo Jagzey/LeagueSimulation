@@ -11,9 +11,28 @@ namespace LeagueSimulation
     public class DashboardUserControl : UserControl
     {
         public League? league;
+        public List<Label> PositionLabels;
         public DashboardUserControl(League league)
         {
             InitializeComponent();
+            PositionLabels = new List<Label>()
+            {
+                firstPositionLabel,
+                secondPositionLabel,
+                thirdPositionLabel,
+                fourthPositionLabel,
+                fifthPositionLabel,
+                sixthPositionLabel,
+                seventhPositionLabel,
+                eighthPositionLabel,
+                ninthPositionLabel,
+                tenthPositionLabel,
+                eleventhPositionLabel,
+                twelfthPositionLabel,
+                thirteenthPositionLabel,
+                fourteenthPositionLabel,
+                fifteenthPositionLabel,
+            };
             this.league = league;
             FillLabels();
         }
@@ -26,83 +45,13 @@ namespace LeagueSimulation
             {
                 List<string> userConferenceTeams = league.GetConferenceTeams(league.GetUserConferenceId());
 
-                firstPositionLabel.Text = $"1. {userConferenceTeams[0]}";
-                secondPositionLabel.Text = $"2. {userConferenceTeams[1]}";
-                thirdPositionLabel.Text = $"3. {userConferenceTeams[2]}";
-                fourthPositionLabel.Text = $"4. {userConferenceTeams[3]}";
-                fifthPositionLabel.Text = $"5. {userConferenceTeams[4]}";
-                sixthPositionLabel.Text = $"6. {userConferenceTeams[5]}";
-                seventhPositionLabel.Text = $"7. {userConferenceTeams[6]}";
-                eighthPositionLabel.Text = $"8. {userConferenceTeams[7]}";
-                ninthPositionLabel.Text = $"9. {userConferenceTeams[8]}";
-                tenthPositionLabel.Text = $"10. {userConferenceTeams[9]}";
-                eleventhPositionLabel.Text = $"11. {userConferenceTeams[10]}";
-                twelfthPositionLabel.Text = $"12. {userConferenceTeams[11]}";
-                thirteenthPositionLabel.Text = $"13. {userConferenceTeams[12]}";
-                fourteenthPositionLabel.Text = $"14. {userConferenceTeams[13]}";
-                fifteenthPositionLabel.Text = $"15. {userConferenceTeams[14]}";
-
-                // now we make the user's team bold in the standings
+                for (int i = 0; i < PositionLabels.Count; i++)
                 {
-                    if (firstPositionLabel.Text.Contains(league.UserTeamName))
+                    Label positionLabel = PositionLabels[i];
+                    positionLabel.Text = $"{i + 1}. {userConferenceTeams[i]}";
+                    if (positionLabel.Text.Contains(league.UserTeamName))
                     {
-                        firstPositionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-                    }
-                    else if (secondPositionLabel.Text.Contains(league.UserTeamName))
-                    {
-                        secondPositionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-                    }
-                    else if (thirdPositionLabel.Text.Contains(league.UserTeamName))
-                    {
-                        thirdPositionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-                    }
-                    else if (fifthPositionLabel.Text.Contains(league.UserTeamName))
-                    {
-                        fifthPositionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-                    }
-                    else if (sixthPositionLabel.Text.Contains(league.UserTeamName))
-                    {
-                        sixthPositionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-                    }
-                    else if (seventhPositionLabel.Text.Contains(league.UserTeamName))
-                    {
-                        seventhPositionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-                    }
-                    else if (eighthPositionLabel.Text.Contains(league.UserTeamName))
-                    {
-                        eighthPositionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-                    }
-                    else if (ninthPositionLabel.Text.Contains(league.UserTeamName))
-                    {
-                        ninthPositionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-                    }
-                    else if (tenthPositionLabel.Text.Contains(league.UserTeamName))
-                    {
-                        tenthPositionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-                    }
-                    else if (eleventhPositionLabel.Text.Contains(league.UserTeamName))
-                    {
-                        eleventhPositionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-                    }
-                    else if (twelfthPositionLabel.Text.Contains(league.UserTeamName))
-                    {
-                        twelfthPositionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-                    }
-                    else if (thirteenthPositionLabel.Text.Contains(league.UserTeamName))
-                    {
-                        thirteenthPositionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-                    }
-                    else if (fourteenthPositionLabel.Text.Contains(league.UserTeamName))
-                    {
-                        fourteenthPositionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-                    }
-                    else if (fifteenthPositionLabel.Text.Contains(league.UserTeamName))
-                    {
-                        fifteenthPositionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
-                    }
-                    else if (fourthPositionLabel.Text.Contains(league.UserTeamName))
-                    {
-                        fourthPositionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
+                        positionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point, 0);
                     }
                 }
 
@@ -619,9 +568,9 @@ namespace LeagueSimulation
             schedulePanel.Controls.Add(upcomingGame2Label);
             schedulePanel.Controls.Add(upcomingGame1Label);
             schedulePanel.Controls.Add(upcomingGamesLabel);
-            schedulePanel.Location = new Point(826, 408);
+            schedulePanel.Location = new Point(774, 408);
             schedulePanel.Name = "schedulePanel";
-            schedulePanel.Size = new Size(254, 229);
+            schedulePanel.Size = new Size(306, 229);
             schedulePanel.TabIndex = 8;
             // 
             // upcomingGame3Label
@@ -629,7 +578,7 @@ namespace LeagueSimulation
             upcomingGame3Label.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             upcomingGame3Label.Location = new Point(3, 185);
             upcomingGame3Label.Name = "upcomingGame3Label";
-            upcomingGame3Label.Size = new Size(254, 29);
+            upcomingGame3Label.Size = new Size(303, 29);
             upcomingGame3Label.TabIndex = 9;
             upcomingGame3Label.Text = "New York @ Los Angeles";
             // 
@@ -638,7 +587,7 @@ namespace LeagueSimulation
             upcomingGame2Label.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             upcomingGame2Label.Location = new Point(3, 111);
             upcomingGame2Label.Name = "upcomingGame2Label";
-            upcomingGame2Label.Size = new Size(248, 32);
+            upcomingGame2Label.Size = new Size(300, 32);
             upcomingGame2Label.TabIndex = 8;
             upcomingGame2Label.Text = "New York @ Salt Lake City";
             // 
@@ -647,7 +596,7 @@ namespace LeagueSimulation
             upcomingGame1Label.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             upcomingGame1Label.Location = new Point(3, 43);
             upcomingGame1Label.Name = "upcomingGame1Label";
-            upcomingGame1Label.Size = new Size(251, 32);
+            upcomingGame1Label.Size = new Size(300, 32);
             upcomingGame1Label.TabIndex = 7;
             upcomingGame1Label.Text = "New York vs Miami";
             // 

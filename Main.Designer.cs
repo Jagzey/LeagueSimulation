@@ -35,6 +35,7 @@
             saveStateNum = new NumericUpDown();
             saveStateNumberLabel = new Label();
             teamNameDropDown = new ComboBox();
+            usedSaveStatesLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)saveStateNum).BeginInit();
             SuspendLayout();
             // 
@@ -111,11 +112,20 @@
             teamNameDropDown.Size = new Size(200, 23);
             teamNameDropDown.TabIndex = 8;
             // 
+            // usedSaveStatesLabel
+            // 
+            usedSaveStatesLabel.Location = new Point(468, 317);
+            usedSaveStatesLabel.Name = "usedSaveStatesLabel";
+            usedSaveStatesLabel.Size = new Size(320, 124);
+            usedSaveStatesLabel.TabIndex = 9;
+            usedSaveStatesLabel.Text = "Used Save States: ";
+            // 
             // Main
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(usedSaveStatesLabel);
             Controls.Add(teamNameDropDown);
             Controls.Add(saveStateNumberLabel);
             Controls.Add(saveStateNum);
@@ -139,5 +149,6 @@
         private NumericUpDown saveStateNum;
         private Label saveStateNumberLabel;
         private ComboBox teamNameDropDown;
+        private Label usedSaveStatesLabel;
     }
 }

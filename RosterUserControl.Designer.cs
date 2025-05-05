@@ -289,9 +289,9 @@
             label4.Font = new Font("Segoe UI", 6.75F, FontStyle.Italic, GraphicsUnit.Point, 0);
             label4.Location = new Point(22, 233);
             label4.Name = "label4";
-            label4.Size = new Size(154, 75);
+            label4.Size = new Size(215, 65);
             label4.TabIndex = 18;
-            label4.Text = "(make sure you pick a suitable position for the player's\r\nplaystyle. e.g. if you set a point guard to center, they\r\nwill not be able to defend these players and create\r\nnegative matchups)\r\n";
+            label4.Text = "(make sure you pick a suitable position for the player's\r\nplaystyle. e.g. if you set a point guard to center, they\r\nwill not be able to defend these players and create\r\nvulnerable matchups)\r\n";
             // 
             // newPositionDropDown
             // 

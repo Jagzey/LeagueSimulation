@@ -14,12 +14,9 @@ namespace LeagueSimulation.Models
         private int position = 0;
         private string conference = "";
         private int teamId = 0;
-        private string currentUser = "";
-        //public int revenue = 200000000;
         public int Position { get; set; }
         public string? Conference { get; set; }
         public int TeamId { get { return teamId; } }
-        public string CurrentUser { get; set; }
 
         //public int Revenue { get; set; }
 
@@ -66,7 +63,7 @@ namespace LeagueSimulation.Models
             return (firstPart, secondPart);
         }
 
-        public Team(string teamName, int teamId, string currentUser)
+        public Team(string teamName, int teamId)
         {
             if (teamName != null)
             {
@@ -77,8 +74,6 @@ namespace LeagueSimulation.Models
                 if (teamId < 16) Conference = "East";
                 else Conference = "West";
             }
-
-            CurrentUser = currentUser;
         }
 
     }

@@ -67,9 +67,13 @@
             playerFinderLabel = new Label();
             panel2 = new Panel();
             playerFinderDataGridView = new DataGridView();
+            playersFoundLabel = new Label();
             PlayerFirstname = new DataGridViewTextBoxColumn();
             PlayerSurname = new DataGridViewTextBoxColumn();
             TeamName = new DataGridViewTextBoxColumn();
+            playerFinderAge = new DataGridViewTextBoxColumn();
+            overall = new DataGridViewTextBoxColumn();
+            potential = new DataGridViewTextBoxColumn();
             height = new DataGridViewTextBoxColumn();
             Weight = new DataGridViewTextBoxColumn();
             Position = new DataGridViewTextBoxColumn();
@@ -82,7 +86,6 @@
             TOV = new DataGridViewTextBoxColumn();
             FGPCT = new DataGridViewTextBoxColumn();
             TFGPCT = new DataGridViewTextBoxColumn();
-            playersFoundLabel = new Label();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)minHeightUpDown).BeginInit();
             ((System.ComponentModel.ISupportInitialize)maxHeightUpDown).BeginInit();
@@ -461,7 +464,7 @@
             panel2.Controls.Add(playersFoundLabel);
             panel2.Location = new Point(390, 3);
             panel2.Name = "panel2";
-            panel2.Size = new Size(922, 629);
+            panel2.Size = new Size(1099, 629);
             panel2.TabIndex = 1;
             // 
             // playerFinderDataGridView
@@ -476,7 +479,7 @@
             dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
             dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
             playerFinderDataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            playerFinderDataGridView.Columns.AddRange(new DataGridViewColumn[] { PlayerFirstname, PlayerSurname, TeamName, height, Weight, Position, Playstyle, PTS, REB, AST, STL, BLK, TOV, FGPCT, TFGPCT });
+            playerFinderDataGridView.Columns.AddRange(new DataGridViewColumn[] { PlayerFirstname, PlayerSurname, TeamName, playerFinderAge, overall, potential, height, Weight, Position, Playstyle, PTS, REB, AST, STL, BLK, TOV, FGPCT, TFGPCT });
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = SystemColors.Window;
             dataGridViewCellStyle2.Font = new Font("Segoe UI", 8F);
@@ -496,9 +499,19 @@
             dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
             dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
             playerFinderDataGridView.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            playerFinderDataGridView.Size = new Size(905, 540);
+            playerFinderDataGridView.Size = new Size(1064, 540);
             playerFinderDataGridView.TabIndex = 4;
             playerFinderDataGridView.CellClick += leagueLeaderDataGridView_CellClick;
+            // 
+            // playersFoundLabel
+            // 
+            playersFoundLabel.AutoSize = true;
+            playersFoundLabel.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            playersFoundLabel.Location = new Point(42, 18);
+            playersFoundLabel.Name = "playersFoundLabel";
+            playersFoundLabel.Size = new Size(163, 30);
+            playersFoundLabel.TabIndex = 0;
+            playersFoundLabel.Text = "Players Found: ";
             // 
             // PlayerFirstname
             // 
@@ -523,6 +536,30 @@
             TeamName.Name = "TeamName";
             TeamName.ReadOnly = true;
             TeamName.Width = 145;
+            // 
+            // playerFinderAge
+            // 
+            playerFinderAge.DataPropertyName = "age";
+            playerFinderAge.HeaderText = "Age";
+            playerFinderAge.Name = "playerFinderAge";
+            playerFinderAge.ReadOnly = true;
+            playerFinderAge.Width = 40;
+            // 
+            // overall
+            // 
+            overall.DataPropertyName = "overall";
+            overall.HeaderText = "Overall";
+            overall.Name = "overall";
+            overall.ReadOnly = true;
+            overall.Width = 50;
+            // 
+            // potential
+            // 
+            potential.DataPropertyName = "potential";
+            potential.HeaderText = "Potential";
+            potential.Name = "potential";
+            potential.ReadOnly = true;
+            potential.Width = 65;
             // 
             // height
             // 
@@ -620,16 +657,6 @@
             TFGPCT.ReadOnly = true;
             TFGPCT.Width = 40;
             // 
-            // playersFoundLabel
-            // 
-            playersFoundLabel.AutoSize = true;
-            playersFoundLabel.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            playersFoundLabel.Location = new Point(42, 18);
-            playersFoundLabel.Name = "playersFoundLabel";
-            playersFoundLabel.Size = new Size(163, 30);
-            playersFoundLabel.TabIndex = 0;
-            playersFoundLabel.Text = "Players Found: ";
-            // 
             // PlayerFinderUserControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -637,7 +664,7 @@
             Controls.Add(panel2);
             Controls.Add(panel1);
             Name = "PlayerFinderUserControl";
-            Size = new Size(1315, 635);
+            Size = new Size(1492, 635);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)minHeightUpDown).EndInit();
@@ -700,6 +727,9 @@
         private DataGridViewTextBoxColumn PlayerFirstname;
         private DataGridViewTextBoxColumn PlayerSurname;
         private DataGridViewTextBoxColumn TeamName;
+        private DataGridViewTextBoxColumn playerFinderAge;
+        private DataGridViewTextBoxColumn overall;
+        private DataGridViewTextBoxColumn potential;
         private DataGridViewTextBoxColumn height;
         private DataGridViewTextBoxColumn Weight;
         private DataGridViewTextBoxColumn Position;

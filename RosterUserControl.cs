@@ -276,7 +276,7 @@ namespace LeagueSimulation
                     }
                 }
             }
-            
+
         }
 
         private void positionChangeButton_Click(object sender, EventArgs e)

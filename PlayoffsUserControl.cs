@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Security.Permissions;
 using LeagueSimulation.Models;
 
 namespace LeagueSimulation
@@ -6,10 +7,53 @@ namespace LeagueSimulation
     public partial class PlayoffsUserControl : UserControl
     {
         public League? CurrentLeague;
+        public List<Label> FirstRoundLabels;
+        public List<Label> SecondRoundLabels;
+        public List<Label> ConferenceFinalsLabels;
         public PlayoffsUserControl(League league)
         {
-            this.CurrentLeague = league;
             InitializeComponent();
+            FirstRoundLabels = new List<Label>()
+            {
+                team1game1EastFirstRound,
+                team2game1EastFirstRound,
+                team1game2EastFirstRound,
+                team2game2EastFirstRound,
+                team1game3EastFirstRound,
+                team2game3EastFirstRound,
+                team1game4EastFirstRound,
+                team2game4EastFirstRound,
+
+                team1game1WestFirstRound,
+                team2game1WestFirstRound,
+                team1game2WestFirstRound,
+                team2game2WestFirstRound,
+                team1game3WestFirstRound,
+                team2game3WestFirstRound,
+                team1game4WestFirstRound,
+                team2game4WestFirstRound
+            };
+            SecondRoundLabels = new List<Label>()
+            {
+                team1game1EastSecondRound,
+                team2game1EastSecondRound,
+                team1game2EastSecondRound,
+                team2game2EastSecondRound,
+
+                team1game1WestSecondRound,
+                team2game1WestSecondRound,
+                team1game2WestSecondRound,
+                team2game2WestSecondRound
+            };
+            ConferenceFinalsLabels = new List<Label>()
+            {
+                team1game1EastSecondRound,
+                team2game1EastSecondRound,
+
+                team1game1WestSecondRound,
+                team2game1WestSecondRound
+            };
+            this.CurrentLeague = league;
             FillPanels();
         }
 
@@ -17,65 +61,31 @@ namespace LeagueSimulation
         {
             string round = "First Round";
             List<string> firstRoundGames = CurrentLeague.GetPlayoffGamesByRound(round);
+            List<string> eastFirstRoundGames = firstRoundGames.Where(x => x.Split(",")[2] == "1").ToList();
+            List<string> westFirstRoundGames = firstRoundGames.Where(x => x.Split(",")[2] == "2").ToList();
+
             List<string> eastTeamsInPositionOrder = CurrentLeague.GetConferenceTeamsByWinPct(1);
             List<string> westTeamsInPositionOrder = CurrentLeague.GetConferenceTeamsByWinPct(2);
-            // here we fill in the first round game data
+
+            for (int i = 0; i < 4; i++)
             {
-                string[] game1TeamsPlaying = firstRoundGames.Where(x => x.Split(",")[2] == "1").ToList()[0].Split(',');
-                int team1Id = int.Parse(game1TeamsPlaying[0]);
-                int team2Id = int.Parse(game1TeamsPlaying[1]);
-                int conferenceId = int.Parse(game1TeamsPlaying[2]);
-                team1game1EastFirstRound.Text = $"{CurrentLeague.GetCityNameFromId(team1Id.ToString())} ({eastTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team1Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team1Id.ToString(), team2Id.ToString()).Split("-")[0]}";
-                team2game1EastFirstRound.Text = $"{CurrentLeague.GetCityNameFromId(team2Id.ToString())} ({eastTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team2Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team2Id.ToString(), team1Id.ToString()).Split("-")[0]}";
+                string[] game1EastGameTeamsPlaying = eastFirstRoundGames[i].Split(",");
+                int team1Id = int.Parse(game1EastGameTeamsPlaying[0]);
+                int team2Id = int.Parse(game1EastGameTeamsPlaying[1]);
+                int conferenceId = int.Parse(game1EastGameTeamsPlaying[2]);
+                Label team1EastFirstRoundLabel = FirstRoundLabels[i * 2];
+                Label team2EastFirstRoundLabel = FirstRoundLabels[i * 2 + 1];
+                team1EastFirstRoundLabel.Text = $"{CurrentLeague.GetCityNameFromId(team1Id.ToString())} ({eastTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team1Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team1Id.ToString(), team2Id.ToString()).Split("-")[0]}";
+                team2EastFirstRoundLabel.Text = $"{CurrentLeague.GetCityNameFromId(team2Id.ToString())} ({eastTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team2Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team2Id.ToString(), team1Id.ToString()).Split("-")[0]}";
 
-                string[] game2TeamsPlaying = firstRoundGames.Where(x => x.Split(",")[2] == "1").ToList()[1].Split(',');
-                team1Id = int.Parse(game2TeamsPlaying[0]);
-                team2Id = int.Parse(game2TeamsPlaying[1]);
-                conferenceId = int.Parse(game2TeamsPlaying[2]);
-                team1game2EastFirstRound.Text = $"{CurrentLeague.GetCityNameFromId(team1Id.ToString())} ({eastTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team1Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team1Id.ToString(), team2Id.ToString()).Split("-")[0]}";
-                team2game2EastFirstRound.Text = $"{CurrentLeague.GetCityNameFromId(team2Id.ToString())} ({eastTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team2Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team2Id.ToString(), team1Id.ToString()).Split("-")[0]}";
-
-                string[] game3TeamsPlaying = firstRoundGames.Where(x => x.Split(",")[2] == "1").ToList()[2].Split(',');
-                team1Id = int.Parse(game3TeamsPlaying[0]);
-                team2Id = int.Parse(game3TeamsPlaying[1]);
-                conferenceId = int.Parse(game3TeamsPlaying[2]);
-                team1game3EastFirstRound.Text = $"{CurrentLeague.GetCityNameFromId(team1Id.ToString())} ({eastTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team1Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team1Id.ToString(), team2Id.ToString()).Split("-")[0]}";
-                team2game3EastFirstRound.Text = $"{CurrentLeague.GetCityNameFromId(team2Id.ToString())} ({eastTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team2Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team2Id.ToString(), team1Id.ToString()).Split("-")[0]}";
-
-                string[] game4TeamsPlaying = firstRoundGames.Where(x => x.Split(",")[2] == "1").ToList()[3].Split(',');
-                team1Id = int.Parse(game4TeamsPlaying[0]);
-                team2Id = int.Parse(game4TeamsPlaying[1]);
-                conferenceId = int.Parse(game4TeamsPlaying[2]);
-                team1game4EastFirstRound.Text = $"{CurrentLeague.GetCityNameFromId(team1Id.ToString())} ({eastTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team1Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team1Id.ToString(), team2Id.ToString()).Split("-")[0]}";
-                team2game4EastFirstRound.Text = $"{CurrentLeague.GetCityNameFromId(team2Id.ToString())} ({eastTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team2Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team2Id.ToString(), team1Id.ToString()).Split("-")[0]}";
-
-                string[] game5TeamsPlaying = firstRoundGames.Where(x => x.Split(",")[2] == "2").ToList()[0].Split(',');
-                team1Id = int.Parse(game5TeamsPlaying[0]);
-                team2Id = int.Parse(game5TeamsPlaying[1]);
-                conferenceId = int.Parse(game5TeamsPlaying[2]);
-                team1game1WestFirstRound.Text = $"{CurrentLeague.GetCityNameFromId(team1Id.ToString())} ({westTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team1Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team1Id.ToString(), team2Id.ToString()).Split("-")[0]}";
-                team2game1WestFirstRound.Text = $"{CurrentLeague.GetCityNameFromId(team2Id.ToString())} ({westTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team2Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team2Id.ToString(), team1Id.ToString()).Split("-")[0]}";
-
-                string[] game6TeamsPlaying = firstRoundGames.Where(x => x.Split(",")[2] == "2").ToList()[1].Split(',');
-                team1Id = int.Parse(game6TeamsPlaying[0]);
-                team2Id = int.Parse(game6TeamsPlaying[1]);
-                conferenceId = int.Parse(game6TeamsPlaying[2]);
-                team1game2WestFirstRound.Text = $"{CurrentLeague.GetCityNameFromId(team1Id.ToString())} ({westTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team1Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team1Id.ToString(), team2Id.ToString()).Split("-")[0]}";
-                team2game2WestFirstRound.Text = $"{CurrentLeague.GetCityNameFromId(team2Id.ToString())} ({westTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team2Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team2Id.ToString(), team1Id.ToString()).Split("-")[0]}";
-
-                string[] game7TeamsPlaying = firstRoundGames.Where(x => x.Split(",")[2] == "2").ToList()[2].Split(',');
-                team1Id = int.Parse(game7TeamsPlaying[0]);
-                team2Id = int.Parse(game7TeamsPlaying[1]);
-                conferenceId = int.Parse(game7TeamsPlaying[2]);
-                team1game3WestFirstRound.Text = $"{CurrentLeague.GetCityNameFromId(team1Id.ToString())} ({westTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team1Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team1Id.ToString(), team2Id.ToString()).Split("-")[0]}";
-                team2game3WestFirstRound.Text = $"{CurrentLeague.GetCityNameFromId(team2Id.ToString())} ({westTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team2Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team2Id.ToString(), team1Id.ToString()).Split("-")[0]}";
-
-                string[] game8TeamsPlaying = firstRoundGames.Where(x => x.Split(",")[2] == "2").ToList()[3].Split(',');
-                team1Id = int.Parse(game8TeamsPlaying[0]);
-                team2Id = int.Parse(game8TeamsPlaying[1]);
-                conferenceId = int.Parse(game8TeamsPlaying[2]);
-                team1game4WestFirstRound.Text = $"{CurrentLeague.GetCityNameFromId(team1Id.ToString())} ({westTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team1Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team1Id.ToString(), team2Id.ToString()).Split("-")[0]}";
-                team2game4WestFirstRound.Text = $"{CurrentLeague.GetCityNameFromId(team2Id.ToString())} ({westTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team2Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team2Id.ToString(), team1Id.ToString()).Split("-")[0]}";
+                string[] game1WestGameTeamsPlaying = westFirstRoundGames[i].Split(",");
+                team1Id = int.Parse(game1WestGameTeamsPlaying[0]);
+                team2Id = int.Parse(game1WestGameTeamsPlaying[1]);
+                conferenceId = int.Parse(game1WestGameTeamsPlaying[2]);
+                Label team1WestFirstRoundLabel = FirstRoundLabels[i * 2 + 8];
+                Label team2WestFirstRoundLabel = FirstRoundLabels[i * 2 + 9];
+                team1WestFirstRoundLabel.Text = $"{CurrentLeague.GetCityNameFromId(team1Id.ToString())} ({westTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team1Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team1Id.ToString(), team2Id.ToString()).Split("-")[0]}";
+                team2WestFirstRoundLabel.Text = $"{CurrentLeague.GetCityNameFromId(team2Id.ToString())} ({westTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team2Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team2Id.ToString(), team1Id.ToString()).Split("-")[0]}";
             }
 
             // here we fill in the secound round data, if needed
@@ -83,33 +93,29 @@ namespace LeagueSimulation
             {
                 round = "Second Round";
                 List<string> secondRoundGames = CurrentLeague.GetPlayoffGamesByRound(round);
-                string[] game1TeamsPlaying = secondRoundGames.Where(x => x.Split(",")[2] == "1").ToList()[0].Split(',');
-                int team1Id = int.Parse(game1TeamsPlaying[0]);
-                int team2Id = int.Parse(game1TeamsPlaying[1]);
-                int conferenceId = int.Parse(game1TeamsPlaying[2]);
-                team1game1EastSecondRound.Text = $"{CurrentLeague.GetCityNameFromId(team1Id.ToString())} ({eastTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team1Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team1Id.ToString(), team2Id.ToString()).Split("-")[0]}";
-                team2game1EastSecondRound.Text = $"{CurrentLeague.GetCityNameFromId(team2Id.ToString())} ({eastTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team2Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team2Id.ToString(), team1Id.ToString()).Split("-")[0]}";
+                List<string> eastSecondRoundGames = secondRoundGames.Where(x => x.Split(",")[2] == "1").ToList();
+                List<string> westSecondRoundGames = secondRoundGames.Where(x => x.Split(",")[2] == "2").ToList();
 
-                string[] game2TeamsPlaying = secondRoundGames.Where(x => x.Split(",")[2] == "1").ToList()[1].Split(',');
-                team1Id = int.Parse(game2TeamsPlaying[0]);
-                team2Id = int.Parse(game2TeamsPlaying[1]);
-                conferenceId = int.Parse(game2TeamsPlaying[2]);
-                team1game2EastSecondRound.Text = $"{CurrentLeague.GetCityNameFromId(team1Id.ToString())} ({eastTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team1Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team1Id.ToString(), team2Id.ToString()).Split("-")[0]}";
-                team2game2EastSecondRound.Text = $"{CurrentLeague.GetCityNameFromId(team2Id.ToString())} ({eastTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team2Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team2Id.ToString(), team1Id.ToString()).Split("-")[0]}";
+                for (int i = 0; i < 2; i++)
+                {
+                    string[] game1EastGameTeamsPlaying = eastSecondRoundGames[i].Split(",");
+                    int team1Id = int.Parse(game1EastGameTeamsPlaying[0]);
+                    int team2Id = int.Parse(game1EastGameTeamsPlaying[1]);
+                    int conferenceId = int.Parse(game1EastGameTeamsPlaying[2]);
+                    Label team1EastSecondRoundLabel = SecondRoundLabels[i * 2];
+                    Label team2EastSecondRoundLabel = SecondRoundLabels[i * 2 + 1];
+                    team1EastSecondRoundLabel.Text = $"{CurrentLeague.GetCityNameFromId(team1Id.ToString())} ({eastTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team1Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team1Id.ToString(), team2Id.ToString()).Split("-")[0]}";
+                    team2EastSecondRoundLabel.Text = $"{CurrentLeague.GetCityNameFromId(team2Id.ToString())} ({eastTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team2Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team2Id.ToString(), team1Id.ToString()).Split("-")[0]}";
 
-                string[] game3TeamsPlaying = secondRoundGames.Where(x => x.Split(",")[2] == "2").ToList()[0].Split(',');
-                team1Id = int.Parse(game3TeamsPlaying[0]);
-                team2Id = int.Parse(game3TeamsPlaying[1]);
-                conferenceId = int.Parse(game3TeamsPlaying[2]);
-                team1game1WestSecondRound.Text = $"{CurrentLeague.GetCityNameFromId(team1Id.ToString())} ({westTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team1Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team1Id.ToString(), team2Id.ToString()).Split("-")[0]}";
-                team2game1WestSecondRound.Text = $"{CurrentLeague.GetCityNameFromId(team2Id.ToString())} ({westTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team2Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team2Id.ToString(), team1Id.ToString()).Split("-")[0]}";
-
-                string[] game4TeamsPlaying = secondRoundGames.Where(x => x.Split(",")[2] == "2").ToList()[1].Split(',');
-                team1Id = int.Parse(game4TeamsPlaying[0]);
-                team2Id = int.Parse(game4TeamsPlaying[1]);
-                conferenceId = int.Parse(game4TeamsPlaying[2]);
-                team1game2WestSecondRound.Text = $"{CurrentLeague.GetCityNameFromId(team1Id.ToString())} ({westTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team1Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team1Id.ToString(), team2Id.ToString()).Split("-")[0]}";
-                team2game2WestSecondRound.Text = $"{CurrentLeague.GetCityNameFromId(team2Id.ToString())} ({westTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team2Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team2Id.ToString(), team1Id.ToString()).Split("-")[0]}";
+                    string[] game1WestGameTeamsPlaying = westSecondRoundGames[i].Split(",");
+                    team1Id = int.Parse(game1WestGameTeamsPlaying[0]);
+                    team2Id = int.Parse(game1WestGameTeamsPlaying[1]);
+                    conferenceId = int.Parse(game1WestGameTeamsPlaying[2]);
+                    Label team1WestSecondRoundLabel = SecondRoundLabels[i * 2 + 4];
+                    Label team2WestSecondRoundLabel = SecondRoundLabels[i * 2 + 5];
+                    team1WestSecondRoundLabel.Text = $"{CurrentLeague.GetCityNameFromId(team1Id.ToString())} ({westTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team1Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team1Id.ToString(), team2Id.ToString()).Split("-")[0]}";
+                    team2WestSecondRoundLabel.Text = $"{CurrentLeague.GetCityNameFromId(team2Id.ToString())} ({westTeamsInPositionOrder.IndexOf(CurrentLeague.GetTeamNameFromId(team2Id.ToString())) + 1}) {CurrentLeague.GetSeriesRecordToDisplay(team2Id.ToString(), team1Id.ToString()).Split("-")[0]}";
+                }
             }
 
             // here we fill in the conference finals data, if needed

@@ -6,7 +6,6 @@ namespace LeagueSimulation.Models
     public class League
     {
         // these are attributes to access the file
-        public string currentUser = "";
         private string leagueFileName = "";
         private string connectionString = "";
         private int currentSaveState = 0;
@@ -21,7 +20,6 @@ namespace LeagueSimulation.Models
 
         private List<List<string>> currentSchedule = new List<List<string>>();
         private List<List<string>> currentPlayoffsSchedule = new List<List<string>>();
-        public string CurrentUser { get; set; }
         public string LeagueFileName { get; set; }
         public string ConnectionString { get; set; }
         public int CurrentSaveState { get; set; }
@@ -492,13 +490,12 @@ namespace LeagueSimulation.Models
         }
         public void GenerateTeams(string leagueFileName)
         {
-            string teamFilePath = $@"C:\Users\{CurrentUser}\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Player Data\basketball_team_names_list.txt";
+            string teamFilePath = $@"Player Data\basketball_team_names_list.txt";
             string[] teamNames = File.ReadAllLines(teamFilePath);
-            string playerFilePath = $@"C:\Users\{CurrentUser}\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Player Data\male_names_list_NEW.txt";
+            string playerFilePath = $@"Player Data\male_names_list_NEW.txt";
             List<string> playerNames = File.ReadAllLines(playerFilePath).ToList();
 
             // Creates a connection to leagueX database
-            string connectionString = $@"Data Source={leagueFileName};Version=3;";
             if (File.Exists(leagueFileName))
             {
                 List<string> positions = new List<string>() { "PG", "SG", "SF", "PF", "C" };
@@ -512,7 +509,7 @@ namespace LeagueSimulation.Models
                     "Rim Protector",
                     "2-Way Player"
                 };
-                using (var connection = new SQLiteConnection(connectionString))
+                using (var connection = new SQLiteConnection(ConnectionString))
                 {
                     connection.Open();
                     // This makes sure we go through 450 names
@@ -530,7 +527,7 @@ namespace LeagueSimulation.Models
                         for (int i = 0; i < 30; i++)
                         {
                             Random random = new Random();
-                            Team team = new Team(teamNames[i], i + 1, CurrentUser);
+                            Team team = new Team(teamNames[i], i + 1);
                             int conference = 0;
                             if (i < 15) conference = 1;
                             else
@@ -538,7 +535,7 @@ namespace LeagueSimulation.Models
                                 conference = 2;
                                 team.Position -= 15;
                             }
-                            int teamOverall = random.Next(77, 82);
+                            int teamOverall = random.Next(78, 83);
                             fullTeamQuery += $@"
 	                        (
                             '{team.teamName}',
@@ -662,6 +659,7 @@ namespace LeagueSimulation.Models
                         JOIN
                             playerGameStats pgs ON pgs.playerId = cp.playerId
                             AND pgs.seasonId = {CurrentSeason}
+                            AND pgs.isPlayoffs = {Playoffs}
                         JOIN
                             players p ON p.playerId = cp.playerId
                             
@@ -1047,28 +1045,6 @@ namespace LeagueSimulation.Models
             }
         }
 
-        // used to select the user's team name
-        public static string GetUserTeamName(int saveState, string currentUser)
-        {
-            string connectionString = $"Data Source={GetStaticLeagueFileName(saveState, currentUser)};Version=3;";
-            using (var connection = new SQLiteConnection(connectionString))
-            {
-                connection.Open();
-                string getTeamNameFromSaveState = "SELECT userTeamName FROM league";
-                using (var command = new SQLiteCommand(getTeamNameFromSaveState, connection))
-                {
-                    using (var reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            return reader.GetString(0);
-                        }
-                    }
-                }
-            }
-            return "";
-        }
-
         public void InsertLeagueData()
         {
             using (var connection = new SQLiteConnection(ConnectionString))
@@ -1261,7 +1237,7 @@ namespace LeagueSimulation.Models
 
         public bool CheckIfPlayoffs()
         {
-            string checkForPlayoffsQuery = $"SELECT COUNT(*) FROM playoffsSchedule WHERE seasonId = {CurrentSeason}";
+            string checkForPlayoffsQuery = $"SELECT COUNT(*) FROM playoffsSchedule ps WHERE ps.seasonId = {CurrentSeason}";
             using (var connection = new SQLiteConnection(ConnectionString))
             {
                 connection.Open();
@@ -1299,7 +1275,7 @@ namespace LeagueSimulation.Models
         {
             // we get the team file names
             Random random = new Random();
-            string fileTeamNamesPath = @$"C:\Users\{CurrentUser}\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Player Data\basketball_team_names_list.txt";
+            string fileTeamNamesPath = @$"Player Data\basketball_team_names_list.txt";
             string[] teamNames = File.ReadAllLines(fileTeamNamesPath);
             int[] gamesPlayed = new int[teamNames.Length];
             List<string> generatedGames = new List<string>();
@@ -1480,7 +1456,7 @@ namespace LeagueSimulation.Models
                     }
                 }
 
-                // now we set the 1320 games into days
+                // now we set the 1230 games into days
                 for (int i = 0; i < 123; i++)
                 {
                     List<string> currentDay = new List<string>();
@@ -1558,16 +1534,16 @@ namespace LeagueSimulation.Models
                         // we check if the last day has any duplicates, if so, we move it into the tempDay
                         for (int i = 0; i < lastDay.Count; i++)
                         {
-                            string currentDay = lastDay[i];
-                            string[] teamsPlaying = currentDay.Split(',');
+                            string currentGame = lastDay[i];
+                            string[] teamsPlaying = currentGame.Split(',');
                             for (int j = 0; j < lastDay.Count; j++)
                             {
                                 if (i == j) continue;
                                 if (lastDay[j].Contains(teamsPlaying[0]) || lastDay[j].Contains(teamsPlaying[1]))
                                 {
                                     daysFilled = false;
-                                    tempDay.Add(currentDay);
-                                    lastDay.Remove(currentDay);
+                                    tempDay.Add(lastDay[j]);
+                                    lastDay.Remove(lastDay[j]);
                                 }
                             }
                         }
@@ -2449,26 +2425,6 @@ namespace LeagueSimulation.Models
             }
 
         }
-        public static bool CheckIfLeagueExists(int saveState, string currentUser)
-        {
-            // this is the string of the file name
-            string variableFileName = $"C:\\Users\\{currentUser}\\OneDrive - The Kings School Chester\\A-Level\\Computer Science\\NEA Project\\Project Files\\LeagueSimulation\\Databases\\League{saveState}.db";
-            // if the file doesn't exist, we initialise the database
-            if (!File.Exists(variableFileName)) return false;
-            return true;
-        }
-        public string GetLeagueFileName(int saveState)
-        {
-            // this is the string of the file name
-            return $"C:\\Users\\{CurrentUser}\\OneDrive - The Kings School Chester\\A-Level\\Computer Science\\NEA Project\\Project Files\\LeagueSimulation\\Databases\\League{saveState}.db";
-        }
-
-        public static string GetStaticLeagueFileName(int saveState, string currentUser)
-        {
-            // this is the string of the file name
-            string variableFileName = $@"C:\Users\{currentUser}\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\Databases\League{saveState}.db";
-            return variableFileName;
-        }
 
         public void SimulateDay(List<string> games, int currentDaySimulated, bool playoffs)
         {
@@ -2492,13 +2448,13 @@ namespace LeagueSimulation.Models
             }
             if (!gameComplete)
             {
-                Team team1 = new Team(GetTeamNameFromId(teamsPlaying[0]), Convert.ToInt32(teamsPlaying[0]), CurrentUser);
-                Team team2 = new Team(GetTeamNameFromId(teamsPlaying[1]), Convert.ToInt32(teamsPlaying[1]), CurrentUser);
+                Team team1 = new Team(GetTeamNameFromId(teamsPlaying[0]), Convert.ToInt32(teamsPlaying[0]));
+                Team team2 = new Team(GetTeamNameFromId(teamsPlaying[1]), Convert.ToInt32(teamsPlaying[1]));
 
                 int gameId = 0;
                 if (Playoffs) gameId = GetPlayoffGameId(game, currentDayOfGame);
                 else gameId = GetGameId(game, currentDayOfGame);
-                GameGenerator simulatedGame = new GameGenerator(team1, team2, ConnectionString, CurrentUser, CurrentSaveState, gameId, Playoffs, this);
+                GameGenerator simulatedGame = new GameGenerator(team1, team2, ConnectionString, CurrentSaveState, gameId, Playoffs, this);
                 if (Playoffs) SetPlayoffGameToComplete(currentDayOfGame, teamsPlaying[0], teamsPlaying[1]);
                 else SetGameToComplete(currentDayOfGame, teamsPlaying[0], teamsPlaying[1]);
             }
@@ -2532,7 +2488,7 @@ namespace LeagueSimulation.Models
                     CurrentPlayoffsSchedule = LoadPlayoffsSchedule();
                 }
             }
-            if (GamesPlayed % 1230 == 0 && !seasonComplete && !Playoffs)
+            if (!seasonComplete && !Playoffs && CheckIfRegularSeasonComplete())
             {
                 // here, we move the league into playoffs mode
                 Playoffs = true;
@@ -2552,6 +2508,21 @@ namespace LeagueSimulation.Models
             {
                 AdvanceToNextSeason();
             }
+            
+        }
+
+        public bool CheckIfRegularSeasonComplete()
+        {
+            string checkForPlayoffsQuery = $"SELECT COUNT(*) FROM seasonSchedule WHERE seasonId = {CurrentSeason} AND gameCompleted = 0";
+            using (var connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+                using (var command = new SQLiteCommand(checkForPlayoffsQuery, connection))
+                {
+                    using (var reader = command.ExecuteReader()) while (reader.Read()) return reader.GetInt32(0) == 0;
+                }
+            }
+            return false;
         }
 
         public Player ExtractCurrentPlayerFromPlayerId(int playerId)
@@ -3564,8 +3535,7 @@ namespace LeagueSimulation.Models
                     else if (player.Potential + finalBoost > 99) finalBoost = 99 - player.Potential;
                     if (finalBoost < 0) player.Potential -= (int)finalBoost;
                     
-                    // once a player hits 33, they have no potential
-                    if (player.Age > 32) player.Potential = player.Overall;
+                    
 
 
                     double overallMultiplier = (player.Overall + finalBoost) / player.Overall;
@@ -3624,6 +3594,9 @@ namespace LeagueSimulation.Models
                     if (player.Overall > player.Potential && finalPotBoost <= 0) { player.Potential = player.Overall; }
                     else if (player.Overall > player.Potential) player.Potential = player.Overall + finalPotBoost;
                     if (player.Potential > 99) player.Potential = 99;
+
+                    // once a player hits 33, they have no potential
+                    if (player.Age > 32) player.Potential = player.Overall;
 
                     //update player's stats in database
                     fullPlayerUpdateQuery += $@"
@@ -3914,12 +3887,12 @@ namespace LeagueSimulation.Models
             else gameComplete = CheckIfGameCompleted(currentDayOfGame, teamsPlaying[0], teamsPlaying[1]);
             if (!gameComplete)
             {
-                Team team1 = new Team(GetTeamNameFromId(teamsPlaying[0]), Convert.ToInt32(teamsPlaying[0]), CurrentUser);
-                Team team2 = new Team(GetTeamNameFromId(teamsPlaying[1]), Convert.ToInt32(teamsPlaying[1]), CurrentUser);
+                Team team1 = new Team(GetTeamNameFromId(teamsPlaying[0]), Convert.ToInt32(teamsPlaying[0]));
+                Team team2 = new Team(GetTeamNameFromId(teamsPlaying[1]), Convert.ToInt32(teamsPlaying[1]));
                 int gameId = 0;
                 if (Playoffs) gameId = GetPlayoffGameId(game, currentDayOfGame);
                 else gameId = GetGameId(game, currentDayOfGame);
-                GameGenerator simulatedGame = new GameGenerator(team1, team2, ConnectionString, CurrentUser, CurrentSaveState, gameId, Playoffs, this);
+                GameGenerator simulatedGame = new GameGenerator(team1, team2, ConnectionString, CurrentSaveState, gameId, Playoffs, this);
                 gameData = (simulatedGame.CommentatorPhrases, simulatedGame.ScoreAfterEachPhrase, simulatedGame.GameTimestamps);
                 if (Playoffs) SetPlayoffGameToComplete(currentDayOfGame, teamsPlaying[0], teamsPlaying[1]);
                 else SetGameToComplete(currentDayOfGame, teamsPlaying[0], teamsPlaying[1]);
@@ -4083,12 +4056,11 @@ namespace LeagueSimulation.Models
             return currentDay;
         }
 
-        public League(string currentUser, int saveState, bool createLeague, string userTeamName)
+        public League(int saveState, bool createLeague, string userTeamName, string leagueFileName)
         {
-            CurrentUser = currentUser;
             CurrentDay = 1;
             CurrentSeason = 1;
-            LeagueFileName = GetLeagueFileName(saveState);
+            LeagueFileName = leagueFileName;
             ConnectionString = $"Data Source={LeagueFileName};Version=3;";
             CurrentSaveState = saveState;
             UserTeamName = userTeamName;

@@ -32,7 +32,6 @@
             label1 = new Label();
             playbackSpeed = new NumericUpDown();
             label2 = new Label();
-            game1WatchGameButton = new Button();
             simToEndButton = new Button();
             teamsPlayingLabel = new Label();
             seasonDayLabel = new Label();
@@ -58,9 +57,9 @@
             // 
             playbackSpeed.DecimalPlaces = 1;
             playbackSpeed.Increment = new decimal(new int[] { 5, 0, 0, 65536 });
-            playbackSpeed.Location = new Point(32, 18);
-            playbackSpeed.Maximum = new decimal(new int[] { 10001, 0, 0, 0 });
-            playbackSpeed.Minimum = new decimal(new int[] { 1, 0, 0, 262144 });
+            playbackSpeed.Location = new Point(31, 37);
+            playbackSpeed.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
+            playbackSpeed.Minimum = new decimal(new int[] { 5, 0, 0, 65536 });
             playbackSpeed.Name = "playbackSpeed";
             playbackSpeed.Size = new Size(120, 23);
             playbackSpeed.TabIndex = 1;
@@ -75,21 +74,10 @@
             label2.TabIndex = 2;
             label2.Text = "Game Playback Speed (1.6 = 160%)";
             // 
-            // game1WatchGameButton
-            // 
-            game1WatchGameButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            game1WatchGameButton.Location = new Point(14, 59);
-            game1WatchGameButton.Name = "game1WatchGameButton";
-            game1WatchGameButton.Size = new Size(170, 33);
-            game1WatchGameButton.TabIndex = 4;
-            game1WatchGameButton.Text = "Pause Simulation";
-            game1WatchGameButton.UseVisualStyleBackColor = true;
-            game1WatchGameButton.Click += game1WatchGameButton_Click;
-            // 
             // simToEndButton
             // 
             simToEndButton.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            simToEndButton.Location = new Point(241, 59);
+            simToEndButton.Location = new Point(218, 34);
             simToEndButton.Name = "simToEndButton";
             simToEndButton.Size = new Size(170, 33);
             simToEndButton.TabIndex = 5;
@@ -133,7 +121,6 @@
             panel2.Controls.Add(seasonDayLabel);
             panel2.Controls.Add(teamsPlayingLabel);
             panel2.Controls.Add(simToEndButton);
-            panel2.Controls.Add(game1WatchGameButton);
             panel2.Controls.Add(label2);
             panel2.Controls.Add(playbackSpeed);
             panel2.Controls.Add(label1);
@@ -193,7 +180,6 @@
         private Label label1;
         public NumericUpDown playbackSpeed;
         private Label label2;
-        private Button game1WatchGameButton;
         private Button simToEndButton;
         private Label teamsPlayingLabel;
         private Label seasonDayLabel;
