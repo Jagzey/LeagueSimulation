@@ -35,7 +35,6 @@ C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\N
 C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\obj\Debug\net8.0-windows\LeagueSimulation.FullScheduleUserControl.resources
 C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\obj\Debug\net8.0-windows\LeagueSimulation.ViewGameResultsUserControl.resources
 C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\obj\Debug\net8.0-windows\LeagueSimulation.LeagueStandingsUserControl.resources
-C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\obj\Debug\net8.0-windows\LeagueSimulation.Properties.Resources.resources
 C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\obj\Debug\net8.0-windows\LeagueSimulation.WatchGameUserControl.resources
 C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\obj\Debug\net8.0-windows\LeagueSimulation.RosterUserControl.resources
 C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\obj\Debug\net8.0-windows\LeagueSimulation.sourcelink.json
