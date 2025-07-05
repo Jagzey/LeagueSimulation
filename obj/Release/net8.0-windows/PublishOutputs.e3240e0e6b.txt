@@ -1,3 +1,10 @@
+C:\Users\FiercePC\Desktop\Player Data\basketball_team_names_list.txt
+C:\Users\FiercePC\Desktop\Player Data\male_names_list_NEW.txt
+C:\Users\FiercePC\Desktop\Player Data\player_playstyles_config.json
+C:\Users\FiercePC\Desktop\Player Data\player_stats_config.json
+C:\Users\FiercePC\Desktop\Databases\League2.db
+C:\Users\FiercePC\Desktop\Databases\League4.db
+C:\Users\FiercePC\Desktop\Databases\League5fx.db
 C:\Users\FiercePC\Desktop\LeagueSimulation.exe
 C:\Users\FiercePC\Desktop\LeagueSimulation.dll
 C:\Users\FiercePC\Desktop\LeagueSimulation.deps.json

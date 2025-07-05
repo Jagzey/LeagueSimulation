@@ -28,7 +28,6 @@ C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\N
 C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\obj\Release\net8.0-windows\LeagueSimulation.PlayerFinderUserControl.resources
 C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\obj\Release\net8.0-windows\LeagueSimulation.PlayerStatsUserControl.resources
 C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\obj\Release\net8.0-windows\LeagueSimulation.PlayoffsUserControl.resources
-C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\obj\Release\net8.0-windows\LeagueSimulation.Properties.Resources.resources
 C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\obj\Release\net8.0-windows\LeagueSimulation.RosterUserControl.resources
 C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\obj\Release\net8.0-windows\LeagueSimulation.SeasonSummaryUserControl.resources
 C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\obj\Release\net8.0-windows\LeagueSimulation.TeamStatsUserControl.resources
@@ -47,3 +46,10 @@ C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\N
 C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\obj\Release\net8.0-windows\LeagueSimulation.pdb
 C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\obj\Release\net8.0-windows\LeagueSimulation.genruntimeconfig.cache
 C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\obj\Release\net8.0-windows\ref\LeagueSimulation.dll
+C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\bin\Release\net8.0-windows\Player Data\basketball_team_names_list.txt
+C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\bin\Release\net8.0-windows\Player Data\male_names_list_NEW.txt
+C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\bin\Release\net8.0-windows\Player Data\player_playstyles_config.json
+C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\bin\Release\net8.0-windows\Player Data\player_stats_config.json
+C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\bin\Release\net8.0-windows\Databases\League4.db
+C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\bin\Release\net8.0-windows\Databases\League2.db
+C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\bin\Release\net8.0-windows\Databases\League5fx.db

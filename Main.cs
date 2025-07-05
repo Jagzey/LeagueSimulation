@@ -5,10 +5,10 @@ namespace LeagueSimulation
 {
     public partial class Main : Form
     {
-        private League currentLeague;
         public Main()
         {
             InitializeComponent();
+            saveStateComboBox.SelectedIndex = 0;
             FillUsedSaveStates();
         }
 
@@ -24,20 +24,9 @@ namespace LeagueSimulation
             }
         }
 
-        private bool CheckIfLeagueExists(int saveState)
-        {
-            // this is the string of the file name
-            string variableFileName = $"Databases\\League{saveState}.db";
-            // if the file doesn't exist, we initialise the database
-            if (!File.Exists(variableFileName)) return false;
-            return true;
-        }
+        private bool CheckIfLeagueExists(int saveState) => File.Exists($"Databases\\League{saveState}.db");
 
-        public static string GetLeagueFileName(int saveState)
-        {
-            // this is the string of the file name
-            return $"Databases\\League{saveState}.db";
-        }
+        public static string GetLeagueFileName(int saveState) => $"Databases\\League{saveState}.db";
 
         // used to select the user's team name
         private string GetUserTeamName(int saveState)
@@ -64,7 +53,7 @@ namespace LeagueSimulation
         private void loadGameButton_Click(object sender, EventArgs e)
         {
             // first, we check if the save state is valid
-            int saveState = (int)saveStateNum.Value;
+            int saveState = Convert.ToInt16(saveStateComboBox.Text);
             if (CheckIfLeagueExists(saveState))
             {
                 MessageBox.Show(text: "A league exists for this save state, it will now be loaded.");
@@ -83,7 +72,7 @@ namespace LeagueSimulation
         private void createGameButton_Click(object sender, EventArgs e)
         {
             // first, we check if the save state is valid
-            int saveState = (int)saveStateNum.Value;
+            int saveState = Convert.ToInt16(saveStateComboBox.Text);
             // this occurs if the user's input is an integer
             {
                 if (CheckIfLeagueExists(saveState))

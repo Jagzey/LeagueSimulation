@@ -1,0 +1,25 @@
+C:\Users\FiercePC\Desktop\league sim 2\Player Data\basketball_team_names_list.txt
+C:\Users\FiercePC\Desktop\league sim 2\Player Data\male_names_list_NEW.txt
+C:\Users\FiercePC\Desktop\league sim 2\Player Data\player_playstyles_config.json
+C:\Users\FiercePC\Desktop\league sim 2\Player Data\player_stats_config.json
+C:\Users\FiercePC\Desktop\league sim 2\Databases\League4.db
+C:\Users\FiercePC\Desktop\league sim 2\Databases\League5.db
+C:\Users\FiercePC\Desktop\league sim 2\LeagueSimulation.exe
+C:\Users\FiercePC\Desktop\league sim 2\LeagueSimulation.dll
+C:\Users\FiercePC\Desktop\league sim 2\LeagueSimulation.deps.json
+C:\Users\FiercePC\Desktop\league sim 2\LeagueSimulation.runtimeconfig.json
+C:\Users\FiercePC\Desktop\league sim 2\LeagueSimulation.pdb
+C:\Users\FiercePC\Desktop\league sim 2\EntityFramework.SqlServer.dll
+C:\Users\FiercePC\Desktop\league sim 2\EntityFramework.dll
+C:\Users\FiercePC\Desktop\league sim 2\System.Data.SQLite.dll
+C:\Users\FiercePC\Desktop\league sim 2\System.Data.SqlClient.dll
+C:\Users\FiercePC\Desktop\league sim 2\System.Data.SQLite.EF6.dll
+C:\Users\FiercePC\Desktop\league sim 2\runtimes\win-arm64\native\sni.dll
+C:\Users\FiercePC\Desktop\league sim 2\runtimes\win-x64\native\sni.dll
+C:\Users\FiercePC\Desktop\league sim 2\runtimes\win-x86\native\sni.dll
+C:\Users\FiercePC\Desktop\league sim 2\runtimes\linux-x64\native\SQLite.Interop.dll
+C:\Users\FiercePC\Desktop\league sim 2\runtimes\osx-x64\native\SQLite.Interop.dll
+C:\Users\FiercePC\Desktop\league sim 2\runtimes\win-x64\native\SQLite.Interop.dll
+C:\Users\FiercePC\Desktop\league sim 2\runtimes\win-x86\native\SQLite.Interop.dll
+C:\Users\FiercePC\Desktop\league sim 2\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\FiercePC\Desktop\league sim 2\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll

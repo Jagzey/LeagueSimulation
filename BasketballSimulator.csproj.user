@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_LastSelectedProfileId>C:\Users\FiercePC\OneDrive - The Kings School Chester\A-Level\Computer Science\NEA Project\Project Files\LeagueSimulation\LeagueSimulation\Properties\PublishProfiles\FolderProfile.pubxml</_LastSelectedProfileId>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Update="DashboardUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="FullScheduleUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="LeagueLeadersUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="LeagueStandingsUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Form2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Main.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MenuForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="PlayerFinderUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="PlayerStatsUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="PlayoffsUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="RosterUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="SeasonSummaryUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="TeamStatsUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="TradeProposalUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="ViewGameResultsUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="WatchGameUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,22 @@
+{
+  "PG": {
+    "Offensive": [28, 90],
+    "Defensive": 47
+         },
+  "SG": {
+    "Offensive": [44, 71],
+    "Defensive": 60
+         },
+  "SF": {
+    "Offensive": [44, 62],
+    "Defensive": 66
+         },
+  "PF": {
+    "Offensive": [32, 40],
+    "Defensive": 48
+         },
+  "C": {
+    "Offensive": [29, 38],
+    "Defensive": 55
+         }
+}

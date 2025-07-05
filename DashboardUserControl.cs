@@ -39,8 +39,8 @@ namespace LeagueSimulation
 
         public void FillLabels()
         {
-            if (!league.Playoffs) playoffsLabel.Hide();
-            else { string round = league.PlayoffsRound; playoffsLabel.Text += $"\n {round.ToUpper()}"; }
+            if (!league.Playoffs) seasonPointLabel.Text = "REGULAR \n SEASON";
+            else { string round = league.PlayoffsRound; seasonPointLabel.Text = $"PLAYOFFS \n {round.ToUpper()}"; }
             // we work out the conference standings in the dashboard
             {
                 List<string> userConferenceTeams = league.GetConferenceTeams(league.GetUserConferenceId());
@@ -65,18 +65,13 @@ namespace LeagueSimulation
                 seasonYearLabel.Text += $"{league.CurrentSeason + 2023}";
                 string conferencePositionText = "";
                 int conferencePosition = league.GetLeaguePositionInConf(league.GetUserConferenceId(), league.UserTeamName);
-                if (conferencePosition == 1)
+                Dictionary<int, string> conferencePairs = new Dictionary<int, string>()
                 {
-                    conferencePositionText = "1st in conference";
-                }
-                else if (conferencePosition == 2)
-                {
-                    conferencePositionText = "2nd in conference";
-                }
-                else if (conferencePosition == 3)
-                {
-                    conferencePositionText = "3rd in conference";
-                }
+                    {1, "1st in conference" },
+                    {2, "2nd in conference" },
+                    {3, "3rd in conference" }
+                };
+                if (conferencePosition < 4) conferencePositionText = conferencePairs[conferencePosition];
                 else
                 {
                     conferencePositionText = $"{conferencePosition}th in conference";
@@ -87,12 +82,7 @@ namespace LeagueSimulation
             // we fill out the upcoming games of the schedule
             {
                 List<string> upcomingGames = league.GetTeamUpcomingGames();
-                if (upcomingGames.Count < 3)
-                {
-                    upcomingGames.Add(" ");
-                    upcomingGames.Add(" ");
-                    upcomingGames.Add(" ");
-                }
+                for (int i = 0; i < 3 - upcomingGames.Count; i++) upcomingGames.Add(" ");
                 upcomingGame1Label.Text = upcomingGames[0];
                 upcomingGame2Label.Text = upcomingGames[1];
                 upcomingGame3Label.Text = upcomingGames[2];
@@ -143,7 +133,7 @@ namespace LeagueSimulation
             tenthPositionLabel = new Label();
             ninthPositionLabel = new Label();
             dashboardPanel1 = new Panel();
-            playoffsLabel = new Label();
+            seasonPointLabel = new Label();
             seasonYearLabel = new Label();
             seasonDayLabel = new Label();
             teamConfPositionLabel = new Label();
@@ -380,7 +370,7 @@ namespace LeagueSimulation
             // 
             // dashboardPanel1
             // 
-            dashboardPanel1.Controls.Add(playoffsLabel);
+            dashboardPanel1.Controls.Add(seasonPointLabel);
             dashboardPanel1.Controls.Add(seasonYearLabel);
             dashboardPanel1.Controls.Add(seasonDayLabel);
             dashboardPanel1.Controls.Add(teamConfPositionLabel);
@@ -392,15 +382,15 @@ namespace LeagueSimulation
             dashboardPanel1.Size = new Size(407, 490);
             dashboardPanel1.TabIndex = 4;
             // 
-            // playoffsLabel
+            // seasonPointLabel
             // 
-            playoffsLabel.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            playoffsLabel.Location = new Point(123, 375);
-            playoffsLabel.Name = "playoffsLabel";
-            playoffsLabel.Size = new Size(170, 83);
-            playoffsLabel.TabIndex = 12;
-            playoffsLabel.Text = "PLAYOFFS";
-            playoffsLabel.TextAlign = ContentAlignment.TopCenter;
+            seasonPointLabel.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            seasonPointLabel.Location = new Point(123, 375);
+            seasonPointLabel.Name = "seasonPointLabel";
+            seasonPointLabel.Size = new Size(170, 83);
+            seasonPointLabel.TabIndex = 12;
+            seasonPointLabel.Text = "PLAYOFFS";
+            seasonPointLabel.TextAlign = ContentAlignment.TopCenter;
             // 
             // seasonYearLabel
             // 
@@ -672,7 +662,7 @@ namespace LeagueSimulation
         private Panel panel2;
         private Label seasonDayLabel;
         private Label seasonYearLabel;
-        private Label playoffsLabel;
+        private Label seasonPointLabel;
         private Label? dashboardPanel;
 
         private void pointsLabel_Click(object sender, EventArgs e)

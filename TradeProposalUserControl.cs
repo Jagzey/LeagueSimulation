@@ -188,7 +188,7 @@ namespace LeagueSimulation
 
         private void proposeTradeButton_Click(object sender, EventArgs e)
         {
-            if (league.CurrentDay > 60 & !league.Playoffs)
+            if (league.CurrentDay > 100 & !league.Playoffs)
             {
                 MessageBox.Show(text: "The trade deadline has passed. Trades can only be completed next season.");
             }

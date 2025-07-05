@@ -7,11 +7,13 @@ namespace LeagueSimulation.Models
 {
     public class GameGenerator
     {
-        // attributes for both teams
-        private int gameId; // used for box score
         public int possession; // which team currently has possession
         private int currentSaveState; // which database are we currently accessing
         public string connectionString; // string to connect to database
+        private League currentLeague;
+
+        // attributes for both teams
+        private int gameId; // used for box score
         public List<string> CommentatorPhrases = new List<string>();
         public List<string> ScoreAfterEachPhrase = new List<string>();
         public List<string> GameTimestamps = new List<string>();
@@ -19,7 +21,6 @@ namespace LeagueSimulation.Models
         private PlayerInGame playerWithBall; // which player has the ball
         private PlayerInGame playerWhoPassed; // player who passed to player with the ball
         private PlayerInGame playerWithBallMatchup; // matchup with player with the ball
-        private League currentLeague;
         public Team team1;
         public Team team2;
         private List<Player> team1Players = new List<Player>();
@@ -363,19 +364,15 @@ namespace LeagueSimulation.Models
                     if (playerWhoPassed != null && playerWhoPassed != playerWithBall && playerWhoPassed.playerStats.TeamId == playerWithBall.playerStats.TeamId)
                     {
                         // convert pass from (45 - 99) to (0 - 0.27)
-                        passerContribution += 0.28 * (playerWhoPassed.playerStats.Passing - 45) / (99 - 45);
-                        passerContribution += playerWhoPassed.Assists * 0.002 / 1.176;
+                        passerContribution += playerWhoPassed.Assists * 0.002 / 1.176 + 0.24 * (playerWhoPassed.playerStats.Passing - 45) / (99 - 45);
                     }
 
                     // convert d overallDifference from (-40 to 40) to (-0.05 to 0.05)
                     int overallDifference = playerWithBallMatchup.playerStats.Overall - playerWithBall.playerStats.Overall;
-                    double probFoulAfterShot = 0;
-                    probFoulAfterShot = -0.05 + 0.10 * (overallDifference + 40) / 80;
+                    double probFoulAfterShot = -0.05 + 0.10 * (overallDifference + 40) / 80;
 
-                    if (playerWithBall.playerStats.PlayerId == 124) { };
-                    List<double> attemptedEventProbabilites = new List<double>();
-                    attemptedEventProbabilites = CalculateEventProbabilities(prob3PAttempted, prob2PAttempted, probLayupAttempted, probDunkAttempted, probPassAttempted, passerContribution);
-                    if (gameClock.Minutes > 28) { };
+                    List<double> attemptedEventProbabilites = CalculateEventProbabilities(prob3PAttempted, prob2PAttempted, probLayupAttempted, probDunkAttempted, probPassAttempted, passerContribution);
+
                     // set the attempted event probabilities based on function above
                     prob3PAttempted = attemptedEventProbabilites[0];
                     prob2PAttempted = attemptedEventProbabilites[1];
@@ -407,8 +404,7 @@ namespace LeagueSimulation.Models
                             // convert block stat (40-99) to (-0.009 - 0.045)
                             dBlockStat = -0.009 + (0.045 + 0.009) * (dBlockStat - 40) / (99 - 40);
                             // convert defense stat (40-99) to (-0.10 - 0.10)
-                            dDefenseStat = -0.11 + (0.11 + 0.13) * (dDefenseStat - 40) / (99 - 40);
-                            dDefenseStat *= -1;
+                            dDefenseStat = -1 * (-0.11 + (0.11 + 0.13) * (dDefenseStat - 40) / (99 - 40));
 
                             // this sets the probabilities of the forthcoming events
                             prob3PMade += oThreePointStat + heightDifference + dDefenseStat;
@@ -1173,8 +1169,7 @@ namespace LeagueSimulation.Models
                     // here we add the possession time to the game clock
                     if (startingPossession)
                     {
-                        int possessionTime = CalculatePossessionTime(numPasses);
-                        gameClock.AddSeconds(possessionTime);
+                        gameClock.AddSeconds(CalculatePossessionTime(numPasses));
                         numPasses = 0;
                         playerWithBall = new PlayerInGame(new Player());
                         playerWithBallMatchup = new PlayerInGame(new Player());
@@ -1239,7 +1234,7 @@ namespace LeagueSimulation.Models
         {
             double mean = 14.8 + numPasses * 0.60;
             double stDev = 2.7;
-            return (int)Player.GenerateRandomNormalDistribution(mean, stDev, 2, 24);
+            return (int)Player.GenerateRandomNormalDistribution(mean, stDev, 3, 24);
         }
 
         public int CalculateReboundProbability()
@@ -1543,7 +1538,7 @@ namespace LeagueSimulation.Models
             List<double> attemptedProbablities = new List<double>();
             // work out 3 point attempted probabilities, (50-99) to (0-0.14)
             double threePointStat = playerWithBall.playerStats.ThreePoint;
-            threePointAttempted = 0.24 * (threePointStat - 50) / (99 - 50);
+            threePointAttempted = 0.22 * (threePointStat - 50) / (99 - 50);
             if (threePointAttempted < 0) threePointAttempted = 0;
             threePointAttempted *= Math.Pow(passerContribution, 2.6);
             if (playerWithBall.playerStats.SecondaryPlaystyle == "Playmaker") threePointAttempted *= 0.65;
@@ -1551,7 +1546,7 @@ namespace LeagueSimulation.Models
 
             // work out 2 point attempted probabilities, (50-99) to (0-0.09)
             double twoPointStat = playerWithBall.playerStats.MidRange;
-            twoPointAttempted = 0.07 * (twoPointStat - 50) / (99 - 50);
+            twoPointAttempted = 0.11 * (twoPointStat - 50) / (99 - 50);
             if (twoPointAttempted < 0) twoPointAttempted = 0;
             twoPointAttempted *= Math.Pow(passerContribution, 2.4);
             if (playerWithBall.playerStats.SecondaryPlaystyle == "Playmaker") twoPointAttempted *= 0.65;
@@ -1593,7 +1588,7 @@ namespace LeagueSimulation.Models
 
             // use this to normalise the probabilites
             double sum = attemptedProbablities.Sum();
-            if (sum < 0.99 || sum > 1.01)
+            if (sum < 0.999 || sum > 1.001)
             {
                 attemptedProbablities[0] /= sum;
                 attemptedProbablities[1] /= sum;

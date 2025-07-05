@@ -956,9 +956,9 @@ namespace LeagueSimulation.Models
         public List<string> GetTeamUpcomingGames()
         {
             List<string> teamUpcomingGames = new List<string>();
-            List<List<string>> schedule = new List<List<string>>();
+            List<List<string>> schedule = CurrentSchedule;
             if (Playoffs) schedule = CurrentPlayoffsSchedule;
-            else schedule = CurrentSchedule;
+
             for (int i = CurrentDay; i < schedule.Count; i++)
             {
                 List<string> currentScheduleDay = schedule[i];
@@ -3586,7 +3586,7 @@ namespace LeagueSimulation.Models
                         else if (player.Strength < 25) player.Strength = 25;
                     }
                     int finalPotBoost = (int)(finalBoost * 0.5);
-                    if (finalPotBoost < -4) player.Potential += 4 + finalPotBoost;
+                    if (finalPotBoost < -4) player.Potential -= 4 + finalPotBoost;
                     else if (finalPotBoost < 0) finalPotBoost = 0; 
 
                     player.Overall += (int)finalBoost;
@@ -3595,8 +3595,8 @@ namespace LeagueSimulation.Models
                     else if (player.Overall > player.Potential) player.Potential = player.Overall + finalPotBoost;
                     if (player.Potential > 99) player.Potential = 99;
 
-                    // once a player hits 33, they have no potential
-                    if (player.Age > 32) player.Potential = player.Overall;
+                    // once a player hits 32, they have no potential
+                    if (player.Age > 31) player.Potential = player.Overall;
 
                     //update player's stats in database
                     fullPlayerUpdateQuery += $@"
