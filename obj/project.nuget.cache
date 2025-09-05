@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "/HZKAaHdd/A=",
+  "dgSpecHash": "+Tdz+NB82hM=",
   "success": true,
-  "projectFilePath": "C:\\Users\\FiercePC\\Desktop\\C# Projects\\BasketballSimulator\\LeagueSimulation\\BasketballSimulator.csproj",
+  "projectFilePath": "E:\\C# Projects\\BasketballSimulator\\LeagueSimulation\\BasketballSimulator.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\FiercePC\\.nuget\\packages\\entityframework\\6.4.4\\entityframework.6.4.4.nupkg.sha512",
     "C:\\Users\\FiercePC\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",

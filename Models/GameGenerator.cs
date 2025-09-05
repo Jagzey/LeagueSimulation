@@ -8,11 +8,10 @@ namespace LeagueSimulation.Models
     public class GameGenerator
     {
         public int possession; // which team currently has possession
-        private int currentSaveState; // which database are we currently accessing
         public string connectionString; // string to connect to database
         private League currentLeague;
 
-        // attributes for both teams
+        // attributes for game generation
         private int gameId; // used for box score
         public List<string> CommentatorPhrases = new List<string>();
         public List<string> ScoreAfterEachPhrase = new List<string>();
@@ -36,7 +35,6 @@ namespace LeagueSimulation.Models
 
         public int GameId { get; set; }
         public League CurrentLeague { get; set; }
-        public int CurrentSaveState { get; set; }
 
         private (List<Player>, List<Player>) ExtractPlayersFromTeams(Team team1, Team team2)
         {
@@ -122,10 +120,7 @@ namespace LeagueSimulation.Models
                         string teamName = team1.teamName;
                         string currentPlayerName = currentStarter.playerStats.playerForename + " " + currentStarter.playerStats.playerSurname;
                         string futurePlayerName = futureStarter.playerStats.playerForename + " " + futureStarter.playerStats.playerSurname;
-                        CommentatorPhrases.Add($"{teamName}: {currentPlayerName} substituted for {futurePlayerName}");
-                        (int, int) score = CalculateScore();
-                        ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
-                        GameTimestamps.Add(gameClock.PrintTime());
+                        HandleCommentatorPhrases($"{teamName}: {currentPlayerName} substituted for {futurePlayerName}");
                     }
                 }
             }
@@ -147,10 +142,7 @@ namespace LeagueSimulation.Models
                         string teamName = team2.teamName;
                         string currentPlayerName = currentStarter.playerStats.playerForename + " " + currentStarter.playerStats.playerSurname;
                         string futurePlayerName = futureStarter.playerStats.playerForename + " " + futureStarter.playerStats.playerSurname;
-                        CommentatorPhrases.Add($"{teamName}: {currentPlayerName} substituted for {futurePlayerName}");
-                        (int, int) score = CalculateScore();
-                        ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
-                        GameTimestamps.Add(gameClock.PrintTime());
+                        HandleCommentatorPhrases($"{teamName}: {currentPlayerName} substituted for {futurePlayerName}");
                     }
                 }
             }
@@ -209,21 +201,17 @@ namespace LeagueSimulation.Models
                 string team2Record = CurrentLeague.GetTeamRecord(team2.teamName);
                 if (playoffs)
                 {
+                    // here we collect playoffs series record instead
                     team1Record = CurrentLeague.GetSeriesRecordToDisplay(team1.TeamId.ToString(), team2.TeamId.ToString());
                     team2Record = CurrentLeague.GetSeriesRecordToDisplay(team2.TeamId.ToString(), team1.TeamId.ToString());
-                    CommentatorPhrases.Add($"Welcome player! Today, we are watching the {team1.teamName} ({team1Record}) vs. {team2.teamName} ({team2Record}) live in the {CurrentLeague.PlayoffsRound} of the playoffs. Enjoy!");
+                    HandleCommentatorPhrases($"Welcome player! Today, we are watching the {team1.teamName} ({team1Record}) vs. {team2.teamName} ({team2Record}) live in the {CurrentLeague.PlayoffsRound} of the playoffs. Enjoy!");
                 }
-                else CommentatorPhrases.Add($"Welcome player! Today, we are watching the {team1.teamName} ({team1Record}) vs. {team2.teamName} ({team2Record}) live. Enjoy!");
-                ScoreAfterEachPhrase.Add($"0-0");
-                GameTimestamps.Add(gameClock.PrintTime());
+                else HandleCommentatorPhrases($"Welcome player! Today, we are watching the {team1.teamName} ({team1Record}) vs. {team2.teamName} ({team2Record}) live. Enjoy!");
             }
 
             // we continue calculating possessions until the number of possessions in a game is reached
             while (gameClock.Minutes <= endOfGameTime && !possessionsComplete)
             {
-                
-
-
                 // this checks if regular time has completed, then check if we need overtime
                 if (gameClock.Minutes >= endOfGameTime)
                 {
@@ -235,13 +223,8 @@ namespace LeagueSimulation.Models
                     // here we check if the game ended in a draw, then go into OT if so
                     if (CheckForDraw().Item1)
                     {
-                        CommentatorPhrases.Add($"The game {team1.teamName} vs. {team2.teamName} resulted in a draw! We're going into overtime!");
-                        CommentatorPhrases.Add($"The score was {CheckForDraw().Item2}");
-                        (int, int) score = CalculateScore();
-                        ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
-                        ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
-                        GameTimestamps.Add(gameClock.PrintTime());
-                        GameTimestamps.Add(gameClock.PrintTime());
+                        HandleCommentatorPhrases($"The game {team1.teamName} vs. {team2.teamName} resulted in a draw! We're going into overtime!");
+                        HandleCommentatorPhrases($"The score was {CheckForDraw().Item2}");
 
                         possessionsComplete = false;
                         numPossessions += 40;
@@ -254,18 +237,13 @@ namespace LeagueSimulation.Models
                         InsertPlayerGameData(gameId, playoffs);
 
                         // we add the final commentator phrase and score to the lists
-                        CommentatorPhrases.Add($"The game {team1.teamName} vs. {team2.teamName} has come to an end as the clock runs out.");
-                        (int, int) score = CalculateScore();
-                        ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
-                        GameTimestamps.Add(gameClock.PrintTime());
+                        HandleCommentatorPhrases($"The game {team1.teamName} vs. {team2.teamName} has come to an end as the clock runs out.");
 
                         // Now we work out the name of the winner of the game, then display it
                         string nameOfWinner = "";
                         if (team1Stats.Sum(x => x.Points) > team2Stats.Sum(x => x.Points)) nameOfWinner = team1.teamName;
                         else nameOfWinner = team2.teamName;
-                        CommentatorPhrases.Add($"The game score finished as {score.Item1}-{score.Item2}, as the win goes to the {nameOfWinner}. ");
-                        ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
-                        GameTimestamps.Add(gameClock.PrintTime());
+                        HandleCommentatorPhrases($"The game score finished as {team1Stats.Sum(x => x.Points)}-{team2Stats.Sum(x => x.Points) }, as the win goes to the {nameOfWinner}. "); 
                     }
                 }
                 // when the game has not finished, we continue simulating possessions
@@ -320,10 +298,7 @@ namespace LeagueSimulation.Models
                         }
 
                         // we say who starts the offense
-                        string currentScore = $"{CalculateScore().Item1}-{CalculateScore().Item2}";
-                        CommentatorPhrases.Add($"{playerWithBall.playerStats.playerForename} {playerWithBall.playerStats.playerSurname} starts the offense for the {oPlayerTeamName}");
-                        ScoreAfterEachPhrase.Add(currentScore);
-                        GameTimestamps.Add(gameClock.PrintTime());
+                        HandleCommentatorPhrases($"{playerWithBall.playerStats.playerForename} {playerWithBall.playerStats.playerSurname} starts the offense for the {oPlayerTeamName}");
                     }
 
                     // list of probabilities of events during a single offensive possession for an offensive player
@@ -1237,6 +1212,14 @@ namespace LeagueSimulation.Models
             return (int)Player.GenerateRandomNormalDistribution(mean, stDev, 3, 24);
         }
 
+        public void HandleCommentatorPhrases(string commentatorPhrase)
+        {
+            CommentatorPhrases.Add(commentatorPhrase);
+            (int, int) score = CalculateScore();
+            ScoreAfterEachPhrase.Add($"{score.Item1}-{score.Item2}");
+            GameTimestamps.Add(gameClock.PrintTime());
+        }
+
         public int CalculateReboundProbability()
         {
 
@@ -1797,7 +1780,6 @@ namespace LeagueSimulation.Models
             this.team2 = team2;
             this.connectionString = connectionString;
             this.gameClock = new GameClock();
-            CurrentSaveState = currentSaveState;
             GameId = gameId;
             CurrentLeague = currentLeague;
 

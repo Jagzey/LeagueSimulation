@@ -82,7 +82,8 @@ namespace LeagueSimulation
             // we fill out the upcoming games of the schedule
             {
                 List<string> upcomingGames = league.GetTeamUpcomingGames();
-                for (int i = 0; i < 3 - upcomingGames.Count; i++) upcomingGames.Add(" ");
+                int initialCount = upcomingGames.Count;
+                for (int i = 0; i < 3 - initialCount; i++) upcomingGames.Add(" ");
                 upcomingGame1Label.Text = upcomingGames[0];
                 upcomingGame2Label.Text = upcomingGames[1];
                 upcomingGame3Label.Text = upcomingGames[2];
