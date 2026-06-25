@@ -362,7 +362,7 @@
             allDefense3SGPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             allDefense3SGPlayerInfo.Location = new Point(523, 438);
             allDefense3SGPlayerInfo.Name = "allDefense3SGPlayerInfo";
-            allDefense3SGPlayerInfo.Size = new Size(162, 15);
+            allDefense3SGPlayerInfo.Size = new Size(163, 15);
             allDefense3SGPlayerInfo.TabIndex = 89;
             allDefense3SGPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
@@ -382,7 +382,7 @@
             allDefense3SFPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             allDefense3SFPlayerInfo.Location = new Point(523, 466);
             allDefense3SFPlayerInfo.Name = "allDefense3SFPlayerInfo";
-            allDefense3SFPlayerInfo.Size = new Size(162, 15);
+            allDefense3SFPlayerInfo.Size = new Size(163, 15);
             allDefense3SFPlayerInfo.TabIndex = 87;
             allDefense3SFPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
@@ -402,7 +402,7 @@
             allDefense3PFPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             allDefense3PFPlayerInfo.Location = new Point(523, 494);
             allDefense3PFPlayerInfo.Name = "allDefense3PFPlayerInfo";
-            allDefense3PFPlayerInfo.Size = new Size(162, 15);
+            allDefense3PFPlayerInfo.Size = new Size(163, 15);
             allDefense3PFPlayerInfo.TabIndex = 85;
             allDefense3PFPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
@@ -422,7 +422,7 @@
             allDefense3CPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             allDefense3CPlayerInfo.Location = new Point(523, 522);
             allDefense3CPlayerInfo.Name = "allDefense3CPlayerInfo";
-            allDefense3CPlayerInfo.Size = new Size(162, 15);
+            allDefense3CPlayerInfo.Size = new Size(163, 15);
             allDefense3CPlayerInfo.TabIndex = 83;
             allDefense3CPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
@@ -442,7 +442,7 @@
             allDefense3PGPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             allDefense3PGPlayerInfo.Location = new Point(523, 410);
             allDefense3PGPlayerInfo.Name = "allDefense3PGPlayerInfo";
-            allDefense3PGPlayerInfo.Size = new Size(162, 15);
+            allDefense3PGPlayerInfo.Size = new Size(163, 15);
             allDefense3PGPlayerInfo.TabIndex = 81;
             allDefense3PGPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
@@ -472,7 +472,7 @@
             allDefense2SGPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             allDefense2SGPlayerInfo.Location = new Point(523, 266);
             allDefense2SGPlayerInfo.Name = "allDefense2SGPlayerInfo";
-            allDefense2SGPlayerInfo.Size = new Size(162, 15);
+            allDefense2SGPlayerInfo.Size = new Size(163, 15);
             allDefense2SGPlayerInfo.TabIndex = 78;
             allDefense2SGPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
@@ -492,7 +492,7 @@
             allDefense2SFPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             allDefense2SFPlayerInfo.Location = new Point(523, 294);
             allDefense2SFPlayerInfo.Name = "allDefense2SFPlayerInfo";
-            allDefense2SFPlayerInfo.Size = new Size(162, 15);
+            allDefense2SFPlayerInfo.Size = new Size(163, 15);
             allDefense2SFPlayerInfo.TabIndex = 76;
             allDefense2SFPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
@@ -512,7 +512,7 @@
             allDefense2PFPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             allDefense2PFPlayerInfo.Location = new Point(523, 322);
             allDefense2PFPlayerInfo.Name = "allDefense2PFPlayerInfo";
-            allDefense2PFPlayerInfo.Size = new Size(162, 15);
+            allDefense2PFPlayerInfo.Size = new Size(163, 15);
             allDefense2PFPlayerInfo.TabIndex = 74;
             allDefense2PFPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
@@ -532,7 +532,7 @@
             allDefense2CPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             allDefense2CPlayerInfo.Location = new Point(523, 350);
             allDefense2CPlayerInfo.Name = "allDefense2CPlayerInfo";
-            allDefense2CPlayerInfo.Size = new Size(162, 15);
+            allDefense2CPlayerInfo.Size = new Size(163, 15);
             allDefense2CPlayerInfo.TabIndex = 72;
             allDefense2CPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
@@ -552,7 +552,7 @@
             allDefense2PGPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             allDefense2PGPlayerInfo.Location = new Point(523, 238);
             allDefense2PGPlayerInfo.Name = "allDefense2PGPlayerInfo";
-            allDefense2PGPlayerInfo.Size = new Size(162, 15);
+            allDefense2PGPlayerInfo.Size = new Size(163, 15);
             allDefense2PGPlayerInfo.TabIndex = 70;
             allDefense2PGPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
@@ -582,7 +582,7 @@
             allDefense1SGPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             allDefense1SGPlayerInfo.Location = new Point(523, 90);
             allDefense1SGPlayerInfo.Name = "allDefense1SGPlayerInfo";
-            allDefense1SGPlayerInfo.Size = new Size(162, 15);
+            allDefense1SGPlayerInfo.Size = new Size(163, 15);
             allDefense1SGPlayerInfo.TabIndex = 67;
             allDefense1SGPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
@@ -602,7 +602,7 @@
             allDefense1SFPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             allDefense1SFPlayerInfo.Location = new Point(523, 118);
             allDefense1SFPlayerInfo.Name = "allDefense1SFPlayerInfo";
-            allDefense1SFPlayerInfo.Size = new Size(162, 15);
+            allDefense1SFPlayerInfo.Size = new Size(163, 15);
             allDefense1SFPlayerInfo.TabIndex = 65;
             allDefense1SFPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
@@ -622,7 +622,7 @@
             allDefense1PFPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             allDefense1PFPlayerInfo.Location = new Point(523, 146);
             allDefense1PFPlayerInfo.Name = "allDefense1PFPlayerInfo";
-            allDefense1PFPlayerInfo.Size = new Size(162, 15);
+            allDefense1PFPlayerInfo.Size = new Size(163, 15);
             allDefense1PFPlayerInfo.TabIndex = 63;
             allDefense1PFPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
@@ -642,7 +642,7 @@
             allDefense1CPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             allDefense1CPlayerInfo.Location = new Point(523, 174);
             allDefense1CPlayerInfo.Name = "allDefense1CPlayerInfo";
-            allDefense1CPlayerInfo.Size = new Size(162, 15);
+            allDefense1CPlayerInfo.Size = new Size(163, 15);
             allDefense1CPlayerInfo.TabIndex = 61;
             allDefense1CPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
@@ -662,7 +662,7 @@
             allDefense1PGPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             allDefense1PGPlayerInfo.Location = new Point(523, 62);
             allDefense1PGPlayerInfo.Name = "allDefense1PGPlayerInfo";
-            allDefense1PGPlayerInfo.Size = new Size(162, 15);
+            allDefense1PGPlayerInfo.Size = new Size(163, 15);
             allDefense1PGPlayerInfo.TabIndex = 59;
             allDefense1PGPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
@@ -702,7 +702,7 @@
             allNBA3SGPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             allNBA3SGPlayerInfo.Location = new Point(278, 438);
             allNBA3SGPlayerInfo.Name = "allNBA3SGPlayerInfo";
-            allNBA3SGPlayerInfo.Size = new Size(162, 15);
+            allNBA3SGPlayerInfo.Size = new Size(163, 15);
             allNBA3SGPlayerInfo.TabIndex = 55;
             allNBA3SGPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
@@ -722,7 +722,7 @@
             allNBA3SFPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             allNBA3SFPlayerInfo.Location = new Point(278, 466);
             allNBA3SFPlayerInfo.Name = "allNBA3SFPlayerInfo";
-            allNBA3SFPlayerInfo.Size = new Size(162, 15);
+            allNBA3SFPlayerInfo.Size = new Size(163, 15);
             allNBA3SFPlayerInfo.TabIndex = 53;
             allNBA3SFPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
@@ -742,7 +742,7 @@
             allNBA3PFPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             allNBA3PFPlayerInfo.Location = new Point(278, 494);
             allNBA3PFPlayerInfo.Name = "allNBA3PFPlayerInfo";
-            allNBA3PFPlayerInfo.Size = new Size(162, 15);
+            allNBA3PFPlayerInfo.Size = new Size(163, 15);
             allNBA3PFPlayerInfo.TabIndex = 51;
             allNBA3PFPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
@@ -762,7 +762,7 @@
             allNBA3CPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             allNBA3CPlayerInfo.Location = new Point(278, 522);
             allNBA3CPlayerInfo.Name = "allNBA3CPlayerInfo";
-            allNBA3CPlayerInfo.Size = new Size(162, 15);
+            allNBA3CPlayerInfo.Size = new Size(163, 15);
             allNBA3CPlayerInfo.TabIndex = 49;
             allNBA3CPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
@@ -782,7 +782,7 @@
             allNBA3PGPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             allNBA3PGPlayerInfo.Location = new Point(278, 410);
             allNBA3PGPlayerInfo.Name = "allNBA3PGPlayerInfo";
-            allNBA3PGPlayerInfo.Size = new Size(162, 15);
+            allNBA3PGPlayerInfo.Size = new Size(163, 15);
             allNBA3PGPlayerInfo.TabIndex = 47;
             allNBA3PGPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
@@ -812,7 +812,7 @@
             allNBA2SGPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             allNBA2SGPlayerInfo.Location = new Point(278, 266);
             allNBA2SGPlayerInfo.Name = "allNBA2SGPlayerInfo";
-            allNBA2SGPlayerInfo.Size = new Size(162, 15);
+            allNBA2SGPlayerInfo.Size = new Size(163, 15);
             allNBA2SGPlayerInfo.TabIndex = 44;
             allNBA2SGPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
@@ -832,7 +832,7 @@
             allNBA2SFPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             allNBA2SFPlayerInfo.Location = new Point(278, 294);
             allNBA2SFPlayerInfo.Name = "allNBA2SFPlayerInfo";
-            allNBA2SFPlayerInfo.Size = new Size(162, 15);
+            allNBA2SFPlayerInfo.Size = new Size(163, 15);
             allNBA2SFPlayerInfo.TabIndex = 42;
             allNBA2SFPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
@@ -852,7 +852,7 @@
             allNBA2PFPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             allNBA2PFPlayerInfo.Location = new Point(278, 322);
             allNBA2PFPlayerInfo.Name = "allNBA2PFPlayerInfo";
-            allNBA2PFPlayerInfo.Size = new Size(162, 15);
+            allNBA2PFPlayerInfo.Size = new Size(163, 15);
             allNBA2PFPlayerInfo.TabIndex = 40;
             allNBA2PFPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
@@ -872,7 +872,7 @@
             allNBA2CPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             allNBA2CPlayerInfo.Location = new Point(278, 350);
             allNBA2CPlayerInfo.Name = "allNBA2CPlayerInfo";
-            allNBA2CPlayerInfo.Size = new Size(162, 15);
+            allNBA2CPlayerInfo.Size = new Size(163, 15);
             allNBA2CPlayerInfo.TabIndex = 38;
             allNBA2CPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
@@ -892,7 +892,7 @@
             allNBA2PGPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             allNBA2PGPlayerInfo.Location = new Point(278, 238);
             allNBA2PGPlayerInfo.Name = "allNBA2PGPlayerInfo";
-            allNBA2PGPlayerInfo.Size = new Size(162, 15);
+            allNBA2PGPlayerInfo.Size = new Size(163, 15);
             allNBA2PGPlayerInfo.TabIndex = 36;
             allNBA2PGPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
@@ -922,7 +922,7 @@
             allNBA1SGPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             allNBA1SGPlayerInfo.Location = new Point(278, 90);
             allNBA1SGPlayerInfo.Name = "allNBA1SGPlayerInfo";
-            allNBA1SGPlayerInfo.Size = new Size(162, 15);
+            allNBA1SGPlayerInfo.Size = new Size(163, 15);
             allNBA1SGPlayerInfo.TabIndex = 33;
             allNBA1SGPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
@@ -942,7 +942,7 @@
             allNBA1SFPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             allNBA1SFPlayerInfo.Location = new Point(278, 118);
             allNBA1SFPlayerInfo.Name = "allNBA1SFPlayerInfo";
-            allNBA1SFPlayerInfo.Size = new Size(162, 15);
+            allNBA1SFPlayerInfo.Size = new Size(163, 15);
             allNBA1SFPlayerInfo.TabIndex = 31;
             allNBA1SFPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
@@ -962,7 +962,7 @@
             allNBA1PFPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             allNBA1PFPlayerInfo.Location = new Point(278, 146);
             allNBA1PFPlayerInfo.Name = "allNBA1PFPlayerInfo";
-            allNBA1PFPlayerInfo.Size = new Size(162, 15);
+            allNBA1PFPlayerInfo.Size = new Size(163, 15);
             allNBA1PFPlayerInfo.TabIndex = 29;
             allNBA1PFPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
@@ -982,7 +982,7 @@
             allNBA1CPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             allNBA1CPlayerInfo.Location = new Point(278, 174);
             allNBA1CPlayerInfo.Name = "allNBA1CPlayerInfo";
-            allNBA1CPlayerInfo.Size = new Size(162, 15);
+            allNBA1CPlayerInfo.Size = new Size(163, 15);
             allNBA1CPlayerInfo.TabIndex = 27;
             allNBA1CPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
@@ -1002,7 +1002,7 @@
             allNBA1PGPlayerInfo.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             allNBA1PGPlayerInfo.Location = new Point(278, 62);
             allNBA1PGPlayerInfo.Name = "allNBA1PGPlayerInfo";
-            allNBA1PGPlayerInfo.Size = new Size(162, 15);
+            allNBA1PGPlayerInfo.Size = new Size(163, 15);
             allNBA1PGPlayerInfo.TabIndex = 25;
             allNBA1PGPlayerInfo.Text = "DeShawn Thompson (Seattle)";
             // 
@@ -1239,8 +1239,8 @@
             // 
             // SeasonSummaryUserControl
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleMode = AutoScaleMode.Dpi;
             Controls.Add(seasonSummaryPanel);
             Name = "SeasonSummaryUserControl";
             Size = new Size(1000, 670);

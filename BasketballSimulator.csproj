@@ -2,10 +2,11 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
+    <ForceDesignerDPIUnaware>true</ForceDesignerDPIUnaware>
     <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
-    <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+<UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
   <ItemGroup>

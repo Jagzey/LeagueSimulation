@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "E:\\C# Projects\\BasketballSimulator\\LeagueSimulation\\BasketballSimulator.csproj": {}
+    "C:\\Users\\User.DESKTOP-JCL967J\\Desktop\\coding\\projects\\c#\\BasketballSimulator\\LeagueSimulation\\BasketballSimulator.csproj": {}
   },
   "projects": {
-    "E:\\C# Projects\\BasketballSimulator\\LeagueSimulation\\BasketballSimulator.csproj": {
+    "C:\\Users\\User.DESKTOP-JCL967J\\Desktop\\coding\\projects\\c#\\BasketballSimulator\\LeagueSimulation\\BasketballSimulator.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\C# Projects\\BasketballSimulator\\LeagueSimulation\\BasketballSimulator.csproj",
+        "projectUniqueName": "C:\\Users\\User.DESKTOP-JCL967J\\Desktop\\coding\\projects\\c#\\BasketballSimulator\\LeagueSimulation\\BasketballSimulator.csproj",
         "projectName": "BasketballSimulator",
-        "projectPath": "E:\\C# Projects\\BasketballSimulator\\LeagueSimulation\\BasketballSimulator.csproj",
-        "packagesPath": "C:\\Users\\FiercePC\\.nuget\\packages\\",
-        "outputPath": "E:\\C# Projects\\BasketballSimulator\\LeagueSimulation\\obj\\",
+        "projectPath": "C:\\Users\\User.DESKTOP-JCL967J\\Desktop\\coding\\projects\\c#\\BasketballSimulator\\LeagueSimulation\\BasketballSimulator.csproj",
+        "packagesPath": "C:\\Users\\User.DESKTOP-JCL967J\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\User.DESKTOP-JCL967J\\Desktop\\coding\\projects\\c#\\BasketballSimulator\\LeagueSimulation\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\FiercePC\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\User.DESKTOP-JCL967J\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],

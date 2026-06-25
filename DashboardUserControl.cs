@@ -603,6 +603,8 @@ namespace LeagueSimulation
             // 
             // DashboardUserControl
             // 
+            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleMode = AutoScaleMode.Dpi;
             Controls.Add(schedulePanel);
             Controls.Add(teamLeadersPanel);
             Controls.Add(teamStatsPanel);

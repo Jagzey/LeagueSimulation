@@ -114,7 +114,7 @@
             teamRecordLabel.AutoSize = true;
             teamRecordLabel.Location = new Point(489, 19);
             teamRecordLabel.Name = "teamRecordLabel";
-            teamRecordLabel.Size = new Size(81, 15);
+            teamRecordLabel.Size = new Size(82, 15);
             teamRecordLabel.TabIndex = 10;
             teamRecordLabel.Text = "Team Record: ";
             // 
@@ -134,7 +134,7 @@
             label1.AutoSize = true;
             label1.Location = new Point(20, 0);
             label1.Name = "label1";
-            label1.Size = new Size(81, 15);
+            label1.Size = new Size(82, 15);
             label1.TabIndex = 1;
             label1.Text = "Current Team:";
             // 
@@ -353,8 +353,8 @@
             // 
             // RosterUserControl
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleMode = AutoScaleMode.Dpi;
             Controls.Add(rosterFlowLayoutPanel);
             Name = "RosterUserControl";
             Size = new Size(1100, 630);

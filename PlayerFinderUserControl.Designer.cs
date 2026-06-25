@@ -67,7 +67,6 @@
             playerFinderLabel = new Label();
             panel2 = new Panel();
             playerFinderDataGridView = new DataGridView();
-            playersFoundLabel = new Label();
             PlayerFirstname = new DataGridViewTextBoxColumn();
             PlayerSurname = new DataGridViewTextBoxColumn();
             TeamName = new DataGridViewTextBoxColumn();
@@ -86,6 +85,7 @@
             TOV = new DataGridViewTextBoxColumn();
             FGPCT = new DataGridViewTextBoxColumn();
             TFGPCT = new DataGridViewTextBoxColumn();
+            playersFoundLabel = new Label();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)minHeightUpDown).BeginInit();
             ((System.ComponentModel.ISupportInitialize)maxHeightUpDown).BeginInit();
@@ -503,16 +503,6 @@
             playerFinderDataGridView.TabIndex = 4;
             playerFinderDataGridView.CellClick += leagueLeaderDataGridView_CellClick;
             // 
-            // playersFoundLabel
-            // 
-            playersFoundLabel.AutoSize = true;
-            playersFoundLabel.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            playersFoundLabel.Location = new Point(42, 18);
-            playersFoundLabel.Name = "playersFoundLabel";
-            playersFoundLabel.Size = new Size(163, 30);
-            playersFoundLabel.TabIndex = 0;
-            playersFoundLabel.Text = "Players Found: ";
-            // 
             // PlayerFirstname
             // 
             PlayerFirstname.DataPropertyName = "playerForename";
@@ -657,10 +647,20 @@
             TFGPCT.ReadOnly = true;
             TFGPCT.Width = 40;
             // 
+            // playersFoundLabel
+            // 
+            playersFoundLabel.AutoSize = true;
+            playersFoundLabel.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            playersFoundLabel.Location = new Point(42, 18);
+            playersFoundLabel.Name = "playersFoundLabel";
+            playersFoundLabel.Size = new Size(163, 30);
+            playersFoundLabel.TabIndex = 0;
+            playersFoundLabel.Text = "Players Found: ";
+            // 
             // PlayerFinderUserControl
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleDimensions = new SizeF(96F, 96F);
+            AutoScaleMode = AutoScaleMode.Dpi;
             Controls.Add(panel2);
             Controls.Add(panel1);
             Name = "PlayerFinderUserControl";
